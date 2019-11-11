@@ -1,0 +1,27 @@
+﻿<Window x:Class="HexEditApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HexEditApp"
+        mc:Ignorable="d"
+        Title="Sims 1 Widescreen Patcher" Height="154" Width="404.8">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250*"/>
+            <ColumnDefinition Width="24*"/>
+            <ColumnDefinition Width="125*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="fileDialog" HorizontalAlignment="Left" Height="23" Margin="10,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="294" Grid.ColumnSpan="3"/>
+        <Button x:Name="BrowseButton" Content="Browse" HorizontalAlignment="Left" Margin="35.333,14,0,0" VerticalAlignment="Top" Width="75" Click="BrowseButton_Click" Height="23" Grid.Column="2"/>
+        <Button x:Name="PatchButton" Content="Patch" HorizontalAlignment="Left" Margin="35.333,57,0,0" VerticalAlignment="Top" Width="75" Click="PatchButton_Click" Grid.Column="2" Height="23"/>
+        <Button x:Name="UninstallButton" Content="Uninstall" HorizontalAlignment="Left" Margin="35.333,85,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="UninstallButton_Click" Grid.Column="2" Height="25" ToolTip="Undoes whatever this program did to your Sims 1 location. Restores the Sims.exe backup, removes custom graphic files, and removes dgVoodoo2."/>
+        <TextBox x:Name="WidthTextBox" HorizontalAlignment="Left" Height="23" Margin="10,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="1920"/>
+        <TextBox x:Name="HeightTextBox" HorizontalAlignment="Left" Height="23" Margin="164,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="1080" Grid.ColumnSpan="3"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,42,0,0" TextWrapping="Wrap" Text="Width" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="164,41,0,0" TextWrapping="Wrap" Text="Height" VerticalAlignment="Top"/>
+        <CheckBox x:Name="dgVoodoo2Checkbox" Content="dgVoodoo2" HorizontalAlignment="Left" Margin="164,85,0,0" VerticalAlignment="Top" ToolTip="Some resolutions require dgVoodoo2. If your game crashes without it, try ticking this box." Grid.ColumnSpan="2" Width="92"/>
+        <CheckBox x:Name="ForceCheckBox" Content="Force" HorizontalAlignment="Left" Margin="164,100,0,0" VerticalAlignment="Top" Width="86" ToolTip="Edit executable even if the md5 hash doesn't match."/>
+
+    </Grid>
+</Window>
