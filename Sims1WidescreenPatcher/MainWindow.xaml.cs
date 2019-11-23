@@ -122,44 +122,31 @@ namespace HexEditApp
             File.WriteAllBytes(path, bytes);
         }
 
-        // TODO: Resize graphics and copy to folder
         private void CopyGraphics(string path)
         {
             string directory = Path.GetDirectoryName(path);
             int width = int.Parse(WidthTextBox.Text);
             int height = int.Parse(HeightTextBox.Text);
+
             Directory.CreateDirectory($@"{directory}\UIGraphics\CPanel\Backgrounds");
             Directory.CreateDirectory($@"{directory}\UIGraphics\Downtown");
             Directory.CreateDirectory($@"{directory}\UIGraphics\Studiotown");
 
-            using (MagickImage image = new MagickImage(@"UIGraphics\CPanel\Backgrounds\PanelBack.bmp"))
-            {
-                MagickGeometry size = new MagickGeometry(width, 100);
-                size.IgnoreAspectRatio = true;
-                image.Resize(size);
-                image.BitDepth(8);
-                image.ColorType = ColorType.TrueColor;
-                image.Write($@"{directory}\UIGraphics\CPanel\Backgrounds\PanelBack.bmp");
-            }
+            ScaleImage(@"UIGraphics\CPanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\CPanel\Backgrounds\PanelBack.bmp", width, 100);
+            ScaleImage(@"UIGraphics\Downtown\largeback.bmp", $@"{directory}\UIGraphics\Downtown\largeback.bmp", width, height);
+            ScaleImage(@"UIGraphics\Studiotown\dlgframe_1024x768.bmp", $@"{directory}\UIGraphics\Studiotown\dlgframe_1024x768.bmp", width, height);
+        }
 
-            using (MagickImage image = new MagickImage(@"UIGraphics\Downtown\largeback.bmp"))
+        private void ScaleImage(string input, string output, int width, int height)
+        {
+            using (MagickImage image = new MagickImage(input))
             {
                 MagickGeometry size = new MagickGeometry(width, height);
                 size.IgnoreAspectRatio = true;
                 image.Resize(size);
                 image.BitDepth(8);
                 image.ColorType = ColorType.TrueColor;
-                image.Write($@"{directory}\UIGraphics\Downtown\largeback.bmp");
-            }
-
-            using (MagickImage image = new MagickImage(@"UIGraphics\Studiotown\dlgframe_1024x768.bmp"))
-            {
-                MagickGeometry size = new MagickGeometry(width, height);
-                size.IgnoreAspectRatio = true;
-                image.Resize(size);
-                image.BitDepth(8);
-                image.ColorType = ColorType.TrueColor;
-                image.Write($@"{directory}\UIGraphics\Studiotown\dlgframe_1024x768.bmp");
+                image.Write(output);
             }
         }
 
