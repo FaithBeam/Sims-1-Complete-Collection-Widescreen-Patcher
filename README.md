@@ -40,7 +40,7 @@ If you want to go back to your default Sims executable and optionally no dgVoodo
 
 ## Screenshots
 
-[Wiki](Sims-1-Complete-Collection-Widescreen-Patcher/wiki)
+[Wiki](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki)
 
 ## Credits
 
