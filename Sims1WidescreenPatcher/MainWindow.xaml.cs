@@ -25,8 +25,10 @@ namespace HexEditApp
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Sims|Sims.exe|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
+            {
                 fileDialog.Text = openFileDialog.FileName;
-            CheckForBackup(fileDialog.Text);
+                CheckForBackup(fileDialog.Text);
+            }
         }
 
         private void PatchButton_Click(object sender, RoutedEventArgs e)
