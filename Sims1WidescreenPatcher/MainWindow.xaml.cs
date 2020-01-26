@@ -33,21 +33,26 @@ namespace HexEditApp
 
         private void PatchButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ForceCheckBox.IsChecked != true)
+            if (!string.IsNullOrWhiteSpace(fileDialog.Text))
             {
-                if (!CheckHash(fileDialog.Text, "42F9A3E11BD1A03515C77777CB97B5BC"))
+                if (ForceCheckBox.IsChecked != true)
                 {
-                    MessageBox.Show("MD5's do not match, canceling.");
-                    return;
+                    if (!CheckHash(fileDialog.Text, "42F9A3E11BD1A03515C77777CB97B5BC"))
+                    {
+                        MessageBox.Show("MD5's do not match, canceling.");
+                        return;
+                    }
                 }
+                BackupFile(fileDialog.Text);
+                if (dgVoodoo2Checkbox.IsChecked == true)
+                    DownloadFiles(fileDialog.Text);
+                EditFile(fileDialog.Text);
+                CopyGraphics(fileDialog.Text);
+                UninstallButton.IsEnabled = true;
+                MessageBox.Show("Patched!");
             }
-            BackupFile(fileDialog.Text);
-            if (dgVoodoo2Checkbox.IsChecked == true)
-                DownloadFiles(fileDialog.Text);
-            EditFile(fileDialog.Text);
-            CopyGraphics(fileDialog.Text);
-            UninstallButton.IsEnabled = true;
-            MessageBox.Show("Patched!");
+            else
+                MessageBox.Show("Please select your sims.exe.");
         }
 
         private void CheckForBackup(string path)
