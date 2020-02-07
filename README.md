@@ -15,10 +15,11 @@ Patches `The Sims 1: Complete Collection` to a custom resolution. You must be us
 
 ## Usage
 
-1. Run Sims1WidescreenPatcher.exe as administrator
-2. Select your Sims.exe
-3. Enter your preferred resolution
-4. Click Patch
+1. Download the latest [release](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/releases)
+2. Run Sims1WidescreenPatcher.exe as administrator
+3. Select your Sims.exe
+4. Enter your preferred resolution
+5. Click Patch
 
 ## Selecting Valid Resolutions
 
