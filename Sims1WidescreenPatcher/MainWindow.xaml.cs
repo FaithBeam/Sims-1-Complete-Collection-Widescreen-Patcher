@@ -108,6 +108,7 @@ namespace HexEditApp
 
             string text = File.ReadAllText($@"{directory}\dgVoodoo.conf");
             text = text.Replace("dgVoodooWatermark                   = true", "dgVoodooWatermark                   = false");
+            text = text.Replace("FastVideoMemoryAccess               = false", "FastVideoMemoryAccess               = true");
             File.WriteAllText($@"{directory}\dgVoodoo.conf", text);
         }
 
