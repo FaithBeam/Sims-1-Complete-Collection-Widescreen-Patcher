@@ -31,7 +31,7 @@ While this application does allow you to input any resolution you want, your gam
 4. Select Display adapter properties for Display 1
 5. Select List All Modes
 
-These are resolutions that will potentially work for The Sims 1. There are resolutions that don't work without dgVoodoo2, however. These resolutions are > 1080p or 1280x720.
+These are resolutions that will potentially work for The Sims 1. There are resolutions that don't work without dgVoodoo2, however. These resolutions are > 1080p.
 
 I'm sure you can increase the range of valid resolutions by creating custom resolutions using [Custom Resolution Utility](https://www.monitortests.com/forum/Thread-Custom-Resolution-Utility-CRU)
 
