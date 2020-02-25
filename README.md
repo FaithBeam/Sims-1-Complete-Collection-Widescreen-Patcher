@@ -43,6 +43,17 @@ If you want to go back to your default Sims executable and optionally no dgVoodo
 
 [Wiki](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki)
 
+## Known Issues
+
+### Missing Next / Back Arrows
+
+In certain resolutions, the Next / Back Arrows are missing in buy mode making purchasing every product impossible. The known resolutions that have this issue are:
+
+* 1600x900
+* 1600x1200
+
+There is no solution for this bug but a workaround is to choose a different resolution.
+
 ## Credits
 
 [WSGF](http://www.wsgf.org/dr/sims)
