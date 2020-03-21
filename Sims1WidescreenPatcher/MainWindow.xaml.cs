@@ -1,11 +1,11 @@
 ﻿using ImageMagick;
 using Microsoft.Win32;
+using PatternFinder;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
-using System.Security.Cryptography;
 using System.Windows;
 
 namespace HexEditApp
@@ -35,21 +35,21 @@ namespace HexEditApp
         {
             if (!string.IsNullOrWhiteSpace(fileDialog.Text))
             {
-                if (ForceCheckBox.IsChecked != true)
-                {
-                    if (!CheckHash(fileDialog.Text, "42F9A3E11BD1A03515C77777CB97B5BC"))
-                    {
-                        MessageBox.Show("MD5's do not match, canceling.");
-                        return;
-                    }
-                }
                 BackupFile(fileDialog.Text);
                 if (dgVoodoo2Checkbox.IsChecked == true)
                     DownloadFiles(fileDialog.Text);
-                EditFile(fileDialog.Text);
-                CopyGraphics(fileDialog.Text);
-                UninstallButton.IsEnabled = true;
-                MessageBox.Show("Patched!");
+                if (EditFile(fileDialog.Text))
+                {
+                    CopyGraphics(fileDialog.Text);
+                    UninstallButton.IsEnabled = true;
+                    var width = $"{int.Parse(WidthTextBox.Text):X4}";
+                    var height = $"{int.Parse(HeightTextBox.Text):X4}";
+                    widthPattern.Text = width.Substring(2) + " " + width.Substring(0, 2);
+                    heightPattern.Text = height.Substring(2) + " " + height.Substring(0, 2);
+                    MessageBox.Show("Patched!");
+                }
+                else
+                    MessageBox.Show("Failed to find pattern...");
             }
             else
                 MessageBox.Show("Please select your sims.exe.");
@@ -62,15 +62,6 @@ namespace HexEditApp
                 UninstallButton.IsEnabled = true;
             else
                 UninstallButton.IsEnabled = false;
-        }
-
-        private bool CheckHash(string path, string expectedMd5Hash)
-        {
-            using var md5 = MD5.Create();
-            using var stream = File.OpenRead(path);
-            var hash = md5.ComputeHash(stream);
-            string md5Hash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-            return md5Hash.Equals(expectedMd5Hash, StringComparison.InvariantCultureIgnoreCase);
         }
 
         private void BackupFile(string path)
@@ -112,22 +103,27 @@ namespace HexEditApp
             File.WriteAllText($@"{directory}\dgVoodoo.conf", text);
         }
 
-        private void EditFile(string path)
+        private bool EditFile(string path)
         {
             byte[] width = BitConverter.GetBytes(int.Parse(WidthTextBox.Text));
             byte[] height = BitConverter.GetBytes(int.Parse(HeightTextBox.Text));
 
-            int widthOffset = 1001563;
-            int heightOffset = 1001570;
             var bytes = File.ReadAllBytes(path);
+            var pattern = Pattern.Transform(widthPattern.Text + " " + betweenPattern.Text + " " + heightPattern.Text);
 
-            bytes[widthOffset] = width[0];
-            bytes[widthOffset + 1] = width[1];
+            if (Pattern.Find(bytes, pattern, out long foundOffset))
+            {
+                bytes[foundOffset] = width[0];
+                bytes[foundOffset + 1] = width[1];
 
-            bytes[heightOffset] = height[0];
-            bytes[heightOffset + 1] = height[1];
+                bytes[foundOffset + 2 + betweenPattern.Text.Trim().Split().Length] = height[0];
+                bytes[foundOffset + 2 + betweenPattern.Text.Trim().Split().Length + 1] = height[1];
 
-            File.WriteAllBytes(path, bytes);
+                File.WriteAllBytes(path, bytes);
+                return true;
+            }
+
+            return false;
         }
 
         private void CopyGraphics(string path)
@@ -165,6 +161,9 @@ namespace HexEditApp
             File.Move($@"{directory}\Sims Backup.exe", $@"{directory}\Sims.exe");
             TryRemoveDgVoodoo(directory);
             UninstallButton.IsEnabled = false;
+            widthPattern.Text = "20 03";
+            betweenPattern.Text = "00 00 C7 45 E0";
+            heightPattern.Text = "58 02";
             MessageBox.Show("Uninstalled.");
         }
 
@@ -189,6 +188,21 @@ namespace HexEditApp
                 Directory.Delete($@"{directory}\Doc", true);
             if (Directory.Exists($@"{directory}\MS"))
                 Directory.Delete($@"{directory}\MS", true);
+        }
+
+        private void WidthPattern_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+
+        }
+
+        private void BetweenPattern_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+
+        }
+
+        private void HeightPattern_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+
         }
     }
 }

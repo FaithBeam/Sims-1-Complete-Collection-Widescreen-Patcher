@@ -1,13 +1,15 @@
 # The Sims 1: Complete Collection Widescreen Patcher
 
-Patches `The Sims 1: Complete Collection` to a custom resolution. You must be using the NoCD executable with MD5 hash 42F9A3E11BD1A03515C77777CB97B5BC. Running this application will:
+Patches `The Sims 1: Complete Collection` to a custom resolution. You must be using a NoCD executable. This has only been tested with NoCD executable with MD5 hash 42F9A3E11BD1A03515C77777CB97B5BC. Running this application will:
 
 1. Create a backup of your existing Sims.exe as Sims Backup.exe
 2. Edit Sims.exe to your custom resolution
 3. Optionally downloads dgVoodoo2
 4. Resize UI graphics to your custom resolution
 
-![Main Application](https://i.imgur.com/GdEFFTk.png)
+You do not need to touch the Width, Between, and Height pattern text boxes. Those are there to offer flexibility in the program's pattern search. If you do want to play with the pattern, the syntax can be read [here](https://github.com/mrexodia/PatternFinder).
+
+![Main Application](https://i.imgur.com/jrR7hAY.png)
 
 ## Requirements
 
@@ -46,6 +48,8 @@ If you want to go back to your default Sims executable and optionally no dgVoodo
 ## Credits
 
 [WSGF](http://www.wsgf.org/dr/sims)
+
+[PatternFinder](https://github.com/mrexodia/PatternFinder)
 
 [dgVoodoo2](http://dege.freeweb.hu/dgVoodoo2/dgVoodoo2.html)
 
