@@ -33,7 +33,7 @@ While this application does allow you to input any resolution you want, your gam
 4. Select Display adapter properties for Display 1
 5. Select List All Modes
 
-These are resolutions that will potentially work for The Sims 1. There are resolutions that don't work without dgVoodoo2, however. These resolutions are > 1080p or 1280x720.
+These are resolutions that will potentially work for The Sims 1. There are resolutions that don't work without dgVoodoo2, however. These resolutions are > 1080p.
 
 I'm sure you can increase the range of valid resolutions by creating custom resolutions using [Custom Resolution Utility](https://www.monitortests.com/forum/Thread-Custom-Resolution-Utility-CRU)
 
@@ -44,6 +44,17 @@ If you want to go back to your default Sims executable and optionally no dgVoodo
 ## Screenshots
 
 [Wiki](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki)
+
+## Known Issues
+
+### Missing Next / Back Arrows
+
+In certain resolutions, the Next / Back Arrows are missing in buy mode making purchasing every product impossible. The known resolutions that have this issue are:
+
+* 1600x900
+* 1600x1200
+
+There is no solution for this bug but a workaround is to choose a different resolution.
 
 ## Credits
 
