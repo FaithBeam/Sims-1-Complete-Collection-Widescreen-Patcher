@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Sims 1 Widescreen Patcher" Height="181.967" Width="404.8">
+        Title="Sims 1 Widescreen Patcher" Height="163.925" Width="404.8">
     <Grid Height="146" VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition Height="79*"/>
@@ -18,18 +18,18 @@
         <TextBox x:Name="fileDialog" HorizontalAlignment="Left" Height="23" Margin="10,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="294" Grid.ColumnSpan="3"/>
         <Button x:Name="BrowseButton" Content="Browse" HorizontalAlignment="Left" Margin="35.667,14,0,0" VerticalAlignment="Top" Width="75" Click="BrowseButton_Click" Height="23" Grid.Column="2"/>
         <Button x:Name="PatchButton" Content="Patch" HorizontalAlignment="Left" Margin="35.667,57,0,0" VerticalAlignment="Top" Width="75" Click="PatchButton_Click" Grid.Column="2" Height="23" Grid.RowSpan="2"/>
-        <Button x:Name="UninstallButton" Content="Uninstall" HorizontalAlignment="Left" Margin="35.667,6.411,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="UninstallButton_Click" Grid.Column="2" Height="25" ToolTip="Undoes whatever this program did to your Sims 1 location. Restores the Sims.exe backup, removes custom graphic files, and removes dgVoodoo2." Grid.Row="1"/>
-        <TextBox x:Name="WidthTextBox" HorizontalAlignment="Left" Height="23" Margin="10,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="1920" Grid.RowSpan="2"/>
-        <TextBox x:Name="HeightTextBox" HorizontalAlignment="Left" Height="23" Margin="164,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="1080" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
+        <Button x:Name="UninstallButton" Content="Uninstall" HorizontalAlignment="Left" Margin="35.667,20.667,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="UninstallButton_Click" Grid.Column="2" Height="25" ToolTip="Undoes whatever this program did to your Sims 1 location. Restores the Sims.exe backup, removes custom graphic files, and removes dgVoodoo2." Grid.Row="1"/>
+        <TextBox x:Name="WidthTextBox" HorizontalAlignment="Left" Height="23" Margin="10,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="90" Text="1920" Grid.RowSpan="2"/>
+        <TextBox x:Name="HeightTextBox" HorizontalAlignment="Left" Height="23" Margin="105,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="90" Text="1080" Grid.RowSpan="2"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,42,0,0" TextWrapping="Wrap" Text="Width" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="164,41,0,0" TextWrapping="Wrap" Text="Height" VerticalAlignment="Top"/>
-        <CheckBox x:Name="dgVoodoo2Checkbox" Content="dgVoodoo2" HorizontalAlignment="Left" Margin="26.667,42.667,0,0" VerticalAlignment="Top" ToolTip="Some resolutions require dgVoodoo2. If your game crashes without it, try ticking this box." Width="84" Grid.Row="1" Grid.Column="2"/>
-        <TextBox x:Name="widthPattern" HorizontalAlignment="Left" Height="23" Margin="10,40.667,0,0" Grid.Row="1" TextWrapping="Wrap" Text="20 03" VerticalAlignment="Top" Width="74" TextChanged="WidthPattern_TextChanged"/>
-        <TextBox x:Name="heightPattern" Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="23" Margin="210,40.667,0,0" Grid.Row="1" TextWrapping="Wrap" Text="58 02" VerticalAlignment="Top" Width="79" TextChanged="HeightPattern_TextChanged"/>
-        <TextBox x:Name="betweenPattern" HorizontalAlignment="Left" Height="23" Margin="90,40.667,0,0" Grid.Row="1" TextWrapping="Wrap" Text="00 00 C7 45 E0" VerticalAlignment="Top" Width="115" TextChanged="BetweenPattern_TextChanged"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,24.667,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" Width="80" Text="Width Pattern"/>
-        <TextBlock HorizontalAlignment="Left" Margin="210,24.667,0,0" TextWrapping="Wrap" Text="Height Pattern" VerticalAlignment="Top" Grid.ColumnSpan="3" Grid.Row="1" Width="79"/>
-        <TextBlock HorizontalAlignment="Left" Margin="90,24.667,0,0" TextWrapping="Wrap" Text="Between Pattern" VerticalAlignment="Top" Grid.Row="1" Width="99"/>
+        <TextBlock HorizontalAlignment="Left" Margin="105,42,0,0" TextWrapping="Wrap" Text="Height" VerticalAlignment="Top"/>
+        <CheckBox x:Name="dgVoodoo2Checkbox" Content="dgVoodoo2" HorizontalAlignment="Left" Margin="205,64,0,0" VerticalAlignment="Top" ToolTip="Some resolutions require dgVoodoo2. If your game crashes without it, try ticking this box." Width="84" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
+        <TextBox x:Name="widthPattern" HorizontalAlignment="Left" Height="23" Margin="10,22.667,0,0" Grid.Row="1" TextWrapping="Wrap" Text="20 03" VerticalAlignment="Top" Width="74" TextChanged="WidthPattern_TextChanged"/>
+        <TextBox x:Name="heightPattern" Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="23" Margin="210,22.667,0,0" Grid.Row="1" TextWrapping="Wrap" Text="58 02" VerticalAlignment="Top" Width="79" TextChanged="HeightPattern_TextChanged"/>
+        <TextBox x:Name="betweenPattern" HorizontalAlignment="Left" Height="23" Margin="90,22.667,0,0" Grid.Row="1" TextWrapping="Wrap" Text="00 00 C7 45 E0" VerticalAlignment="Top" Width="115" TextChanged="BetweenPattern_TextChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,6.667,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" Width="80" Text="Width Pattern"/>
+        <TextBlock HorizontalAlignment="Left" Margin="210,6.667,0,0" TextWrapping="Wrap" Text="Height Pattern" VerticalAlignment="Top" Grid.ColumnSpan="3" Grid.Row="1" Width="79"/>
+        <TextBlock HorizontalAlignment="Left" Margin="90,6.667,0,0" TextWrapping="Wrap" Text="Between Pattern" VerticalAlignment="Top" Grid.Row="1" Width="99"/>
 
     </Grid>
 </Window>
