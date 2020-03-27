@@ -7,8 +7,6 @@ Patches `The Sims 1: Complete Collection` to a custom resolution. You must be us
 3. Optionally downloads dgVoodoo2
 4. Resize UI graphics to your custom resolution
 
-You do not need to touch the Width, Between, and Height pattern text boxes. Those are there to offer flexibility in the program's pattern search. If you do want to play with the pattern, the syntax can be read [here](https://github.com/mrexodia/PatternFinder).
-
 ![Main Application](https://i.imgur.com/PXYOF06.png)
 
 ## Requirements
@@ -22,6 +20,8 @@ You do not need to touch the Width, Between, and Height pattern text boxes. Thos
 3. Select your Sims.exe
 4. Enter your preferred resolution
 5. Click Patch
+
+You do not need to touch the Width, Between, and Height pattern text boxes. Those are there to offer flexibility in the program's pattern search. 
 
 ## Selecting Valid Resolutions
 
