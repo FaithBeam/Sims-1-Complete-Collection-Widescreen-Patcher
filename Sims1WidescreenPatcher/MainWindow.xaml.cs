@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Windows;
+using log4net;
 
 namespace HexEditApp
 {
@@ -15,9 +16,21 @@ namespace HexEditApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public MainWindow()
         {
+            log4net.Config.XmlConfigurator.Configure();
+            this.Dispatcher.UnhandledException += OnDispatcherUnhandledException;
             InitializeComponent();
+        }
+
+        void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            string errorMessage = string.Format("An unhandled exception occurred: {0}", e.Exception.Message);
+            log.Error(errorMessage);
+            MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            e.Handled = true;
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
