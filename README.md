@@ -56,6 +56,14 @@ In certain resolutions, the Next / Back Arrows are missing in buy mode making pu
 
 There is no solution for this bug but a workaround is to choose a different resolution.
 
+## General Sims Recommendations
+
+* Create a shortcut to your Sims.exe on your desktop or anywhere you want
+* Change the compatibility of this shortcut to run as "Windows XP (Service Pack 2)" (Fixes the 1000 colors error message)
+* Run this program as administrator (Fixes not being able to save)
+
+![Campatibility](https://i.imgur.com/1rGxVWH.png)
+
 ## Credits
 
 [WSGF](http://www.wsgf.org/dr/sims)
