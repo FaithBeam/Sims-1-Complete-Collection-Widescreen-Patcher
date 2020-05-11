@@ -240,41 +240,51 @@ namespace HexEditApp
             MessageBox.Show("Uninstalled.");
         }
 
+        private void DeleteFile(string path)
+        {
+            log.Info($"Deleting {path}");
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+
+        private void DeleteDirectory(string path)
+        {
+            log.Info($"Deleting {path}");
+            if (Directory.Exists(path))
+                Directory.Delete(path, true);
+        }
+
         private void TryRemoveDgVoodoo(string directory)
         {
             log.Info("Deleting previous installation.");
-            File.Delete($@"{directory}\D3DCompiler_43.dll");
-            File.Delete($@"{directory}\d3dcompiler_47.dll");
-            File.Delete($@"{directory}\D3D8.dll");
-            File.Delete($@"{directory}\D3D9.dll");
-            File.Delete($@"{directory}\D3DImm.dll");
-            File.Delete($@"{directory}\DDraw.dll");
-            File.Delete($@"{directory}\dgVoodoo.conf");
-            File.Delete($@"{directory}\dgVoodooCpl.exe");
-            File.Delete($@"{directory}\QuickGuide.html");
-            File.Delete($@"{directory}\dgVoodoo2_55_4.zip");
-            File.Delete($@"{directory}\UIGraphics\Community\Bus_loadscreen_1024x768.bmp");
-            File.Delete($@"{directory}\UIGraphics\CPanel\Backgrounds\PanelBack.bmp");
-            File.Delete($@"{directory}\UIGraphics\Downtown\largeback.bmp");
-            File.Delete($@"{directory}\UIGraphics\Downtown\dlgframe_1024x768.bmp");
-            File.Delete($@"{directory}\UIGraphics\Downtown\Taxi_loadscreen_1024x768.bmp");
-            File.Delete($@"{directory}\UIGraphics\Magicland\dlgframe_1024x768.bmp");
-            File.Delete($@"{directory}\UIGraphics\Magicland\largeback.bmp");
-            File.Delete($@"{directory}\UIGraphics\Magicland\magicland_loadscreen_1024x768.bmp");
-            File.Delete($@"{directory}\UIGraphics\Magicland\magicland_loadscreen_hole_1024x768.bmp");
-            File.Delete($@"{directory}\UIGraphics\Nbhd\Bus_loadscreen_1024x768.bmp");
-            File.Delete($@"{directory}\UIGraphics\Studiotown\dlgframe_1024x768.bmp");
-            File.Delete($@"{directory}\UIGraphics\Studiotown\largeback.bmp");
-            File.Delete($@"{directory}\UIGraphics\Studiotown\Studiotown_loadscreen_1024x768.bmp");
-            File.Delete($@"{directory}\UIGraphics\Studiotown\Studiotown_loadscreen_fan_1024x768.bmp");
-            File.Delete($@"{directory}\UIGraphics\Visland\vacation_loadscreen_1024x768.bmp");
-            File.Delete($@"{directory}\UIGraphics\Visland\vacation_loadscreen2_1024x768.bmp");
-            if (Directory.Exists($@"{directory}\3Dfx"))
-                Directory.Delete($@"{directory}\3Dfx", true);
-            if (Directory.Exists($@"{directory}\Doc"))
-                Directory.Delete($@"{directory}\Doc", true);
-            if (Directory.Exists($@"{directory}\MS"))
-                Directory.Delete($@"{directory}\MS", true);
+            DeleteFile($@"{directory}\D3DCompiler_43.dll");
+            DeleteFile($@"{directory}\d3dcompiler_47.dll");
+            DeleteFile($@"{directory}\D3D8.dll");
+            DeleteFile($@"{directory}\D3D9.dll");
+            DeleteFile($@"{directory}\D3DImm.dll");
+            DeleteFile($@"{directory}\DDraw.dll");
+            DeleteFile($@"{directory}\dgVoodoo.conf");
+            DeleteFile($@"{directory}\dgVoodooCpl.exe");
+            DeleteFile($@"{directory}\QuickGuide.html");
+            DeleteFile($@"{directory}\dgVoodoo2_55_4.zip");
+            DeleteFile($@"{directory}\UIGraphics\Community\Bus_loadscreen_1024x768.bmp");
+            DeleteFile($@"{directory}\UIGraphics\CPanel\Backgrounds\PanelBack.bmp");
+            DeleteFile($@"{directory}\UIGraphics\Downtown\largeback.bmp");
+            DeleteFile($@"{directory}\UIGraphics\Downtown\dlgframe_1024x768.bmp");
+            DeleteFile($@"{directory}\UIGraphics\Downtown\Taxi_loadscreen_1024x768.bmp");
+            DeleteFile($@"{directory}\UIGraphics\Magicland\dlgframe_1024x768.bmp");
+            DeleteFile($@"{directory}\UIGraphics\Magicland\largeback.bmp");
+            DeleteFile($@"{directory}\UIGraphics\Magicland\magicland_loadscreen_1024x768.bmp");
+            DeleteFile($@"{directory}\UIGraphics\Magicland\magicland_loadscreen_hole_1024x768.bmp");
+            DeleteFile($@"{directory}\UIGraphics\Nbhd\Bus_loadscreen_1024x768.bmp");
+            DeleteFile($@"{directory}\UIGraphics\Studiotown\largeback.bmp");
+            DeleteFile($@"{directory}\UIGraphics\Studiotown\Studiotown_loadscreen_1024x768.bmp");
+            DeleteFile($@"{directory}\UIGraphics\Studiotown\Studiotown_loadscreen_fan_1024x768.bmp");
+            DeleteFile($@"{directory}\UIGraphics\Visland\vacation_loadscreen_1024x768.bmp");
+            DeleteFile($@"{directory}\UIGraphics\Visland\vacation_loadscreen2_1024x768.bmp");
+            DeleteDirectory($@"{directory}\3Dfx");
+            DeleteDirectory($@"{directory}\Doc");
+            DeleteDirectory($@"{directory}\MS");
         }
 
         private void WidthPattern_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
