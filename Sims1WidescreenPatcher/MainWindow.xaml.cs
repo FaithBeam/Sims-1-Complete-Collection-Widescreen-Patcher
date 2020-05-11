@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Net;
 using System.Windows;
 using log4net;
 
@@ -81,10 +80,7 @@ namespace HexEditApp
         private void CheckForBackup(string path)
         {
             string directory = Path.GetDirectoryName(path);
-            if (File.Exists($@"{directory}\Sims Backup.exe"))
-                UninstallButton.IsEnabled = true;
-            else
-                UninstallButton.IsEnabled = false;
+            UninstallButton.IsEnabled = File.Exists($@"{directory}\Sims Backup.exe");
         }
 
         private void BackupFile(string path)
@@ -98,37 +94,33 @@ namespace HexEditApp
                 log.Info($@"Created backup {directory}\{filename} Backup.exe");
             }
             else
+            {
                 log.Info("A previous backup already exists, not creating another.");
+            }
         }
 
         private void DownloadFiles(string path)
         {
             string directory = Path.GetDirectoryName(path);
-            List<string> urls = new List<string> {
-                "http://dege.freeweb.hu/dgVoodoo2/D3DCompiler_43.zip",
-                "http://dege.freeweb.hu/dgVoodoo2/D3DCompiler_47.zip",
-                "http://dege.freeweb.hu/dgVoodoo2/dgVoodoo2_55_4.zip"
+            var voodooZips = new List<string>
+            {
+                "D3DCompiler_43.zip",
+                "D3DCompiler_47.zip",
+                "dgVoodoo2_55_4.zip"
             };
             TryRemoveDgVoodoo(directory);
-            using var client = new WebClient();
-            foreach (var url in urls)
+            foreach (var voodooZip in voodooZips)
             {
-                string fileName = Path.GetFileName(url);
-                log.Info($"Downloading {fileName}");
-                client.DownloadFile(url, $@"{directory}\{fileName}");
-
+                string fileName = Path.GetFileName(voodooZip);
                 log.Info($"Extracting {fileName}");
-                ZipFile.ExtractToDirectory($@"{directory}\{fileName}", $@"{directory}\");
-
-                log.Info($"Deleting {fileName}");
-                File.Delete($@"{directory}\{fileName}");
+                ZipFile.ExtractToDirectory(voodooZip, $@"{directory}\");
             }
 
             log.Info("Deleting unneeded directories.");
             new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory($@"{directory}\MS\", directory);
-            Directory.Delete($@"{directory}\3Dfx", true);
-            Directory.Delete($@"{directory}\Doc", true);
-            Directory.Delete($@"{directory}\MS", true);
+            DeleteDirectory($@"{directory}\3Dfx");
+            DeleteDirectory($@"{directory}\Doc");
+            DeleteDirectory($@"{directory}\MS");
 
             log.Info("Editing dgvoodoo.conf.");
             string text = File.ReadAllText($@"{directory}\dgVoodoo.conf");
@@ -198,32 +190,28 @@ namespace HexEditApp
         private void ScaleImageRle(string input, string output, int width, int height)
         {
             log.Info($"Resizing {input} to {output}");
-            using (MagickImage image = new MagickImage(input))
-            {
-                MagickGeometry size = new MagickGeometry(width, height);
-                size.IgnoreAspectRatio = true;
-                image.Resize(size);
-                image.Depth = 8;
-                image.Settings.Format = MagickFormat.Bmp3;
-                image.ColorType = ColorType.Palette;
-                image.Alpha(AlphaOption.Off);
-                image.Write(output);
-            }
+            using MagickImage image = new MagickImage(input);
+            MagickGeometry size = new MagickGeometry(width, height);
+            size.IgnoreAspectRatio = true;
+            image.Resize(size);
+            image.Depth = 8;
+            image.Settings.Format = MagickFormat.Bmp3;
+            image.ColorType = ColorType.Palette;
+            image.Alpha(AlphaOption.Off);
+            image.Write(output);
         }
 
         private void ScaleImageRgb(string input, string output, int width, int height)
         {
             log.Info($"Resizing {input} to {output}");
-            using (MagickImage image = new MagickImage(input))
-            {
-                MagickGeometry size = new MagickGeometry(width, height);
-                size.IgnoreAspectRatio = true;
-                image.Resize(size);
-                image.Depth = 8;
-                image.Settings.Format = MagickFormat.Bmp3;
-                image.ColorType = ColorType.TrueColor;
-                image.Write(output);
-            }
+            using MagickImage image = new MagickImage(input);
+            MagickGeometry size = new MagickGeometry(width, height);
+            size.IgnoreAspectRatio = true;
+            image.Resize(size);
+            image.Depth = 8;
+            image.Settings.Format = MagickFormat.Bmp3;
+            image.ColorType = ColorType.TrueColor;
+            image.Write(output);
         }
 
         private void UninstallButton_Click(object sender, RoutedEventArgs e)
