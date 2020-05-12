@@ -316,19 +316,10 @@ namespace HexEditApp
             DeleteDirectory($@"{directory}\MS");
         }
 
-        private void WidthPattern_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void HeightTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-
-        }
-
-        private void BetweenPattern_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-
-        }
-
-        private void HeightPattern_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-
+            if (int.Parse(HeightTextBox.Text) > 1080)
+                dgVoodoo2Checkbox.IsChecked = true;
         }
     }
 }
