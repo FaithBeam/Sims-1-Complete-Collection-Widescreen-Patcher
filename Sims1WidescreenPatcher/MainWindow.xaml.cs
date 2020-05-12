@@ -8,6 +8,7 @@ using System.IO.Compression;
 using System.Windows;
 using log4net;
 using System.Security.Cryptography;
+using System.Configuration;
 
 namespace HexEditApp
 {
@@ -17,12 +18,20 @@ namespace HexEditApp
     public partial class MainWindow : Window
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly string exeName = ConfigurationManager.AppSettings["Executable"];
 
         public MainWindow()
         {
             log4net.Config.XmlConfigurator.Configure();
             this.Dispatcher.UnhandledException += OnDispatcherUnhandledException;
             InitializeComponent();
+            if (ConfigurationManager.AppSettings["PowerUser"] == "true")
+            {
+                widthPattern.IsEnabled = true;
+                betweenPattern.IsEnabled = true;
+                heightPattern.IsEnabled = true;
+                resizeUiElementsCheckbox.IsEnabled = true;
+            }
         }
 
         private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
@@ -37,7 +46,7 @@ namespace HexEditApp
         {
             log.Info($"Clicked browse button.");
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Sims|Sims.exe|All files (*.*)|*.*";
+            openFileDialog.Filter = $"{this.exeName}|{this.exeName}.exe|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
                 fileDialog.Text = openFileDialog.FileName;
@@ -86,7 +95,7 @@ namespace HexEditApp
             else
             {
                 log.Info("No file was selected.");
-                MessageBox.Show("Please select your sims.exe.");
+                MessageBox.Show($"Please select your {this.exeName}.exe.");
             }
         }
 
@@ -101,7 +110,7 @@ namespace HexEditApp
         private void CheckForBackup(string path)
         {
             string directory = Path.GetDirectoryName(path);
-            UninstallButton.IsEnabled = File.Exists($@"{directory}\Sims Backup.exe");
+            UninstallButton.IsEnabled = File.Exists($@"{directory}\{this.exeName} Backup.exe");
         }
 
         private void BackupFile(string path)
@@ -251,7 +260,7 @@ namespace HexEditApp
             log.Info("Uninstall button pressed.");
             string directory = Path.GetDirectoryName(fileDialog.Text);
             File.Delete(fileDialog.Text);
-            File.Move($@"{directory}\Sims Backup.exe", $@"{directory}\Sims.exe");
+            File.Move($@"{directory}\{this.exeName} Backup.exe", $@"{directory}\{this.exeName}.exe");
             TryRemoveDgVoodoo(directory);
             UninstallButton.IsEnabled = false;
             widthPattern.Text = "20 03";
@@ -289,6 +298,8 @@ namespace HexEditApp
         private void TryRemoveDgVoodoo(string directory)
         {
             log.Info("Deleting previous installation.");
+            DeleteFile($@"{directory}\D3DCompiler_43.dll");
+            DeleteFile($@"{directory}\d3dcompiler_47.dll");
             DeleteFile($@"{directory}\D3D8.dll");
             DeleteFile($@"{directory}\D3D9.dll");
             DeleteFile($@"{directory}\D3DImm.dll");
