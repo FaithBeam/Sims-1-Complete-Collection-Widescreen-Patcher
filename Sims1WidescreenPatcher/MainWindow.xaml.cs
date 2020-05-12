@@ -59,7 +59,10 @@ namespace HexEditApp
                         ExtractVoodooZips(fileDialog.Text);
                     if (EditFile(fileDialog.Text))
                     {
-                        CopyGraphics(fileDialog.Text);
+                        if (resizeUiElementsCheckbox.IsChecked == true)
+                            CopyGraphics(fileDialog.Text);
+                        else
+                            log.Info("Resize UI elements checkbox is not checked, not resizing or copying graphics.");
                         UninstallButton.IsEnabled = true;
                         var width = $"{int.Parse(WidthTextBox.Text):X4}";
                         var height = $"{int.Parse(HeightTextBox.Text):X4}";
