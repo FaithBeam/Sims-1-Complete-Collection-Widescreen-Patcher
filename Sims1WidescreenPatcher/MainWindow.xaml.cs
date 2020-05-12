@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Windows;
 using log4net;
+using System.Security.Cryptography;
 
 namespace HexEditApp
 {
@@ -24,7 +25,7 @@ namespace HexEditApp
             InitializeComponent();
         }
 
-        void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             string errorMessage = string.Format("An unhandled exception occurred: {0}", e.Exception.Message);
             log.Error(errorMessage);
@@ -50,24 +51,33 @@ namespace HexEditApp
             log.Info("Clicked patch button.");
             if (!string.IsNullOrWhiteSpace(fileDialog.Text))
             {
-                BackupFile(fileDialog.Text);
-                if (dgVoodoo2Checkbox.IsChecked == true)
-                    DownloadFiles(fileDialog.Text);
-                if (EditFile(fileDialog.Text))
+                if (File.Exists(fileDialog.Text))
                 {
-                    CopyGraphics(fileDialog.Text);
-                    UninstallButton.IsEnabled = true;
-                    var width = $"{int.Parse(WidthTextBox.Text):X4}";
-                    var height = $"{int.Parse(HeightTextBox.Text):X4}";
-                    widthPattern.Text = width.Substring(2) + " " + width.Substring(0, 2);
-                    heightPattern.Text = height.Substring(2) + " " + height.Substring(0, 2);
-                    log.Info("Patched");
-                    MessageBox.Show("Patched!");
+                    GetMd5(fileDialog.Text);
+                    BackupFile(fileDialog.Text);
+                    if (dgVoodoo2Checkbox.IsChecked == true)
+                        ExtractVoodooZips(fileDialog.Text);
+                    if (EditFile(fileDialog.Text))
+                    {
+                        CopyGraphics(fileDialog.Text);
+                        UninstallButton.IsEnabled = true;
+                        var width = $"{int.Parse(WidthTextBox.Text):X4}";
+                        var height = $"{int.Parse(HeightTextBox.Text):X4}";
+                        widthPattern.Text = width.Substring(2) + " " + width.Substring(0, 2);
+                        heightPattern.Text = height.Substring(2) + " " + height.Substring(0, 2);
+                        log.Info("Patched");
+                        MessageBox.Show("Patched!");
+                    }
+                    else
+                    {
+                        log.Info($"Failed to find pattern: " + widthPattern.Text + " " + betweenPattern.Text + " " + heightPattern.Text);
+                        MessageBox.Show("Failed to find pattern...");
+                    }
                 }
                 else
                 {
-                    log.Info($"Failed to find pattern");
-                    MessageBox.Show("Failed to find pattern...");
+                    log.Info("File " + fileDialog.Text + " doesn't exist.");
+                    MessageBox.Show("File " + fileDialog.Text + " doesn't exist.");
                 }
             }
             else
@@ -75,6 +85,14 @@ namespace HexEditApp
                 log.Info("No file was selected.");
                 MessageBox.Show("Please select your sims.exe.");
             }
+        }
+
+        private void GetMd5(string path)
+        {
+            using var md5 = MD5.Create();
+            using var stream = File.OpenRead(path);
+            var hash = md5.ComputeHash(stream);
+            log.Info("File md5 is: " + BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant());
         }
 
         private void CheckForBackup(string path)
@@ -99,7 +117,7 @@ namespace HexEditApp
             }
         }
 
-        private void DownloadFiles(string path)
+        private void ExtractVoodooZips(string path)
         {
             string directory = Path.GetDirectoryName(path);
             var voodooZips = new List<string>
@@ -140,7 +158,7 @@ namespace HexEditApp
 
             if (Pattern.Find(bytes, pattern, out long foundOffset))
             {
-                log.Info($"{pattern} found.");
+                log.Info(widthPattern.Text + " " + betweenPattern.Text + " " + heightPattern.Text + " found.");
                 bytes[foundOffset] = width[0];
                 bytes[foundOffset + 1] = width[1];
 
@@ -151,7 +169,6 @@ namespace HexEditApp
                 return true;
             }
 
-            log.Info($"{pattern} not found.");
             return false;
         }
 
