@@ -181,13 +181,12 @@ namespace HexEditApp
             int width = int.Parse(WidthTextBox.Text);
             int height = int.Parse(HeightTextBox.Text);
 
-            Directory.CreateDirectory($@"{directory}\UIGraphics\Community");
-            Directory.CreateDirectory($@"{directory}\UIGraphics\CPanel\Backgrounds");
-            Directory.CreateDirectory($@"{directory}\UIGraphics\Downtown");
-            Directory.CreateDirectory($@"{directory}\UIGraphics\Magicland");
-            Directory.CreateDirectory($@"{directory}\UIGraphics\Nbhd");
-            Directory.CreateDirectory($@"{directory}\UIGraphics\Studiotown");
-            Directory.CreateDirectory($@"{directory}\UIGraphics\Visland");
+            CreateDirectory($@"{directory}\UIGraphics\Community");
+            CreateDirectory($@"{directory}\UIGraphics\CPanel\Backgrounds");
+            CreateDirectory($@"{directory}\UIGraphics\Magicland");
+            CreateDirectory($@"{directory}\UIGraphics\Nbhd");
+            CreateDirectory($@"{directory}\UIGraphics\Studiotown");
+            CreateDirectory($@"{directory}\UIGraphics\Visland");
 
             ScaleImageRle(@"UIGraphics\Community\Bus_loadscreen_1024x768.bmp", $@"{directory}\UIGraphics\Community\Bus_loadscreen_1024x768.bmp", width, height);
             ScaleImageRle(@"UIGraphics\CPanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\CPanel\Backgrounds\PanelBack.bmp", width, 100);
@@ -205,6 +204,19 @@ namespace HexEditApp
             ScaleImageRle(@"UIGraphics\Studiotown\Studiotown_loadscreen_fan_1024x768.bmp", $@"{directory}\UIGraphics\Studiotown\Studiotown_loadscreen_fan_1024x768.bmp", width, height);
             ScaleImageRle(@"UIGraphics\Visland\vacation_loadscreen_1024x768.bmp", $@"{directory}\UIGraphics\Visland\vacation_loadscreen_1024x768.bmp", width, height);
             ScaleImageRle(@"UIGraphics\Visland\vacation_loadscreen2_1024x768.bmp", $@"{directory}\UIGraphics\Visland\vacation_loadscreen2_1024x768.bmp", width, height);
+        }
+
+        private void CreateDirectory(string path)
+        {
+            if (Directory.Exists(path))
+            {
+                log.Info(path + " already exists.");
+            }
+            else
+            {
+                log.Info("Creating directory: " + path);
+                Directory.CreateDirectory(path);
+            }
         }
 
         private void ScaleImageRle(string input, string output, int width, int height)
@@ -250,23 +262,33 @@ namespace HexEditApp
 
         private void DeleteFile(string path)
         {
-            log.Info($"Deleting {path}");
             if (File.Exists(path))
+            {
+                log.Info($"Deleting {path}");
                 File.Delete(path);
+            }
+            else
+            {
+                log.Info(path + " doesn't exist.");
+            }
         }
 
         private void DeleteDirectory(string path)
         {
-            log.Info($"Deleting {path}");
             if (Directory.Exists(path))
+            {
+                log.Info($"Deleting {path}");
                 Directory.Delete(path, true);
+            }
+            else
+            {
+                log.Info(path + " doesn't exist.");
+            }
         }
 
         private void TryRemoveDgVoodoo(string directory)
         {
             log.Info("Deleting previous installation.");
-            DeleteFile($@"{directory}\D3DCompiler_43.dll");
-            DeleteFile($@"{directory}\d3dcompiler_47.dll");
             DeleteFile($@"{directory}\D3D8.dll");
             DeleteFile($@"{directory}\D3D9.dll");
             DeleteFile($@"{directory}\D3DImm.dll");
@@ -274,7 +296,6 @@ namespace HexEditApp
             DeleteFile($@"{directory}\dgVoodoo.conf");
             DeleteFile($@"{directory}\dgVoodooCpl.exe");
             DeleteFile($@"{directory}\QuickGuide.html");
-            DeleteFile($@"{directory}\dgVoodoo2_55_4.zip");
             DeleteFile($@"{directory}\UIGraphics\Community\Bus_loadscreen_1024x768.bmp");
             DeleteFile($@"{directory}\UIGraphics\CPanel\Backgrounds\PanelBack.bmp");
             DeleteFile($@"{directory}\UIGraphics\Downtown\largeback.bmp");
