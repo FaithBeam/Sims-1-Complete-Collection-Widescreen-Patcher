@@ -196,6 +196,7 @@ namespace HexEditApp
             CreateDirectory($@"{directory}\UIGraphics\Nbhd");
             CreateDirectory($@"{directory}\UIGraphics\Studiotown");
             CreateDirectory($@"{directory}\UIGraphics\Visland");
+            CreateDirectory($@"{directory}\UIGraphics\Downtown");
 
             ScaleImageRle(@"UIGraphics\Community\Bus_loadscreen_1024x768.bmp", $@"{directory}\UIGraphics\Community\Bus_loadscreen_1024x768.bmp", width, height);
             ScaleImageRle(@"UIGraphics\CPanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\CPanel\Backgrounds\PanelBack.bmp", width, 100);
