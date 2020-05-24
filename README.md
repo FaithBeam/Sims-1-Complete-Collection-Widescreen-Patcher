@@ -41,29 +41,6 @@ I'm sure you can increase the range of valid resolutions by creating custom reso
 
 If you want to go back to your default Sims executable and optionally no dgVoodoo2 files, select the uninstall button.
 
-## Screenshots
-
-[Wiki](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki)
-
-## Known Issues
-
-### Missing Next / Back Arrows
-
-In certain resolutions, the Next / Back Arrows are missing in buy mode making purchasing every product impossible. The known resolutions that have this issue are:
-
-* 1600x900
-* 1600x1200
-
-There is no solution for this bug but a workaround is to choose a different resolution.
-
-## General Sims Recommendations
-
-* Create a shortcut to your Sims.exe on your desktop or anywhere you want
-* Change the compatibility of this shortcut to run as "Windows XP (Service Pack 2)" (Fixes the 1000 colors error message)
-* Run this program as administrator (Fixes not being able to save)
-
-![Campatibility](https://i.imgur.com/1rGxVWH.png)
-
 ## Credits
 
 [WSGF](http://www.wsgf.org/dr/sims)
