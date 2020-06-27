@@ -25,6 +25,11 @@ namespace HexEditApp
             log4net.Config.XmlConfigurator.Configure();
             this.Dispatcher.UnhandledException += OnDispatcherUnhandledException;
             InitializeComponent();
+            string screenWidth = SystemParameters.PrimaryScreenWidth.ToString();
+            string screenHeight = SystemParameters.PrimaryScreenHeight.ToString();
+            WidthTextBox.Text = screenWidth;
+            HeightTextBox.Text = screenHeight;
+            log.Info($"Screen resolution detected as {screenWidth}x{screenHeight}");
             if (ConfigurationManager.AppSettings["PowerUser"] == "true")
             {
                 widthPattern.IsEnabled = true;
