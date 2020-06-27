@@ -30,6 +30,9 @@ namespace HexEditApp
             WidthTextBox.Text = screenWidth;
             HeightTextBox.Text = screenHeight;
             log.Info($"Screen resolution detected as {screenWidth}x{screenHeight}");
+            widthPattern.Text = ConfigurationManager.AppSettings["WidthPattern"];
+            betweenPattern.Text = ConfigurationManager.AppSettings["BetweenPattern"];
+            heightPattern.Text = ConfigurationManager.AppSettings["HeightPattern"];
             if (ConfigurationManager.AppSettings["PowerUser"] == "true")
             {
                 widthPattern.IsEnabled = true;
@@ -270,9 +273,9 @@ namespace HexEditApp
             File.Move($@"{directory}\{this.exeName} Backup.exe", $@"{directory}\{this.exeName}.exe");
             TryRemoveDgVoodoo(directory);
             UninstallButton.IsEnabled = false;
-            widthPattern.Text = "20 03";
-            betweenPattern.Text = "00 00 C7 45 E0";
-            heightPattern.Text = "58 02";
+            widthPattern.Text = ConfigurationManager.AppSettings["WidthPattern"];
+            betweenPattern.Text = ConfigurationManager.AppSettings["BetweenPattern"];
+            heightPattern.Text = ConfigurationManager.AppSettings["HeightPattern"];
             MessageBox.Show("Uninstalled.");
         }
 
