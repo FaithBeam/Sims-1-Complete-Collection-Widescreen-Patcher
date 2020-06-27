@@ -67,7 +67,7 @@ namespace HexEditApp
             {
                 if (File.Exists(fileDialog.Text))
                 {
-                    GetMd5(fileDialog.Text);
+                    log.Info("Before patch md5 is: " + GetMd5(fileDialog.Text));
                     BackupFile(fileDialog.Text);
                     if (dgVoodoo2Checkbox.IsChecked == true)
                         ExtractVoodooZips(fileDialog.Text);
@@ -82,6 +82,7 @@ namespace HexEditApp
                         var height = $"{int.Parse(HeightTextBox.Text):X4}";
                         widthPattern.Text = width.Substring(2) + " " + width.Substring(0, 2);
                         heightPattern.Text = height.Substring(2) + " " + height.Substring(0, 2);
+                        log.Info("After patch md5 is: " + GetMd5(fileDialog.Text));
                         log.Info("Patched");
                         MessageBox.Show("Patched!");
                     }
@@ -104,12 +105,12 @@ namespace HexEditApp
             }
         }
 
-        private void GetMd5(string path)
+        private string GetMd5(string path)
         {
             using var md5 = MD5.Create();
             using var stream = File.OpenRead(path);
             var hash = md5.ComputeHash(stream);
-            log.Info("File md5 is: " + BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant());
+            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
 
         private void CheckForBackup(string path)
