@@ -9,7 +9,6 @@ using System.Windows;
 using log4net;
 using System.Security.Cryptography;
 using System.Configuration;
-using Sims.Far;
 
 namespace HexEditApp
 {
@@ -18,26 +17,29 @@ namespace HexEditApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly List<string> bmpsToExtract = new List<string> {
-            @"Community\Bus_loadscreen_800x600.bmp",
-            @"cpanel\Backgrounds\budgetback.bmp",
-            @"cpanel\Backgrounds\PanelBack.bmp",
-            @"Downtown\dlgframe2.bmp", // Gets renamed to dlgframe_800x600
-            @"Downtown\largeback.bmp",
-            @"Downtown\Taxi_loadscreen_800x600.bmp",
-            @"Magicland\dlgframe2.bmp", // Gets renamed to dlgframe_800x600
-            @"Magicland\largeback.bmp",
-            @"Magicland\magicland_loadscreen_800x600.bmp",
-            @"Magicland\magicland_loadscreen_hole_800x600.bmp",
-            @"Nbhd\Bus_loadscreen_800x600.bmp",
-            @"Other\setup.bmp",
-            @"Studiotown\dlgframe2.bmp", // Gets renamed to dlgframe_800x600
-            @"Studiotown\dlgframe_1024x768.bmp",
-            @"Studiotown\largeback.bmp",
-            @"Studiotown\Studiotown_loadscreen_800x600.bmp",
-            @"Studiotown\Studiotown_loadscreen_fan_800x600.bmp",
-            @"VIsland\vacation_loadscreen_800x600.bmp",
-            @"VIsland\vacation_loadscreen2_800x600.bmp",
+        private readonly List<string> images = new List<string> {
+            @"UIGraphics\Community\Bus_loadscreen_1024x768.bmp",
+            @"UIGraphics\Downtown\Taxi_loadscreen_1024x768.bmp",
+            @"UIGraphics\Magicland\magicland_loadscreen_1024x768.bmp",
+            @"UIGraphics\Magicland\magicland_loadscreen_hole_1024x768.bmp",
+            @"UIGraphics\Nbhd\Bus_loadscreen_1024x768.bmp",
+            @"UIGraphics\Other\setup.bmp",
+            @"UIGraphics\Studiotown\Studiotown_loadscreen_1024x768.bmp",
+            @"UIGraphics\Studiotown\Studiotown_loadscreen_fan_1024x768.bmp",
+            @"UIGraphics\VIsland\vacation_loadscreen_1024x768.bmp",
+            @"UIGraphics\VIsland\vacation_loadscreen2_1024x768.bmp",
+        };
+        private readonly List<string> blueImages = new List<string>
+        {
+            @"UIGraphics\Downtown\largeback.bmp",
+            @"UIGraphics\Magicland\largeback.bmp",
+            @"UIGraphics\Studiotown\largeback.bmp",
+        };
+        private readonly List<string> compositeImages = new List<string>
+        {
+            @"UIGraphics\Downtown\dlgframe_1024x768.bmp",
+            @"UIGraphics\Magicland\dlgframe_1024x768.bmp",
+            @"UIGraphics\Studiotown\dlgframe_1024x768.bmp",
         };
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly string exeName = ConfigurationManager.AppSettings["Executable"];
@@ -229,10 +231,13 @@ namespace HexEditApp
             CreateDirectory($@"{directory}\UIGraphics\Visland");
             CreateDirectory($@"{directory}\UIGraphics\Downtown");
 
-            var far = new Far(@"C:\Program Files (x86)\Maxis\The Sims\UIGraphics\UIGraphics.far");
-            far.Extract(@"UIGraphics\", this.bmpsToExtract);
-
-            ScaleImagesRle(this.bmpsToExtract, directory, width, height);
+            ScaleImage(@"UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
+            foreach (var i in images)
+                ScaleImage(i, $@"{directory}\{i}", width, height);
+            foreach (var i in blueImages)
+                ScaleImage(@"UIGraphics\bluebackground.png", $@"{directory}\{i}", width, height);
+            foreach (var i in compositeImages)
+                CompositeImage($@"{directory}\{i}", width, height);
         }
 
         private void CreateDirectory(string path)
@@ -248,24 +253,36 @@ namespace HexEditApp
             }
         }
 
-        private void ScaleImagesRle(IEnumerable<string> images, string outputDirectory, int width, int height)
+        private void CompositeImage(string output, int width, int height)
         {
-            foreach (var i in images)
-            {
-                using var image = new MagickImage($@"UIGraphics\{i}");
-                var size = i.Contains("PanelBack.bmp") ? new MagickGeometry(width, 100) : new MagickGeometry(width, height);
-                log.Info($@"Resizing {i} to {outputDirectory}\UIGraphics\{i}");
+            using var compositeImage = new MagickImage(@"UIGraphics\pink.png");
+            using var baseImage = new MagickImage(@"UIGraphics\bluebackground.png");
+            log.Info($@"Compositing UIGraphics\pink.png over UIGraphics\bluebackground.png to {output}");
+            var size = new MagickGeometry(width, height);
+            size.IgnoreAspectRatio = true;
+            baseImage.Resize(size);
+            baseImage.Composite(compositeImage, Gravity.Center);
+            baseImage.Depth = 8;
+            baseImage.Settings.Compression = CompressionMethod.RLE;
+            baseImage.Settings.Format = MagickFormat.Bmp3;
+            baseImage.ColorType = ColorType.Palette;
+            baseImage.Alpha(AlphaOption.Off);
+            baseImage.Write(output);
+        }
+
+        private void ScaleImage(string input, string output, int width, int height)
+        {
+                using var image = new MagickImage(input);
+                var size = new MagickGeometry(width, height);
+                log.Info($"Resizing {input} to {output}");
                 size.IgnoreAspectRatio = true;
                 image.Resize(size);
                 image.Depth = 8;
+                image.Settings.Compression = CompressionMethod.RLE;
                 image.Settings.Format = MagickFormat.Bmp3;
                 image.ColorType = ColorType.Palette;
                 image.Alpha(AlphaOption.Off);
-                if (i.Contains("dlgframe2.bmp"))
-                    image.Write($@"{outputDirectory}\UIGraphics\{i.Replace("dlgframe2", "dlgframe_800x600")}");
-                else
-                    image.Write($@"{outputDirectory}\UIGraphics\{i}");
-            }
+                image.Write(output);
         }
 
         private void UninstallButton_Click(object sender, RoutedEventArgs e)
@@ -319,9 +336,13 @@ namespace HexEditApp
             DeleteFile($@"{directory}\dgVoodoo.conf");
             DeleteFile($@"{directory}\dgVoodooCpl.exe");
             DeleteFile($@"{directory}\QuickGuide.html");
-            foreach (var i in this.bmpsToExtract)
-                DeleteFile($@"{directory}\UIGraphics\{i}");
-            DeleteDirectory("UIGraphics");
+            DeleteFile($@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp");
+            foreach (var i in images)
+                DeleteFile($@"{directory}\{i}");
+            foreach (var i in blueImages)
+                DeleteFile($@"{directory}\{i}");
+            foreach (var i in compositeImages)
+                DeleteFile($@"{directory}\{i}");
             DeleteDirectory($@"{directory}\3Dfx");
             DeleteDirectory($@"{directory}\Doc");
             DeleteDirectory($@"{directory}\MS");

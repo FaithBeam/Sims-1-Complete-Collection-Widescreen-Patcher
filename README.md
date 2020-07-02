@@ -5,7 +5,7 @@ Patches `The Sims 1: Complete Collection` to a custom resolution. You must be us
 1. Create a backup of your existing Sims.exe as Sims Backup.exe
 2. Edit Sims.exe to your custom resolution
 3. Optionally extracts dgVoodoo2
-4. Extract and resize UI graphics from UIGraphics.far to your custom resolution
+4. Resize UI graphics to your custom resolution
 
 ![Main Application](https://i.imgur.com/tbNdvkt.png)
 
