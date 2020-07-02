@@ -39,7 +39,7 @@ I'm sure you can increase the range of valid resolutions by creating custom reso
 
 ## Uninstall
 
-If you want to go back to your default Sims executable and optionally no dgVoodoo2 files, select the uninstall button.
+If you want to go back to your default Sims executable, select the uninstall button.
 
 ## Credits
 
