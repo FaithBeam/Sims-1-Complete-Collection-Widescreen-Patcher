@@ -50,3 +50,5 @@ If you want to go back to your default Sims executable and optionally no dgVoodo
 [dgVoodoo2](http://dege.freeweb.hu/dgVoodoo2/dgVoodoo2.html)
 
 [Magick.NET](https://github.com/dlemstra/Magick.NET)
+
+[Abulph](https://www.reddit.com/r/thesims/comments/6snibn/the_sims_1_widescreen_fix_1080p/) - Ideas to fix certain graphical issues
