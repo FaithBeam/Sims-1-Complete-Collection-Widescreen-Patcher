@@ -5,7 +5,7 @@ pipeline {
         stage('Establish Variables') {
             steps {
                 script {
-                    VERSION = powershell(returnStdout: true, script: '''(Get-Content .\\Sims1WidescreenPatcher\\Properties\\AssemblyInfo.cs | Select-String -Pattern \'AssemblyInformationalVersion\\(\\"(.+)-d\\"\\)\').Matches.Groups[1].Value''').trim()
+                    VERSION = powershell(returnStdout: true, script: '''(Get-Content .\\Sims1WidescreenPatcher\\Properties\\AssemblyInfo.cs | Select-String -Pattern \'AssemblyVersion\\(\\"(\\d+\\.\\d+\\.\\d+).+\\)]).Matches.Groups[1].Value''').trim()
                 }
             }
         }

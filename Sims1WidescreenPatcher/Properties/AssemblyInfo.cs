@@ -53,6 +53,5 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.11.0.0")]
 [assembly: AssemblyFileVersion("1.11.0.0")]
-[assembly: AssemblyInformationalVersion("1.10.0-d")]
 
 [assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config", Watch = true)]
