@@ -11,7 +11,7 @@ Patches `The Sims 1: Complete Collection` to a custom resolution. You must be us
 
 ## Requirements
 
-* .NET 4.5
+* .NET 4.0
 
 ## Usage
 
