@@ -199,12 +199,9 @@
     <PackageReference Include="Magick.NET-Q8-AnyCPU">
       <Version>7.20.0.1</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PatternFinder\PatternFinder.csproj">
-      <Project>{ef5b161c-55a2-472c-9632-df27a0e0a775}</Project>
-      <Name>PatternFinder</Name>
-    </ProjectReference>
+    <PackageReference Include="PatternFinder">
+      <Version>1.0.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

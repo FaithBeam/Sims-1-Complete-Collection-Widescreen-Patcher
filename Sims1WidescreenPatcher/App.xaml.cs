@@ -1,10 +1,4 @@
 ﻿using log4net;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace HexEditApp
@@ -19,6 +13,9 @@ namespace HexEditApp
         {
             log4net.Config.XmlConfigurator.Configure();
             log.Info("=============  Started Logging  =============        ");
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+            log.Info(fvi.FileVersion);
             base.OnStartup(e);
         }
     }
