@@ -1,14 +1,14 @@
 ﻿using ImageMagick;
 using Microsoft.Win32;
-using PatternFinder;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Windows;
 using log4net;
 using System.Security.Cryptography;
 using System.Configuration;
+using PatternFinder;
+using Ionic.Zip;
 
 namespace HexEditApp
 {
@@ -176,7 +176,7 @@ namespace HexEditApp
             {
                 string fileName = Path.GetFileName(voodooZip);
                 log.Info($"Extracting {fileName}");
-                ZipFile.ExtractToDirectory(voodooZip, $@"{directory}\");
+                new ZipFile(voodooZip).ExtractAll($@"{directory}\");
             }
 
             log.Info("Deleting unneeded directories.");
@@ -197,9 +197,8 @@ namespace HexEditApp
             log.Debug($"Hex editing {path}");
             byte[] width = BitConverter.GetBytes(int.Parse(WidthTextBox.Text));
             byte[] height = BitConverter.GetBytes(int.Parse(HeightTextBox.Text));
-
-            var bytes = File.ReadAllBytes(path);
             var pattern = Pattern.Transform(widthPattern.Text + " " + betweenPattern.Text + " " + heightPattern.Text);
+            var bytes = File.ReadAllBytes(path);
 
             if (Pattern.Find(bytes, pattern, out long foundOffset))
             {
@@ -264,7 +263,7 @@ namespace HexEditApp
             baseImage.Resize(size);
             baseImage.Composite(compositeImage, Gravity.Center);
             baseImage.Depth = 8;
-            baseImage.Settings.Compression = CompressionMethod.RLE;
+            baseImage.Settings.Compression = ImageMagick.CompressionMethod.RLE;
             baseImage.Settings.Format = MagickFormat.Bmp3;
             baseImage.ColorType = ColorType.Palette;
             baseImage.Alpha(AlphaOption.Off);
@@ -279,7 +278,7 @@ namespace HexEditApp
                 size.IgnoreAspectRatio = true;
                 image.Resize(size);
                 image.Depth = 8;
-                image.Settings.Compression = CompressionMethod.RLE;
+                image.Settings.Compression = ImageMagick.CompressionMethod.RLE;
                 image.Settings.Format = MagickFormat.Bmp3;
                 image.ColorType = ColorType.Palette;
                 image.Alpha(AlphaOption.Off);
