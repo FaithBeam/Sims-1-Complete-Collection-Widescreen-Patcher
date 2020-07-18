@@ -180,7 +180,8 @@ namespace HexEditApp
             }
 
             log.Info("Deleting unneeded directories.");
-            new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory($@"{directory}\MS\x86", directory);
+            foreach (var file in Directory.GetFiles($@"{directory}\MS\x86"))
+                File.Move(file, $@"{directory}\{Path.GetFileName(file)}");
             DeleteDirectory($@"{directory}\3Dfx");
             DeleteDirectory($@"{directory}\Doc");
             DeleteDirectory($@"{directory}\MS");

@@ -12,7 +12,7 @@ namespace HexEditApp
         protected override void OnStartup(StartupEventArgs e)
         {
             log4net.Config.XmlConfigurator.Configure();
-            log.Info("=============  Started Logging  =============        ");
+            log.Info("=============  Started Logging  =============");
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
             log.Info(fvi.FileVersion);
