@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Configuration;
 using PatternFinder;
 using Ionic.Zip;
+using System.Threading.Tasks;
 
 namespace HexEditApp
 {
@@ -233,12 +234,9 @@ namespace HexEditApp
             CreateDirectory($@"{directory}\UIGraphics\Downtown");
 
             ScaleImage(@"UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
-            foreach (var i in images)
-                ScaleImage(i, $@"{directory}\{i}", width, height);
-            foreach (var i in blueImages)
-                ScaleImage(@"UIGraphics\bluebackground.png", $@"{directory}\{i}", width, height);
-            foreach (var i in compositeImages)
-                CompositeImage($@"{directory}\{i}", width, height);
+            Parallel.ForEach(images, (i) => ScaleImage(i, $@"{directory}\{i}", width, height));
+            Parallel.ForEach(blueImages, (i) => ScaleImage(@"UIGraphics\bluebackground.png", $@"{directory}\{i}", width, height));
+            Parallel.ForEach(compositeImages, (i) => CompositeImage($@"{directory}\{i}", width, height));
         }
 
         private void CreateDirectory(string path)
