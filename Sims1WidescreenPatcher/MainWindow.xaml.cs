@@ -167,17 +167,11 @@ namespace HexEditApp
         private void ExtractVoodooZips(string path)
         {
             string directory = Path.GetDirectoryName(path);
-            var voodooZips = new List<string>
-            {
-                "D3DCompiler_47.zip",
-                "dgVoodoo2_64.zip"
-            };
             TryRemoveDgVoodoo(directory);
-            foreach (var voodooZip in voodooZips)
+            foreach (var zip in new string[] {"D3DCompiler_47.zip", "dgVoodoo2_64.zip"})
             {
-                string fileName = Path.GetFileName(voodooZip);
-                log.Info($"Extracting {fileName}");
-                new ZipFile(voodooZip).ExtractAll($@"{directory}\");
+                log.Info($"Extracting {zip}");
+                new ZipFile(zip).ExtractAll($@"{directory}\");
             }
 
             log.Info("Deleting unneeded directories.");
@@ -271,17 +265,17 @@ namespace HexEditApp
 
         private void ScaleImage(string input, string output, int width, int height)
         {
-                using var image = new MagickImage(input);
-                var size = new MagickGeometry(width, height);
-                log.Info($"Resizing {input} to {output}");
-                size.IgnoreAspectRatio = true;
-                image.Resize(size);
-                image.Depth = 8;
-                image.Settings.Compression = ImageMagick.CompressionMethod.RLE;
-                image.Settings.Format = MagickFormat.Bmp3;
-                image.ColorType = ColorType.Palette;
-                image.Alpha(AlphaOption.Off);
-                image.Write(output);
+            using var image = new MagickImage(input);
+            var size = new MagickGeometry(width, height);
+            log.Info($"Resizing {input} to {output}");
+            size.IgnoreAspectRatio = true;
+            image.Resize(size);
+            image.Depth = 8;
+            image.Settings.Compression = ImageMagick.CompressionMethod.RLE;
+            image.Settings.Format = MagickFormat.Bmp3;
+            image.ColorType = ColorType.Palette;
+            image.Alpha(AlphaOption.Off);
+            image.Write(output);
         }
 
         private void UninstallButton_Click(object sender, RoutedEventArgs e)
