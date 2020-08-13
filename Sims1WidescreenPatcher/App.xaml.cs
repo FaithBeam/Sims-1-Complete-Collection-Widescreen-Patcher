@@ -1,5 +1,7 @@
 ﻿using log4net;
+using System;
 using System.Configuration;
+using System.IO;
 using System.Windows;
 
 namespace HexEditApp
@@ -19,6 +21,9 @@ namespace HexEditApp
                 var assembly = System.Reflection.Assembly.GetExecutingAssembly();
                 var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
                 log.Info(fvi.FileVersion);
+                log.Info(Environment.OSVersion);
+                log.Info($"Base directory: {AppDomain.CurrentDomain.BaseDirectory}");
+                log.Info($"Current directory: {Directory.GetCurrentDirectory()}");
             }
             else
             {

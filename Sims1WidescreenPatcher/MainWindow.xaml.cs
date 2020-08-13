@@ -65,6 +65,8 @@ namespace HexEditApp
                 heightPattern.IsEnabled = true;
                 resizeUiElementsCheckbox.IsEnabled = true;
             }
+            if (ConfigurationManager.AppSettings["CheckInstallation"] == "true")
+                CheckFiles();
         }
 
         private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
@@ -190,7 +192,7 @@ namespace HexEditApp
 
         private bool EditFile(string path)
         {
-            log.Debug($"Hex editing {path}");
+            log.Info($"Hex editing {path}");
             byte[] width = BitConverter.GetBytes(int.Parse(WidthTextBox.Text));
             byte[] height = BitConverter.GetBytes(int.Parse(HeightTextBox.Text));
             var pattern = Pattern.Transform(widthPattern.Text + " " + betweenPattern.Text + " " + heightPattern.Text);
@@ -212,6 +214,36 @@ namespace HexEditApp
             return false;
         }
 
+        private void CheckFiles()
+        {
+            log.Info("Checking the existance of local resources");
+            if (!CheckFiles(AppDomain.CurrentDomain.BaseDirectory + @"UIGraphics\cpanel\Backgrounds\PanelBack.bmp"))
+                return;
+            if (!CheckFiles(AppDomain.CurrentDomain.BaseDirectory + @"UIGraphics\bluebackground.png"))
+                return;
+            if (!CheckFiles(AppDomain.CurrentDomain.BaseDirectory + @"UIGraphics\pink.png"))
+                return;
+            foreach (var item in images)
+                if (!CheckFiles(AppDomain.CurrentDomain.BaseDirectory + item))
+                    return;
+        }
+
+        private bool CheckFiles(string path)
+        {
+            if (File.Exists(path))
+            {
+                log.Info($"{path} found.");
+                return true;
+            }
+            else
+            {
+                log.Error($"Couldn't find {path}.");
+                MessageBox.Show($"Couldn't find {path}. Check your installation.");
+                PatchButton.IsEnabled = false;
+                return false;
+            }
+        }
+
         private void CopyGraphics(string path)
         {
             string directory = Path.GetDirectoryName(path);
@@ -227,9 +259,9 @@ namespace HexEditApp
             CreateDirectory($@"{directory}\UIGraphics\Visland");
             CreateDirectory($@"{directory}\UIGraphics\Downtown");
 
-            ScaleImage(@"UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
-            Parallel.ForEach(images, (i) => ScaleImage(i, $@"{directory}\{i}", width, height));
-            Parallel.ForEach(blueImages, (i) => ScaleImage(@"UIGraphics\bluebackground.png", $@"{directory}\{i}", width, height));
+            ScaleImage(AppDomain.CurrentDomain.BaseDirectory + @"UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
+            Parallel.ForEach(images, (i) => ScaleImage(AppDomain.CurrentDomain.BaseDirectory + i, $@"{directory}\{i}", width, height));
+            Parallel.ForEach(blueImages, (i) => ScaleImage(AppDomain.CurrentDomain.BaseDirectory + @"UIGraphics\bluebackground.png", $@"{directory}\{i}", width, height));
             Parallel.ForEach(compositeImages, (i) => CompositeImage($@"{directory}\{i}", width, height));
         }
 
@@ -248,8 +280,8 @@ namespace HexEditApp
 
         private void CompositeImage(string output, int width, int height)
         {
-            using var compositeImage = new MagickImage(@"UIGraphics\pink.png");
-            using var baseImage = new MagickImage(@"UIGraphics\bluebackground.png");
+            using var compositeImage = new MagickImage(AppDomain.CurrentDomain.BaseDirectory + @"UIGraphics\pink.png");
+            using var baseImage = new MagickImage(AppDomain.CurrentDomain.BaseDirectory + @"UIGraphics\bluebackground.png");
             log.Info($@"Compositing UIGraphics\pink.png over UIGraphics\bluebackground.png to {output}");
             var size = new MagickGeometry(width, height);
             size.IgnoreAspectRatio = true;
