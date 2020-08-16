@@ -73,6 +73,8 @@ namespace HexEditApp
         {
             string errorMessage = string.Format("An unhandled exception occurred: {0}", e.Exception.Message);
             log.Error(errorMessage);
+            log.Error(e.Exception.StackTrace);
+            log.Error(e.Exception.InnerException);
             MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             e.Handled = true;
         }
@@ -119,7 +121,7 @@ namespace HexEditApp
                     }
                     else
                     {
-                        log.Info($"Failed to find pattern: " + widthPattern.Text + " " + betweenPattern.Text + " " + heightPattern.Text);
+                        log.Info("Failed to find pattern: " + widthPattern.Text + " " + betweenPattern.Text + " " + heightPattern.Text);
                         MessageBox.Show("Failed to find pattern...");
                     }
                 }
@@ -158,6 +160,7 @@ namespace HexEditApp
             if (!File.Exists($@"{directory}\{filename} Backup.exe"))
             {
                 File.Copy(path, $@"{directory}\{filename} Backup.exe");
+                File.SetAttributes($@"{directory}\{filename} Backup.exe", FileAttributes.Normal);
                 log.Info($@"Created backup {directory}\{filename} Backup.exe");
             }
             else
@@ -314,6 +317,7 @@ namespace HexEditApp
         {
             log.Info("Uninstall button pressed.");
             string directory = Path.GetDirectoryName(fileDialog.Text);
+            File.SetAttributes(fileDialog.Text, FileAttributes.Normal);
             File.Delete(fileDialog.Text);
             File.Move($@"{directory}\{this.exeName} Backup.exe", $@"{directory}\{this.exeName}.exe");
             TryRemoveDgVoodoo(directory);
