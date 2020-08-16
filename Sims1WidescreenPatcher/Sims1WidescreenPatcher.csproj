@@ -63,6 +63,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -187,14 +188,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DotNetZip.Reduced">
-      <Version>1.9.1.8</Version>
-    </PackageReference>
     <PackageReference Include="log4net">
       <Version>2.0.8</Version>
     </PackageReference>
     <PackageReference Include="Magick.NET-Q8-AnyCPU">
-      <Version>7.20.0.1</Version>
+      <Version>7.21.1</Version>
     </PackageReference>
     <PackageReference Include="PatternFinder">
       <Version>1.0.1</Version>

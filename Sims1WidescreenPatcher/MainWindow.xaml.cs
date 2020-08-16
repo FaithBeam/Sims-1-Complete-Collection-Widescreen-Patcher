@@ -8,8 +8,8 @@ using log4net;
 using System.Security.Cryptography;
 using System.Configuration;
 using PatternFinder;
-using Ionic.Zip;
 using System.Threading.Tasks;
+using System.IO.Compression;
 
 namespace HexEditApp
 {
@@ -50,11 +50,6 @@ namespace HexEditApp
             log4net.Config.XmlConfigurator.Configure();
             this.Dispatcher.UnhandledException += OnDispatcherUnhandledException;
             InitializeComponent();
-            string screenWidth = SystemParameters.PrimaryScreenWidth.ToString();
-            string screenHeight = SystemParameters.PrimaryScreenHeight.ToString();
-            WidthTextBox.Text = screenWidth;
-            HeightTextBox.Text = screenHeight;
-            log.Info($"Screen resolution detected as {screenWidth}x{screenHeight}");
             widthPattern.Text = ConfigurationManager.AppSettings["WidthPattern"];
             betweenPattern.Text = ConfigurationManager.AppSettings["BetweenPattern"];
             heightPattern.Text = ConfigurationManager.AppSettings["HeightPattern"];
@@ -176,7 +171,7 @@ namespace HexEditApp
             foreach (var zip in new string[] {"D3DCompiler_47.zip", "dgVoodoo2_64.zip"})
             {
                 log.Info($"Extracting {zip}");
-                new ZipFile(zip).ExtractAll($@"{directory}\");
+                ZipFile.ExtractToDirectory(zip, $@"{directory}\");
             }
 
             log.Info("Deleting unneeded directories.");
