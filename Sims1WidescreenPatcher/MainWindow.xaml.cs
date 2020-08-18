@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 using System.Configuration;
 using PatternFinder;
 using System.Threading.Tasks;
-using System.IO.Compression;
+using Ionic.Zip;
 
 namespace HexEditApp
 {
@@ -19,16 +19,16 @@ namespace HexEditApp
     public partial class MainWindow : Window
     {
         private readonly List<string> images = new List<string> {
-            @"UIGraphics\Community\Bus_loadscreen_1024x768.bmp",
-            @"UIGraphics\Downtown\Taxi_loadscreen_1024x768.bmp",
-            @"UIGraphics\Magicland\magicland_loadscreen_1024x768.bmp",
-            @"UIGraphics\Magicland\magicland_loadscreen_hole_1024x768.bmp",
-            @"UIGraphics\Nbhd\Bus_loadscreen_1024x768.bmp",
-            @"UIGraphics\Other\setup.bmp",
-            @"UIGraphics\Studiotown\Studiotown_loadscreen_1024x768.bmp",
-            @"UIGraphics\Studiotown\Studiotown_loadscreen_fan_1024x768.bmp",
-            @"UIGraphics\VIsland\vacation_loadscreen_1024x768.bmp",
-            @"UIGraphics\VIsland\vacation_loadscreen2_1024x768.bmp",
+            @"Content\UIGraphics\Community\Bus_loadscreen_1024x768.bmp",
+            @"Content\UIGraphics\Downtown\Taxi_loadscreen_1024x768.bmp",
+            @"Content\UIGraphics\Magicland\magicland_loadscreen_1024x768.bmp",
+            @"Content\UIGraphics\Magicland\magicland_loadscreen_hole_1024x768.bmp",
+            @"Content\UIGraphics\Nbhd\Bus_loadscreen_1024x768.bmp",
+            @"Content\UIGraphics\Other\setup.bmp",
+            @"Content\UIGraphics\Studiotown\Studiotown_loadscreen_1024x768.bmp",
+            @"Content\UIGraphics\Studiotown\Studiotown_loadscreen_fan_1024x768.bmp",
+            @"Content\UIGraphics\VIsland\vacation_loadscreen_1024x768.bmp",
+            @"Content\UIGraphics\VIsland\vacation_loadscreen2_1024x768.bmp",
         };
         private readonly List<string> blueImages = new List<string>
         {
@@ -96,7 +96,6 @@ namespace HexEditApp
                 {
                     log.Info("Before patch md5 is: " + GetMd5(fileDialog.Text));
                     log.Info("Resolution chosen is: " + WidthTextBox.Text + "x" + HeightTextBox.Text);
-                    BackupFile(fileDialog.Text);
                     if (dgVoodoo2Checkbox.IsChecked == true)
                         ExtractVoodooZips(fileDialog.Text);
                     if (EditFile(fileDialog.Text))
@@ -168,10 +167,10 @@ namespace HexEditApp
         {
             string directory = Path.GetDirectoryName(path);
             TryRemoveDgVoodoo(directory);
-            foreach (var zip in new string[] {"D3DCompiler_47.zip", "dgVoodoo2_64.zip"})
+            foreach (var zip in new string[] {@"Content\D3DCompiler_47.zip", @"Content\dgVoodoo2_64.zip"})
             {
                 log.Info($"Extracting {zip}");
-                ZipFile.ExtractToDirectory(zip, $@"{directory}\");
+                ZipFile.Read(zip).ExtractAll($@"{directory}\");
             }
 
             log.Info("Deleting unneeded directories.");
@@ -198,7 +197,8 @@ namespace HexEditApp
 
             if (Pattern.Find(bytes, pattern, out long foundOffset))
             {
-                log.Info(widthPattern.Text + " " + betweenPattern.Text + " " + heightPattern.Text + " found.");
+                BackupFile(fileDialog.Text);
+                log.Info(widthPattern.Text + " " + betweenPattern.Text + " " + heightPattern.Text + " found at " + foundOffset);
                 bytes[foundOffset] = width[0];
                 bytes[foundOffset + 1] = width[1];
 
@@ -215,14 +215,14 @@ namespace HexEditApp
         private void CheckFiles()
         {
             log.Info("Checking the existance of local resources");
-            if (!CheckFiles(AppDomain.CurrentDomain.BaseDirectory + @"UIGraphics\cpanel\Backgrounds\PanelBack.bmp"))
+            if (!CheckFiles(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp"))
                 return;
-            if (!CheckFiles(AppDomain.CurrentDomain.BaseDirectory + @"UIGraphics\bluebackground.png"))
+            if (!CheckFiles(@"Content\UIGraphics\bluebackground.png"))
                 return;
-            if (!CheckFiles(AppDomain.CurrentDomain.BaseDirectory + @"UIGraphics\pink.png"))
+            if (!CheckFiles(@"Content\UIGraphics\pink.png"))
                 return;
             foreach (var item in images)
-                if (!CheckFiles(AppDomain.CurrentDomain.BaseDirectory + item))
+                if (!CheckFiles(item))
                     return;
         }
 
@@ -257,9 +257,9 @@ namespace HexEditApp
             CreateDirectory($@"{directory}\UIGraphics\Visland");
             CreateDirectory($@"{directory}\UIGraphics\Downtown");
 
-            ScaleImage(AppDomain.CurrentDomain.BaseDirectory + @"UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
-            Parallel.ForEach(images, (i) => ScaleImage(AppDomain.CurrentDomain.BaseDirectory + i, $@"{directory}\{i}", width, height));
-            Parallel.ForEach(blueImages, (i) => ScaleImage(AppDomain.CurrentDomain.BaseDirectory + @"UIGraphics\bluebackground.png", $@"{directory}\{i}", width, height));
+            ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
+            Parallel.ForEach(images, (i) => ScaleImage(i, $@"{directory}\{i.Replace(@"Content\", "")}", width, height));
+            Parallel.ForEach(blueImages, (i) => ScaleImage(@"Content\UIGraphics\bluebackground.png", $@"{directory}\{i}", width, height));
             Parallel.ForEach(compositeImages, (i) => CompositeImage($@"{directory}\{i}", width, height));
         }
 
@@ -278,9 +278,9 @@ namespace HexEditApp
 
         private void CompositeImage(string output, int width, int height)
         {
-            using var compositeImage = new MagickImage(AppDomain.CurrentDomain.BaseDirectory + @"UIGraphics\pink.png");
-            using var baseImage = new MagickImage(AppDomain.CurrentDomain.BaseDirectory + @"UIGraphics\bluebackground.png");
-            log.Info($@"Compositing UIGraphics\pink.png over UIGraphics\bluebackground.png to {output}");
+            using var compositeImage = new MagickImage(@"Content\UIGraphics\pink.png");
+            using var baseImage = new MagickImage(@"Content\UIGraphics\bluebackground.png");
+            log.Info($@"Compositing Content\UIGraphics\pink.png over Content\UIGraphics\bluebackground.png to {output}");
             var size = new MagickGeometry(width, height);
             size.IgnoreAspectRatio = true;
             baseImage.Resize(size);
@@ -362,7 +362,7 @@ namespace HexEditApp
             DeleteFile($@"{directory}\QuickGuide.html");
             DeleteFile($@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp");
             foreach (var i in images)
-                DeleteFile($@"{directory}\{i}");
+                DeleteFile($@"{directory}\{i.Replace(@"Content\", "")}");
             foreach (var i in blueImages)
                 DeleteFile($@"{directory}\{i}");
             foreach (var i in compositeImages)
@@ -374,8 +374,9 @@ namespace HexEditApp
 
         private void HeightTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            if (int.Parse(HeightTextBox.Text) > 1080)
-                dgVoodoo2Checkbox.IsChecked = true;
+            if (int.TryParse(HeightTextBox.Text, out int height))
+                if (height > 1080)
+                    dgVoodoo2Checkbox.IsChecked = true;
         }
     }
 }
