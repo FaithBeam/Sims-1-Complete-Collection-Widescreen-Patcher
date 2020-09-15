@@ -258,9 +258,12 @@ namespace HexEditApp
             CreateDirectory($@"{directory}\UIGraphics\Downtown");
 
             ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
-            Parallel.ForEach(images, (i) => ScaleImage(i, $@"{directory}\{i.Replace(@"Content\", "")}", width, height));
-            Parallel.ForEach(blueImages, (i) => ScaleImage(@"Content\UIGraphics\bluebackground.png", $@"{directory}\{i}", width, height));
-            Parallel.ForEach(compositeImages, (i) => CompositeImage($@"{directory}\{i}", width, height));
+            foreach (var image in images)
+                ScaleImage(image, $@"{directory}\{image.Replace(@"Content\", "")}", width, height);
+            foreach (var image in blueImages)
+                ScaleImage(@"Content\UIGraphics\bluebackground.png", $@"{directory}\{image}", width, height);
+            foreach (var image in compositeImages)
+                CompositeImage($@"{directory}\{image}", width, height);
         }
 
         private void CreateDirectory(string path)
