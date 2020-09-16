@@ -14,6 +14,8 @@ namespace HexEditApp
         private static readonly ILog log = LogManager.GetLogger(typeof(App));
         protected override void OnStartup(StartupEventArgs e)
         {
+            Dispatcher.UnhandledException += OnDispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += LogUnhandledException;
             if (ConfigurationManager.AppSettings["EnableLogging"] == "true")
             {
                 log4net.Config.XmlConfigurator.Configure();
@@ -30,6 +32,23 @@ namespace HexEditApp
                 LogManager.GetRepository().ResetConfiguration();
             }
             base.OnStartup(e);
+        }
+
+        private void LogUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            string errorMessage = string.Format("An unhandled exception occurred: {0}", e.ExceptionObject);
+            log.Error(errorMessage);
+            MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            string errorMessage = string.Format("An unhandled exception occurred: {0}", e.Exception.Message);
+            log.Error(errorMessage);
+            log.Error(e.Exception.StackTrace);
+            log.Error(e.Exception.InnerException);
+            MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            e.Handled = true;
         }
     }
 }

@@ -48,7 +48,6 @@ namespace HexEditApp
         public MainWindow()
         {
             log4net.Config.XmlConfigurator.Configure();
-            this.Dispatcher.UnhandledException += OnDispatcherUnhandledException;
             InitializeComponent();
             widthPattern.Text = ConfigurationManager.AppSettings["WidthPattern"];
             betweenPattern.Text = ConfigurationManager.AppSettings["BetweenPattern"];
@@ -62,16 +61,6 @@ namespace HexEditApp
             }
             if (ConfigurationManager.AppSettings["CheckInstallation"] == "true")
                 CheckFiles();
-        }
-
-        private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
-        {
-            string errorMessage = string.Format("An unhandled exception occurred: {0}", e.Exception.Message);
-            log.Error(errorMessage);
-            log.Error(e.Exception.StackTrace);
-            log.Error(e.Exception.InnerException);
-            MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            e.Handled = true;
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
