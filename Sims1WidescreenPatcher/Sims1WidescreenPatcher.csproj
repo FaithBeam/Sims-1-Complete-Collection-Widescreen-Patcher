@@ -111,6 +111,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Content Include="Content\UIGraphics\dlgframe_1024x768.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UIGraphics\largeback.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\UIGraphics\bluebackground.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -133,9 +139,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\UIGraphics\Other\setup.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UIGraphics\pink.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\UIGraphics\Studiotown\Studiotown_loadscreen_1024x768.bmp">
