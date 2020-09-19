@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Pack') {
             steps {
-                powershell "7z.exe a -tzip \"\$(\$HOME)\\Desktop\\Sims1WidescreenPatcher.${VERSION}+\$(\$env:GIT_COMMIT.Substring(0,7)).zip\" bin\\* -mx9"
+                powershell "7z.exe a -tzip \"\$(\$HOME)\\Desktop\\Sims1WidescreenPatcher.${VERSION}+\$(\$env:GIT_COMMIT.Substring(0,7)).zip\" .\\bin\\* -mx9"
             }
         }
     }
