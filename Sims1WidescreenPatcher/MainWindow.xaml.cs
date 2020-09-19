@@ -30,13 +30,13 @@ namespace HexEditApp
             @"Content\UIGraphics\VIsland\vacation_loadscreen_1024x768.bmp",
             @"Content\UIGraphics\VIsland\vacation_loadscreen2_1024x768.bmp",
         };
-        private readonly List<string> blueImages = new List<string>
+        private readonly List<string> largeBackLocations = new List<string>
         {
             @"UIGraphics\Downtown\largeback.bmp",
             @"UIGraphics\Magicland\largeback.bmp",
             @"UIGraphics\Studiotown\largeback.bmp",
         };
-        private readonly List<string> compositeImages = new List<string>
+        private readonly List<string> dlgFrameLocations = new List<string>
         {
             @"UIGraphics\Downtown\dlgframe_1024x768.bmp",
             @"UIGraphics\Magicland\dlgframe_1024x768.bmp",
@@ -219,8 +219,6 @@ namespace HexEditApp
                 return;
             if (!CheckFiles(@"Content\UIGraphics\bluebackground.png"))
                 return;
-            if (!CheckFiles(@"Content\UIGraphics\pink.png"))
-                return;
             foreach (var item in images)
                 if (!CheckFiles(item))
                     return;
@@ -259,8 +257,8 @@ namespace HexEditApp
 
             ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
             Parallel.ForEach(images, (i) => ScaleImage(i, $@"{directory}\{i.Replace(@"Content\", "")}", width, height));
-            Parallel.ForEach(blueImages, (i) => ScaleImage(@"Content\UIGraphics\bluebackground.png", $@"{directory}\{i}", width, height));
-            Parallel.ForEach(compositeImages, (i) => CompositeImage($@"{directory}\{i}", width, height));
+            Parallel.ForEach(largeBackLocations, (i) => CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\largeback.bmp", $@"{directory}\{i}", width, height));
+            Parallel.ForEach(dlgFrameLocations, (i) => CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\dlgframe_1024x768.bmp", $@"{directory}\{i}", width, height));
         }
 
         private void CreateDirectory(string path)
@@ -276,11 +274,11 @@ namespace HexEditApp
             }
         }
 
-        private void CompositeImage(string output, int width, int height)
+        private void CompositeImage(string background, string overlay, string output, int width, int height)
         {
-            using var compositeImage = new MagickImage(@"Content\UIGraphics\pink.png");
-            using var baseImage = new MagickImage(@"Content\UIGraphics\bluebackground.png");
-            log.Info($@"Compositing Content\UIGraphics\pink.png over Content\UIGraphics\bluebackground.png to {output}");
+            using var compositeImage = new MagickImage(overlay);
+            using var baseImage = new MagickImage(background);
+            log.Info($@"Compositing {overlay} over {background} to {output}");
             var size = new MagickGeometry(width, height);
             size.IgnoreAspectRatio = true;
             baseImage.Resize(size);
@@ -363,9 +361,9 @@ namespace HexEditApp
             DeleteFile($@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp");
             foreach (var i in images)
                 DeleteFile($@"{directory}\{i.Replace(@"Content\", "")}");
-            foreach (var i in blueImages)
+            foreach (var i in largeBackLocations)
                 DeleteFile($@"{directory}\{i}");
-            foreach (var i in compositeImages)
+            foreach (var i in dlgFrameLocations)
                 DeleteFile($@"{directory}\{i}");
             DeleteDirectory($@"{directory}\3Dfx");
             DeleteDirectory($@"{directory}\Doc");

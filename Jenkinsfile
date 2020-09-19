@@ -6,6 +6,12 @@ pipeline {
             steps {
                 script {
                     VERSION = powershell(returnStdout: true, script: '''(Get-Content .\\Sims1WidescreenPatcher\\Properties\\AssemblyInfo.cs | Select-String -Pattern \'AssemblyVersion\\(\\"(\\d+\\.\\d+\\.\\d+).+\\)]\').Matches.Groups[1].Value''').trim()
+                    if (env.BRANCH_NAME == "develop") {
+                        VERSION = VERSION + "-beta"
+                    }
+                    else if (env.BRANCH_NAME.contains("features")) {
+                        VERSION = VERSION + "-" + env.BRANCH_NAME.replaceAll('[/_ ]', '-')
+                    }
                 }
             }
         }
