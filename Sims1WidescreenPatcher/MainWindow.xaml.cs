@@ -244,10 +244,20 @@ namespace HexEditApp
             CreateDirectory($@"{directory}\UIGraphics\Visland");
             CreateDirectory($@"{directory}\UIGraphics\Downtown");
 
-            ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
-            Parallel.ForEach(images, (i) => ScaleImage(i, $@"{directory}\{i.Replace(@"Content\", "")}", width, height));
-            Parallel.ForEach(largeBackLocations, (i) => CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\largeback.bmp", $@"{directory}\{i}", width, height));
-            Parallel.ForEach(dlgFrameLocations, (i) => CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\dlgframe_1024x768.bmp", $@"{directory}\{i}", width, height));
+            try
+            {
+                ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
+                Parallel.ForEach(images, (i) => ScaleImage(i, $@"{directory}\{i.Replace(@"Content\", "")}", width, height));
+                Parallel.ForEach(largeBackLocations, (i) => CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\largeback.bmp", $@"{directory}\{i}", width, height));
+                Parallel.ForEach(dlgFrameLocations, (i) => CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\dlgframe_1024x768.bmp", $@"{directory}\{i}", width, height));
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+                log.Error(e.StackTrace);
+                log.Error(e.InnerException);
+                throw;
+            }
         }
 
         private void CreateDirectory(string path)
