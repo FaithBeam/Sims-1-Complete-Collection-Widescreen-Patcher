@@ -10,7 +10,7 @@ pipeline {
                         VERSION = VERSION + "-beta"
                     }
                     else if (env.BRANCH_NAME.contains("features")) {
-                        VERSION = VERSION + env.BRANCH_NAME.replaceAll('[/_ ]', '-')
+                        VERSION = VERSION + "-" + env.BRANCH_NAME.replaceAll('[/_ ]', '-')
                     }
                 }
             }
