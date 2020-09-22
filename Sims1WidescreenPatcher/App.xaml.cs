@@ -34,6 +34,13 @@ namespace HexEditApp
             base.OnStartup(e);
         }
 
+        private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            string exceptionStr = e.ExceptionObject.ToString();
+            log.Error(exceptionStr);
+            MessageBox.Show(exceptionStr, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
         private void LogUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             string errorMessage = string.Format("An unhandled exception occurred: {0}", e.ExceptionObject);
