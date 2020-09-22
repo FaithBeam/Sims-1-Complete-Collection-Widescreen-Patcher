@@ -16,6 +16,7 @@ namespace HexEditApp
         {
             Dispatcher.UnhandledException += OnDispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += LogUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnUnhandledException);
             if (ConfigurationManager.AppSettings["EnableLogging"] == "true")
             {
                 log4net.Config.XmlConfigurator.Configure();
