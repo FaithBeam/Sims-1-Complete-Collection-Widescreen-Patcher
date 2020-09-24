@@ -25,6 +25,8 @@ namespace HexEditApp
                 var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
                 log.Info(fvi.FileVersion);
                 log.Info(Environment.OSVersion);
+                log.Info("Is 64bit process: " + Environment.Is64BitProcess);
+                log.Info("Is 64bit operating system: " + Environment.Is64BitOperatingSystem);
                 log.Info($"Base directory: {AppDomain.CurrentDomain.BaseDirectory}");
                 log.Info($"Current directory: {Directory.GetCurrentDirectory()}");
             }
