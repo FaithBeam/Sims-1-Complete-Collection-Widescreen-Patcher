@@ -15,8 +15,6 @@ namespace HexEditApp
         protected override void OnStartup(StartupEventArgs e)
         {
             Dispatcher.UnhandledException += OnDispatcherUnhandledException;
-            AppDomain.CurrentDomain.UnhandledException += LogUnhandledException;
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnUnhandledException);
             if (ConfigurationManager.AppSettings["EnableLogging"] == "true")
             {
                 log4net.Config.XmlConfigurator.Configure();
@@ -25,8 +23,6 @@ namespace HexEditApp
                 var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
                 log.Info(fvi.FileVersion);
                 log.Info(Environment.OSVersion);
-                log.Info("Is 64bit process: " + Environment.Is64BitProcess);
-                log.Info("Is 64bit operating system: " + Environment.Is64BitOperatingSystem);
                 log.Info($"Base directory: {AppDomain.CurrentDomain.BaseDirectory}");
                 log.Info($"Current directory: {Directory.GetCurrentDirectory()}");
             }
@@ -35,20 +31,6 @@ namespace HexEditApp
                 LogManager.GetRepository().ResetConfiguration();
             }
             base.OnStartup(e);
-        }
-
-        private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            string exceptionStr = e.ExceptionObject.ToString();
-            log.Error(exceptionStr);
-            MessageBox.Show(exceptionStr, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        private void LogUnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            string errorMessage = string.Format("An unhandled exception occurred: {0}", e.ExceptionObject);
-            log.Error(errorMessage);
-            MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)

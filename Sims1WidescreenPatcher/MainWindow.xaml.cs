@@ -8,9 +8,7 @@ using log4net;
 using System.Security.Cryptography;
 using System.Configuration;
 using PatternFinder;
-using System.Threading.Tasks;
 using Ionic.Zip;
-using System.Runtime.ExceptionServices;
 
 namespace HexEditApp
 {
@@ -230,7 +228,6 @@ namespace HexEditApp
             }
         }
 
-        [HandleProcessCorruptedStateExceptions]
         private void CopyGraphics(string path)
         {
             string directory = Path.GetDirectoryName(path);
@@ -246,24 +243,13 @@ namespace HexEditApp
             CreateDirectory($@"{directory}\UIGraphics\Visland");
             CreateDirectory($@"{directory}\UIGraphics\Downtown");
 
-            try
-            {
-                ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
-                foreach (var i in images)
-                    ScaleImage(i, $@"{directory}\{i.Replace(@"Content\", "")}", width, height);
-                foreach (var i in largeBackLocations)
-                    CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\largeback.bmp", $@"{directory}\{i}", width, height);
-                foreach (var i in dlgFrameLocations)
-                    CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\dlgframe_1024x768.bmp", $@"{directory}\{i}", width, height);
-            }
-            catch (Exception e)
-            {
-                log.Error(e.Message);
-                log.Error(e.StackTrace);
-                log.Error(e.InnerException);
-                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                throw;
-            }
+            ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
+            foreach (var i in images)
+                ScaleImage(i, $@"{directory}\{i.Replace(@"Content\", "")}", width, height);
+            foreach (var i in largeBackLocations)
+                CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\largeback.bmp", $@"{directory}\{i}", width, height);
+            foreach (var i in dlgFrameLocations)
+                CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\dlgframe_1024x768.bmp", $@"{directory}\{i}", width, height);
         }
 
         private void CreateDirectory(string path)
@@ -279,7 +265,6 @@ namespace HexEditApp
             }
         }
 
-        [HandleProcessCorruptedStateExceptions]
         private void CompositeImage(string background, string overlay, string output, int width, int height)
         {
             using var compositeImage = new MagickImage(overlay);
