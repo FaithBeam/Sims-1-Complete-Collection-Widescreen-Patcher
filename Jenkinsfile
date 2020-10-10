@@ -15,19 +15,14 @@ pipeline {
                 }
             }
         }
-        stage('Nuget Restore') {
-            steps {
-                bat 'nuget restore'
-            }
-        }
         stage('Build') {
             steps {
-                powershell 'msbuild .\\Sims1WidescreenPatcher.sln -p:Configuration=Release -p:OutDir=\"\$(\$pwd)\\bin\"'
+                powershell 'msbuild -restore .\\Sims1WidescreenPatcher.sln -p:Configuration=Release -p:OutDir=\"\$(\$pwd)\\bin\"'
             }
         }
         stage('Pack') {
             steps {
-                powershell "7z.exe a -tzip \"\$(\$HOME)\\Desktop\\Sims1WidescreenPatcher.${VERSION}+\$(\$env:GIT_COMMIT.Substring(0,7)).zip\" .\\bin\\* -mx9"
+                powershell "7z.exe a -tzip \"\$(\$HOME)\\Desktop\\Sims1WidescreenPatcher.${VERSION}+x86.\$(\$env:GIT_COMMIT.Substring(0,7)).zip\" .\\bin\\* -mx9"
             }
         }
     }
