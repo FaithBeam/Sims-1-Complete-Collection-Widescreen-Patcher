@@ -15,14 +15,9 @@ pipeline {
                 }
             }
         }
-        stage('Nuget Restore') {
-            steps {
-                bat 'nuget restore'
-            }
-        }
         stage('Build') {
             steps {
-                powershell 'msbuild .\\Sims1WidescreenPatcher.sln -p:Configuration=Release -p:OutDir=\"\$(\$pwd)\\bin\"'
+                powershell 'msbuild -restore .\\Sims1WidescreenPatcher.sln -p:Configuration=Release -p:OutDir=\"\$(\$pwd)\\bin\"'
             }
         }
         stage('Pack') {
