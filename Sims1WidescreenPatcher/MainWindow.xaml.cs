@@ -246,7 +246,7 @@ namespace HexEditApp
 
             ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
             foreach (var i in images)
-                CompositeImage(@"Content\UIGraphics\blackbackground.png", i, $@"{directory}\{i}", width, height);
+                CompositeImage(@"Content\UIGraphics\blackbackground.png", i, $@"{directory}\{i.Replace("Content\\", "")}", width, height);
             foreach (var i in largeBackLocations)
                 CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\largeback.bmp", $@"{directory}\{i}", width, height);
             foreach (var i in dlgFrameLocations)
