@@ -245,9 +245,12 @@ namespace HexEditApp
             CreateDirectory($@"{directory}\UIGraphics\Downtown");
 
             ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
-            Parallel.ForEach(images, (i) => CompositeImage(@"Content\UIGraphics\blackbackground.png", i, $@"{directory}\{i}", width, height));
-            Parallel.ForEach(largeBackLocations, (i) => CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\largeback.bmp", $@"{directory}\{i}", width, height));
-            Parallel.ForEach(dlgFrameLocations, (i) => CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\dlgframe_1024x768.bmp", $@"{directory}\{i}", width, height));
+            foreach (var i in images)
+                CompositeImage(@"Content\UIGraphics\blackbackground.png", i, $@"{directory}\{i}", width, height);
+            foreach (var i in largeBackLocations)
+                CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\largeback.bmp", $@"{directory}\{i}", width, height);
+            foreach (var i in dlgFrameLocations)
+                CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\dlgframe_1024x768.bmp", $@"{directory}\{i}", width, height);
         }
 
         private void CreateDirectory(string path)
