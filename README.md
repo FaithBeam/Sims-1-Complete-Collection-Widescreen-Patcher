@@ -7,7 +7,7 @@ Patches `The Sims 1: Complete Collection` to a custom resolution. You must be us
 3. Optionally extracts dgVoodoo2
 4. Resize UI graphics to your custom resolution
 
-![Main Application](https://i.imgur.com/tbNdvkt.png)
+![Main Application](https://i.imgur.com/2Fwq3qR.png)
 
 ## Requirements
 
