@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Configuration;
 using PatternFinder;
 using Ionic.Zip;
+using System.Threading.Tasks;
 
 namespace HexEditApp
 {
@@ -155,7 +156,7 @@ namespace HexEditApp
         {
             string directory = Path.GetDirectoryName(path);
             TryRemoveDgVoodoo(directory);
-            foreach (var zip in new string[] {@"Content\D3DCompiler_47.zip", @"Content\dgVoodoo2_64.zip"})
+            foreach (var zip in new string[] { @"Content\D3DCompiler_47.zip", @"Content\dgVoodoo2_64.zip" })
             {
                 log.Info($"Extracting {zip}");
                 ZipFile.Read(zip).ExtractAll($@"{directory}\");
@@ -243,20 +244,10 @@ namespace HexEditApp
             CreateDirectory($@"{directory}\UIGraphics\Visland");
             CreateDirectory($@"{directory}\UIGraphics\Downtown");
 
-            try
-            {
-                ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
-                Parallel.ForEach(images, (i) => ScaleImage(i, $@"{directory}\{i.Replace(@"Content\", "")}", width, height));
-                Parallel.ForEach(largeBackLocations, (i) => CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\largeback.bmp", $@"{directory}\{i}", width, height));
-                Parallel.ForEach(dlgFrameLocations, (i) => CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\dlgframe_1024x768.bmp", $@"{directory}\{i}", width, height));
-            }
-            catch (Exception e)
-            {
-                log.Error(e.Message);
-                log.Error(e.StackTrace);
-                log.Error(e.InnerException);
-                throw;
-            }
+            ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
+            Parallel.ForEach(images, (i) => ScaleImage(i, $@"{directory}\{i.Replace(@"Content\", "")}", width, height));
+            Parallel.ForEach(largeBackLocations, (i) => CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\largeback.bmp", $@"{directory}\{i}", width, height));
+            Parallel.ForEach(dlgFrameLocations, (i) => CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\dlgframe_1024x768.bmp", $@"{directory}\{i}", width, height));
         }
 
         private void CreateDirectory(string path)
