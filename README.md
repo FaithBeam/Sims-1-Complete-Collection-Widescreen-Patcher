@@ -22,8 +22,6 @@ Patches `The Sims 1: Complete Collection` to a custom resolution. You must be us
 5. Enter your preferred resolution
 6. Click Patch
 
-You do not need to touch the Width, Between, and Height pattern text boxes. Those are there to offer flexibility in the program's pattern search. 
-
 ## Selecting Valid Resolutions
 
 While this application does allow you to input any resolution you want, your game most likely will crash on startup if you don't enter a valid resolution your monitor supports. You can find out which resolutions your monitor supports by:
