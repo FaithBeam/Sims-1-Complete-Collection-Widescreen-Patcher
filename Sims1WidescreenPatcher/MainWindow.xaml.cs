@@ -49,16 +49,6 @@ namespace HexEditApp
         {
             log4net.Config.XmlConfigurator.Configure();
             InitializeComponent();
-            widthPattern.Text = ConfigurationManager.AppSettings["WidthPattern"];
-            betweenPattern.Text = ConfigurationManager.AppSettings["BetweenPattern"];
-            heightPattern.Text = ConfigurationManager.AppSettings["HeightPattern"];
-            if (ConfigurationManager.AppSettings["PowerUser"] == "true")
-            {
-                widthPattern.IsEnabled = true;
-                betweenPattern.IsEnabled = true;
-                heightPattern.IsEnabled = true;
-                resizeUiElementsCheckbox.IsEnabled = true;
-            }
             if (ConfigurationManager.AppSettings["CheckInstallation"] == "true")
                 CheckFiles();
         }
@@ -90,21 +80,23 @@ namespace HexEditApp
                     if (EditFile(fileDialog.Text))
                     {
                         log.Info("After patch md5 is: " + GetMd5(fileDialog.Text));
-                        if (resizeUiElementsCheckbox.IsChecked == true)
+                        if (ConfigurationManager.AppSettings["ResizeUiElements"] == "true")
                             CopyGraphics(fileDialog.Text);
                         else
                             log.Info("Resize UI elements checkbox is not checked, not resizing or copying graphics.");
                         UninstallButton.IsEnabled = true;
-                        var width = $"{int.Parse(WidthTextBox.Text):X4}";
-                        var height = $"{int.Parse(HeightTextBox.Text):X4}";
-                        widthPattern.Text = width.Substring(2) + " " + width.Substring(0, 2);
-                        heightPattern.Text = height.Substring(2) + " " + height.Substring(0, 2);
+                        string width = $"{int.Parse(WidthTextBox.Text):X4}";
+                        width = width.Substring(2) + width.Substring(0, 2);
+                        string height = $"{int.Parse(HeightTextBox.Text):X4}";
+                        height = height.Substring(2) + height.Substring(0, 2);
+                        ConfigurationManager.AppSettings["WidthPattern"] = width;
+                        ConfigurationManager.AppSettings["HeightPattern"] = height;
                         log.Info("Patched");
                         MessageBox.Show("Patched!");
                     }
                     else
                     {
-                        log.Info("Failed to find pattern: " + widthPattern.Text + " " + betweenPattern.Text + " " + heightPattern.Text);
+                        log.Info("Failed to find pattern: " + ConfigurationManager.AppSettings["WidthPattern"] + " " + ConfigurationManager.AppSettings["BetweenPattern"] + " " + ConfigurationManager.AppSettings["HeightPattern"]);
                         MessageBox.Show("Failed to find pattern...");
                     }
                 }
@@ -179,20 +171,23 @@ namespace HexEditApp
         private bool EditFile(string path)
         {
             log.Info($"Hex editing {path}");
+            string widthPattern = ConfigurationManager.AppSettings["WidthPattern"];
+            string betweenPattern = ConfigurationManager.AppSettings["BetweenPattern"];
+            string heightPattern = ConfigurationManager.AppSettings["HeightPattern"];
             byte[] width = BitConverter.GetBytes(int.Parse(WidthTextBox.Text));
             byte[] height = BitConverter.GetBytes(int.Parse(HeightTextBox.Text));
-            var pattern = Pattern.Transform(widthPattern.Text + " " + betweenPattern.Text + " " + heightPattern.Text);
-            var bytes = File.ReadAllBytes(path);
+            Pattern.Byte[] pattern = Pattern.Transform(widthPattern + " " + betweenPattern + " " + heightPattern);
+            byte[] bytes = File.ReadAllBytes(path);
 
             if (Pattern.Find(bytes, pattern, out long foundOffset))
             {
                 BackupFile(fileDialog.Text);
-                log.Info(widthPattern.Text + " " + betweenPattern.Text + " " + heightPattern.Text + " found at " + foundOffset);
+                log.Info(widthPattern + " " + betweenPattern + " " + heightPattern + " found at " + foundOffset);
                 bytes[foundOffset] = width[0];
                 bytes[foundOffset + 1] = width[1];
 
-                bytes[foundOffset + 2 + betweenPattern.Text.Trim().Split().Length] = height[0];
-                bytes[foundOffset + 2 + betweenPattern.Text.Trim().Split().Length + 1] = height[1];
+                bytes[foundOffset + 2 + betweenPattern.Trim().Split().Length] = height[0];
+                bytes[foundOffset + 2 + betweenPattern.Trim().Split().Length + 1] = height[1];
 
                 File.WriteAllBytes(path, bytes);
                 return true;
@@ -301,15 +296,13 @@ namespace HexEditApp
         private void UninstallButton_Click(object sender, RoutedEventArgs e)
         {
             log.Info("Uninstall button pressed.");
+            ConfigurationManager.RefreshSection("appSettings");
             string directory = Path.GetDirectoryName(fileDialog.Text);
             File.SetAttributes(fileDialog.Text, FileAttributes.Normal);
             File.Delete(fileDialog.Text);
             File.Move($@"{directory}\{this.exeName} Backup.exe", $@"{directory}\{this.exeName}.exe");
             TryRemoveDgVoodoo(directory);
             UninstallButton.IsEnabled = false;
-            widthPattern.Text = ConfigurationManager.AppSettings["WidthPattern"];
-            betweenPattern.Text = ConfigurationManager.AppSettings["BetweenPattern"];
-            heightPattern.Text = ConfigurationManager.AppSettings["HeightPattern"];
             MessageBox.Show("Uninstalled.");
         }
 
