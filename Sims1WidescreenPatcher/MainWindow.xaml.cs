@@ -60,28 +60,28 @@ namespace HexEditApp
             openFileDialog.Filter = $"{this.exeName}|{this.exeName}.exe|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
-                fileDialog.Text = openFileDialog.FileName;
-                log.Info($"Selected {fileDialog.Text}");
-                CheckForBackup(fileDialog.Text);
+                FileDialog.Text = openFileDialog.FileName;
+                log.Info($"Selected {FileDialog.Text}");
+                CheckForBackup(FileDialog.Text);
             }
         }
 
         private void PatchButton_Click(object sender, RoutedEventArgs e)
         {
             log.Info("Clicked patch button.");
-            if (!string.IsNullOrWhiteSpace(fileDialog.Text))
+            if (!string.IsNullOrWhiteSpace(FileDialog.Text))
             {
-                if (File.Exists(fileDialog.Text))
+                if (File.Exists(FileDialog.Text))
                 {
-                    log.Info("Before patch md5 is: " + GetMd5(fileDialog.Text));
+                    log.Info("Before patch md5 is: " + GetMd5(FileDialog.Text));
                     log.Info("Resolution chosen is: " + WidthTextBox.Text + "x" + HeightTextBox.Text);
-                    if (dgVoodoo2Checkbox.IsChecked == true)
-                        ExtractVoodooZips(fileDialog.Text);
-                    if (EditFile(fileDialog.Text))
+                    if (DgVoodoo2Checkbox.IsChecked == true)
+                        ExtractVoodooZips(FileDialog.Text);
+                    if (EditFile(FileDialog.Text))
                     {
-                        log.Info("After patch md5 is: " + GetMd5(fileDialog.Text));
+                        log.Info("After patch md5 is: " + GetMd5(FileDialog.Text));
                         if (ConfigurationManager.AppSettings["ResizeUiElements"] == "true")
-                            CopyGraphics(fileDialog.Text);
+                            CopyGraphics(FileDialog.Text);
                         else
                             log.Info("Resize UI elements checkbox is not checked, not resizing or copying graphics.");
                         UninstallButton.IsEnabled = true;
@@ -102,8 +102,8 @@ namespace HexEditApp
                 }
                 else
                 {
-                    log.Info("File " + fileDialog.Text + " doesn't exist.");
-                    MessageBox.Show("File " + fileDialog.Text + " doesn't exist.");
+                    log.Info("File " + FileDialog.Text + " doesn't exist.");
+                    MessageBox.Show("File " + FileDialog.Text + " doesn't exist.");
                 }
             }
             else
@@ -181,7 +181,7 @@ namespace HexEditApp
 
             if (Pattern.Find(bytes, pattern, out long foundOffset))
             {
-                BackupFile(fileDialog.Text);
+                BackupFile(FileDialog.Text);
                 log.Info(widthPattern + " " + betweenPattern + " " + heightPattern + " found at " + foundOffset);
                 bytes[foundOffset] = width[0];
                 bytes[foundOffset + 1] = width[1];
@@ -297,9 +297,9 @@ namespace HexEditApp
         {
             log.Info("Uninstall button pressed.");
             ConfigurationManager.RefreshSection("appSettings");
-            string directory = Path.GetDirectoryName(fileDialog.Text);
-            File.SetAttributes(fileDialog.Text, FileAttributes.Normal);
-            File.Delete(fileDialog.Text);
+            string directory = Path.GetDirectoryName(FileDialog.Text);
+            File.SetAttributes(FileDialog.Text, FileAttributes.Normal);
+            File.Delete(FileDialog.Text);
             File.Move($@"{directory}\{this.exeName} Backup.exe", $@"{directory}\{this.exeName}.exe");
             TryRemoveDgVoodoo(directory);
             UninstallButton.IsEnabled = false;
@@ -359,7 +359,7 @@ namespace HexEditApp
         {
             if (int.TryParse(HeightTextBox.Text, out int height))
                 if (height > 1080)
-                    dgVoodoo2Checkbox.IsChecked = true;
+                    DgVoodoo2Checkbox.IsChecked = true;
         }
     }
 }
