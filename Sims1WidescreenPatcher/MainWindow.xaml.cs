@@ -10,6 +10,7 @@ using System.Configuration;
 using PatternFinder;
 using Ionic.Zip;
 using System.Threading.Tasks;
+using Sims.Far;
 
 namespace HexEditApp
 {
@@ -49,8 +50,6 @@ namespace HexEditApp
         {
             log4net.Config.XmlConfigurator.Configure();
             InitializeComponent();
-            if (ConfigurationManager.AppSettings["CheckInstallation"] == "true")
-                CheckFiles();
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
@@ -81,9 +80,15 @@ namespace HexEditApp
                     {
                         log.Info("After patch md5 is: " + GetMd5(FileDialog.Text));
                         if (ConfigurationManager.AppSettings["ResizeUiElements"] == "true")
+                        {
+                            ExtractUigraphics(FileDialog.Text);
                             CopyGraphics(FileDialog.Text);
+                            DeleteDirectory(@"Content\UIGraphics");
+                        }
                         else
+                        {
                             log.Info("Resize UI elements checkbox is not checked, not resizing or copying graphics.");
+                        }
                         UninstallButton.IsEnabled = true;
                         string width = $"{int.Parse(WidthTextBox.Text):X4}";
                         width = width.Substring(2) + width.Substring(0, 2);
@@ -196,34 +201,6 @@ namespace HexEditApp
             return false;
         }
 
-        private void CheckFiles()
-        {
-            log.Info("Checking the existance of local resources");
-            if (!CheckFiles(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp"))
-                return;
-            if (!CheckFiles(@"Content\UIGraphics\bluebackground.png"))
-                return;
-            foreach (var item in images)
-                if (!CheckFiles(item))
-                    return;
-        }
-
-        private bool CheckFiles(string path)
-        {
-            if (File.Exists(path))
-            {
-                log.Info($"{path} found.");
-                return true;
-            }
-            else
-            {
-                log.Error($"Couldn't find {path}.");
-                MessageBox.Show($"Couldn't find {path}. Check your installation.");
-                PatchButton.IsEnabled = false;
-                return false;
-            }
-        }
-
         private void CopyGraphics(string path)
         {
             string directory = Path.GetDirectoryName(path);
@@ -241,11 +218,48 @@ namespace HexEditApp
 
             ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
             foreach (var i in images)
-                CompositeImage(@"Content\UIGraphics\blackbackground.png", i, $@"{directory}\{i.Replace("Content\\", "")}", width, height);
-            foreach (var i in largeBackLocations)
-                CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\largeback.bmp", $@"{directory}\{i}", width, height);
-            foreach (var i in dlgFrameLocations)
-                CompositeImage(@"Content\UIGraphics\bluebackground.png", @"Content\UIGraphics\dlgframe_1024x768.bmp", $@"{directory}\{i}", width, height);
+            {
+                if (!File.Exists(i))
+                {
+                    log.Info($"Couldn't find {i}");
+                    continue;
+                }
+                CompositeImage(@"Content\blackbackground.png", i, $@"{directory}\{i.Replace("Content\\", "")}", width, height);
+            }
+            if (File.Exists(@"Content\UIGraphics\Downtown\largeback.bmp"))
+            {
+                foreach (var i in largeBackLocations)
+                    CompositeImage(@"Content\bluebackground.png", @"Content\UIGraphics\Downtown\largeback.bmp", $@"{directory}\{i}", width, height);
+            }
+            else
+            {
+                log.Info(@"Content\UIGraphics\Downtown\largeback.bmp doesn't exist, skipping this section");
+            }
+            if (File.Exists(@"Content\UIGraphics\StudioTown\dlgframe_1024x768.bmp"))
+            {
+                foreach (var i in dlgFrameLocations)
+                    CompositeImage(@"Content\bluebackground.png", @"Content\UIGraphics\StudioTown\dlgframe_1024x768.bmp", $@"{directory}\{i}", width, height);
+            }
+            else
+            {
+                log.Info(@"Content\UIGraphics\StudioTown\dlgframe_1024x768.bmp doesn't exist, skipping this section");
+            }
+        }
+
+        private void ExtractUigraphics(string pathToSimsExe)
+        {
+            var simsInstallationDirectory = Path.GetDirectoryName(pathToSimsExe);
+            var uigraphicsPath = simsInstallationDirectory + @"\UIGraphics\UIGraphics.far";
+            log.Info($"Extracting images from {uigraphicsPath}");
+            if (!File.Exists(uigraphicsPath))
+            {
+                MessageBox.Show($"Couldn't find UIGraphics.far at {uigraphicsPath}");
+                log.Info($"Couldn't find UIGraphics.far at {uigraphicsPath}");
+            }
+            CreateDirectory(@"Content\UIGraphics");
+            var far = new Far(uigraphicsPath);
+            far.Extract(@"Content\UIGraphics", new List<string> { @"Downtown\largeback.bmp", });
+            far.Extract(@"Content\UIGraphics");
         }
 
         private void CreateDirectory(string path)
