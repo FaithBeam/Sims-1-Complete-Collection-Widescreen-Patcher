@@ -4,7 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Windows;
 
-namespace HexEditApp
+namespace SimsWidescreenPatcher
 {
     /// <summary>
     /// Interaction logic for App.xaml

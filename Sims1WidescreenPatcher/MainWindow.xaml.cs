@@ -9,10 +9,9 @@ using System.Security.Cryptography;
 using System.Configuration;
 using PatternFinder;
 using Ionic.Zip;
-using System.Threading.Tasks;
 using Sims.Far;
 
-namespace HexEditApp
+namespace SimsWidescreenPatcher
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
