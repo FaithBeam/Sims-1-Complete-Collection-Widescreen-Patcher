@@ -19,16 +19,16 @@ namespace SimsWidescreenPatcher
     public partial class MainWindow : Window
     {
         private readonly List<string> images = new List<string> {
-            @"Content\UIGraphics\Community\Bus_loadscreen_1024x768.bmp",
-            @"Content\UIGraphics\Downtown\Taxi_loadscreen_1024x768.bmp",
-            @"Content\UIGraphics\Magicland\magicland_loadscreen_1024x768.bmp",
-            @"Content\UIGraphics\Magicland\magicland_loadscreen_hole_1024x768.bmp",
-            @"Content\UIGraphics\Nbhd\Bus_loadscreen_1024x768.bmp",
-            @"Content\UIGraphics\Other\setup.bmp",
-            @"Content\UIGraphics\Studiotown\Studiotown_loadscreen_1024x768.bmp",
-            @"Content\UIGraphics\Studiotown\Studiotown_loadscreen_fan_1024x768.bmp",
-            @"Content\UIGraphics\VIsland\vacation_loadscreen_1024x768.bmp",
-            @"Content\UIGraphics\VIsland\vacation_loadscreen2_1024x768.bmp",
+            @"Community\Bus_loadscreen_1024x768.bmp",
+            @"Downtown\Taxi_loadscreen_1024x768.bmp",
+            @"Magicland\magicland_loadscreen_1024x768.bmp",
+            @"Magicland\magicland_loadscreen_hole_1024x768.bmp",
+            @"Nbhd\Bus_loadscreen_1024x768.bmp",
+            @"Other\setup.bmp",
+            @"Studiotown\Studiotown_loadscreen_1024x768.bmp",
+            @"Studiotown\Studiotown_loadscreen_fan_1024x768.bmp",
+            @"VIsland\vacation_loadscreen_1024x768.bmp",
+            @"VIsland\vacation_loadscreen2_1024x768.bmp",
         };
         private readonly List<string> largeBackLocations = new List<string>
         {
@@ -119,10 +119,14 @@ namespace SimsWidescreenPatcher
 
         private string GetMd5(string path)
         {
-            using var md5 = MD5.Create();
-            using var stream = File.OpenRead(path);
-            var hash = md5.ComputeHash(stream);
-            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            using (var md5 = MD5.Create())
+            {
+                using (var stream = File.OpenRead(path))
+                {
+                    var hash = md5.ComputeHash(stream);
+                    return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                }
+            }
         }
 
         private void CheckForBackup(string path)
@@ -218,12 +222,12 @@ namespace SimsWidescreenPatcher
             ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
             foreach (var i in images)
             {
-                if (!File.Exists(i))
+                if (!File.Exists($@"Content\UIGraphics\{i}"))
                 {
-                    log.Info($"Couldn't find {i}");
+                    log.Info($@"Couldn't find Content\UIGraphics\{i}");
                     continue;
                 }
-                CompositeImage(@"Content\blackbackground.png", i, $@"{directory}\{i.Replace("Content\\", "")}", width, height);
+                CompositeImage(@"Content\blackbackground.png", $@"Content\UIGraphics\{i}", $@"{directory}\UIGraphics\{i}", width, height);
             }
             if (File.Exists(@"Content\UIGraphics\Downtown\largeback.bmp"))
             {
@@ -257,8 +261,13 @@ namespace SimsWidescreenPatcher
             }
             CreateDirectory(@"Content\UIGraphics");
             var far = new Far(uigraphicsPath);
-            far.Extract(@"Content\UIGraphics", new List<string> { @"Downtown\largeback.bmp", });
-            far.Extract(@"Content\UIGraphics");
+            var extractImages = new List<string>(images)
+            {
+                @"Downtown\largeback.bmp",
+                @"StudioTown\dlgframe_1024x768.bmp",
+                @"cpanel\Backgrounds\PanelBack.bmp"
+            };
+            far.Extract(outputDirectory: @"Content\UIGraphics", filter: extractImages);
         }
 
         private void CreateDirectory(string path)
@@ -276,34 +285,40 @@ namespace SimsWidescreenPatcher
 
         private void CompositeImage(string background, string overlay, string output, int width, int height)
         {
-            using var compositeImage = new MagickImage(overlay);
-            using var baseImage = new MagickImage(background);
-            log.Info($@"Compositing {overlay} over {background} to {output}");
-            var size = new MagickGeometry(width, height);
-            size.IgnoreAspectRatio = true;
-            baseImage.Resize(size);
-            baseImage.Composite(compositeImage, Gravity.Center);
-            baseImage.Depth = 8;
-            baseImage.Settings.Compression = ImageMagick.CompressionMethod.RLE;
-            baseImage.Settings.Format = MagickFormat.Bmp3;
-            baseImage.ColorType = ColorType.Palette;
-            baseImage.Alpha(AlphaOption.Off);
-            baseImage.Write(output);
+            using (var compositeImage = new MagickImage(overlay))
+            {
+                using (var baseImage = new MagickImage(background))
+                {
+                    log.Info($@"Compositing {overlay} over {background} to {output}");
+                    var size = new MagickGeometry(width, height);
+                    size.IgnoreAspectRatio = true;
+                    baseImage.Resize(size);
+                    baseImage.Composite(compositeImage, Gravity.Center);
+                    baseImage.Depth = 8;
+                    baseImage.Settings.Compression = ImageMagick.CompressionMethod.RLE;
+                    baseImage.Settings.Format = MagickFormat.Bmp3;
+                    baseImage.ColorType = ColorType.Palette;
+                    baseImage.Alpha(AlphaOption.Off);
+                    baseImage.Write(output);
+                }
+            }
         }
 
         private void ScaleImage(string input, string output, int width, int height)
         {
-            using var image = new MagickImage(input);
-            var size = new MagickGeometry(width, height);
-            log.Info($"Resizing {input} to {output}");
-            size.IgnoreAspectRatio = true;
-            image.Resize(size);
-            image.Depth = 8;
-            image.Settings.Compression = ImageMagick.CompressionMethod.RLE;
-            image.Settings.Format = MagickFormat.Bmp3;
-            image.ColorType = ColorType.Palette;
-            image.Alpha(AlphaOption.Off);
-            image.Write(output);
+            using (var image = new MagickImage(input))
+            {
+                var size = new MagickGeometry(width, height);
+                log.Info($"Resizing {input} to {output}");
+                size.IgnoreAspectRatio = true;
+                image.Resize(size);
+                image.Depth = 8;
+                image.Settings.Compression = ImageMagick.CompressionMethod.RLE;
+                image.Settings.Format = MagickFormat.Bmp3;
+                image.ColorType = ColorType.Palette;
+                image.Alpha(AlphaOption.Off);
+                image.Write(output);
+            }
         }
 
         private void UninstallButton_Click(object sender, RoutedEventArgs e)
@@ -358,7 +373,7 @@ namespace SimsWidescreenPatcher
             DeleteFile($@"{directory}\QuickGuide.html");
             DeleteFile($@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp");
             foreach (var i in images)
-                DeleteFile($@"{directory}\{i.Replace(@"Content\", "")}");
+                DeleteFile($@"{directory}\UIGraphics\{i}");
             foreach (var i in largeBackLocations)
                 DeleteFile($@"{directory}\{i}");
             foreach (var i in dlgFrameLocations)
