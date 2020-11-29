@@ -264,7 +264,7 @@ namespace SimsWidescreenPatcher
             var extractImages = new List<string>(images)
             {
                 @"Downtown\largeback.bmp",
-                @"StudioTown\dlgframe_1024x768.bmp",
+                @"Studiotown\dlgframe_1024x768.bmp",
                 @"cpanel\Backgrounds\PanelBack.bmp"
             };
             far.Extract(outputDirectory: @"Content\UIGraphics", filter: extractImages);
