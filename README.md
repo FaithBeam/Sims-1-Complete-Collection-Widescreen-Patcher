@@ -21,6 +21,18 @@ This program patches `The Sims 1: Complete Collection` to a custom resolution. Y
 
 If you want to go back to your default Sims executable, select the uninstall button.
 
+## Other
+
+[Screenshots](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Screenshots)
+
+[General Sims recommendations to fix common issues](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/General-Sims-Recommendations)
+
+[Play in windowed mode](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Windowed-Mode)
+
+[Selecting valid resolutions](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Selecting-Valid-Resolutions)
+
+[Known issues](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Known-Issues)
+
 ## Credits
 
 [WSGF](http://www.wsgf.org/dr/sims)
