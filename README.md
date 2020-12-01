@@ -19,7 +19,7 @@ This program patches `The Sims 1: Complete Collection` to a custom resolution. Y
 
 ## Uninstall
 
-If you want to go back to your default Sims executable, select the uninstall button.
+If you want to go back to your original Sims executable, select the uninstall button.
 
 ## Wiki
 
