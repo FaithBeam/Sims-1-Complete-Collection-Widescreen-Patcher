@@ -6,7 +6,7 @@ This program patches `The Sims 1: Complete Collection` to a custom resolution. Y
 
 ## Requirements
 
-* .NET 4.0
+* .NET 4.6.1
 
 ## Usage
 
