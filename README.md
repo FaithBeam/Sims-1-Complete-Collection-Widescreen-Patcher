@@ -23,6 +23,8 @@ If you want to go back to your original Sims executable, select the uninstall bu
 
 ## Wiki
 
+[Antialiasing](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Antialiasing)
+
 [Screenshots](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Screenshots)
 
 [General Sims recommendations to fix common issues](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/General-Sims-Recommendations)
