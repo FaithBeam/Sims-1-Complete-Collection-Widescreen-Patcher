@@ -152,7 +152,7 @@
       <Version>1.9.1.8</Version>
     </PackageReference>
     <PackageReference Include="log4net">
-      <Version>2.0.8</Version>
+      <Version>2.0.10</Version>
     </PackageReference>
     <PackageReference Include="Magick.NET-Q8-x86">
       <Version>7.22.0</Version>
