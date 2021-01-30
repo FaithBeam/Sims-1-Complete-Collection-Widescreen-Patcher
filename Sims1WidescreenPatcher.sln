@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.Vood
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.Uninstall", "Sims1WidescreenPatcher.Uninstall\Sims1WidescreenPatcher.Uninstall.csproj", "{FB96BE34-EEED-47A1-BF19-1F1B1AD0A5E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.Models", "Sims1WidescreenPatcher.Models\Sims1WidescreenPatcher.Models.csproj", "{229D742E-301C-4BB3-861F-206B9A49F33C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,8 +27,8 @@ Global
 		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Debug|x86.ActiveCfg = Debug|x86
 		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Debug|x86.Build.0 = Debug|x86
-		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Release|x86.ActiveCfg = Release|x86
 		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Release|x86.Build.0 = Release|x86
 		{57B22D97-4889-4EF4-A0DB-4A50129E4C38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -73,14 +71,6 @@ Global
 		{FB96BE34-EEED-47A1-BF19-1F1B1AD0A5E6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FB96BE34-EEED-47A1-BF19-1F1B1AD0A5E6}.Release|x86.ActiveCfg = Release|x86
 		{FB96BE34-EEED-47A1-BF19-1F1B1AD0A5E6}.Release|x86.Build.0 = Release|x86
-		{229D742E-301C-4BB3-861F-206B9A49F33C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{229D742E-301C-4BB3-861F-206B9A49F33C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{229D742E-301C-4BB3-861F-206B9A49F33C}.Debug|x86.ActiveCfg = Debug|x86
-		{229D742E-301C-4BB3-861F-206B9A49F33C}.Debug|x86.Build.0 = Debug|x86
-		{229D742E-301C-4BB3-861F-206B9A49F33C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{229D742E-301C-4BB3-861F-206B9A49F33C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{229D742E-301C-4BB3-861F-206B9A49F33C}.Release|x86.ActiveCfg = Release|x86
-		{229D742E-301C-4BB3-861F-206B9A49F33C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

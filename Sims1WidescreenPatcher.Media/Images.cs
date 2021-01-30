@@ -1,10 +1,12 @@
 ﻿using ImageMagick;
+using Serilog;
 using Sims.Far;
 using Sims1WidescreenPatcher.IO;
-using Sims1WidescreenPatcher.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace Sims1WidescreenPatcher.Media
 {
@@ -34,39 +36,33 @@ namespace Sims1WidescreenPatcher.Media
             @"UIGraphics\Magicland\dlgframe_1024x768.bmp",
             @"UIGraphics\Studiotown\dlgframe_1024x768.bmp",
         };
-        private readonly PatchOptions _options;
         private readonly int _totalImages;
         private int _current;
+        private readonly Far _far;
+        private readonly string _path;
+        private readonly int _width;
+        private readonly int _height;
+        private readonly IProgress<double> _progress;
+        private readonly string _uigraphicsPath;
 
-        public event Action<ScaleStatus> StatusChanged;
-        public event Action Completed;
-        public event Action<string> Failed;
-
-        public Images(PatchOptions options)
+        public Images(string path, int width, int height, Progress<double> progress)
         {
-            _options = options;
+            _path = path;
+            _width = width;
+            _height = height;
+            _progress = progress;
             _totalImages = images.Count + largeBackLocations.Count + dlgFrameLocations.Count + 1;
             _current = 0;
-        }
-
-        public void ExtractUigraphics()
-        {
-            var simsInstallationDirectory = Path.GetDirectoryName(_options.Path);
-            var uigraphicsPath = simsInstallationDirectory + @"\UIGraphics\UIGraphics.far";
-            DirectoryHelper.CreateDirectory(@"Content\UIGraphics");
-            var far = new Far(uigraphicsPath);
-            var extractImages = new List<string>(images)
-            {
-                @"Downtown\largeback.bmp",
-                @"Studiotown\dlgframe_1024x768.bmp",
-                @"cpanel\Backgrounds\PanelBack.bmp"
-            };
-            far.Extract(outputDirectory: @"Content\UIGraphics", filter: extractImages);
+            _uigraphicsPath = Path.GetDirectoryName(_path) + @"\UIGraphics\UIGraphics.far";
+            _far = new Far(_uigraphicsPath);
+            _far.ParseFar();
         }
 
         public void RemoveGraphics()
         {
-            var directory = Path.GetDirectoryName(_options.Path);
+            Log.Debug($"Remove installed graphics from {Path.GetDirectoryName(_path)}.");
+            var directory = Path.GetDirectoryName(_path);
+            FileHelper.DeleteFile($@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp");
             foreach (var i in images)
                 FileHelper.DeleteFile($@"{directory}\UIGraphics\{i}");
             foreach (var i in largeBackLocations)
@@ -75,9 +71,19 @@ namespace Sims1WidescreenPatcher.Media
                 FileHelper.DeleteFile($@"{directory}\{i}");
         }
 
+        private byte[] GetBytes(string name)
+        {
+            Log.Debug($"Get bytes of {name} from {_uigraphicsPath}.");
+            var me = _far.Manifest.ManifestEntries.Where(f => string.Equals(f.Filename, name, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            _far.FarStream.Seek(me.FileOffset, SeekOrigin.Begin);
+            var bytes = new byte[me.FileLength1];
+            _far.FarStream.Read(bytes, 0, me.FileLength1);
+            return bytes;
+        }
+
         public void CopyGraphics()
         {
-            string directory = Path.GetDirectoryName(_options.Path);
+            string directory = Path.GetDirectoryName(_path);
 
             DirectoryHelper.CreateDirectory($@"{directory}\UIGraphics\Community");
             DirectoryHelper.CreateDirectory($@"{directory}\UIGraphics\CPanel\Backgrounds");
@@ -88,36 +94,26 @@ namespace Sims1WidescreenPatcher.Media
             DirectoryHelper.CreateDirectory($@"{directory}\UIGraphics\Visland");
             DirectoryHelper.CreateDirectory($@"{directory}\UIGraphics\Downtown");
 
-            ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", _options.Width, 100);
+            ScaleImage(GetBytes(@"cpanel\Backgrounds\PanelBack.bmp"), $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", _width, 100);
             foreach (var i in images)
-            {
-                if (!File.Exists($@"Content\UIGraphics\{i}"))
-                    continue;
-                CompositeImage(@"Content\blackbackground.png", $@"Content\UIGraphics\{i}", $@"{directory}\UIGraphics\{i}", _options.Width, _options.Height);
-            }
-            if (File.Exists(@"Content\UIGraphics\Downtown\largeback.bmp"))
-            {
-                foreach (var i in largeBackLocations)
-                    CompositeImage(@"Content\bluebackground.png", @"Content\UIGraphics\Downtown\largeback.bmp", $@"{directory}\{i}", _options.Width, _options.Height);
-            }
-            if (File.Exists(@"Content\UIGraphics\StudioTown\dlgframe_1024x768.bmp"))
-            {
-                foreach (var i in dlgFrameLocations)
-                    CompositeImage(@"Content\bluebackground.png", @"Content\UIGraphics\StudioTown\dlgframe_1024x768.bmp", $@"{directory}\{i}", _options.Width, _options.Height);
-            }
-
-            // Cleanup
-            DirectoryHelper.DeleteDirectory(@"Content\UIGraphics");
+                CompositeImage("blackbackground.png", GetBytes(i), $@"{directory}\UIGraphics\{i}", _width, _height);
+            foreach (var i in largeBackLocations)
+                CompositeImage("bluebackground.png", GetBytes(@"Downtown\largeback.bmp"), $@"{directory}\{i}", _width, _height);
+            foreach (var i in dlgFrameLocations)
+                CompositeImage("bluebackground.png", GetBytes(@"StudioTown\dlgframe_1024x768.bmp"), $@"{directory}\{i}", _width, _height);
+            _far.FarStream.Close();
         }
 
-        private void CompositeImage(string background, string overlay, string output, int width, int height)
+        private void CompositeImage(string background, byte[] overlay, string output, int width, int height)
         {
+            Log.Debug($"Composite {background} with bytes to {output}. Width: {width}, Height: {height}.");
             _current++;
             double calc = (double)_current / (double)_totalImages * 100;
-            _options.Progress.Report(calc);
+            _progress.Report(calc);
             using (var compositeImage = new MagickImage(overlay))
             {
-                using (var baseImage = new MagickImage(background))
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"Sims1WidescreenPatcher.Media.Resources.{background}"))
+                using (var baseImage = new MagickImage(stream))
                 {
                     var size = new MagickGeometry(width, height)
                     {
@@ -135,12 +131,13 @@ namespace Sims1WidescreenPatcher.Media
             }
         }
 
-        private void ScaleImage(string input, string output, int width, int height)
+        private void ScaleImage(byte[] bytes, string output, int width, int height)
         {
+            Log.Debug($"Scale bytes to {output}. Width: {width}, Height: {height}.");
             _current++;
             double calc = (double)_current / (double)_totalImages * 100;
-            _options.Progress.Report(calc);
-            using (var image = new MagickImage(input))
+            _progress.Report(calc);
+            using (var image = new MagickImage(bytes))
             {
                 var size = new MagickGeometry(width, height)
                 {

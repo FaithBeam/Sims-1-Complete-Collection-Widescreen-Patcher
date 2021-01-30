@@ -2,12 +2,12 @@
 
 namespace Sims1WidescreenPatcher
 {
-    public class OpenFileDialogService
+    public class OpenFileDialogService : IOpenFileDialogService
     {
         private const string EXECUTABLE = "Sims";
         public string OpenFileDialog()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            var openFileDialog = new OpenFileDialog
             {
                 Filter = $"{EXECUTABLE}|{EXECUTABLE}.exe|All files (*.*)|*.*",
                 FilterIndex = 1,

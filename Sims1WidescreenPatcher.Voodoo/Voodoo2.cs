@@ -1,46 +1,41 @@
-﻿using Sims1WidescreenPatcher.IO;
+﻿using Serilog;
+using Sims1WidescreenPatcher.IO;
 using System.IO;
-using System.IO.Compression;
+using System.Reflection;
 
 namespace Sims1WidescreenPatcher.Voodoo
 {
-    public static class Voodoo2
+    public class Voodoo2
     {
-        public static void ExtractVoodooZips(string path)
+        private readonly string[] _voodoo = { "D3D8.dll", "D3D9.dll", "d3dcompiler_47.dll", "D3DImm.dll", "DDraw.dll", "dgVoodoo.conf", "dgVoodooCpl.exe" };
+        private readonly string _path;
+
+        public Voodoo2(string path)
         {
-            string directory = Path.GetDirectoryName(path);
-            TryRemoveDgVoodoo(directory);
-            foreach (var zip in new string[] { @"Content\D3DCompiler_47.zip", @"Content\dgVoodoo2_64.zip" })
-                ZipFile.ExtractToDirectory(zip, $@"{directory}\");
-
-            foreach (var file in Directory.GetFiles($@"{directory}\MS\x86"))
-                File.Move(file, $@"{directory}\{Path.GetFileName(file)}");
-
-            DirectoryHelper.DeleteDirectory($@"{directory}\3Dfx");
-            DirectoryHelper.DeleteDirectory($@"{directory}\Doc");
-            DirectoryHelper.DeleteDirectory($@"{directory}\MS");
-
-            string text = File.ReadAllText($@"{directory}\dgVoodoo.conf");
-            text = text.Replace("dgVoodooWatermark                   = true", "dgVoodooWatermark                   = false");
-            text = text.Replace("FastVideoMemoryAccess               = false", "FastVideoMemoryAccess               = true");
-            File.WriteAllText($@"{directory}\dgVoodoo.conf", text);
+            _path = path;
         }
 
-        public static void TryRemoveDgVoodoo(string path)
+        public void ExtractVoodoo()
         {
-            var directory = Path.GetDirectoryName(path);
-            FileHelper.DeleteFile($@"{directory}\d3dcompiler_47.dll");
-            FileHelper.DeleteFile($@"{directory}\D3D8.dll");
-            FileHelper.DeleteFile($@"{directory}\D3D9.dll");
-            FileHelper.DeleteFile($@"{directory}\D3DImm.dll");
-            FileHelper.DeleteFile($@"{directory}\DDraw.dll");
-            FileHelper.DeleteFile($@"{directory}\dgVoodoo.conf");
-            FileHelper.DeleteFile($@"{directory}\dgVoodooCpl.exe");
-            FileHelper.DeleteFile($@"{directory}\QuickGuide.html");
-            FileHelper.DeleteFile($@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp");
-            DirectoryHelper.DeleteDirectory($@"{directory}\3Dfx");
-            DirectoryHelper.DeleteDirectory($@"{directory}\Doc");
-            DirectoryHelper.DeleteDirectory($@"{directory}\MS");
+            string directory = Path.GetDirectoryName(_path);
+            TryRemoveDgVoodoo();
+            foreach (var item in _voodoo)
+            {
+                Log.Debug($"Extract {item} to {_path}.");
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"Sims1WidescreenPatcher.Voodoo.DgVoodoo2Resources.{item}"))
+                using (var fs = File.Create(Path.Combine(directory, item)))
+                {
+                    stream.CopyTo(fs);
+                }
+            }
+        }
+
+        public void TryRemoveDgVoodoo()
+        {
+            Log.Debug("Removing DgVoodoo2 installation.");
+            var directory = Path.GetDirectoryName(_path);
+            foreach (var item in _voodoo)
+                FileHelper.DeleteFile(Path.Combine(directory, item));
         }
     }
 }

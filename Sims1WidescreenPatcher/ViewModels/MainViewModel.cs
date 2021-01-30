@@ -1,7 +1,9 @@
-﻿using Sims1WidescreenPatcher.Exe;
+﻿using Serilog;
+using Sims1WidescreenPatcher.Exe;
 using Sims1WidescreenPatcher.IO;
-using Sims1WidescreenPatcher.Models;
+using Sims1WidescreenPatcher.Media;
 using Sims1WidescreenPatcher.Uninstall;
+using Sims1WidescreenPatcher.Voodoo;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -12,18 +14,18 @@ namespace Sims1WidescreenPatcher.ViewModels
     {
         #region Fields
 
-        string _path;
-        int _width;
-        int _height;
-        bool _dgVoodooEnabled;
-        bool _uninstallButtonEnabled;
-        double _progress;
-        bool _patchButtonEnabled;
-        bool _browseButtonEnabled = true;
-        readonly OpenFileDialogService _fileDialogService;
-        readonly MessageBoxService _openMessageBoxService;
-        readonly DelegateCommand _patchCommand;
-        readonly DelegateCommand _uninstallCommand;
+        private string _path;
+        private int _width;
+        private int _height;
+        private bool _dgVoodooEnabled;
+        private bool _uninstallButtonEnabled;
+        private double _progress;
+        private bool _patchButtonEnabled;
+        private bool _browseButtonEnabled = true;
+        private readonly OpenFileDialogService _fileDialogService;
+        private readonly DialogService _openMessageBoxService;
+        private readonly DelegateCommand _patchCommand;
+        private readonly DelegateCommand _uninstallCommand;
 
         #endregion
 
@@ -52,9 +54,12 @@ namespace Sims1WidescreenPatcher.ViewModels
             get { return _path; }
             set
             {
-                SetProperty(ref _path, value);
-                IsValidExe();
-                CheckForBackup();
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    SetProperty(ref _path, value);
+                    IsValidExe();
+                    CheckForBackup();
+                }
             }
         }
 
@@ -72,7 +77,11 @@ namespace Sims1WidescreenPatcher.ViewModels
         public int Height
         {
             get { return _height; }
-            set { SetProperty(ref _height, value); }
+            set {
+                SetProperty(ref _height, value);
+                if (_height > 1080)
+                    DgVoodooEnabled = true;
+            }
         }
 
         public bool DgVoodooEnabled
@@ -107,7 +116,7 @@ namespace Sims1WidescreenPatcher.ViewModels
             _patchCommand = new DelegateCommand(OnClickedPatch);
             _uninstallCommand = new DelegateCommand(OnClickedUninstall);
             _fileDialogService = new OpenFileDialogService();
-            _openMessageBoxService = new MessageBoxService();
+            _openMessageBoxService = new DialogService();
             OpenFileDialogCommand = new DelegateCommand(OnOpenFileDialog);
         }
 
@@ -140,7 +149,7 @@ namespace Sims1WidescreenPatcher.ViewModels
 
         private async void IsValidExe()
         {
-            var isValid = await Task.Run(() => new S1WP(new PatchOptions { Path = _path }).ValidFile());
+            var isValid = await Task.Run(() => new S1WP(_path, _width, _height).ValidFile());
             if (isValid)
             {
                 PatchButtonEnabled = true;
@@ -161,13 +170,9 @@ namespace Sims1WidescreenPatcher.ViewModels
         private void CheckPath()
         {
             if (string.IsNullOrEmpty(_path))
-            {
                 PatchButtonEnabled = false;
-            }
             else
-            {
                 PatchButtonEnabled = true;
-            }
         }
 
         private async void OnClickedPatch(object commandParameter)
@@ -175,14 +180,14 @@ namespace Sims1WidescreenPatcher.ViewModels
             PatchButtonEnabled = false;
             BrowseButtonEnabled = false;
             var progress = new Progress<double>(percent => { Progress = percent; });
-            await Task.Run(() => new S1WP(new PatchOptions
+            await Task.Run(() => new S1WP(_path, _width, _height).Patch());
+            await Task.Run(() => 
             {
-                Progress = progress,
-                DgVoodooEnabled = _dgVoodooEnabled,
-                Height = _height,
-                Path = _path,
-                Width = _width
-            }).Patch());
+                var i = new Images(_path, _width, _height, progress);
+                i.CopyGraphics();
+            });
+            if (_dgVoodooEnabled)
+                await Task.Run(() => new Voodoo2(_path).ExtractVoodoo());
             BrowseButtonEnabled = true;
         }
 

@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sims1WidescreenPatcher.Voodoo</RootNamespace>
     <AssemblyName>Sims1WidescreenPatcher.Voodoo</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,9 +54,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,6 +62,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Resource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource1.resx</DependentUpon>
+    </Compile>
     <Compile Include="Voodoo2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -74,7 +77,38 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <EmbeddedResource Include="Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DgVoodoo2Resources\D3D8.dll" />
+    <EmbeddedResource Include="DgVoodoo2Resources\dgVoodoo.conf" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DgVoodoo2Resources\D3D9.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DgVoodoo2Resources\d3dcompiler_47.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DgVoodoo2Resources\D3DImm.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DgVoodoo2Resources\DDraw.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DgVoodoo2Resources\dgVoodooCpl.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ILMerge">
+      <Version>3.0.41</Version>
+    </PackageReference>
+    <PackageReference Include="Serilog">
+      <Version>2.10.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
