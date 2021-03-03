@@ -197,6 +197,7 @@ namespace SimsWidescreenPatcher
                 bytes[foundOffset + 2 + betweenPattern.Trim().Split().Length] = height[0];
                 bytes[foundOffset + 2 + betweenPattern.Trim().Split().Length + 1] = height[1];
 
+                File.SetAttributes(path, FileAttributes.Normal);
                 File.WriteAllBytes(path, bytes);
                 return true;
             }
