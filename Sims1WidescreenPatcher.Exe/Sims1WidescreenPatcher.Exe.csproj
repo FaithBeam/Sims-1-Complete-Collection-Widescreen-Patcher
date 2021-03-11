@@ -77,9 +77,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ILMerge">
-      <Version>3.0.41</Version>
-    </PackageReference>
     <PackageReference Include="PatternFinder">
       <Version>1.0.1</Version>
     </PackageReference>

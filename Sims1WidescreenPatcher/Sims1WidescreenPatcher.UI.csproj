@@ -138,9 +138,6 @@
     <Resource Include="Sims_0000.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ILMerge">
-      <Version>3.0.41</Version>
-    </PackageReference>
     <PackageReference Include="Serilog">
       <Version>2.10.0</Version>
     </PackageReference>

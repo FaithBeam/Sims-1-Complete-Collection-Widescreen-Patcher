@@ -91,9 +91,6 @@
     <EmbeddedResource Include="Resources\bluebackground.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ILMerge">
-      <Version>3.0.41</Version>
-    </PackageReference>
     <PackageReference Include="Magick.NET-Q8-x86">
       <Version>7.23.2</Version>
     </PackageReference>
