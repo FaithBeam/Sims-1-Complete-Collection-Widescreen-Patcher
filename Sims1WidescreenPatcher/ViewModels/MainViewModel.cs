@@ -1,9 +1,8 @@
-﻿using Serilog;
-using Sims1WidescreenPatcher.Exe;
+﻿using Sims1WidescreenPatcher.Exe;
 using Sims1WidescreenPatcher.IO;
 using Sims1WidescreenPatcher.Media;
 using Sims1WidescreenPatcher.Uninstall;
-using Sims1WidescreenPatcher.Voodoo;
+using Sims1WidescreenPatcher.DDrawCompat;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -17,7 +16,7 @@ namespace Sims1WidescreenPatcher.ViewModels
         private string _path;
         private int _width;
         private int _height;
-        private bool _dgVoodooEnabled;
+        private bool _dDrawCompatEnabled;
         private bool _uninstallButtonEnabled;
         private double _progress;
         private bool _patchButtonEnabled;
@@ -33,30 +32,30 @@ namespace Sims1WidescreenPatcher.ViewModels
 
         public bool BrowseButtonEnabled
         {
-            get { return _browseButtonEnabled; }
-            set { SetProperty(ref _browseButtonEnabled, value); }
+            get => _browseButtonEnabled;
+            set => _ = SetProperty(ref _browseButtonEnabled, value);
         }
 
         public bool UninstallButtonEnabled
         {
-            get { return _uninstallButtonEnabled; }
-            set { SetProperty(ref _uninstallButtonEnabled, value); }
+            get => _uninstallButtonEnabled;
+            set => _ = SetProperty(ref _uninstallButtonEnabled, value);
         }
 
         public bool PatchButtonEnabled
         {
-            get { return _patchButtonEnabled; }
-            set { SetProperty(ref _patchButtonEnabled, value); }
+            get => _patchButtonEnabled;
+            set => _ = SetProperty(ref _patchButtonEnabled, value);
         }
 
         public string Path
         {
-            get { return _path; }
+            get => _path;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    SetProperty(ref _path, value);
+                    _ = SetProperty(ref _path, value);
                     IsValidExe();
                     CheckForBackup();
                 }
@@ -65,37 +64,42 @@ namespace Sims1WidescreenPatcher.ViewModels
 
         public int Width
         {
-            get { return _width; }
+            get => _width;
             set
             {
-                SetProperty(ref _width, value);
+                _ = SetProperty(ref _width, value);
                 if (_width > 1920)
-                    DgVoodooEnabled = true;
+                {
+                    DDrawCompatEnabled = true;
+                }
             }
         }
 
         public int Height
         {
-            get { return _height; }
-            set {
-                SetProperty(ref _height, value);
+            get => _height;
+            set
+            {
+                _ = SetProperty(ref _height, value);
                 if (_height > 1080)
-                    DgVoodooEnabled = true;
+                {
+                    DDrawCompatEnabled = true;
+                }
             }
         }
 
-        public bool DgVoodooEnabled
+        public bool DDrawCompatEnabled
         {
-            get { return _dgVoodooEnabled; }
-            set { SetProperty(ref _dgVoodooEnabled, value); }
+            get => _dDrawCompatEnabled;
+            set => _ = SetProperty(ref _dDrawCompatEnabled, value);
         }
 
         public double Progress
         {
-            get { return _progress; }
+            get => _progress;
             set
             {
-                SetProperty(ref _progress, value);
+                _ = SetProperty(ref _progress, value);
                 if (_progress >= 100)
                 {
                     OpenFinishedPatchPopup();
@@ -133,10 +137,7 @@ namespace Sims1WidescreenPatcher.ViewModels
 
         private void CheckForBackup()
         {
-            if (!string.IsNullOrWhiteSpace(_path) && FileHelper.CheckForBackup(_path))
-                UninstallButtonEnabled = true;
-            else
-                UninstallButtonEnabled = false;
+            UninstallButtonEnabled = !string.IsNullOrWhiteSpace(_path) && FileHelper.CheckForBackup(_path);
         }
 
         private void OnClickedUninstall(object commandParameter)
@@ -169,10 +170,7 @@ namespace Sims1WidescreenPatcher.ViewModels
 
         private void CheckPath()
         {
-            if (string.IsNullOrEmpty(_path))
-                PatchButtonEnabled = false;
-            else
-                PatchButtonEnabled = true;
+            PatchButtonEnabled = !string.IsNullOrEmpty(_path);
         }
 
         private async void OnClickedPatch(object commandParameter)
@@ -186,8 +184,11 @@ namespace Sims1WidescreenPatcher.ViewModels
                 var i = new Images(_path, _width, _height, progress);
                 i.CopyGraphics();
             });
-            if (_dgVoodooEnabled)
-                await Task.Run(() => new Voodoo2(_path).ExtractVoodoo());
+            if (_dDrawCompatEnabled)
+            {
+                await Task.Run(() => new DllWrapper(_path).CopyDll());
+            }
+
             BrowseButtonEnabled = true;
         }
 

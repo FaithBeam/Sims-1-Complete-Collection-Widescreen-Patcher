@@ -118,25 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="D3D8" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DgVoodoo2Resources\D3D8.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="D3D9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DgVoodoo2Resources\D3D9.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="d3dcompiler_47" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DgVoodoo2Resources\d3dcompiler_47.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="D3DImm" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DgVoodoo2Resources\D3DImm.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="DDraw" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DgVoodoo2Resources\DDraw.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="dgVoodoo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DgVoodoo2Resources\dgVoodoo.conf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="dgVoodooCpl" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>DgVoodoo2Resources\dgVoodooCpl.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="ddraw" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ddraw.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

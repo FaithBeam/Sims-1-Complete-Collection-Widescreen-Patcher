@@ -146,6 +146,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Sims1WidescreenPatcher.DDrawCompat\Sims1WidescreenPatcher.DDrawCompat.csproj">
+      <Project>{a6af9b1e-ca61-48ff-9c24-0876997dee22}</Project>
+      <Name>Sims1WidescreenPatcher.DDrawCompat</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sims1WidescreenPatcher.Exe\Sims1WidescreenPatcher.Exe.csproj">
       <Project>{57b22d97-4889-4ef4-a0db-4a50129e4c38}</Project>
       <Name>Sims1WidescreenPatcher.Exe</Name>
@@ -161,10 +165,6 @@
     <ProjectReference Include="..\Sims1WidescreenPatcher.Uninstall\Sims1WidescreenPatcher.Uninstall.csproj">
       <Project>{fb96be34-eeed-47a1-bf19-1f1b1ad0a5e6}</Project>
       <Name>Sims1WidescreenPatcher.Uninstall</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sims1WidescreenPatcher.Voodoo\Sims1WidescreenPatcher.Voodoo.csproj">
-      <Project>{a6af9b1e-ca61-48ff-9c24-0876997dee22}</Project>
-      <Name>Sims1WidescreenPatcher.Voodoo</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

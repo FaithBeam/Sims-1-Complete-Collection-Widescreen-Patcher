@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sims1WidescreenPatcher.Voodoo {
+namespace Sims1WidescreenPatcher.DDrawCompat {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Sims1WidescreenPatcher.Voodoo {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource1 {
+    internal class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resource1() {
+        internal Resource() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Sims1WidescreenPatcher.Voodoo {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sims1WidescreenPatcher.Voodoo.Resource1", typeof(Resource1).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sims1WidescreenPatcher.DDrawCompat.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -63,69 +63,9 @@ namespace Sims1WidescreenPatcher.Voodoo {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] D3D8 {
+        internal static byte[] ddraw {
             get {
-                object obj = ResourceManager.GetObject("D3D8", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] D3D9 {
-            get {
-                object obj = ResourceManager.GetObject("D3D9", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] d3dcompiler_47 {
-            get {
-                object obj = ResourceManager.GetObject("d3dcompiler_47", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] D3DImm {
-            get {
-                object obj = ResourceManager.GetObject("D3DImm", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] DDraw {
-            get {
-                object obj = ResourceManager.GetObject("DDraw", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] dgVoodoo {
-            get {
-                object obj = ResourceManager.GetObject("dgVoodoo", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] dgVoodooCpl {
-            get {
-                object obj = ResourceManager.GetObject("dgVoodooCpl", resourceCulture);
+                object obj = ResourceManager.GetObject("ddraw", resourceCulture);
                 return ((byte[])(obj));
             }
         }

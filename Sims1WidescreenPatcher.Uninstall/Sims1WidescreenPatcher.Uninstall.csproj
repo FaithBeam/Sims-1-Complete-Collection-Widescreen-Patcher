@@ -65,13 +65,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Sims1WidescreenPatcher.DDrawCompat\Sims1WidescreenPatcher.DDrawCompat.csproj">
+      <Project>{a6af9b1e-ca61-48ff-9c24-0876997dee22}</Project>
+      <Name>Sims1WidescreenPatcher.DDrawCompat</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sims1WidescreenPatcher.Media\Sims1WidescreenPatcher.Media.csproj">
       <Project>{efcd12fa-434d-4481-a858-6539340a5c10}</Project>
       <Name>Sims1WidescreenPatcher.Media</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sims1WidescreenPatcher.Voodoo\Sims1WidescreenPatcher.Voodoo.csproj">
-      <Project>{a6af9b1e-ca61-48ff-9c24-0876997dee22}</Project>
-      <Name>Sims1WidescreenPatcher.Voodoo</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

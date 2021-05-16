@@ -1,6 +1,6 @@
 ﻿using Serilog;
 using Sims1WidescreenPatcher.Media;
-using Sims1WidescreenPatcher.Voodoo;
+using Sims1WidescreenPatcher.DDrawCompat;
 using System.IO;
 
 namespace Sims1WidescreenPatcher.Uninstall
@@ -16,7 +16,7 @@ namespace Sims1WidescreenPatcher.Uninstall
             var filenameWithoutExtension = Path.GetFileNameWithoutExtension(path);
             var backupPath = Path.Combine(directory, filenameWithoutExtension);
             File.Move($@"{backupPath} Backup.exe", path);
-            new Voodoo2(path).TryRemoveDgVoodoo();
+            new DllWrapper(path).TryRemoveDDrawCompat();
             new Images(path, 0, 0, null).RemoveGraphics();
             Log.Debug("Finished uninstall.");
         }
