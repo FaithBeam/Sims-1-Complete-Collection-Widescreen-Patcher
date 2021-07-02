@@ -1,12 +1,13 @@
 # The Sims 1: Complete Collection Widescreen Patcher
 
-This program patches `The Sims 1: Complete Collection` to a custom resolution. You must be using a NoCD executable.
+This program patches `The Sims 1: Complete Collection` to a custom resolution.
 
 ![Main Application](https://i.imgur.com/QnvbmCY.png)
 
 ## Requirements
 
 * .NET 4.0
+* NoCD/Crack Executable
 
 ## Usage
 
