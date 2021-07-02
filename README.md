@@ -7,7 +7,7 @@ This program patches `The Sims 1: Complete Collection` to a custom resolution.
 ## Requirements
 
 * .NET 4.0
-* NoCD/Crack Executable
+* NoCD/Crack Sims Executable
 
 ## Usage
 
