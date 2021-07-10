@@ -39,7 +39,7 @@ If you want to go back to your original Sims executable, select the uninstall bu
 
 [PatternFinder](https://github.com/mrexodia/PatternFinder)
 
-[dgVoodoo2](http://dege.freeweb.hu/dgVoodoo2/dgVoodoo2/)
+[DDrawCompat](https://github.com/narzoul/DDrawCompat)
 
 [Magick.NET](https://github.com/dlemstra/Magick.NET)
 
