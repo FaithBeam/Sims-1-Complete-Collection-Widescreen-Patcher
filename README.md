@@ -2,7 +2,7 @@
 
 This program patches `The Sims 1: Complete Collection` to a custom resolution. You must be using a NoCD executable.
 
-![Main Application](https://i.imgur.com/XJp87Kh.png)
+![Main Application](https://i.imgur.com/5UaxMWb.png)
 
 ## Requirements
 
