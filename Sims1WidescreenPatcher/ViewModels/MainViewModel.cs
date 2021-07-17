@@ -6,6 +6,8 @@ using Sims1WidescreenPatcher.DDrawCompat;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
+using Sims1WidescreenPatcher.Resolutions;
 
 namespace Sims1WidescreenPatcher.ViewModels
 {
@@ -29,6 +31,8 @@ namespace Sims1WidescreenPatcher.ViewModels
         #endregion
 
         #region Properties
+
+        public ObservableCollection<Resolution> Resolutions;
 
         public bool BrowseButtonEnabled
         {

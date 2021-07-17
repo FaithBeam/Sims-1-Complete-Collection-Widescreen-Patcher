@@ -150,6 +150,10 @@
       <Project>{a6af9b1e-ca61-48ff-9c24-0876997dee22}</Project>
       <Name>Sims1WidescreenPatcher.DDrawCompat</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Sims1WidescreenPatcher.EnumerateResolutions\Sims1WidescreenPatcher.Resolutions.csproj">
+      <Project>{F239BACC-DB19-4424-A023-EC24E5747818}</Project>
+      <Name>Sims1WidescreenPatcher.Resolutions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sims1WidescreenPatcher.Exe\Sims1WidescreenPatcher.Exe.csproj">
       <Project>{57b22d97-4889-4ef4-a0db-4a50129e4c38}</Project>
       <Name>Sims1WidescreenPatcher.Exe</Name>
