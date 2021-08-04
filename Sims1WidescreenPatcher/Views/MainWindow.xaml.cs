@@ -2,7 +2,7 @@
 using Serilog;
 using Sims1WidescreenPatcher.ViewModels;
 
-namespace SimsWidescreenPatcher.Views
+namespace Sims1WidescreenPatcher.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

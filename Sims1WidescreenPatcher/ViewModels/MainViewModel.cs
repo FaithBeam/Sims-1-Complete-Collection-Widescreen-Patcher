@@ -157,7 +157,8 @@ namespace Sims1WidescreenPatcher.ViewModels
             }
             else
             {
-                _openMessageBoxService.ShowMessageBox("This executable cannot be edited. Please make sure you're using a valid nocd executable.");
+                _openMessageBoxService.ShowMessageBox(
+                    "This executable cannot be edited. Please make sure you're using a valid nocd executable.");
                 PatchButtonEnabled = false;
             }
         }
@@ -179,7 +180,7 @@ namespace Sims1WidescreenPatcher.ViewModels
             BrowseButtonEnabled = false;
             var progress = new Progress<double>(percent => { Progress = percent; });
             await Task.Run(() => new S1WP(_path, _width, _height).Patch());
-            await Task.Run(() => 
+            await Task.Run(() =>
             {
                 var i = new Images(_path, _width, _height, progress);
                 i.CopyGraphics();
