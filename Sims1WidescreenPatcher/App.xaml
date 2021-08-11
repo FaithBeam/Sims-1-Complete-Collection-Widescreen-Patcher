@@ -1,9 +1,7 @@
-﻿<Application x:Class="SimsWidescreenPatcher.App"
+﻿<Application x:Class="Sims1WidescreenPatcher.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:SimsWidescreenPatcher"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Application.Resources>
          
     </Application.Resources>
 </Application>

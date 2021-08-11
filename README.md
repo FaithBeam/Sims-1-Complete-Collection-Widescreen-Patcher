@@ -2,11 +2,11 @@
 
 This program patches `The Sims 1: Complete Collection` to a custom resolution.
 
-![Main Application](https://i.imgur.com/QnvbmCY.png)
+![Main Application](https://i.imgur.com/5UaxMWb.png)
 
 ## Requirements
 
-* .NET 4.0
+* [.NET Framework 4.7.2](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-web-installer)
 * NoCD/Crack Sims Executable
 
 ## Usage
@@ -44,7 +44,7 @@ If you want to go back to your original Sims executable, select the uninstall bu
 
 [PatternFinder](https://github.com/mrexodia/PatternFinder)
 
-[dgVoodoo2](http://dege.freeweb.hu/dgVoodoo2/dgVoodoo2/)
+[DDrawCompat](https://github.com/narzoul/DDrawCompat)
 
 [Magick.NET](https://github.com/dlemstra/Magick.NET)
 
