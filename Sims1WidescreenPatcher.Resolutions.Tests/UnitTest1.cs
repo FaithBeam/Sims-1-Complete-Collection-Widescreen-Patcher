@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.ObjectModel;
+using Sims1WidescreenPatcher.EnumerateResolutions;
 
 namespace Sims1WidescreenPatcher.Resolutions.Tests
 {
@@ -9,9 +10,8 @@ namespace Sims1WidescreenPatcher.Resolutions.Tests
         [TestMethod]
         public void TestGet()
         {
-            var o = new ObservableCollection<Resolution>();
-            var c = new EnumerateResolutions();
-            c.Get(o);
+            var c = new EnumerateResolutions.EnumerateResolutions();
+            var t = EnumerateResolutions.EnumerateResolutions.Get();
             ;
         }
     }

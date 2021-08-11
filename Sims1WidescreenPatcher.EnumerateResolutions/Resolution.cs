@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 // https://stackoverflow.com/a/744609
-namespace Sims1WidescreenPatcher.Resolutions
+namespace Sims1WidescreenPatcher.EnumerateResolutions
 {
     public class EnumerateResolutions
     {
@@ -55,10 +54,11 @@ namespace Sims1WidescreenPatcher.Resolutions
         {
         }
 
-        public void Get(ObservableCollection<Resolution> resolutions)
+        public static List<Resolution> Get()
         {
+            var resolutions = new List<Resolution>();
             var vDevMode = new DEVMODE();
-            int i = 0;
+            var i = 0;
             while (EnumDisplaySettings(null, i, ref vDevMode))
             {
                 var resolution = new Resolution
@@ -66,12 +66,14 @@ namespace Sims1WidescreenPatcher.Resolutions
                     Width = vDevMode.dmPelsWidth,
                     Height = vDevMode.dmPelsHeight
                 };
-                if (!resolutions.Any(r => r.Width == resolution.Width && r.Height == r.Height))
+                if (resolutions.All(r => r.Width != resolution.Width))
                 {
                     resolutions.Add(resolution);
                 }
                 i++;
             }
+
+            return resolutions.OrderBy(x => x.Height * x.Width).ToList();
         }
     }
 

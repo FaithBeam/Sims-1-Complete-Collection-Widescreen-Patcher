@@ -31,7 +31,7 @@
 
                 <StackPanel Grid.Column="0">
                     <TextBlock Text="Resolution" />
-                    <ComboBox x:Name="ResolutionComboBox" ItemsSource="{Binding Path=Resolutions}" />
+                    <ComboBox x:Name="ResolutionComboBox" ItemsSource="{Binding Path=Res}" />
                 </StackPanel>
 
                 <CheckBox x:Name="DDrawCompatCheckbox" Grid.Column="1" Content="DDrawCompat" VerticalAlignment="Bottom" HorizontalAlignment="Center" IsChecked="{Binding Path=DDrawCompatEnabled}" ToolTip="Enable for improved performance. May cause stuttering at startup but should go away once in the neighborhood screen." />

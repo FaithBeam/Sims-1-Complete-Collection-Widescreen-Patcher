@@ -4,10 +4,11 @@ using Sims1WidescreenPatcher.Media;
 using Sims1WidescreenPatcher.Uninstall;
 using Sims1WidescreenPatcher.DDrawCompat;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
-using Sims1WidescreenPatcher.Resolutions;
+using Sims1WidescreenPatcher.EnumerateResolutions;
 
 namespace Sims1WidescreenPatcher.ViewModels
 {
@@ -32,7 +33,8 @@ namespace Sims1WidescreenPatcher.ViewModels
 
         #region Properties
 
-        public ObservableCollection<Resolution> Resolutions;
+        public List<Resolution> Res { get; set; }
+        public Resolution SelectedResolution { get; set; }
 
         public bool BrowseButtonEnabled
         {
@@ -126,6 +128,8 @@ namespace Sims1WidescreenPatcher.ViewModels
             _fileDialogService = new OpenFileDialogService();
             _openMessageBoxService = new DialogService();
             OpenFileDialogCommand = new DelegateCommand(OnOpenFileDialog);
+            
+            Res = EnumerateResolutions.EnumerateResolutions.Get();
         }
 
         #endregion
