@@ -1,8 +1,8 @@
-﻿using Serilog;
-using SimsWidescreenPatcher.Views;
-using System.Windows;
+﻿using System.Windows;
+using Serilog;
+using Sims1WidescreenPatcher.Views;
 
-namespace SimsWidescreenPatcher
+namespace Sims1WidescreenPatcher
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -1,12 +1,13 @@
 # The Sims 1: Complete Collection Widescreen Patcher
 
-This program patches `The Sims 1: Complete Collection` to a custom resolution. You must be using a NoCD executable.
+This program patches `The Sims 1: Complete Collection` to a custom resolution.
 
 ![Main Application](https://i.imgur.com/5UaxMWb.png)
 
 ## Requirements
 
 * [.NET Framework 4.7.2](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-web-installer)
+* NoCD/Crack Sims Executable
 
 ## Usage
 
@@ -23,15 +24,17 @@ If you want to go back to your original Sims executable, select the uninstall bu
 
 ## Wiki
 
-[Screenshots](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Screenshots)
-
 [General Sims recommendations to fix common issues](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/General-Sims-Recommendations)
+
+[Known issues](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Known-Issues)
+
+[Linux Usage](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Linux-Usage)
 
 [Play in windowed mode](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Windowed-Mode)
 
-[Selecting valid resolutions](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Selecting-Valid-Resolutions)
+[Screenshots](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Screenshots)
 
-[Known issues](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Known-Issues)
+[Selecting valid resolutions](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Selecting-Valid-Resolutions)
 
 ## Credits
 

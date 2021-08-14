@@ -2,11 +2,12 @@
 using Sims1WidescreenPatcher.IO;
 using Sims1WidescreenPatcher.Media;
 using Sims1WidescreenPatcher.Uninstall;
-using Sims1WidescreenPatcher.DDrawCompat;
+using Sims1WidescreenPatcher.Wrappers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Sims1WidescreenPatcher.Wrappers.Models;
 using System.Collections.ObjectModel;
 using Sims1WidescreenPatcher.EnumerateResolutions;
 
@@ -19,7 +20,6 @@ namespace Sims1WidescreenPatcher.ViewModels
         private string _path;
         private int _width;
         private int _height;
-        private bool _dDrawCompatEnabled;
         private bool _uninstallButtonEnabled;
         private double _progress;
         private bool _patchButtonEnabled;
@@ -71,33 +71,13 @@ namespace Sims1WidescreenPatcher.ViewModels
         public int Width
         {
             get => _width;
-            set
-            {
-                _ = SetProperty(ref _width, value);
-                if (_width > 1920)
-                {
-                    DDrawCompatEnabled = true;
-                }
-            }
+            set => _ = SetProperty(ref _width, value);
         }
 
         public int Height
         {
             get => _height;
-            set
-            {
-                _ = SetProperty(ref _height, value);
-                if (_height > 1080)
-                {
-                    DDrawCompatEnabled = true;
-                }
-            }
-        }
-
-        public bool DDrawCompatEnabled
-        {
-            get => _dDrawCompatEnabled;
-            set => _ = SetProperty(ref _dDrawCompatEnabled, value);
+            set => _ = SetProperty(ref _height, value);
         }
 
         public double Progress
@@ -111,6 +91,20 @@ namespace Sims1WidescreenPatcher.ViewModels
                     OpenFinishedPatchPopup();
                 }
             }
+        }
+
+        public IEnumerable<Wrapper> Wrappers { get; } = new[]
+        {
+            Wrapper.None,
+            Wrapper.DgVoodoo2,
+            Wrapper.DDrawCompat
+        };
+
+        private Wrapper _selectedWrapper;
+        public Wrapper SelectedWrapper
+        {
+            get => _selectedWrapper;
+            set => SetProperty(ref _selectedWrapper, value);
         }
 
         public ICommand PatchCommand => _patchCommand;
@@ -165,7 +159,8 @@ namespace Sims1WidescreenPatcher.ViewModels
             }
             else
             {
-                _openMessageBoxService.ShowMessageBox("This executable cannot be edited. Please make sure you're using a valid nocd executable.");
+                _openMessageBoxService.ShowMessageBox(
+                    "This executable cannot be edited. Please make sure you're using a valid nocd executable.");
                 PatchButtonEnabled = false;
             }
         }
@@ -187,14 +182,15 @@ namespace Sims1WidescreenPatcher.ViewModels
             BrowseButtonEnabled = false;
             var progress = new Progress<double>(percent => { Progress = percent; });
             await Task.Run(() => new S1WP(_path, _width, _height).Patch());
-            await Task.Run(() => 
+            await Task.Run(() =>
             {
                 var i = new Images(_path, _width, _height, progress);
                 i.CopyGraphics();
             });
-            if (_dDrawCompatEnabled)
+
+            if (_selectedWrapper != Wrapper.None)
             {
-                await Task.Run(() => new DllWrapper(_path).CopyDll());
+                await Task.Run(() => new DllWrapper(_path).CopyDll(_selectedWrapper));
             }
 
             BrowseButtonEnabled = true;

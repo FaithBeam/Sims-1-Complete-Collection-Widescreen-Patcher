@@ -12,7 +12,7 @@ Sims 1 no expansions, Sims 1 Complete Collection, etc.
 
 **Are you using a nocd exe / crack?**
 
-**Describe the issue**
+**Describe the issue. Include screenshots if you can**
 
 **What are the steps to reproduce the issue?**
 
