@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Sims1WidescreenPatcher.Wrappers.Models;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Sims1WidescreenPatcher.EnumerateResolutions;
 
 namespace Sims1WidescreenPatcher.ViewModels
@@ -18,8 +19,6 @@ namespace Sims1WidescreenPatcher.ViewModels
         #region Fields
 
         private string _path;
-        private int _width;
-        private int _height;
         private bool _uninstallButtonEnabled;
         private double _progress;
         private bool _patchButtonEnabled;
@@ -34,7 +33,12 @@ namespace Sims1WidescreenPatcher.ViewModels
         #region Properties
 
         public List<Resolution> Res { get; set; }
-        public Resolution SelectedResolution { get; set; }
+        private Resolution _selectedResolution;
+        public Resolution SelectedResolution
+        {
+            get => _selectedResolution;
+            set => SetProperty(ref _selectedResolution, value);
+        }
 
         public bool BrowseButtonEnabled
         {
@@ -66,18 +70,6 @@ namespace Sims1WidescreenPatcher.ViewModels
                     CheckForBackup();
                 }
             }
-        }
-
-        public int Width
-        {
-            get => _width;
-            set => _ = SetProperty(ref _width, value);
-        }
-
-        public int Height
-        {
-            get => _height;
-            set => _ = SetProperty(ref _height, value);
         }
 
         public double Progress
@@ -124,6 +116,7 @@ namespace Sims1WidescreenPatcher.ViewModels
             OpenFileDialogCommand = new DelegateCommand(OnOpenFileDialog);
             
             Res = EnumerateResolutions.EnumerateResolutions.Get();
+            _selectedResolution = Res.FirstOrDefault();
         }
 
         #endregion
@@ -152,7 +145,7 @@ namespace Sims1WidescreenPatcher.ViewModels
 
         private async void IsValidExe()
         {
-            var isValid = await Task.Run(() => new S1WP(_path, _width, _height).ValidFile());
+            var isValid = await Task.Run(() => new S1WP(_path, _selectedResolution.Width, _selectedResolution.Height).ValidFile());
             if (isValid)
             {
                 PatchButtonEnabled = true;
@@ -181,10 +174,10 @@ namespace Sims1WidescreenPatcher.ViewModels
             PatchButtonEnabled = false;
             BrowseButtonEnabled = false;
             var progress = new Progress<double>(percent => { Progress = percent; });
-            await Task.Run(() => new S1WP(_path, _width, _height).Patch());
+            await Task.Run(() => new S1WP(_path, _selectedResolution.Width, _selectedResolution.Height).Patch());
             await Task.Run(() =>
             {
-                var i = new Images(_path, _width, _height, progress);
+                var i = new Images(_path, _selectedResolution.Width, _selectedResolution.Height, progress);
                 i.CopyGraphics();
             });
 

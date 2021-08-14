@@ -14,8 +14,6 @@ namespace Sims1WidescreenPatcher.Views
             InitializeComponent();
             var viewModel = new MainViewModel();
             DataContext = viewModel;
-            viewModel.Width = 1920;
-            viewModel.Height = 1080;
         }
 
         private void HeightTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)

@@ -39,7 +39,9 @@
 
                 <StackPanel Grid.Column="0">
                     <TextBlock Text="Resolution" />
-                    <ComboBox x:Name="ResolutionComboBox" ItemsSource="{Binding Path=Res}" />
+                    <ComboBox x:Name="ResolutionComboBox" 
+                              ItemsSource="{Binding Path=Res}"
+                              SelectedItem="{Binding SelectedResolution}"/>
                 </StackPanel>
                 
                 <StackPanel Grid.Column="1"
