@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.Medi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.IO", "Sims1WidescreenPatcher.IO\Sims1WidescreenPatcher.IO.csproj", "{0ED8F08D-7EB5-4B07-945D-3B22BF32C228}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.DDrawCompat", "Sims1WidescreenPatcher.DDrawCompat\Sims1WidescreenPatcher.DDrawCompat.csproj", "{A6AF9B1E-CA61-48FF-9C24-0876997DEE22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.Wrappers", "Sims1WidescreenPatcher.Wrappers\Sims1WidescreenPatcher.Wrappers.csproj", "{A6AF9B1E-CA61-48FF-9C24-0876997DEE22}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.Uninstall", "Sims1WidescreenPatcher.Uninstall\Sims1WidescreenPatcher.Uninstall.csproj", "{FB96BE34-EEED-47A1-BF19-1F1B1AD0A5E6}"
 EndProject

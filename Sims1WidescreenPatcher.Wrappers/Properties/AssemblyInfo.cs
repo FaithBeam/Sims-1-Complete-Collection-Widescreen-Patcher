@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Sims1WidescreenPatcher.Voodoo")]
+[assembly: AssemblyTitle("Sims1WidescreenPatcher.Wrappers")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Sims1WidescreenPatcher.Voodoo")]
+[assembly: AssemblyProduct("Sims1WidescreenPatcher.Wrappers")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

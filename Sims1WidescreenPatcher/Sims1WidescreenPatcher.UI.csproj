@@ -146,9 +146,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sims1WidescreenPatcher.DDrawCompat\Sims1WidescreenPatcher.DDrawCompat.csproj">
+    <ProjectReference Include="..\Sims1WidescreenPatcher.Wrappers\Sims1WidescreenPatcher.Wrappers.csproj">
       <Project>{a6af9b1e-ca61-48ff-9c24-0876997dee22}</Project>
-      <Name>Sims1WidescreenPatcher.DDrawCompat</Name>
+      <Name>Sims1WidescreenPatcher.Wrappers</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sims1WidescreenPatcher.Exe\Sims1WidescreenPatcher.Exe.csproj">
       <Project>{57b22d97-4889-4ef4-a0db-4a50129e4c38}</Project>
