@@ -50,10 +50,6 @@ namespace Sims1WidescreenPatcher.EnumerateResolutions
             public int dmPanningHeight;
         }
 
-        public EnumerateResolutions()
-        {
-        }
-
         public static List<Resolution> Get()
         {
             var resolutions = new List<Resolution>();
