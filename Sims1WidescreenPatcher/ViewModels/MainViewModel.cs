@@ -125,7 +125,7 @@ namespace Sims1WidescreenPatcher.ViewModels
 
         private void OpenFinishedPatchPopup()
         {
-            _openMessageBoxService.ShowMessageBox("Patched!");
+            _openMessageBoxService.ShowMessageBox("Patched! You may close this application now.");
             Progress = 0;
             CheckForBackup();
         }
