@@ -2,7 +2,7 @@
 
 This program patches `The Sims 1: Complete Collection` to a custom resolution.
 
-![Main Application](https://i.imgur.com/5UaxMWb.png)
+![zopfli_1 24 0-beta 1](https://user-images.githubusercontent.com/32502411/129477186-8ca04e4d-e02a-4b40-8c89-77718265a08a.png)
 
 ## Requirements
 
@@ -41,6 +41,8 @@ If you want to go back to your original Sims executable, select the uninstall bu
 [WSGF](http://www.wsgf.org/dr/sims)
 
 [PatternFinder](https://github.com/mrexodia/PatternFinder)
+
+[DgVoodoo2](http://dege.freeweb.hu/dgVoodoo2/dgVoodoo2/)
 
 [DDrawCompat](https://github.com/narzoul/DDrawCompat)
 
