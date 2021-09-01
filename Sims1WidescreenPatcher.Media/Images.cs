@@ -30,7 +30,7 @@ namespace Sims1WidescreenPatcher.Media
             @"Downtown\largeback.bmp",
             @"Magicland\largeback.bmp",
             @"Studiotown\largeback.bmp",
-            @"Downtown\dlgframe2.bmp",
+            @"Downtown\dlgframe_1024x768.bmp",
             @"Magicland\dlgframe_1024x768.bmp",
             @"Studiotown\dlgframe_1024x768.bmp",
         };
@@ -62,7 +62,7 @@ namespace Sims1WidescreenPatcher.Media
             foreach (var i in _blackBackground)
                 FileHelper.DeleteFile($@"{directory}\UIGraphics\{i}");
             foreach (var i in _blueBackground)
-                FileHelper.DeleteFile($@"{directory}\{i}");
+                FileHelper.DeleteFile($@"{directory}\UIGraphics\{i}");
         }
 
         public void CopyGraphics()

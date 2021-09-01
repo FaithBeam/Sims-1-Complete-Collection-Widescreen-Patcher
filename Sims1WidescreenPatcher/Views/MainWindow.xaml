@@ -45,7 +45,16 @@
                     <TextBlock Text="Resolution" />
                     <ComboBox x:Name="ResolutionComboBox" 
                               ItemsSource="{Binding Path=Res}"
-                              SelectedItem="{Binding SelectedResolution}"/>
+                              SelectedItem="{Binding SelectedResolution}"
+                              ToolTipService.ShowDuration="50000000">
+                        <ComboBox.ToolTip>
+                            <TextBlock>
+                                Resolutions supported by your monitor.<LineBreak/>
+                                800x600 and 1024x768 are the two default resolutions for The Sims.<LineBreak/>
+                                1600xX resolutions have game breaking graphical issues.
+                            </TextBlock>
+                        </ComboBox.ToolTip>
+                    </ComboBox>
                 </StackPanel>
                 
                 <StackPanel Grid.Column="1"

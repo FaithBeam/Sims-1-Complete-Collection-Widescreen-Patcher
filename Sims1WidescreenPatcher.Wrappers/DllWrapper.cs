@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Serilog;
 using Sims1WidescreenPatcher.IO;
 using System.IO;
@@ -29,7 +30,7 @@ namespace Sims1WidescreenPatcher.Wrappers
             TryRemoveWrapper();
             var resourceStream = "Sims1WidescreenPatcher.Wrappers.Resources.";
             var items = new List<string>();
-            
+
             switch (wrapper)
             {
                 case Wrapper.DDrawCompat:
@@ -40,6 +41,10 @@ namespace Sims1WidescreenPatcher.Wrappers
                     resourceStream += "DgVoodoo2";
                     items = _dgvoodooResources;
                     break;
+                case Wrapper.None:
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(wrapper), wrapper, null);
             }
 
             foreach (var item in items)
