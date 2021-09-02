@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Reflection;
+using System.Windows;
 using Serilog;
 using Sims1WidescreenPatcher.Views;
 
@@ -17,6 +18,8 @@ namespace Sims1WidescreenPatcher
             .MinimumLevel.Debug()
             .WriteTo.File("Sims1WidescreenPatcher.log")
             .CreateLogger();
+            
+            Log.Debug($"{Assembly.GetExecutingAssembly().GetName().Name}\t{Assembly.GetExecutingAssembly().GetName().Version}");
 
             var mainWindow = new MainWindow();
             mainWindow.Show();
