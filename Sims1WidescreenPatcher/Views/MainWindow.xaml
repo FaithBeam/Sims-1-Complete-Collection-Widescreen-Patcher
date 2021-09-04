@@ -45,6 +45,7 @@
                     <TextBlock Text="Resolution" />
                     <ComboBox x:Name="ResolutionComboBox" 
                               ItemsSource="{Binding Path=Res}"
+                              IsEditable="True"
                               SelectedItem="{Binding SelectedResolution}"
                               ToolTipService.ShowDuration="50000000">
                         <ComboBox.ToolTip>
