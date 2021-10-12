@@ -2,7 +2,7 @@
 
 This program patches `The Sims 1: Complete Collection` to a custom resolution.
 
-![zopfli_1 24 0-beta 1](https://user-images.githubusercontent.com/32502411/129477186-8ca04e4d-e02a-4b40-8c89-77718265a08a.png)
+![Untitled](https://user-images.githubusercontent.com/32502411/136943721-7475909c-2993-498f-beff-cd6fdc0b9b23.png)
 
 ## Requirements
 
