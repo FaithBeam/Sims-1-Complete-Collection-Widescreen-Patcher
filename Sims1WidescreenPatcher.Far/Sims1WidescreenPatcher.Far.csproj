@@ -4,14 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0ED8F08D-7EB5-4B07-945D-3B22BF32C228}</ProjectGuid>
+    <ProjectGuid>{EFCD12FA-434D-4481-A858-6539340A5C10}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sims1WidescreenPatcher.IO</RootNamespace>
-    <AssemblyName>Sims1WidescreenPatcher.IO</AssemblyName>
+    <RootNamespace>Sims1WidescreenPatcher.Far</RootNamespace>
+    <AssemblyName>Sims1WidescreenPatcher.Far</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -35,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,13 +46,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DirectoryHelper.cs" />
-    <Compile Include="FileHelper.cs" />
+    <Compile Include="Images.cs" />
+    <Compile Include="Models\CompositeImageJob.cs" />
+    <Compile Include="Models\IJob.cs" />
+    <Compile Include="Models\ScaleImageJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource1.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Serilog">
-      <Version>2.10.0</Version>
+    <ProjectReference Include="..\Sims1WidescreenPatcher.IO\Sims1WidescreenPatcher.IO.csproj">
+      <Project>{0ed8f08d-7eb5-4b07-945d-3b22bf32c228}</Project>
+      <Name>Sims1WidescreenPatcher.IO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\blackbackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\bluebackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Magick.NET-Q8-AnyCPU">
+      <Version>8.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="Sims.Far">
+      <Version>3.0.0-beta.15</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

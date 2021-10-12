@@ -1,5 +1,5 @@
-﻿using Serilog;
-using System.IO;
+﻿using System.IO;
+using Serilog;
 
 namespace Sims1WidescreenPatcher.IO
 {
@@ -9,36 +9,37 @@ namespace Sims1WidescreenPatcher.IO
         {
             if (File.Exists(path))
             {
-                Log.Debug($"Deleting {path}");
+                Log.Debug("Deleting {Path}", path);
                 File.Delete(path);
             }
             else
             {
-                Log.Debug($"{path} doesn't exist");
+                Log.Debug("{Path} doesn't exist", path);
             }
         }
 
         public static void BackupFile(string path)
         {
-            string filename = Path.GetFileNameWithoutExtension(path);
-            string directory = Path.GetDirectoryName(path);
+            var filename = Path.GetFileNameWithoutExtension(path);
+            var directory = Path.GetDirectoryName(path);
             if (!File.Exists($@"{directory}\{filename} Backup.exe"))
             {
-                Log.Debug($@"Backing up {path} to {directory}\{filename} Backup.exe.");
+                Log.Debug(@"Backing up {Path} to {Directory}\{Filename} Backup.exe", path, directory, filename);
                 File.Copy(path, $@"{directory}\{filename} Backup.exe");
                 File.SetAttributes($@"{directory}\{filename} Backup.exe", FileAttributes.Normal);
             }
             else
             {
-                Log.Debug($@"There is already a backup at {directory}\{filename} Backup.exe, not creating another.");
+                Log.Debug(@"There is already a backup at {Directory}\{Filename} Backup.exe, not creating another", directory, filename);
             }
         }
 
         public static bool CheckForBackup(string path)
         {
-            string directory = Path.GetDirectoryName(path);
-            string fileName = Path.GetFileNameWithoutExtension(path);
-            Log.Debug($"{path} exists: {File.Exists($@"{directory}\{fileName} Backup.exe")}.");
+            var directory = Path.GetDirectoryName(path);
+            var fileName = Path.GetFileNameWithoutExtension(path);
+            var exists = File.Exists($@"{directory}\{fileName} Backup.exe");
+            Log.Debug("{Path} exists: {Exists}", path, exists);
             return File.Exists($@"{directory}\{fileName} Backup.exe");
         }
     }

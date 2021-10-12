@@ -3,74 +3,54 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29409.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.UI", "Sims1WidescreenPatcher\Sims1WidescreenPatcher.UI.csproj", "{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.UI.WPF", "Sims1WidescreenPatcher.UI.WPF\Sims1WidescreenPatcher.UI.WPF.csproj", "{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.Exe", "Sims1WidescreenPatcher.Exe\Sims1WidescreenPatcher.Exe.csproj", "{57B22D97-4889-4EF4-A0DB-4A50129E4C38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.Patch", "Sims1WidescreenPatcher.Patch\Sims1WidescreenPatcher.Patch.csproj", "{57B22D97-4889-4EF4-A0DB-4A50129E4C38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.Media", "Sims1WidescreenPatcher.Media\Sims1WidescreenPatcher.Media.csproj", "{EFCD12FA-434D-4481-A858-6539340A5C10}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.Far", "Sims1WidescreenPatcher.Far\Sims1WidescreenPatcher.Far.csproj", "{EFCD12FA-434D-4481-A858-6539340A5C10}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.IO", "Sims1WidescreenPatcher.IO\Sims1WidescreenPatcher.IO.csproj", "{0ED8F08D-7EB5-4B07-945D-3B22BF32C228}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.DDrawCompat", "Sims1WidescreenPatcher.DDrawCompat\Sims1WidescreenPatcher.DDrawCompat.csproj", "{A6AF9B1E-CA61-48FF-9C24-0876997DEE22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.Wrappers", "Sims1WidescreenPatcher.Wrappers\Sims1WidescreenPatcher.Wrappers.csproj", "{A6AF9B1E-CA61-48FF-9C24-0876997DEE22}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.Uninstall", "Sims1WidescreenPatcher.Uninstall\Sims1WidescreenPatcher.Uninstall.csproj", "{FB96BE34-EEED-47A1-BF19-1F1B1AD0A5E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sims1WidescreenPatcher.Resolutions", "Sims1WidescreenPatcher.Resolutions\Sims1WidescreenPatcher.Resolutions.csproj", "{F239BACC-DB19-4424-A023-EC24E5747818}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Debug|x86.ActiveCfg = Debug|x86
-		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Debug|x86.Build.0 = Debug|x86
 		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Release|x86.ActiveCfg = Release|x86
-		{C3DBEF3A-A82B-4FC8-94E2-441ECD608E7D}.Release|x86.Build.0 = Release|x86
 		{57B22D97-4889-4EF4-A0DB-4A50129E4C38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{57B22D97-4889-4EF4-A0DB-4A50129E4C38}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57B22D97-4889-4EF4-A0DB-4A50129E4C38}.Debug|x86.ActiveCfg = Debug|x86
-		{57B22D97-4889-4EF4-A0DB-4A50129E4C38}.Debug|x86.Build.0 = Debug|x86
 		{57B22D97-4889-4EF4-A0DB-4A50129E4C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57B22D97-4889-4EF4-A0DB-4A50129E4C38}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57B22D97-4889-4EF4-A0DB-4A50129E4C38}.Release|x86.ActiveCfg = Release|x86
-		{57B22D97-4889-4EF4-A0DB-4A50129E4C38}.Release|x86.Build.0 = Release|x86
 		{EFCD12FA-434D-4481-A858-6539340A5C10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EFCD12FA-434D-4481-A858-6539340A5C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFCD12FA-434D-4481-A858-6539340A5C10}.Debug|x86.ActiveCfg = Debug|x86
-		{EFCD12FA-434D-4481-A858-6539340A5C10}.Debug|x86.Build.0 = Debug|x86
 		{EFCD12FA-434D-4481-A858-6539340A5C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFCD12FA-434D-4481-A858-6539340A5C10}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFCD12FA-434D-4481-A858-6539340A5C10}.Release|x86.ActiveCfg = Release|x86
-		{EFCD12FA-434D-4481-A858-6539340A5C10}.Release|x86.Build.0 = Release|x86
 		{0ED8F08D-7EB5-4B07-945D-3B22BF32C228}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0ED8F08D-7EB5-4B07-945D-3B22BF32C228}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0ED8F08D-7EB5-4B07-945D-3B22BF32C228}.Debug|x86.ActiveCfg = Debug|x86
-		{0ED8F08D-7EB5-4B07-945D-3B22BF32C228}.Debug|x86.Build.0 = Debug|x86
 		{0ED8F08D-7EB5-4B07-945D-3B22BF32C228}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0ED8F08D-7EB5-4B07-945D-3B22BF32C228}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0ED8F08D-7EB5-4B07-945D-3B22BF32C228}.Release|x86.ActiveCfg = Release|x86
-		{0ED8F08D-7EB5-4B07-945D-3B22BF32C228}.Release|x86.Build.0 = Release|x86
 		{A6AF9B1E-CA61-48FF-9C24-0876997DEE22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A6AF9B1E-CA61-48FF-9C24-0876997DEE22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A6AF9B1E-CA61-48FF-9C24-0876997DEE22}.Debug|x86.ActiveCfg = Debug|x86
-		{A6AF9B1E-CA61-48FF-9C24-0876997DEE22}.Debug|x86.Build.0 = Debug|x86
 		{A6AF9B1E-CA61-48FF-9C24-0876997DEE22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6AF9B1E-CA61-48FF-9C24-0876997DEE22}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A6AF9B1E-CA61-48FF-9C24-0876997DEE22}.Release|x86.ActiveCfg = Release|x86
-		{A6AF9B1E-CA61-48FF-9C24-0876997DEE22}.Release|x86.Build.0 = Release|x86
 		{FB96BE34-EEED-47A1-BF19-1F1B1AD0A5E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FB96BE34-EEED-47A1-BF19-1F1B1AD0A5E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB96BE34-EEED-47A1-BF19-1F1B1AD0A5E6}.Debug|x86.ActiveCfg = Debug|x86
-		{FB96BE34-EEED-47A1-BF19-1F1B1AD0A5E6}.Debug|x86.Build.0 = Debug|x86
 		{FB96BE34-EEED-47A1-BF19-1F1B1AD0A5E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB96BE34-EEED-47A1-BF19-1F1B1AD0A5E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB96BE34-EEED-47A1-BF19-1F1B1AD0A5E6}.Release|x86.ActiveCfg = Release|x86
-		{FB96BE34-EEED-47A1-BF19-1F1B1AD0A5E6}.Release|x86.Build.0 = Release|x86
+		{F239BACC-DB19-4424-A023-EC24E5747818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F239BACC-DB19-4424-A023-EC24E5747818}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F239BACC-DB19-4424-A023-EC24E5747818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F239BACC-DB19-4424-A023-EC24E5747818}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
