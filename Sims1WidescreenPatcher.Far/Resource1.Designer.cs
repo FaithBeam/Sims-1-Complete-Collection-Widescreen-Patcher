@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sims1WidescreenPatcher.Wrappers {
+namespace Sims1WidescreenPatcher.Far {
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -19,14 +19,14 @@ namespace Sims1WidescreenPatcher.Wrappers {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class Resource1 {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal Resource1() {
         }
         
         /// <summary>
@@ -36,7 +36,7 @@ namespace Sims1WidescreenPatcher.Wrappers {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sims1WidescreenPatcher.DDrawCompat.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sims1WidescreenPatcher.Far.Resource1", typeof(Resource1).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -58,72 +58,22 @@ namespace Sims1WidescreenPatcher.Wrappers {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static byte[] D3D8 {
+        internal static System.Drawing.Bitmap blackbackground {
             get {
-                object obj = ResourceManager.GetObject("D3D8", resourceCulture);
-                return ((byte[])(obj));
+                object obj = ResourceManager.GetObject("blackbackground", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static byte[] D3D9 {
+        internal static System.Drawing.Bitmap bluebackground {
             get {
-                object obj = ResourceManager.GetObject("D3D9", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] D3DImm {
-            get {
-                object obj = ResourceManager.GetObject("D3DImm", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] ddraw {
-            get {
-                object obj = ResourceManager.GetObject("ddraw", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] DDraw1 {
-            get {
-                object obj = ResourceManager.GetObject("DDraw1", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] dgVoodoo {
-            get {
-                object obj = ResourceManager.GetObject("dgVoodoo", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] dgVoodooCpl {
-            get {
-                object obj = ResourceManager.GetObject("dgVoodooCpl", resourceCulture);
-                return ((byte[])(obj));
+                object obj = ResourceManager.GetObject("bluebackground", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

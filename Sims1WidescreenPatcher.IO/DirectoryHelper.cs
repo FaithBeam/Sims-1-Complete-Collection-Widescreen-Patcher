@@ -1,5 +1,5 @@
-﻿using Serilog;
-using System.IO;
+﻿using System.IO;
+using Serilog;
 
 namespace Sims1WidescreenPatcher.IO
 {
@@ -9,12 +9,12 @@ namespace Sims1WidescreenPatcher.IO
         {
             if (!Directory.Exists(path))
             {
-                Log.Debug($"Creating {path}.");
+                Log.Debug("Creating {Path}", path);
                 Directory.CreateDirectory(path);
             }
             else
             {
-                Log.Debug($"{path} already exists, not creating.");
+                Log.Debug("{Path} already exists, not creating", path);
             }
         }
 
@@ -22,12 +22,12 @@ namespace Sims1WidescreenPatcher.IO
         {
             if (Directory.Exists(path))
             {
-                Log.Debug($"Deleting {path}.");
+                Log.Debug("Deleting {Path}", path);
                 Directory.Delete(path, true);
             }
             else
             {
-                Log.Debug($"{path} does not exist, not deleting.");
+                Log.Debug("{Path} does not exist, not deleting", path);
             }
         }
     }

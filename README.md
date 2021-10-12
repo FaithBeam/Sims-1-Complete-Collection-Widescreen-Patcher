@@ -26,15 +26,11 @@ If you want to go back to your original Sims executable, select the uninstall bu
 
 [General Sims recommendations to fix common issues](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/General-Sims-Recommendations)
 
-[Known issues](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Known-Issues)
-
 [Linux Usage](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Linux-Usage)
 
 [Play in windowed mode](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Windowed-Mode)
 
 [Screenshots](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Screenshots)
-
-[Selecting valid resolutions](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Selecting-Valid-Resolutions)
 
 ## Credits
 
@@ -49,3 +45,5 @@ If you want to go back to your original Sims executable, select the uninstall bu
 [Magick.NET](https://github.com/dlemstra/Magick.NET)
 
 [Abulph](https://www.reddit.com/r/thesims/comments/6snibn/the_sims_1_widescreen_fix_1080p/) - Ideas to fix certain graphical issues
+
+[thesimsone](https://www.deviantart.com/thesimsone) - High resolution The Sims icon
