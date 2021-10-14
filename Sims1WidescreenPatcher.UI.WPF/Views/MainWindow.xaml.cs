@@ -14,10 +14,10 @@ namespace Sims1WidescreenPatcher.UI.WPF.Views
     {
         private readonly Regex _rx = new Regex(@"[\dx]", RegexOptions.Compiled);
         
-        public MainWindow()
+        public MainWindow(IDialogService dialogService, IOpenFileDialogService openFileDialogService)
         {
             InitializeComponent();
-            var viewModel = new MainViewModel(new DialogService(), new OpenFileDialogService());
+            var viewModel = new MainViewModel(dialogService, openFileDialogService);
             DataContext = viewModel;
         }
 

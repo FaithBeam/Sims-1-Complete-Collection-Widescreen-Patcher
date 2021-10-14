@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Windows;
 using Serilog;
+using Sims1WidescreenPatcher.UI.WPF.Services;
 using Sims1WidescreenPatcher.UI.WPF.Views;
 
 namespace Sims1WidescreenPatcher.UI.WPF
@@ -22,9 +23,9 @@ namespace Sims1WidescreenPatcher.UI.WPF
             var informationalVersion = ((AssemblyInformationalVersionAttribute) Assembly.GetExecutingAssembly()
                 .GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false).FirstOrDefault())?.InformationalVersion;
             var name = Assembly.GetExecutingAssembly().GetName().Name;
-            Log.Debug($"{name}\t{informationalVersion}");
+            Log.Debug("{Name}\t{InformationalVersion}", name, informationalVersion);
 
-            var mainWindow = new MainWindow();
+            var mainWindow = new MainWindow(new DialogService(), new OpenFileDialogService());
             mainWindow.Show();
         }
     }
