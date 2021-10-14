@@ -26,8 +26,8 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
         private bool _browseButtonEnabled = true;
         private Resolution _selectedResolution;
         private Wrapper _selectedWrapper;
-        private readonly DialogService _dialogService;
-        private readonly OpenFileDialogService _openFileDialogService;
+        private readonly IDialogService _dialogService;
+        private readonly IOpenFileDialogService _openFileDialogService;
         private readonly Regex _resolutionRegex = new Regex(@"\d+x\d+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly List<string> _previouslyPatchedList = new List<string>();
 
@@ -107,12 +107,12 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
 
         #region Constructor
 
-        public MainViewModel()
+        public MainViewModel(IDialogService dialogService, IOpenFileDialogService openFileDialogService)
         {
             PatchCommand = new DelegateCommand(OnClickedPatch, CanPatch);
             UninstallCommand = new DelegateCommand(OnClickedUninstall, CanUninstall);
-            _openFileDialogService = new OpenFileDialogService();
-            _dialogService = new DialogService();
+            _openFileDialogService = openFileDialogService;
+            _dialogService = dialogService;
             OpenFileDialogCommand = new DelegateCommand(OnOpenFileDialog);
             Resolutions = Sims1WidescreenPatcher.Resolutions.Resolutions.Get();
         }

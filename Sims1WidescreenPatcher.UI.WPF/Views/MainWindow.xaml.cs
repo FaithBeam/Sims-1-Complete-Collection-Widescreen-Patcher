@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using Serilog;
+using Sims1WidescreenPatcher.UI.WPF.Services;
 using Sims1WidescreenPatcher.UI.WPF.ViewModels;
 
 namespace Sims1WidescreenPatcher.UI.WPF.Views
@@ -16,7 +17,7 @@ namespace Sims1WidescreenPatcher.UI.WPF.Views
         public MainWindow()
         {
             InitializeComponent();
-            var viewModel = new MainViewModel();
+            var viewModel = new MainViewModel(new DialogService(), new OpenFileDialogService());
             DataContext = viewModel;
         }
 
