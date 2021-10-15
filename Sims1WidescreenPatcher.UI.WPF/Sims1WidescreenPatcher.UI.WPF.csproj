@@ -73,6 +73,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\ResolutionConverter.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\IDialogService.cs" />
