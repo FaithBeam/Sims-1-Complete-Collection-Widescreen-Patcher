@@ -28,7 +28,7 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
         private Wrapper _selectedWrapper;
         private readonly IDialogService _dialogService;
         private readonly IOpenFileDialogService _openFileDialogService;
-        private readonly Regex _resolutionRegex = new Regex(@"\d+x\d+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private readonly Regex _resolutionRegex = new Regex(@"^\d+x\d+$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly List<string> _previouslyPatchedList = new List<string>();
 
         #endregion
