@@ -18,6 +18,10 @@ This program patches `The Sims 1: Complete Collection` to a custom resolution.
 5. Enter your preferred resolution
 6. Click Patch
 
+## Graphics Wrappers
+
+You can select between two graphics wrappers, [DgVoodoo2](http://dege.freeweb.hu/dgVoodoo2/dgVoodoo2/) and [DDrawCompat](https://github.com/narzoul/DDrawCompat). The short is they both fix graphical issues and improve performance. I recommend trying DDrawCompat first and if that doesn't work, try DgVoodoo2. If neither work, choose none.
+
 ## Uninstall
 
 If you want to go back to your original Sims executable, select the uninstall button.
