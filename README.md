@@ -8,6 +8,7 @@ This program patches `The Sims 1: Complete Collection` to a custom resolution.
 
 * [.NET Framework 4.7.2](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-web-installer)
 * NoCD/Crack Sims Executable
+  * This exe cannot be previously patched to a custom resolution. For example, if you downloaded a crack that was patched to 1080p, my program will not work.
 
 ## Usage
 
