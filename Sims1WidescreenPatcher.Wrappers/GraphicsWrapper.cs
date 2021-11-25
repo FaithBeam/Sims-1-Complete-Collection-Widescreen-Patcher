@@ -8,16 +8,16 @@ using Sims1WidescreenPatcher.Wrappers.Models;
 
 namespace Sims1WidescreenPatcher.Wrappers
 {
-    public class GraphicsWrapper
+    public static class GraphicsWrapper
     {
-        private readonly List<string> _ddrawCompatResources = new List<string>() {"DDraw.dll"};
+        private static readonly List<string> _ddrawCompatResources = new List<string>() {"DDraw.dll"};
 
-        private readonly List<string> _dgvoodooResources = new List<string>()
+        private static readonly List<string> _dgvoodooResources = new List<string>()
         {
             "D3D8.dll", "D3D9.dll", "D3DImm.dll", "DDraw.dll", "dgVoodoo.conf", "dgVoodooCpl.exe"
         };
 
-        public void CopyDll(Wrapper wrapper, string path)
+        public static void CopyDll(Wrapper wrapper, string path)
         {
             var directory = Path.GetDirectoryName(path);
             var resourceStream = "Sims1WidescreenPatcher.Wrappers.Resources.";
@@ -51,7 +51,7 @@ namespace Sims1WidescreenPatcher.Wrappers
             }
         }
 
-        public void TryRemoveWrapper(string path)
+        public static void TryRemoveWrapper(string path)
         {
             Log.Debug("Removing graphics wrapper installation");
             var directory = Path.GetDirectoryName(path);

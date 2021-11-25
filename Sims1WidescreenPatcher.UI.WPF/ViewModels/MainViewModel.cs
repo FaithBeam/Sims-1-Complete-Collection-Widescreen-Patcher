@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using Serilog;
 using Sims1WidescreenPatcher.Far;
 using Sims1WidescreenPatcher.IO;
@@ -14,7 +16,7 @@ using Sims1WidescreenPatcher.Wrappers.Models;
 
 namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
 {
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : ObservableObject
     {
         #region Fields
 
@@ -43,7 +45,7 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
             set
             {
                 SetProperty(ref _selectedResolution, value);
-                PatchCommand.RaiseCanExecuteChanged();
+                PatchCommand.NotifyCanExecuteChanged();
             } 
         }
         public string Path
@@ -54,8 +56,8 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
                 if (string.IsNullOrWhiteSpace(value)) return;
                 _ = SetProperty(ref _path, value);
                 _invalidExeDialogShown = false;
-                PatchCommand.RaiseCanExecuteChanged();
-                UninstallCommand.RaiseCanExecuteChanged();
+                PatchCommand.NotifyCanExecuteChanged();
+                UninstallCommand.NotifyCanExecuteChanged();
             }
         }
         public double Progress
@@ -101,9 +103,9 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
 
         #region Commands
 
-        public DelegateCommand PatchCommand { get; }
-        public DelegateCommand UninstallCommand { get; }
-        public DelegateCommand OpenFileDialogCommand { get; }
+        public IAsyncRelayCommand PatchCommand { get; }
+        public IRelayCommand UninstallCommand { get; }
+        public IRelayCommand OpenFileDialogCommand { get; }
 
         #endregion
 
@@ -111,11 +113,11 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
 
         public MainViewModel(IDialogService dialogService, IOpenFileDialogService openFileDialogService)
         {
-            PatchCommand = new DelegateCommand(OnClickedPatch, CanPatch);
-            UninstallCommand = new DelegateCommand(OnClickedUninstall, CanUninstall);
+            PatchCommand = new AsyncRelayCommand(OnClickedPatch, CanPatch);
+            UninstallCommand = new RelayCommand(OnClickedUninstall, CanUninstall);
             _openFileDialogService = openFileDialogService;
             _dialogService = dialogService;
-            OpenFileDialogCommand = new DelegateCommand(OnOpenFileDialog);
+            OpenFileDialogCommand = new RelayCommand(OnOpenFileDialog);
             Resolutions = Sims1WidescreenPatcher.Resolutions.Resolutions.Get();
         }
 
@@ -135,7 +137,7 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
 
         private bool IsValidExe()
         {
-            if (new Exe().ValidFile(_path))
+            if (Exe.ValidFile(_path))
                 return true;
 
             if (!_invalidExeDialogShown)
@@ -173,11 +175,11 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
             ResolutionComboBoxEnabled = !ResolutionComboBoxEnabled;
             WrapperComboBoxEnabled = !WrapperComboBoxEnabled;
             BrowseButtonEnabled = !BrowseButtonEnabled;
-            PatchCommand.RaiseCanExecuteChanged();
-            UninstallCommand.RaiseCanExecuteChanged();
+            PatchCommand.NotifyCanExecuteChanged();
+            UninstallCommand.NotifyCanExecuteChanged();
         }
 
-        private void OnClickedUninstall(object commandParameter)
+        private void OnClickedUninstall()
         {
             _isBusy = true;
             EvaluateUiElements();
@@ -188,27 +190,20 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
             EvaluateUiElements();
         }
 
-        private void OnClickedPatch(object commandParameter)
-        {
-#pragma warning disable CS4014 // Asynchronous methods should return a Task instead of void
-            DoPatch();
-#pragma warning restore CS4014 // Asynchronous methods should return a Task instead of void
-        }
-
-        private async Task DoPatch()
+        private async Task OnClickedPatch()
         {
             try
             {
                 _isBusy = true;
                 EvaluateUiElements();
                 var progress = new Progress<double>(percent => { Progress = percent; });
-                await Task.Run(() => new Exe().Patch(Path, SelectedResolution.Width, SelectedResolution.Height));
-                await Task.Run(() => new Images().CopyGraphics(Path, SelectedResolution.Width, SelectedResolution.Height, progress));
+                await Task.Run(() => Exe.Patch(Path, SelectedResolution.Width, SelectedResolution.Height));
+                await Task.Run(() => Images.CopyGraphics(Path, SelectedResolution.Width, SelectedResolution.Height, progress));
 
                 if (SelectedWrapper != Wrapper.None)
                 {
-                    await Task.Run(() => new GraphicsWrapper().TryRemoveWrapper(Path));
-                    await Task.Run(() => new GraphicsWrapper().CopyDll(SelectedWrapper, Path));
+                    await Task.Run(() => GraphicsWrapper.TryRemoveWrapper(Path));
+                    await Task.Run(() => GraphicsWrapper.CopyDll(SelectedWrapper, Path));
                 }
 
                 _isBusy = false;
@@ -223,7 +218,7 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
             }
         }
 
-        private void OnOpenFileDialog(object obj)
+        private void OnOpenFileDialog()
         {
             Path = _openFileDialogService.OpenFileDialog();
         }

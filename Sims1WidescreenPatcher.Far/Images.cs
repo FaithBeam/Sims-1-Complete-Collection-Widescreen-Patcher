@@ -10,9 +10,9 @@ using Sims1WidescreenPatcher.IO;
 
 namespace Sims1WidescreenPatcher.Far
 {
-    public class Images
+    public static class Images
     {
-        private readonly List<string> _blackBackground = new List<string>
+        private static readonly List<string> _blackBackground = new List<string>
         {
             @"Community\Bus_loadscreen_1024x768.bmp",
             @"Downtown\Taxi_loadscreen_1024x768.bmp",
@@ -26,7 +26,7 @@ namespace Sims1WidescreenPatcher.Far
             @"VIsland\vacation_loadscreen2_1024x768.bmp",
         };
 
-        private readonly List<string> _blueBackground = new List<string>
+        private static readonly List<string> _blueBackground = new List<string>
         {
             @"Downtown\largeback.bmp",
             @"Magicland\largeback.bmp",
@@ -36,7 +36,7 @@ namespace Sims1WidescreenPatcher.Far
             @"Studiotown\dlgframe_1024x768.bmp",
         };
 
-        public void RemoveGraphics(string path)
+        public static void RemoveGraphics(string path)
         {
             var directoryName = Path.GetDirectoryName(path);
             Log.Debug("Remove installed graphics from {DirectoryName}", directoryName);
@@ -47,7 +47,7 @@ namespace Sims1WidescreenPatcher.Far
                 FileHelper.DeleteFile($@"{directoryName}\UIGraphics\{i}");
         }
 
-        public void CopyGraphics(string path, int width, int height, IProgress<double> progress)
+        public static void CopyGraphics(string path, int width, int height, IProgress<double> progress)
         {
             var directory = Path.GetDirectoryName(path);
             var farLocation = Path.Combine(directory, @"UIGraphics\UIGraphics.far");

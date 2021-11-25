@@ -16,8 +16,8 @@ namespace Sims1WidescreenPatcher.Uninstall
             var filenameWithoutExtension = Path.GetFileNameWithoutExtension(path);
             var backupPath = Path.Combine(directory, filenameWithoutExtension);
             File.Move($@"{backupPath} Backup.exe", path);
-            new GraphicsWrapper().TryRemoveWrapper(path);
-            new Images().RemoveGraphics(path);
+            GraphicsWrapper.TryRemoveWrapper(path);
+            Images.RemoveGraphics(path);
             Log.Debug("Finished uninstall");
         }
     }

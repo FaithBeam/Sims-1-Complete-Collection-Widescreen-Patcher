@@ -74,14 +74,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\ResolutionConverter.cs" />
-    <Compile Include="DelegateCommand.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\IOpenFileDialogService.cs" />
     <Compile Include="Services\OpenFileDialogService.cs" />
     <Compile Include="ValidationRules\ResolutionValidationRule.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\ViewModelBase.cs" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -123,6 +121,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Toolkit.Mvvm">
+      <Version>7.1.2</Version>
+    </PackageReference>
     <PackageReference Include="Serilog">
       <Version>2.10.0</Version>
     </PackageReference>
