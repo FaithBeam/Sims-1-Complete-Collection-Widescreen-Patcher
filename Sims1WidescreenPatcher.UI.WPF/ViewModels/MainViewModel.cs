@@ -24,6 +24,7 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
         private bool _resolutionComboBoxEnabled = true;
         private bool _wrapperComboBoxEnabled = true;
         private bool _browseButtonEnabled = true;
+        private bool _invalidExeDialogShown = false;
         private Resolution _selectedResolution;
         private Wrapper _selectedWrapper;
         private readonly IDialogService _dialogService;
@@ -52,6 +53,7 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
             {
                 if (string.IsNullOrWhiteSpace(value)) return;
                 _ = SetProperty(ref _path, value);
+                _invalidExeDialogShown = false;
                 PatchCommand.RaiseCanExecuteChanged();
                 UninstallCommand.RaiseCanExecuteChanged();
             }
@@ -126,13 +128,22 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
             return !_previouslyPatchedList.Contains(Path) && 
                    !_isBusy && 
                    !CheckForBackup() &&
+                   !string.IsNullOrWhiteSpace(Path) &&
                    IsValidExe() && 
                    IsValidRes();
         }
 
         private bool IsValidExe()
         {
-            return !string.IsNullOrWhiteSpace(Path) && new Exe().ValidFile(_path);
+            if (new Exe().ValidFile(_path))
+                return true;
+
+            if (!_invalidExeDialogShown)
+            {
+                _invalidExeDialogShown = true;
+                _dialogService.ShowMessageBox("Invalid Sims exe. Please replace it with a NoCD exe that has not been patched to a custom resolution.");
+            }
+            return false;
         }
 
         private bool IsValidRes()

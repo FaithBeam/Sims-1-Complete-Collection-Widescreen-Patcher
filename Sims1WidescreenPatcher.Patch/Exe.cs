@@ -14,12 +14,6 @@ namespace Sims1WidescreenPatcher.Patch
 
         public bool ValidFile(string path)
         {
-            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
-            {
-                Log.Debug("{Path} is not valid", path);
-                return false;
-            }
-
             var pattern = Pattern.Transform(WidthPattern + " " + BetweenPattern + " " + HeightPattern);
             var bytes = File.ReadAllBytes(path);
 
@@ -28,11 +22,9 @@ namespace Sims1WidescreenPatcher.Patch
                 Log.Debug("{Path} is valid", path);
                 return true;
             }
-            else
-            {
-                Log.Debug("Could not find pattern in {Path}", path);
-                return false;
-            }
+
+            Log.Debug("Could not find pattern in {Path}", path);
+            return false;
         }
 
         public void Patch(string path, int width, int height)
