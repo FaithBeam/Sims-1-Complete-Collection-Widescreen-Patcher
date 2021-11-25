@@ -26,7 +26,7 @@ namespace Sims1WidescreenPatcher.UI.WPF.ViewModels
         private bool _resolutionComboBoxEnabled = true;
         private bool _wrapperComboBoxEnabled = true;
         private bool _browseButtonEnabled = true;
-        private bool _invalidExeDialogShown = false;
+        private bool _invalidExeDialogShown;
         private Resolution _selectedResolution;
         private Wrapper _selectedWrapper;
         private readonly IDialogService _dialogService;
