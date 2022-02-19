@@ -37,7 +37,7 @@ If you want to go back to your original Sims executable, select the uninstall bu
 
 [Linux Usage](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Linux-Usage)
 
-[Play in windowed mode](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Windowed-Mode)
+[Windowed Mode](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Windowed-Mode)
 
 [Screenshots](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Screenshots)
 
