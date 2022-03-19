@@ -50,6 +50,7 @@
     <Compile Include="Models\CompositeImageJob.cs" />
     <Compile Include="Models\IJob.cs" />
     <Compile Include="Models\ScaleImageJob.cs" />
+    <Compile Include="Models\TransparentBackgroundJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource1.Designer.cs">
       <AutoGen>True</AutoGen>

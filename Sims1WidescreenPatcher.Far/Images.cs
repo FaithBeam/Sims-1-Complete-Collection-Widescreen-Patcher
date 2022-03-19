@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Serilog;
-using Sims.Far;
 using Sims1WidescreenPatcher.Far.Models;
 using Sims1WidescreenPatcher.IO;
 
@@ -36,6 +35,95 @@ namespace Sims1WidescreenPatcher.Far
             @"Studiotown\dlgframe_1024x768.bmp",
         };
 
+        private static readonly List<string> _transparentBackground = new List<string>
+        {
+            @"cpanel\Catalog\BuyCFour.bmp",
+            @"cpanel\Catalog\BuyCThree.bmp",
+            @"cpanel\Catalog\BuyCTwo.bmp",
+            @"cpanel\Catalog\BuyDOutdoor.bmp",
+            @"cpanel\Catalog\BuyDShops.bmp",
+            @"cpanel\Catalog\BuyDStreet.bmp",
+            @"cpanel\Catalog\BuyMOutdoor.bmp",
+            @"cpanel\Catalog\BuyMTmagic.bmp",
+            @"cpanel\Catalog\BuySTDining.bmp",
+            @"cpanel\Catalog\BuySTMisc.bmp",
+            @"cpanel\Catalog\BuySTShops.bmp",
+            @"cpanel\Catalog\BuySTSpa.bmp",
+            @"cpanel\Catalog\BuySTStudio.bmp",
+            @"cpanel\Catalog\BuyVFour.bmp",
+            @"cpanel\Catalog\BuyVOne.bmp",
+            @"cpanel\Catalog\BuyVThree.bmp",
+            @"cpanel\Catalog\BuyVTwo.bmp",
+            @"cpanel\Catalog\SubSortIcons\BuySubSortAll.bmp",
+            @"cpanel\Catalog\SubSortIcons\BuySubSortOther.bmp",
+            @"cpanel\Catalog\SubSortIcons\Appliances\BuySubSortFour.BMP",
+            @"cpanel\Catalog\SubSortIcons\Appliances\BuySubSortOne.BMP",
+            @"cpanel\Catalog\SubSortIcons\Appliances\BuySubSortThree.BMP",
+            @"cpanel\Catalog\SubSortIcons\Appliances\BuySubSortTwo.bmp",
+            @"cpanel\Catalog\SubSortIcons\CommunitySubsort\BuySubSortCommunityAppliances.BMP",
+            @"cpanel\Catalog\SubSortIcons\CommunitySubsort\BuySubSortCommunityDecorative.BMP",
+            @"cpanel\Catalog\SubSortIcons\CommunitySubsort\BuySubSortCommunityElectronics.bmp",
+            @"cpanel\Catalog\SubSortIcons\CommunitySubsort\BuySubSortCommunityLighting.BMP",
+            @"cpanel\Catalog\SubSortIcons\CommunitySubsort\BuySubSortCommunityMisc.bmp",
+            @"cpanel\Catalog\SubSortIcons\CommunitySubsort\BuySubSortCommunityPlumbing.BMP",
+            @"cpanel\Catalog\SubSortIcons\CommunitySubsort\BuySubSortCommunitySeating.BMP",
+            @"cpanel\Catalog\SubSortIcons\CommunitySubsort\BuySubSortCommunitySurfaces.BMP",
+            @"cpanel\Catalog\SubSortIcons\Decorative\BuySubSortFour.BMP",
+            @"cpanel\Catalog\SubSortIcons\Decorative\BuySubSortOne.BMP",
+            @"cpanel\Catalog\SubSortIcons\Decorative\BuySubSortThree.BMP",
+            @"cpanel\Catalog\SubSortIcons\Decorative\BuySubSortTwo.bmp",
+            @"cpanel\Catalog\SubSortIcons\DowntownSubsort\BuySubSortDowntownAppliances.BMP",
+            @"cpanel\Catalog\SubSortIcons\DowntownSubsort\BuySubSortDowntownDecorative.BMP",
+            @"cpanel\Catalog\SubSortIcons\DowntownSubsort\BuySubSortDowntownElectronics.bmp",
+            @"cpanel\Catalog\SubSortIcons\DowntownSubsort\BuySubSortDowntownLighting.BMP",
+            @"cpanel\Catalog\SubSortIcons\DowntownSubsort\BuySubSortDowntownMisc.bmp",
+            @"cpanel\Catalog\SubSortIcons\DowntownSubsort\BuySubSortDowntownPlumbing.BMP",
+            @"cpanel\Catalog\SubSortIcons\DowntownSubsort\BuySubSortDowntownSeating.BMP",
+            @"cpanel\Catalog\SubSortIcons\DowntownSubsort\BuySubSortDowntownSurfaces.BMP",
+            @"cpanel\Catalog\SubSortIcons\Electronics\BuySubSortFour.BMP",
+            @"cpanel\Catalog\SubSortIcons\Electronics\BuySubSortOne.BMP",
+            @"cpanel\Catalog\SubSortIcons\Electronics\BuySubSortThree.BMP",
+            @"cpanel\Catalog\SubSortIcons\Electronics\BuySubSortTwo.bmp",
+            @"cpanel\Catalog\SubSortIcons\Lighting\BuySubSortFour.BMP",
+            @"cpanel\Catalog\SubSortIcons\Lighting\BuySubSortOne.BMP",
+            @"cpanel\Catalog\SubSortIcons\Lighting\BuySubSortThree.BMP",
+            @"cpanel\Catalog\SubSortIcons\Lighting\BuySubSortTwo.bmp",
+            @"cpanel\Catalog\SubSortIcons\Miscellaneous\BuySubSortFour.BMP",
+            @"cpanel\Catalog\SubSortIcons\Miscellaneous\BuySubSortMagic.BMP",
+            @"cpanel\Catalog\SubSortIcons\Miscellaneous\BuySubSortOne.BMP",
+            @"cpanel\Catalog\SubSortIcons\Miscellaneous\BuySubSortPets.BMP",
+            @"cpanel\Catalog\SubSortIcons\Miscellaneous\BuySubSortThree.BMP",
+            @"cpanel\Catalog\SubSortIcons\Miscellaneous\BuySubSortTwo.bmp",
+            @"cpanel\Catalog\SubSortIcons\Plumbing\BuySubSortFour.BMP",
+            @"cpanel\Catalog\SubSortIcons\Plumbing\BuySubSortOne.BMP",
+            @"cpanel\Catalog\SubSortIcons\Plumbing\BuySubSortThree.BMP",
+            @"cpanel\Catalog\SubSortIcons\Plumbing\BuySubSortTwo.bmp",
+            @"cpanel\Catalog\SubSortIcons\RoomSubsort\BuySubSortRoomAppliances.BMP",
+            @"cpanel\Catalog\SubSortIcons\RoomSubsort\BuySubSortRoomDecorative.BMP",
+            @"cpanel\Catalog\SubSortIcons\RoomSubsort\BuySubSortRoomElectronics.bmp",
+            @"cpanel\Catalog\SubSortIcons\RoomSubsort\BuySubSortRoomLighting.BMP",
+            @"cpanel\Catalog\SubSortIcons\RoomSubsort\BuySubSortRoomMisc.bmp",
+            @"cpanel\Catalog\SubSortIcons\RoomSubsort\BuySubSortRoomPlumbing.BMP",
+            @"cpanel\Catalog\SubSortIcons\RoomSubsort\BuySubSortRoomSeating.BMP",
+            @"cpanel\Catalog\SubSortIcons\RoomSubsort\BuySubSortRoomSurfaces.BMP",
+            @"cpanel\Catalog\SubSortIcons\Seating\BuySubSortFour.BMP",
+            @"cpanel\Catalog\SubSortIcons\Seating\BuySubSortOne.BMP",
+            @"cpanel\Catalog\SubSortIcons\Seating\BuySubSortThree.BMP",
+            @"cpanel\Catalog\SubSortIcons\Seating\BuySubSortTwo.bmp",
+            @"cpanel\Catalog\SubSortIcons\Surfaces\BuySubSortFour.BMP",
+            @"cpanel\Catalog\SubSortIcons\Surfaces\BuySubSortOne.BMP",
+            @"cpanel\Catalog\SubSortIcons\Surfaces\BuySubSortThree.BMP",
+            @"cpanel\Catalog\SubSortIcons\Surfaces\BuySubSortTwo.bmp",
+            @"cpanel\Catalog\SubSortIcons\VacationSubsort\BuySubSortVacationAppliances.BMP",
+            @"cpanel\Catalog\SubSortIcons\VacationSubsort\BuySubSortVacationDecorative.BMP",
+            @"cpanel\Catalog\SubSortIcons\VacationSubsort\BuySubSortVacationElectronics.bmp",
+            @"cpanel\Catalog\SubSortIcons\VacationSubsort\BuySubSortVacationLighting.BMP",
+            @"cpanel\Catalog\SubSortIcons\VacationSubsort\BuySubSortVacationMisc.bmp",
+            @"cpanel\Catalog\SubSortIcons\VacationSubsort\BuySubSortVacationPlumbing.BMP",
+            @"cpanel\Catalog\SubSortIcons\VacationSubsort\BuySubSortVacationSeating.BMP",
+            @"cpanel\Catalog\SubSortIcons\VacationSubsort\BuySubSortVacationSurfaces.BMP"
+        };
+
         public static void RemoveGraphics(string path)
         {
             var directoryName = Path.GetDirectoryName(path);
@@ -44,6 +132,8 @@ namespace Sims1WidescreenPatcher.Far
             foreach (var i in _blackBackground)
                 FileHelper.DeleteFile($@"{directoryName}\UIGraphics\{i}");
             foreach (var i in _blueBackground)
+                FileHelper.DeleteFile($@"{directoryName}\UIGraphics\{i}");
+            foreach (var i in _transparentBackground)
                 FileHelper.DeleteFile($@"{directoryName}\UIGraphics\{i}");
         }
 
@@ -80,12 +170,19 @@ namespace Sims1WidescreenPatcher.Far
                     Height = height,
                     Width = width
                 }));
+            jobs.AddRange(_transparentBackground.Where(i => far.Manifest.ManifestEntries.Any(m => m.Filename == i))
+                .Select(i => new TransparentBackgroundJob()
+                {
+                    Bytes = far.GetBytes(i),
+                    Output = $@"{directory}\UIGraphics\{i}"
+                }));
 
             #endregion
 
             var totalImages = jobs.Count;
             var current = 0;
             var lockObject = new object();
+
             #region Run Jobs
 
             Parallel.ForEach(jobs, job =>
@@ -98,7 +195,7 @@ namespace Sims1WidescreenPatcher.Far
                     progress.Report(calc);
                 }
             });
-            
+
             #endregion
         }
     }

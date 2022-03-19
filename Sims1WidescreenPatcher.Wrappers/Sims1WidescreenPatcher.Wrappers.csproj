@@ -73,7 +73,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\DgVoodoo2\D3D8.dll" />
-    <EmbeddedResource Include="Resources\DgVoodoo2\D3D9.dll" />
     <EmbeddedResource Include="Resources\DgVoodoo2\D3DImm.dll" />
     <EmbeddedResource Include="Resources\DgVoodoo2\DDraw.dll" />
     <EmbeddedResource Include="Resources\DgVoodoo2\dgVoodoo.conf" />

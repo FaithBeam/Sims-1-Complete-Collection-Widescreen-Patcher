@@ -14,7 +14,7 @@ namespace Sims1WidescreenPatcher.Wrappers
 
         private static readonly List<string> _dgvoodooResources = new List<string>()
         {
-            "D3D8.dll", "D3D9.dll", "D3DImm.dll", "DDraw.dll", "dgVoodoo.conf", "dgVoodooCpl.exe"
+            "D3D8.dll", "D3DImm.dll", "DDraw.dll", "dgVoodoo.conf", "dgVoodooCpl.exe"
         };
 
         public static void CopyDll(Wrapper wrapper, string path)

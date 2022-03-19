@@ -121,9 +121,6 @@
   <data name="D3D8" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\DgVoodoo2\D3D8.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="D3D9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\DgVoodoo2\D3D9.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="D3DImm" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\DgVoodoo2\D3DImm.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
