@@ -8,7 +8,7 @@ This program patches `The Sims 1: Complete Collection` to a custom resolution.
 
 * [.NET Framework 4.7.2](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-web-installer)
 * NoCD/Crack Sims Executable
-  * This exe cannot be previously patched to a custom resolution. For example, if you downloaded a crack that was patched to 1080p, my program will not work.
+  * This exe cannot be previously patched to a custom resolution. For example, if you downloaded a crack that was patched to 1080p, this program will not work.
 
 ## Usage
 
@@ -18,10 +18,14 @@ This program patches `The Sims 1: Complete Collection` to a custom resolution.
 4. Select your Sims.exe
 5. Enter your preferred resolution
 6. Click Patch
+7. Run "The Sims...800x600" shortcut or create your own from Sims.exe
 
 ## Graphics Wrappers
 
 You can select between two graphics wrappers, [DgVoodoo2](http://dege.freeweb.hu/dgVoodoo2/dgVoodoo2/) and [DDrawCompat](https://github.com/narzoul/DDrawCompat). The short is they both fix graphical issues and improve performance. I recommend trying DDrawCompat first and if that doesn't work, try DgVoodoo2. If neither work, choose none.
+
+**Note**
+If you use DDrawCompat and are using a GSync monitor, your game will crash. Refer to this page for the fix: [DDrawCompat-GSync-Fix](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/DDrawCompat-GSync-Fix)
 
 ## Uninstall
 
@@ -33,7 +37,7 @@ If you want to go back to your original Sims executable, select the uninstall bu
 
 [Linux Usage](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Linux-Usage)
 
-[Play in windowed mode](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Windowed-Mode)
+[Windowed Mode](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Windowed-Mode)
 
 [Screenshots](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Screenshots)
 
