@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ImageMagick;
 using Serilog;
 using Sims1WidescreenPatcher.Far.Models;
 using Sims1WidescreenPatcher.IO;
@@ -124,6 +125,28 @@ namespace Sims1WidescreenPatcher.Far
             @"cpanel\Catalog\SubSortIcons\VacationSubsort\BuySubSortVacationSurfaces.BMP"
         };
 
+        private static readonly List<ReplaceColorJob> ReplaceColorJobs = new List<ReplaceColorJob>()
+        {
+            new ReplaceColorJob()
+            {
+                ImagePath = @"cpanel\Build\TerrainDownIcon.BMP",
+                ReplaceColor = new MagickColor((byte) 0, (byte) 0, (byte) 82),
+                Percentage = 1
+            },
+            new ReplaceColorJob()
+            {
+                ImagePath = @"cpanel\Build\TerrainLevelIcon.BMP",
+                ReplaceColor = new MagickColor((byte) 0, (byte) 0, (byte) 82),
+                Percentage = 1
+            },
+            new ReplaceColorJob()
+            {
+                ImagePath = @"cpanel\Build\TerrainUpIcon.BMP",
+                ReplaceColor = new MagickColor((byte) 0, (byte) 0, (byte) 82),
+                Percentage = 5
+            },
+        };
+
         public static void RemoveGraphics(string path)
         {
             var directoryName = Path.GetDirectoryName(path);
@@ -134,6 +157,8 @@ namespace Sims1WidescreenPatcher.Far
             foreach (var i in _blueBackground)
                 FileHelper.DeleteFile($@"{directoryName}\UIGraphics\{i}");
             foreach (var i in _transparentBackground)
+                FileHelper.DeleteFile($@"{directoryName}\UIGraphics\{i}");
+            foreach (var i in ReplaceColorJobs.Select(x => x.ImagePath))
                 FileHelper.DeleteFile($@"{directoryName}\UIGraphics\{i}");
         }
 
@@ -176,6 +201,12 @@ namespace Sims1WidescreenPatcher.Far
                     Bytes = far.GetBytes(i),
                     Output = $@"{directory}\UIGraphics\{i}"
                 }));
+            foreach (var rcJob in ReplaceColorJobs.Where(rcJob => far.Manifest.ManifestEntries.Any(m => m.Filename == rcJob.ImagePath)))
+            {
+                rcJob.Bytes = far.GetBytes(rcJob.ImagePath);
+                rcJob.Output = $@"{directory}\UIGraphics\{rcJob.ImagePath}";
+                jobs.Add(rcJob);
+            }
 
             #endregion
 

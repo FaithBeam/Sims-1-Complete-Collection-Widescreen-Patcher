@@ -49,6 +49,7 @@
     <Compile Include="Images.cs" />
     <Compile Include="Models\CompositeImageJob.cs" />
     <Compile Include="Models\IJob.cs" />
+    <Compile Include="Models\ReplaceColorJob.cs" />
     <Compile Include="Models\ScaleImageJob.cs" />
     <Compile Include="Models\TransparentBackgroundJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
