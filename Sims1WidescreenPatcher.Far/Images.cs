@@ -58,7 +58,7 @@ namespace Sims1WidescreenPatcher.Far
             #region Create Jobs
 
             if (far.Manifest.ManifestEntries.Any(m => m.Filename == @"cpanel\Backgrounds\PanelBack.bmp"))
-                jobs.Add(new ScaleAndChopImageJob()
+                jobs.Add(new ScalePanelback()
                 {
                     Bytes = far.GetBytes(@"cpanel\Backgrounds\PanelBack.bmp"),
                     Output = $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", Height = 100, Width = width
