@@ -307,18 +307,28 @@ namespace SimsWidescreenPatcher
 
         private void ScaleImage(string input, string output, int width, int height)
         {
-            using (var image = new MagickImage(input))
+            using (var img = new MagickImage(input))
             {
-                var size = new MagickGeometry(width, height);
-                log.Info($"Resizing {input} to {output}");
-                size.IgnoreAspectRatio = true;
-                image.Resize(size);
-                image.Depth = 8;
-                image.Settings.Compression = ImageMagick.CompressionMethod.RLE;
-                image.Settings.Format = MagickFormat.Bmp3;
-                image.ColorType = ColorType.Palette;
-                image.Alpha(AlphaOption.Off);
-                image.Write(output);
+                var left = img.Clone(0, 0, 286, 100);
+                var middle = img.Clone(left.Width, 0, 500, 100);
+                var right = img.Clone(left.Width + middle.Width, 0, 18, 100);
+                middle.Resize(new MagickGeometry(width - left.Width - right.Width, height) { IgnoreAspectRatio = true });
+                left.Page = new MagickGeometry("+0+0");
+                middle.Page = new MagickGeometry($"+{left.Width}+0");
+                right.Page = new MagickGeometry($"+{left.Width + middle.Width}+0");
+                using (var images = new MagickImageCollection())
+                {
+                    images.Add(left);
+                    images.Add(middle);
+                    images.Add(right);
+                    var merged = images.Merge();
+                    merged.Depth = 8;
+                    merged.Settings.Compression = ImageMagick.CompressionMethod.RLE;
+                    merged.Settings.Format = MagickFormat.Bmp3;
+                    merged.ColorType = ColorType.Palette;
+                    merged.Alpha(AlphaOption.Off);
+                    merged.Write(output);
+                }
             }
         }
 
