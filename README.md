@@ -45,6 +45,8 @@ If you want to go back to your original Sims executable, select the uninstall bu
 
 [WSGF](http://www.wsgf.org/dr/sims)
 
+[PCGamingWiki](https://www.pcgamingwiki.com/wiki/The_Sims)
+
 [PatternFinder](https://github.com/mrexodia/PatternFinder)
 
 [DgVoodoo2](http://dege.freeweb.hu/dgVoodoo2/dgVoodoo2/)
