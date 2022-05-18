@@ -5,7 +5,7 @@ using Sims1WidescreenPatcher.IO;
 
 namespace Sims1WidescreenPatcher.Far.Models
 {
-    public class ReplaceColorJob : IJob
+    public class ScaleJob : IJob
     {
         public string ImagePath { get; set; }
         public MagickColor ReplaceColor { get; set; }
@@ -19,15 +19,12 @@ namespace Sims1WidescreenPatcher.Far.Models
             var destDir = Path.GetDirectoryName(Output);
             DirectoryHelper.CreateDirectory(destDir);
             Log.Debug("Fix {Output} transparency", Output);
-            using (var image = new MagickImage(Bytes))
+            using (var image = new MagickImage(Bytes, MagickFormat.Tga))
             {
-                image.ColorFuzz = new Percentage(Percentage);
-                image.Opaque(ReplaceColor, MagickColor.FromRgb((byte) 255, (byte) 0, (byte) 255));
-                image.Depth = 8;
+                image.Resize(new MagickGeometry(Width, Height) {IgnoreAspectRatio = true});
+                image.Depth = 32;
                 image.Settings.Compression = CompressionMethod.RLE;
-                image.Settings.Format = MagickFormat.Bmp3;
-                image.ColorType = ColorType.Palette;
-                image.Alpha(AlphaOption.Off);
+                image.Settings.Format = MagickFormat.Tga;
                 image.Write(Output);
             }
         }
