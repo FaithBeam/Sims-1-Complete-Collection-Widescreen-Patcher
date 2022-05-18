@@ -12,7 +12,7 @@ namespace Sims1WidescreenPatcher.Far
 {
     public static class Images
     {
-        private static readonly List<string> _blackBackground = new List<string>
+        private static readonly List<string> BlackBackground = new List<string>
         {
             @"Community\Bus_loadscreen_1024x768.bmp",
             @"Downtown\Taxi_loadscreen_1024x768.bmp",
@@ -26,7 +26,7 @@ namespace Sims1WidescreenPatcher.Far
             @"VIsland\vacation_loadscreen2_1024x768.bmp",
         };
 
-        private static readonly List<string> _blueBackground = new List<string>
+        private static readonly List<string> BlueBackground = new List<string>
         {
             @"Downtown\largeback.bmp",
             @"Magicland\largeback.bmp",
@@ -36,15 +36,22 @@ namespace Sims1WidescreenPatcher.Far
             @"Studiotown\dlgframe_1024x768.bmp",
         };
 
+        private static readonly List<string> ScaleList = new List<string>
+        {
+            @"cpanel\Backgrounds\TallSubPanel.TGA"
+        };
+
 
         public static void RemoveGraphics(string path)
         {
             var directoryName = Path.GetDirectoryName(path);
             Log.Debug("Remove installed graphics from {DirectoryName}", directoryName);
             FileHelper.DeleteFile($@"{directoryName}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp");
-            foreach (var i in _blackBackground)
+            foreach (var i in BlackBackground)
                 FileHelper.DeleteFile($@"{directoryName}\UIGraphics\{i}");
-            foreach (var i in _blueBackground)
+            foreach (var i in BlueBackground)
+                FileHelper.DeleteFile($@"{directoryName}\UIGraphics\{i}");
+            foreach (var i in ScaleList)
                 FileHelper.DeleteFile($@"{directoryName}\UIGraphics\{i}");
         }
 
@@ -63,7 +70,7 @@ namespace Sims1WidescreenPatcher.Far
                     Bytes = far.GetBytes(@"cpanel\Backgrounds\PanelBack.bmp"),
                     Output = $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", Height = 100, Width = width
                 });
-            jobs.AddRange(_blackBackground.Where(i => far.Manifest.ManifestEntries.Any(m => m.Filename == i))
+            jobs.AddRange(BlackBackground.Where(i => far.Manifest.ManifestEntries.Any(m => m.Filename == i))
                 .Select(i => new CompositeImageJob()
                 {
                     Background = "blackbackground.png",
@@ -72,13 +79,21 @@ namespace Sims1WidescreenPatcher.Far
                     Height = height,
                     Width = width
                 }));
-            jobs.AddRange(_blueBackground.Where(i => far.Manifest.ManifestEntries.Any(m => m.Filename == i))
+            jobs.AddRange(BlueBackground.Where(i => far.Manifest.ManifestEntries.Any(m => m.Filename == i))
                 .Select(i => new CompositeImageJob()
                 {
                     Background = "bluebackground.png",
                     Bytes = far.GetBytes(i),
                     Output = $@"{directory}\UIGraphics\{i}",
                     Height = height,
+                    Width = width
+                }));
+            jobs.AddRange(ScaleList.Where(i => far.Manifest.ManifestEntries.Any(m => m.Filename == i))
+                .Select(i => new ScaleJob()
+                {
+                    Bytes = far.GetBytes(i),
+                    Output = $@"{directory}\UIGraphics\{i}",
+                    Height = 150,
                     Width = width
                 }));
 
