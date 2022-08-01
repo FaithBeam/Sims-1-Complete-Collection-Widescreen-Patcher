@@ -2,11 +2,10 @@
 
 This program patches `The Sims 1: Complete Collection` to a custom resolution.
 
-![Untitled](https://user-images.githubusercontent.com/32502411/136943721-7475909c-2993-498f-beff-cd6fdc0b9b23.png)
+![Untitled](https://i.imgur.com/BwRreNH.png)
 
 ## Requirements
 
-* [.NET Framework 4.7.2](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-web-installer)
 * NoCD/Crack Sims Executable
   * This exe cannot be previously patched to a custom resolution. For example, if you downloaded a crack that was patched to 1080p, this program will not work.
 
@@ -20,9 +19,21 @@ This program patches `The Sims 1: Complete Collection` to a custom resolution.
 6. Click Patch
 7. Run "The Sims...800x600" shortcut or create your own from Sims.exe
 
+**MacOS Note**
+
+If you can't select the Sims.exe because it is installed in an app bundle from Wineskin Winery, click [here](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/MacOS---How-to-Enter-an-App-Bundle-to-Select-Sims-Exe) for a workaround.
+
 ## Graphics Wrappers
 
 You can select between two graphics wrappers, [DgVoodoo2](http://dege.freeweb.hu/dgVoodoo2/dgVoodoo2/) and [DDrawCompat](https://github.com/narzoul/DDrawCompat). The short is they both fix graphical issues and improve performance. I recommend trying DDrawCompat first and if that doesn't work, try DgVoodoo2. If neither work, choose none.
+
+**Wrapper OS Compatability**
+
+|                 | Windows | Linux | MacOS |
+|-----------------|---------|-------|-------|
+| **None**        | ✅       | ✅     | ✅     |
+| **DGVoodoo2**   | ✅       | ✅     | ❌     |
+| **DDrawCompat** | ✅       | ❌     | ❌     |
 
 **Note**
 If you use DDrawCompat and are using a GSync monitor, your game will crash. Refer to this page for the fix: [DDrawCompat-GSync-Fix](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/DDrawCompat-GSync-Fix)
