@@ -15,10 +15,14 @@
         <Product>Sims1WidescreenPatcher</Product>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <IsPackable>false</IsPackable>
+        <ApplicationIcon>..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico</ApplicationIcon>
     </PropertyGroup>
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
         <None Remove=".gitignore" />
+        <None Include="..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico">
+          <Link>SimsICO.ico</Link>
+        </None>
     </ItemGroup>
     <ItemGroup>
         <!--This helps with theme dll-s trimming.

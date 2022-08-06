@@ -16,12 +16,16 @@
         <FileVersion>3.0.0</FileVersion>
         <PackageVersion>3.0.0-beta.1</PackageVersion>
         <InformationalVersion>3.0.0-beta.1</InformationalVersion>
+        <ApplicationIcon>..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico</ApplicationIcon>
     </PropertyGroup>
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
         <None Remove=".gitignore" />
         <None Update="displayplacer">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico">
+          <Link>SimsICO.ico</Link>
         </None>
     </ItemGroup>
     <ItemGroup>
