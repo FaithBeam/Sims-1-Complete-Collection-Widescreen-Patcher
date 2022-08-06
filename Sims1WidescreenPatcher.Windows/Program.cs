@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using Avalonia;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
@@ -20,6 +22,14 @@ internal static class Program
             .WriteTo.File("Sims1WidescreenPatcher.log")
             .MinimumLevel.Debug()
             .CreateLogger();
+        var informationalVersion = ((AssemblyInformationalVersionAttribute)Assembly
+                .GetExecutingAssembly()
+                .GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false)
+                .FirstOrDefault()! ?? throw new InvalidOperationException())
+            .InformationalVersion;
+        var name = Assembly.GetExecutingAssembly().GetName().Name;
+        Log.Information("{@Name}", name);
+        Log.Information("{@Version}", informationalVersion);
         try
         {
             BuildAvaloniaApp()
