@@ -1,6 +1,6 @@
-# The Sims 1: Complete Collection Widescreen Patcher
+# The Sims 1 Widescreen Patcher
 
-This program patches `The Sims 1: Complete Collection` to a custom resolution.
+This program patches `The Sims 1` to a custom resolution.
 
 ![Untitled](https://i.imgur.com/BwRreNH.png)
 
@@ -8,6 +8,22 @@ This program patches `The Sims 1: Complete Collection` to a custom resolution.
 
 * NoCD/Crack Sims Executable
   * This exe cannot be previously patched to a custom resolution. For example, if you downloaded a crack that was patched to 1080p, this program will not work.
+
+### OS Version Compatability
+
+| Windows |
+|---------|
+|    11   |
+|    10   |
+|  7 SP 1 |
+
+| Ubuntu | Fedora |
+|--------|--------|
+| 16.04+ | 33+    |
+
+| macOS  |
+|--------|
+| 10.15+ |
 
 ## Usage
 
@@ -29,7 +45,7 @@ You can select between two graphics wrappers, [DgVoodoo2](http://dege.freeweb.hu
 
 **Wrapper OS Compatability**
 
-|                 | Windows | Linux | MacOS |
+|                 | Windows | Linux | macOS |
 |-----------------|---------|-------|-------|
 | **None**        | ✅       | ✅     | ✅     |
 | **DGVoodoo2**   | ✅       | ✅     | ❌     |
