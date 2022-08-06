@@ -10,7 +10,7 @@ namespace Sims1WidescreenPatcher.Services;
 public class WindowsResolutionsService : IResolutionsService
 {
     [DllImport("user32.dll")]
-    private static extern bool EnumDisplaySettings(string deviceName, int modeNum, ref DEVMODE devMode);
+    private static extern bool EnumDisplaySettings(string? deviceName, int modeNum, ref DEVMODE devMode);
 
     [StructLayout(LayoutKind.Sequential)]
     private struct DEVMODE
