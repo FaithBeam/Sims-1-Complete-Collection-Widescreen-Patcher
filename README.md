@@ -35,7 +35,7 @@ This program patches `The Sims 1` to a custom resolution.
 
 1. Download the latest [release](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/releases)
 2. Extract everything from the zip
-3. Run Sims1WidescreenPatcher.exe as administrator
+3. (Windows) Run Sims1WidescreenPatcher.exe as administrator
 4. Select your Sims.exe
 5. Enter your preferred resolution
 6. Click Patch
