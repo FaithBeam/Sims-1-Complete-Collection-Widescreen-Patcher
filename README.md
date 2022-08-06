@@ -9,6 +9,12 @@ This program patches `The Sims 1` to a custom resolution.
 * NoCD/Crack Sims Executable
   * This exe cannot be previously patched to a custom resolution. For example, if you downloaded a crack that was patched to 1080p, this program will not work.
 
+**Linux**
+
+* xrandr
+  * Ubuntu ```sudo apt install xrandr``` 
+  * Fedora ```sudo dnf install xrandr```
+
 ### OS Version Compatability
 
 | Windows |
