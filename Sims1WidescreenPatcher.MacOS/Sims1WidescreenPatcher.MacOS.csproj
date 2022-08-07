@@ -17,6 +17,22 @@
         <PackageVersion>3.0.0-beta.1</PackageVersion>
         <InformationalVersion>3.0.0-beta.2</InformationalVersion>
         <ApplicationIcon>..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico</ApplicationIcon>
+        <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+        <UseAppHost>true</UseAppHost>
+        <SelfContained>true</SelfContained>
+        
+    </PropertyGroup>
+    <PropertyGroup>
+        <CFBundleName>Sims1WidescreenPatcher</CFBundleName> <!-- Also defines .app file name -->
+        <CFBundleDisplayName>Sims 1 Widescreen Patcher</CFBundleDisplayName>
+        <CFBundleIdentifier>com.example</CFBundleIdentifier>
+        <CFBundleVersion>3.0.0-beta.2</CFBundleVersion>
+        <CFBundleShortVersionString>3.0.0-beta.2</CFBundleShortVersionString>
+        <CFBundlePackageType>APPL</CFBundlePackageType>
+        <CFBundleExecutable>Sims1WidescreenPatcher</CFBundleExecutable>
+        <CFBundleIconFile>SimsICO.ico</CFBundleIconFile> <!-- Will be copied from output directory -->
+        <NSPrincipalClass>NSApplication</NSPrincipalClass>
+        <NSHighResolutionCapable>true</NSHighResolutionCapable>
     </PropertyGroup>
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
@@ -26,6 +42,7 @@
         </None>
         <None Include="..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico">
           <Link>SimsICO.ico</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
     <ItemGroup>

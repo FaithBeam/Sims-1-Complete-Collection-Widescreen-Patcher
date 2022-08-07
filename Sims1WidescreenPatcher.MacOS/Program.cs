@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Avalonia;
+using Avalonia.Controls.Shapes;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using ReactiveUI;
@@ -11,6 +13,7 @@ using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Services;
 using Sims1WidescreenPatcher.UI;
 using Splat;
+using Path = System.IO.Path;
 
 namespace Sims1WidescreenPatcher;
 
