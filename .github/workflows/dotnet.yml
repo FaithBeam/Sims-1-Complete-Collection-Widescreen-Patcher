@@ -3,7 +3,10 @@ name: .NET
 env:
   PACK_VER: 3.0.0-beta.2
 
-on: [push]
+on: 
+  push:
+    branches:
+      - develop
 jobs:
   linux:
     runs-on: ubuntu-latest
@@ -53,7 +56,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore Sims1WidescreenPatcher.MacOS/Sims1WidescreenPatcher.MacOS.csproj -r osx-x64
     - name: Publish
-      run: dotnet msbuild Sims1WidescreenPatcher.MacOS/Sims1WidescreenPatcher.MacOS.csproj -t:BundleApp -p:RuntimeIdentifier=osx-x64 -p:UseAppHost=true -p:CFBundleShortVersionString=$PACK_VER -p:TargetFramework=net6.0 -p:SelfContained=true -p:Configuration=Release
+      run: dotnet msbuild Sims1WidescreenPatcher.MacOS/Sims1WidescreenPatcher.MacOS.csproj -t:BundleApp -p:Configuration=Release
     - name: Move App Bundle to Artifacts
       run: mkdir artifacts && mv Sims1WidescreenPatcher.MacOS/bin/Release/net6.0/osx-x64/publish/Sims1WidescreenPatcher.app artifacts/
     - name: Upload a Build Artifact
