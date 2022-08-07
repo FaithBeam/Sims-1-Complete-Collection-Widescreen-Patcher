@@ -1,0 +1,52 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
+        mc:Ignorable="d"
+        Width="450"
+        Height="80"
+        d:DesignWidth="450"
+        d:DesignHeight="80"
+        x:Class="Sims1WidescreenPatcher.UI.Views.CustomResolutionDialog"
+        Title="Enter Custom Resolution"
+        SizeToContent="Height">
+    <Design.DataContext>
+        <viewModels:CustomResolutionDialogViewModel />
+    </Design.DataContext>
+    <Grid IsSharedSizeScope="True">
+        <StackPanel Margin="5">
+            <!--Row 1-->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="80" SharedSizeGroup="button"/>
+                    <ColumnDefinition Width="*" SharedSizeGroup="button"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Margin="0 0 5 0">
+                    <Label Content="Width" />
+                    <TextBox Text="{Binding Width}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="0 0 5 0">
+                    <Label Content="Height" />
+                    <TextBox Text="{Binding Height}" />
+                </StackPanel>
+                <Button Grid.Column="2"
+                        Name="CancelButton"
+                        Margin="0 0 5 0"
+                        Content="Cancel"
+                        Click="CancelButton_OnClick"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center" />
+                <Button Grid.Column="3"
+                        Content="Ok"
+                        Command="{Binding OkCommand}"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center" />
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>

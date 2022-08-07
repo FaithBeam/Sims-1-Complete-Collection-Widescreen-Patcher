@@ -1,5 +1,6 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
+using System.Windows.Input;
 using Avalonia.Collections;
 using MessageBox.Avalonia.Enums;
 using ReactiveUI;
@@ -36,7 +37,8 @@ public class MainWindowViewModel : ViewModelBase
         _isValidSimsExe = this
             .WhenAnyValue(x => x.Path, PatchUtility.IsValidSims)
             .ToProperty(this, x => x.IsValidSimsExe, deferSubscription: true);
-        var canPatch = this.WhenAnyValue(x => x.IsBusy, x => x.Path, x => x.IsValidSimsExe, x => x.HasBackup,
+        var canPatch = this
+            .WhenAnyValue(x => x.IsBusy, x => x.Path, x => x.IsValidSimsExe, x => x.HasBackup,
             (isBusy, path, validSimsExe, hasBackup) =>
                 !string.IsNullOrWhiteSpace(path) &&
                 !hasBackup &&
@@ -44,7 +46,8 @@ public class MainWindowViewModel : ViewModelBase
                 !_previouslyPatched.Contains(path) &&
                 !isBusy
         ).DistinctUntilChanged();
-        var canUninstall = this.WhenAnyValue(x => x.IsBusy, x => x.Path, x => x.HasBackup,
+        var canUninstall = this
+            .WhenAnyValue(x => x.IsBusy, x => x.Path, x => x.HasBackup,
             (isBusy, path, hasBackup) =>
                 !string.IsNullOrWhiteSpace(path) &&
                 !isBusy &&
@@ -55,19 +58,23 @@ public class MainWindowViewModel : ViewModelBase
         OpenFile = ReactiveCommand.CreateFromTask(OpenFileAsync);
         ShowOpenFileDialog = new Interaction<Unit, string>();
         var resolutionsService = Locator.Current.GetService<IResolutionsService>();
-        Resolutions = new AvaloniaList<Resolution>(resolutionsService?.GetResolutions() ?? Array.Empty<Resolution>());
+        Resolutions = new AvaloniaList<Resolution>(resolutionsService?.GetResolutions() ?? Array.Empty<Resolution>()) { new(-1, -1) };
         SelectedResolution = Resolutions.FirstOrDefault() ?? new Resolution(1920, 1080);
         SelectedWrapper = Wrappers.FirstOrDefault();
+        ShowCustomResolutionDialog = new Interaction<CustomResolutionDialogViewModel, Resolution?>();
+        CustomResolutionCommand = ReactiveCommand.CreateFromTask(OpenCustomResolutionDialogAsync);
     }
 
     #endregion
 
     #region Commands
 
-    public ReactiveCommand<Unit, Unit> PatchCommand { get; }
-    public ReactiveCommand<Unit, Unit> UninstallCommand { get; }
-    public ReactiveCommand<Unit, Unit> OpenFile { get; }
+    public ICommand PatchCommand { get; }
+    public ICommand UninstallCommand { get; }
+    public ICommand OpenFile { get; }
     public Interaction<Unit, string> ShowOpenFileDialog { get; }
+    public ICommand CustomResolutionCommand { get; }
+    public Interaction<CustomResolutionDialogViewModel, Resolution?> ShowCustomResolutionDialog { get; }
 
     #endregion
 
@@ -93,7 +100,17 @@ public class MainWindowViewModel : ViewModelBase
     public Resolution? SelectedResolution
     {
         get => _selectedResolution;
-        set => this.RaiseAndSetIfChanged(ref _selectedResolution, value);
+        set
+        {
+            if (value is { Width: -1, Height: -1 })
+            {
+                CustomResolutionCommand.Execute(null);
+            }
+            else
+            {
+                this.RaiseAndSetIfChanged(ref _selectedResolution, value);
+            }
+        }
     }
 
     public AvaloniaList<WrapperUtility.Wrapper> Wrappers { get; } =
@@ -125,6 +142,17 @@ public class MainWindowViewModel : ViewModelBase
     #endregion
 
     #region Methods
+
+    private async Task OpenCustomResolutionDialogAsync()
+    {
+        var vm = new CustomResolutionDialogViewModel();
+        var res = await ShowCustomResolutionDialog.Handle(vm);
+        if (res is { Width: > 0, Height: > 0 })
+        {
+            Resolutions.Insert(Resolutions.Count - 1, res);
+            SelectedResolution = res;
+        }
+    }
 
     private async Task OpenFileAsync()
     {

@@ -6,6 +6,7 @@ using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using ReactiveUI;
 using Serilog;
+using Serilog.Formatting.Compact;
 using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Services;
 using Sims1WidescreenPatcher.UI;
@@ -19,7 +20,7 @@ internal static class Program
     public static void Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
-            .WriteTo.File("Sims1WidescreenPatcher.log")
+            .WriteTo.File(new CompactJsonFormatter(), "Sims1WidescreenPatcherLog.clef")
             .MinimumLevel.Debug()
             .CreateLogger();
         var informationalVersion = ((AssemblyInformationalVersionAttribute)Assembly

@@ -36,6 +36,10 @@ public class Resolution
 
     public override string ToString()
     {
+        if (Width == -1 && Height == -1)
+        {
+            return @"<Custom Resolution>";
+        }
         return $"{Width}x{Height}";
     }
 }

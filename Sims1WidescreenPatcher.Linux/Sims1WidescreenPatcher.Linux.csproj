@@ -13,7 +13,7 @@
         <Product>Sims1WidescreenPatcher</Product>
         <AssemblyVersion>3.0.0</AssemblyVersion>
         <FileVersion>3.0.0</FileVersion>
-        <InformationalVersion>3.0.0-beta.1</InformationalVersion>
+        <InformationalVersion>3.0.0-beta.2</InformationalVersion>
         <ApplicationIcon>..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico</ApplicationIcon>
     </PropertyGroup>
     <ItemGroup>
@@ -36,6 +36,7 @@
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.17" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.17" />
+        <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     </ItemGroup>
