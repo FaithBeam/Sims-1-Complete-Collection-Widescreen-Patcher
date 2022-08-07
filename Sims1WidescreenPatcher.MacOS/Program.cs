@@ -23,7 +23,7 @@ internal static class Program
     public static void Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
-            .WriteTo.File(new CompactJsonFormatter(), "Sims1WidescreenPatcherLog.clef")
+            .WriteTo.File(new CompactJsonFormatter(),  Path.Combine(AppContext.BaseDirectory, "Sims1WidescreenPatcherLog.clef"))
             .MinimumLevel.Debug()
             .CreateLogger();
         var informationalVersion = ((AssemblyInformationalVersionAttribute)Assembly
