@@ -24,7 +24,7 @@
     </PropertyGroup>
     <PropertyGroup>
         <CFBundleName>Sims1WidescreenPatcher</CFBundleName> <!-- Also defines .app file name -->
-        <CFBundleDisplayName>Sims 1 Widescreen Patcher</CFBundleDisplayName>
+        <CFBundleDisplayName>Sims1WidescreenPatcher</CFBundleDisplayName>
         <CFBundleIdentifier>com.example</CFBundleIdentifier>
         <CFBundleVersion>3.0.0-beta.2</CFBundleVersion>
         <CFBundleShortVersionString>3.0.0-beta.2</CFBundleShortVersionString>
