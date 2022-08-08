@@ -16,6 +16,12 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <IsPackable>false</IsPackable>
         <ApplicationIcon>..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico</ApplicationIcon>
+        <SelfContained>true</SelfContained>
+        <PublishSingleFile>true</PublishSingleFile>
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+        <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+        <DebugType>embedded</DebugType>
+        <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     </PropertyGroup>
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />

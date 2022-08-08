@@ -1,67 +1,72 @@
 name: .NET
 
 env:
+  PACK_ID: Sims1WidescreenPatcher
   PACK_VER: 3.0.0-beta.2
 
 on: 
   push:
     branches:
       - develop
+
 jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore Sims1WidescreenPatcher.Linux/Sims1WidescreenPatcher.Linux.csproj -r linux-x64
-    - name: Publish
-      run: dotnet publish Sims1WidescreenPatcher.Linux/Sims1WidescreenPatcher.Linux.csproj -c Release -o artifacts -r linux-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true -p:DebugType=embedded -p:EnableCompressionInSingleFile=true
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.0
-      with:
-        name: Sims1WidescreenPatcher.${{ env.PACK_VER }}+linux
-        path: artifacts/Sims1WidescreenPatcher
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore Sims1WidescreenPatcher.Linux/Sims1WidescreenPatcher.Linux.csproj -r linux-x64
+      - name: Publish
+        run: dotnet publish Sims1WidescreenPatcher.Linux/Sims1WidescreenPatcher.Linux.csproj -c Release -o artifacts -r linux-x64
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+linux.x64
+          path: artifacts/Sims1WidescreenPatcher
 
-  
   windows:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore Sims1WidescreenPatcher.Windows/Sims1WidescreenPatcher.Windows.csproj -r win-x64
-    - name: Publish
-      run: dotnet publish Sims1WidescreenPatcher.Windows/Sims1WidescreenPatcher.Windows.csproj -c Release -o artifacts -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true -p:DebugType=embedded -p:EnableCompressionInSingleFile=true
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.0
-      with:
-        name: Sims1WidescreenPatcher.${{ env.PACK_VER }}+win
-        path: artifacts/Sims1WidescreenPatcher.exe
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore Sims1WidescreenPatcher.Windows/Sims1WidescreenPatcher.Windows.csproj -r win-x64
+      - name: Publish
+        run: dotnet publish Sims1WidescreenPatcher.Windows/Sims1WidescreenPatcher.Windows.csproj -c Release -o artifacts -r win-x64
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+win.x64
+          path: artifacts/Sims1WidescreenPatcher.exe
 
   macos:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore Sims1WidescreenPatcher.MacOS/Sims1WidescreenPatcher.MacOS.csproj -r osx-x64
-    - name: Publish
-      run: dotnet msbuild Sims1WidescreenPatcher.MacOS/Sims1WidescreenPatcher.MacOS.csproj -t:BundleApp -p:Configuration=Release
-    - name: Move App Bundle to Artifacts
-      run: mkdir artifacts && mv Sims1WidescreenPatcher.MacOS/bin/Release/net6.0/osx-x64/publish/Sims1WidescreenPatcher.app artifacts/
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.0
-      with:
-        name: Sims1WidescreenPatcher.${{ env.PACK_VER }}+osx
-        path: artifacts/
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore Sims1WidescreenPatcher.MacOS/Sims1WidescreenPatcher.MacOS.csproj -r osx-x64
+      - name: Publish
+        run: dotnet msbuild Sims1WidescreenPatcher.MacOS/Sims1WidescreenPatcher.MacOS.csproj -t:BundleApp -p:Configuration=Release
+      - name: Move App Bundle to Artifacts
+        run: mkdir artifacts && mv Sims1WidescreenPatcher.MacOS/bin/Release/net6.0/osx-x64/publish/Sims1WidescreenPatcher.app artifacts/
+      - name: Set Executable
+        run: chmod -R +x artifacts/Sims1WidescreenPatcher.app/Contents/MacOS/
+      - name: Tar to Preserve Permissions
+        run: tar -cvf Sims1WidescreenPatcher.${{ env.PACK_VER }}+osx.x64.tar artifacts/
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+osx.x64
+          path: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+osx.x64.tar
     
