@@ -51,11 +51,6 @@ namespace Sims1WidescreenPatcher
                 .UseReactiveUI()
                 .AfterPlatformServicesSetup(_ => Locator.RegisterResolverCallbackChanged(() =>
                 {
-                    if (Locator.CurrentMutable is null)
-                    {
-                        return;
-                    }
-
                     PlatformRegistrationManager.SetRegistrationNamespaces(RegistrationNamespace.Avalonia);
                     RxApp.MainThreadScheduler = AvaloniaScheduler.Instance;
                     Locator.CurrentMutable.RegisterConstant(new AvaloniaActivationForViewFetcher(), typeof(IActivationForViewFetcher));
