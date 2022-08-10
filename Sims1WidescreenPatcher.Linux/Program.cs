@@ -33,7 +33,7 @@ namespace Sims1WidescreenPatcher
             Log.Information("{@Name}", name);
             Log.Information("{@Version}", informationalVersion);
             Log.Information("{@OSInformation}", osNameAndVersion);
-                    try
+            try
             {
                 BuildAvaloniaApp()
                     .StartWithClassicDesktopLifetime(args);
@@ -55,8 +55,10 @@ namespace Sims1WidescreenPatcher
                 {
                     PlatformRegistrationManager.SetRegistrationNamespaces(RegistrationNamespace.Avalonia);
                     RxApp.MainThreadScheduler = AvaloniaScheduler.Instance;
-                    Locator.CurrentMutable.RegisterConstant(new AvaloniaActivationForViewFetcher(), typeof(IActivationForViewFetcher));
-                    Locator.CurrentMutable.RegisterConstant(new AutoDataTemplateBindingHook(), typeof(IPropertyBindingHook));
+                    Locator.CurrentMutable.RegisterConstant(new AvaloniaActivationForViewFetcher(),
+                        typeof(IActivationForViewFetcher));
+                    Locator.CurrentMutable.RegisterConstant(new AutoDataTemplateBindingHook(),
+                        typeof(IPropertyBindingHook));
                     Locator.CurrentMutable.RegisterConstant(new LinuxResolutionService(), typeof(IResolutionsService));
                 }));
     }
