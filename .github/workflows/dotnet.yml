@@ -21,7 +21,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore Sims1WidescreenPatcher.Linux/Sims1WidescreenPatcher.Linux.csproj -r linux-x64
       - name: Publish
-        run: dotnet publish Sims1WidescreenPatcher.Linux/Sims1WidescreenPatcher.Linux.csproj -c Release -o artifacts -r linux-x64
+        run: dotnet publish Sims1WidescreenPatcher.Linux/Sims1WidescreenPatcher.Linux.csproj -c Release -o artifacts
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.0
         with:
@@ -39,7 +39,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore Sims1WidescreenPatcher.Windows/Sims1WidescreenPatcher.Windows.csproj -r win-x64
       - name: Publish
-        run: dotnet publish Sims1WidescreenPatcher.Windows/Sims1WidescreenPatcher.Windows.csproj -c Release -o artifacts -r win-x64
+        run: dotnet publish Sims1WidescreenPatcher.Windows/Sims1WidescreenPatcher.Windows.csproj -c Release -o artifacts
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.0
         with:
