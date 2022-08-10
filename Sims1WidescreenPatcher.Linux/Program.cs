@@ -29,9 +29,11 @@ namespace Sims1WidescreenPatcher
                     .FirstOrDefault()! ?? throw new InvalidOperationException())
                 .InformationalVersion;
             var name = Assembly.GetExecutingAssembly().GetName().Name;
+            var osNameAndVersion = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
             Log.Information("{@Name}", name);
             Log.Information("{@Version}", informationalVersion);
-            try
+            Log.Information("{@OSInformation}", osNameAndVersion);
+                    try
             {
                 BuildAvaloniaApp()
                     .StartWithClassicDesktopLifetime(args);

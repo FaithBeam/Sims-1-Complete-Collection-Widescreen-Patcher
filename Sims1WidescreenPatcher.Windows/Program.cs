@@ -29,8 +29,10 @@ internal static class Program
                 .FirstOrDefault()! ?? throw new InvalidOperationException())
             .InformationalVersion;
         var name = Assembly.GetExecutingAssembly().GetName().Name;
+        var osNameAndVersion = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
         Log.Information("{@Name}", name);
         Log.Information("{@Version}", informationalVersion);
+        Log.Information("{@OSInformation}", osNameAndVersion);
         try
         {
             BuildAvaloniaApp()

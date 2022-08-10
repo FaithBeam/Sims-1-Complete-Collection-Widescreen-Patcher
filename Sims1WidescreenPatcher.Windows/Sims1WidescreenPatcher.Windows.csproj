@@ -10,7 +10,7 @@
         <AssemblyName>Sims1WidescreenPatcher</AssemblyName>
         <AssemblyVersion>3.0.0</AssemblyVersion>
         <FileVersion>3.0.0</FileVersion>
-        <InformationalVersion>3.0.0-beta.2</InformationalVersion>
+        <InformationalVersion>3.0.0-beta.3</InformationalVersion>
         <Company>Sims1WidescreenPatcher</Company>
         <Product>Sims1WidescreenPatcher</Product>
         <ApplicationManifest>app.manifest</ApplicationManifest>

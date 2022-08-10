@@ -23,7 +23,8 @@ internal static class Program
     public static void Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
-            .WriteTo.File(new CompactJsonFormatter(),  Path.Combine(AppContext.BaseDirectory, "Sims1WidescreenPatcherLog.clef"))
+            .WriteTo.File(new CompactJsonFormatter(),
+                Path.Combine(AppContext.BaseDirectory, "Sims1WidescreenPatcherLog.clef"))
             .MinimumLevel.Debug()
             .CreateLogger();
         var informationalVersion = ((AssemblyInformationalVersionAttribute)Assembly
@@ -32,8 +33,10 @@ internal static class Program
                 .FirstOrDefault()! ?? throw new InvalidOperationException())
             .InformationalVersion;
         var name = Assembly.GetExecutingAssembly().GetName().Name;
+        var osNameAndVersion = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
         Log.Information("{@Name}", name);
         Log.Information("{@Version}", informationalVersion);
+        Log.Information("{@OSInformation}", osNameAndVersion);
         try
         {
             BuildAvaloniaApp()

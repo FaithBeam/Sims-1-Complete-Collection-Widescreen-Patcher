@@ -13,7 +13,7 @@
         <Product>Sims1WidescreenPatcher</Product>
         <AssemblyVersion>3.0.0</AssemblyVersion>
         <FileVersion>3.0.0</FileVersion>
-        <InformationalVersion>3.0.0-beta.2</InformationalVersion>
+        <InformationalVersion>3.0.0-beta.3</InformationalVersion>
         <ApplicationIcon>..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico</ApplicationIcon>
         <SelfContained>true</SelfContained>
         <PublishSingleFile>true</PublishSingleFile>
