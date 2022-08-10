@@ -44,7 +44,7 @@ namespace Sims1WidescreenPatcher
             }
         }
 
-        public static AppBuilder BuildAvaloniaApp()
+        private static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
                 .LogToTrace()
