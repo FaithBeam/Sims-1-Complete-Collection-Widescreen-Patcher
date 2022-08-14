@@ -2,12 +2,12 @@ name: .NET
 
 env:
   PACK_ID: Sims1WidescreenPatcher
-  PACK_VER: 3.0.0-beta.3
+  PACK_VER: 3.0.0
 
 on: 
   push:
     branches:
-      - develop
+      - master
 
 jobs:
   linux:
