@@ -39,9 +39,6 @@
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
         <None Remove=".gitignore" />
-        <None Update="displayplacer">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
         <None Include="..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico">
           <Link>SimsICO.ico</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
 using Serilog;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services;
@@ -10,41 +9,56 @@ namespace Sims1WidescreenPatcher.Services;
 
 public class MacOsResolutionService : IResolutionsService
 {
-    private const string FileName = "./displayplacer";
-    private const string Cmd = "list";
-    private readonly Regex _resolutionRx = new(@"\d{3,}x\d{3,}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    [DllImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
+    private static extern CgDirectDisplayId CGMainDisplayID();
+
+    // Used this file as a reference for private CoreGraphics APIs https://github.com/robbertkl/ResolutionMenu/blob/master/Resolution%20Menu/DisplayModeMenuItem.m
+    [DllImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
+    private static extern void CGSGetNumberOfDisplayModes(CgDirectDisplayId display, ref int nModes);
+    
+    [DllImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
+    private static extern void CGSGetDisplayModeDescriptionOfLength(CgDirectDisplayId display, int idx, ref CgsDisplayMode mode, int length);
 
     public IEnumerable<Resolution> GetResolutions()
     {
-        Log.Information("Enumerating resolutions");
-        var psi = new ProcessStartInfo
-        {
-            FileName = FileName,
-            Arguments = Cmd,
-            RedirectStandardOutput = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
-        };
-        using var process = Process.Start(psi);
-        var output = "";
-        if (process != null)
-        {
-            process.WaitForExit();
-            output = process.StandardOutput.ReadToEnd();
-        }
         var resolutions = new List<Resolution>();
-        if (string.IsNullOrWhiteSpace(output)) return resolutions;
-        var matches = _resolutionRx.Matches(output);
-        foreach (Match m in matches)
+        var nModes = 0;
+        var id = CGMainDisplayID();
+        CGSGetNumberOfDisplayModes(id, ref nModes);
+        for (var i = 0; i < nModes; i++)
         {
-            var split = m.Value.Split("x");
-            var newRes = new Resolution(int.Parse(split[0]), int.Parse(split[1]));
-            if (!resolutions.Contains(newRes, Resolution.WidthHeightComparer))
+            CgsDisplayMode mode = default;
+            CGSGetDisplayModeDescriptionOfLength(id, i, ref mode, Marshal.SizeOf(mode));
+            var resolution = new Resolution((int)mode.width, (int)mode.height);
+            if (!resolutions.Contains(resolution, Resolution.WidthHeightComparer))
             {
-                resolutions.Add(newRes);
+                resolutions.Add(resolution);
             }
         }
         Log.Debug("Resolutions {@Resolutions}", resolutions);
-        return resolutions.OrderBy(x => x.Height * x.Width);
+        Log.Information("End enumerate resolutions");
+        return resolutions;
+    }
+    
+    [StructLayout(LayoutKind.Sequential)]
+    private struct CgsDisplayMode
+    {
+        private readonly uint modeNumber;
+        private readonly uint flags;
+        public readonly uint width;
+        public readonly uint height;
+        private readonly uint depth;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 170)]
+        private readonly byte[] unknown;
+        private readonly ushort freq;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+        private readonly byte[] more_unknown;
+        private readonly float density;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct CgDirectDisplayId
+    {
+        private readonly uint id;
     }
 }
