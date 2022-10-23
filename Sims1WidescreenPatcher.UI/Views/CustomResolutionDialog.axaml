@@ -6,6 +6,7 @@
         mc:Ignorable="d"
         Width="450"
         Height="80"
+        WindowStartupLocation="CenterOwner"
         d:DesignWidth="450"
         d:DesignHeight="80"
         x:Class="Sims1WidescreenPatcher.UI.Views.CustomResolutionDialog"

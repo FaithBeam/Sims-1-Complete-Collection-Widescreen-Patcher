@@ -8,9 +8,9 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <RootNamespace>Sims1WidescreenPatcher</RootNamespace>
         <AssemblyName>Sims1WidescreenPatcher</AssemblyName>
-        <AssemblyVersion>3.2.1</AssemblyVersion>
-        <FileVersion>3.2.1</FileVersion>
-        <InformationalVersion>3.2.1</InformationalVersion>
+        <AssemblyVersion>3.2.2</AssemblyVersion>
+        <FileVersion>3.2.2</FileVersion>
+        <InformationalVersion>3.2.2</InformationalVersion>
         <Company>Sims1WidescreenPatcher</Company>
         <Product>Sims1WidescreenPatcher</Product>
         <ApplicationManifest>app.manifest</ApplicationManifest>
