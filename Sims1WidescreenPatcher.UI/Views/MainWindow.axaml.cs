@@ -24,12 +24,37 @@ public class MainWindow : ReactiveWindow<MainWindowViewModel>
         {
             if (ViewModel != null) d(ViewModel.ShowOpenFileDialog.RegisterHandler(ShowOpenFileDialog));
             d(ViewModel!.ShowCustomResolutionDialog.RegisterHandler(ShowCustomResolutionDialogAsync));
+            d(ViewModel!.ShowCustomYesNoDialog.RegisterHandler(ShowCustomYesNoDialogAsync));
+            d(ViewModel!.ShowCustomInformationDialog.RegisterHandler(ShowCustomInformationDialogAsync));
         });
     }
 
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
+    }
+
+    private async Task ShowCustomInformationDialogAsync(
+        InteractionContext<CustomInformationDialogViewModel, Unit> interaction)
+    {
+        var dialog = new CustomInformationDialog
+        {
+            DataContext = interaction.Input
+        };
+
+        var result = await dialog.ShowDialog<Unit>(this);
+        interaction.SetOutput(result);
+    }
+
+    private async Task ShowCustomYesNoDialogAsync(InteractionContext<CustomYesNoDialogViewModel, YesNoDialogResponse?> interaction)
+    {
+        var dialog = new CustomYesNoDialog
+        {
+            DataContext = interaction.Input
+        };
+
+        var result = await dialog.ShowDialog<YesNoDialogResponse?>(this);
+        interaction.SetOutput(result);
     }
 
     private async Task ShowCustomResolutionDialogAsync(
@@ -53,7 +78,7 @@ public class MainWindow : ReactiveWindow<MainWindowViewModel>
                 new()
                 {
                     Extensions = new List<string> {"exe"},
-                    Name = "Sims"
+                    Name = "Sims executable (Sims.exe)"
                 }
             },
             AllowMultiple = false,

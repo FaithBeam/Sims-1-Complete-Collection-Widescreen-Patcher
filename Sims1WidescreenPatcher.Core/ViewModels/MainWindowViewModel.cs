@@ -2,8 +2,8 @@
 using System.Reactive.Linq;
 using System.Windows.Input;
 using Avalonia.Collections;
-using MessageBox.Avalonia.Enums;
 using ReactiveUI;
+using Sims1WidescreenPatcher.Core.Enums;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Utilities;
@@ -31,38 +31,41 @@ public class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel()
     {
         this.WhenAnyValue(x => x.Path).Subscribe(x => System.Diagnostics.Debug.WriteLine(x));
-        _hasBackup = this.
-            WhenAnyValue(x => x.Path, x => x.IsBusy, (path, isBusy) => PatchUtility.SimsBackupExists(path))
+        _hasBackup = this
+            .WhenAnyValue(x => x.Path, x => x.IsBusy, (path, isBusy) => PatchUtility.SimsBackupExists(path))
             .ToProperty(this, x => x.HasBackup, deferSubscription: true);
         _isValidSimsExe = this
             .WhenAnyValue(x => x.Path, PatchUtility.IsValidSims)
             .ToProperty(this, x => x.IsValidSimsExe, deferSubscription: true);
         var canPatch = this
             .WhenAnyValue(x => x.IsBusy, x => x.Path, x => x.IsValidSimsExe, x => x.HasBackup,
-            (isBusy, path, validSimsExe, hasBackup) =>
-                !string.IsNullOrWhiteSpace(path) &&
-                !hasBackup &&
-                validSimsExe &&
-                !_previouslyPatched.Contains(path) &&
-                !isBusy
-        ).DistinctUntilChanged();
+                (isBusy, path, validSimsExe, hasBackup) =>
+                    !string.IsNullOrWhiteSpace(path) &&
+                    !hasBackup &&
+                    validSimsExe &&
+                    !_previouslyPatched.Contains(path) &&
+                    !isBusy
+            ).DistinctUntilChanged();
         var canUninstall = this
             .WhenAnyValue(x => x.IsBusy, x => x.Path, x => x.HasBackup,
-            (isBusy, path, hasBackup) =>
-                !string.IsNullOrWhiteSpace(path) &&
-                !isBusy &&
-                hasBackup
-        ).DistinctUntilChanged();
+                (isBusy, path, hasBackup) =>
+                    !string.IsNullOrWhiteSpace(path) &&
+                    !isBusy &&
+                    hasBackup
+            ).DistinctUntilChanged();
         PatchCommand = ReactiveCommand.CreateFromTask(OnClickedPatch, canPatch);
         UninstallCommand = ReactiveCommand.CreateFromTask(OnClickedUninstall, canUninstall);
         OpenFile = ReactiveCommand.CreateFromTask(OpenFileAsync);
         ShowOpenFileDialog = new Interaction<Unit, string>();
         var resolutionsService = Locator.Current.GetService<IResolutionsService>();
-        Resolutions = new AvaloniaList<Resolution>(resolutionsService?.GetResolutions() ?? Array.Empty<Resolution>()) { new(-1, -1) };
+        Resolutions = new AvaloniaList<Resolution>(resolutionsService?.GetResolutions() ?? Array.Empty<Resolution>())
+            { new(-1, -1) };
         SelectedResolution = Resolutions.FirstOrDefault() ?? new Resolution(1920, 1080);
         SelectedWrapper = Wrappers.FirstOrDefault();
         ShowCustomResolutionDialog = new Interaction<CustomResolutionDialogViewModel, Resolution?>();
         CustomResolutionCommand = ReactiveCommand.CreateFromTask(OpenCustomResolutionDialogAsync);
+        ShowCustomYesNoDialog = new Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?>();
+        ShowCustomInformationDialog = new Interaction<CustomInformationDialogViewModel, Unit>();
     }
 
     #endregion
@@ -75,6 +78,8 @@ public class MainWindowViewModel : ViewModelBase
     public Interaction<Unit, string> ShowOpenFileDialog { get; }
     public ICommand CustomResolutionCommand { get; }
     public Interaction<CustomResolutionDialogViewModel, Resolution?> ShowCustomResolutionDialog { get; }
+    public Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?> ShowCustomYesNoDialog { get; }
+    public Interaction<CustomInformationDialogViewModel, Unit> ShowCustomInformationDialog { get; }
 
     #endregion
 
@@ -143,6 +148,19 @@ public class MainWindowViewModel : ViewModelBase
 
     #region Methods
 
+    private async Task OpenCustomInformationDialogAsync(string title, string message)
+    {
+        var vm = new CustomInformationDialogViewModel(title, message);
+        await ShowCustomInformationDialog.Handle(vm);
+    }
+    
+    private async Task<YesNoDialogResponse?> OpenCustomYesNoDialogAsync(string title, string message)
+    {
+        var vm = new CustomYesNoDialogViewModel(title, message);
+        var result = await ShowCustomYesNoDialog.Handle(vm);
+        return result;
+    }
+    
     private async Task OpenCustomResolutionDialogAsync()
     {
         var vm = new CustomResolutionDialogViewModel();
@@ -167,14 +185,27 @@ public class MainWindowViewModel : ViewModelBase
     {
         IsBusy = true;
         var progress = new Progress<double>(percent => { Progress = percent; });
+
+        if (SelectedWrapper is WrapperUtility.Wrapper.DDrawCompat)
+        {
+            var result = await OpenCustomYesNoDialogAsync("DDrawCompat Settings", "Enable borderless fullscreen?");
+            if (result is not null && result.Result)
+            {
+                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
+                    DDrawCompatEnums.BorderlessFullscreen);
+            }
+        }
+
         await Task.Run(() => PatchUtility.Patch(Path, SelectedResolution!.Width, SelectedResolution.Height));
-        await Task.Run(() => Images.Images.ModifySimsUi(Path, SelectedResolution!.Width, SelectedResolution.Height, progress));
+        await Task.Run(() =>
+            Images.Images.ModifySimsUi(Path, SelectedResolution!.Width, SelectedResolution.Height, progress));
 
         if (SelectedWrapper != WrapperUtility.Wrapper.None)
         {
             await Task.Run(() => WrapperUtility.RemoveWrapper(Path));
             await Task.Run(() => WrapperUtility.ExtractWrapper(SelectedWrapper, Path));
         }
+
         _previouslyPatched.Add(Path);
         IsBusy = false;
     }
@@ -182,20 +213,31 @@ public class MainWindowViewModel : ViewModelBase
     private async Task OnClickedUninstall()
     {
         IsBusy = true;
+        var ddrawSettingsPath = CheckDDrawCompatIniService.DDrawCompatSettingsExist(Path);
+        if (!string.IsNullOrWhiteSpace(ddrawSettingsPath))
+        {
+            var result = await OpenCustomYesNoDialogAsync("Uninstall", $"DDrawCompat settings found at\n{ddrawSettingsPath}\n\nDo you wish to remove it?");
+            if (result is not null && result.Result)
+            {
+                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
+                    DDrawCompatEnums.BorderlessFullscreen);
+            }
+            if (result is not null && result.Result)
+            {
+                RemoveDDrawCompatSettingsService.Remove(ddrawSettingsPath);
+            }
+        }
+
         await Task.Run(() => UninstallUtility.Uninstall(Path));
         _previouslyPatched.Remove(Path);
         IsBusy = false;
-        var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-            .GetMessageBoxStandardWindow("Progress", "Uninstalled!", icon: Icon.Info);
-        await messageBoxStandardWindow.Show();
+        await OpenCustomInformationDialogAsync("Progress", "Uninstalled");
     }
 
-    private static void OpenFinishedPatchPopup()
+    private async Task OpenFinishedPatchPopup()
     {
-        var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-            .GetMessageBoxStandardWindow("Progress", "Patched! You may close this application now.", icon: Icon.Info);
-        messageBoxStandardWindow.Show();
+        await OpenCustomInformationDialogAsync("Progress", "Patched! You may close this application now.");
     }
-    
+
     #endregion
 }

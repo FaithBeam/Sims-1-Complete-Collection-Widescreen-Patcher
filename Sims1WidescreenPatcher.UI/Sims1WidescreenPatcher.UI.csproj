@@ -9,12 +9,17 @@
 
     <ItemGroup>
       <AvaloniaResource Include="Assets\SimsICO.ico" />
+      <None Remove="Assets\icons8-question-mark-96.png" />
+      <AvaloniaResource Include="Assets\icons8-question-mark-96.png" />
+      <None Remove="Assets\icons8-exclamation-mark-96.png" />
+      <AvaloniaResource Include="Assets\icons8-exclamation-mark-96.png" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Avalonia" Version="0.10.17" />
-      <PackageReference Include="Avalonia.Diagnostics" Version="0.10.17" />
-      <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.17" />
+      <PackageReference Include="Avalonia" Version="11.0.0-preview2" />
+      <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview2" />
+      <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview2" />
+      <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview2" />
     </ItemGroup>
 
     <ItemGroup>

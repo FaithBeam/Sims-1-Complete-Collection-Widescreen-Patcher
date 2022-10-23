@@ -1,0 +1,29 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner"
+        Icon="/Assets/SimsICO.ico"
+        MinWidth="300"
+        MinHeight="100"
+        CanResize="False"
+        x:Class="Sims1WidescreenPatcher.UI.Views.CustomYesNoDialog"
+        Title="{Binding Title}">
+    <Design.DataContext>
+        <vm:CustomYesNoDialogViewModel />
+    </Design.DataContext>
+    
+    <Grid RowDefinitions="*,*" Margin="5">
+        <Grid ColumnDefinitions="Auto,Auto">
+            <Image Source="../Assets/icons8-question-mark-96.png" Width="48" Height="48" />
+            <Label Grid.Column="1" VerticalAlignment="Center" Content="{Binding Message}" />
+        </Grid>
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,Auto" HorizontalAlignment="Right">
+            <Button HorizontalContentAlignment="Center" IsDefault="True" Content="Yes" Width="80" Margin="0 0 5 0" Command="{Binding YesCommand}" />
+            <Button Grid.Column="1" HorizontalContentAlignment="Center" Content="No" Width="80" Command="{Binding NoCommand}" />
+        </Grid>
+    </Grid>
+</Window>

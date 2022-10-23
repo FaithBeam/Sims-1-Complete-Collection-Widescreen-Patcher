@@ -49,10 +49,7 @@
                               SelectedItem="{Binding SelectedResolution}"
                               HorizontalAlignment="Stretch">
                         <ToolTip.Tip>
-                            <TextBlock TextWrapping="Wrap">
-Resolutions supported by your monitor.
-800x600 and 1024x768 are the two default resolutions for The Sims.
-1600xX resolutions have game breaking graphical issues.
+                            <TextBlock Text="Resolutions supported by your monitor.&#x0a;&#x0a;800x600 and 1024x768 are the two default resolutions for The Sims.&#x0a;&#x0a;1600xX resolutions have game breaking graphical issues.">
                             </TextBlock>
                         </ToolTip.Tip>
                     </ComboBox>
@@ -65,11 +62,7 @@ Resolutions supported by your monitor.
                               SelectedItem="{Binding SelectedWrapper}"
                               HorizontalAlignment="Stretch">
                         <ToolTip.Tip>
-                            <TextBlock TextWrapping="Wrap">
-None: Low framerate. Use if DgVoodoo2 and DDrawCompat don't work.
-DgVoodoo2: Low/Medium framerate. Use if DDrawCompat doesn't work.
-DDrawCompat: High framerate. Occasional visual glitches.
-                            </TextBlock>
+                            <TextBlock Text="None: Low framerate. Use if DgVoodoo2 and DDrawCompat don't work.&#x0a;&#x0a;DgVoodoo2: Low/Medium framerate. Use if DDrawCompat doesn't work. (Windows and Linux only)&#x0a;&#x0a;DDrawCompat: High framerate. Use this for borderless fullscreen. Press Shift+F11 for in-game menu. View the wiki for more settings. (Windows only)"></TextBlock>
                         </ToolTip.Tip>
                     </ComboBox>
                 </StackPanel>
