@@ -11,9 +11,9 @@
         <Authors>FaithBeam</Authors>
         <Company>Sims1WidescreenPatcher</Company>
         <Product>Sims1WidescreenPatcher</Product>
-        <AssemblyVersion>3.2.0</AssemblyVersion>
-        <FileVersion>3.2.0</FileVersion>
-        <InformationalVersion>3.2.0</InformationalVersion>
+        <AssemblyVersion>3.2.1</AssemblyVersion>
+        <FileVersion>3.2.1</FileVersion>
+        <InformationalVersion>3.2.1</InformationalVersion>
         <ApplicationIcon>..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico</ApplicationIcon>
         <SelfContained>true</SelfContained>
         <PublishSingleFile>true</PublishSingleFile>
@@ -38,11 +38,11 @@
         <TrimmableAssembly Include="Avalonia.Themes.Default" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.17" />
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.17" />
+        <PackageReference Include="Avalonia" Version="11.0.0-preview2" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview2" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.17" />
-        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.17" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview2" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview2" />
         <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
