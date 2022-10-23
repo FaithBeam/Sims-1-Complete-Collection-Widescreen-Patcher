@@ -69,6 +69,8 @@ If you want to go back to your original Sims executable, select the uninstall bu
 
 [General Sims recommendations to fix common issues](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/General-Sims-Recommendations)
 
+[Configure DDrawCompat Wrapper](https://github.com/narzoul/DDrawCompat/wiki/Configuration)
+
 [Windowed/Borderless Fullscreen/FSR Upscaling](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Windowed,-Borderless-Fullscreen,-FSR-Upscaling)
 
 [Screenshots](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Screenshots)
