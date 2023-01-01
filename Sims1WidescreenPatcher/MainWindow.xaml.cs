@@ -1,17 +1,17 @@
-﻿using ImageMagick;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows;
 using log4net;
-using System.Security.Cryptography;
-using System.Configuration;
+using Microsoft.Win32;
 using PatternFinder;
-using Ionic.Zip;
 using Sims.Far;
 
-namespace SimsWidescreenPatcher
+namespace Sims1WidescreenPatcher
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -42,7 +42,7 @@ namespace SimsWidescreenPatcher
             @"UIGraphics\Magicland\dlgframe_1024x768.bmp",
             @"UIGraphics\Studiotown\dlgframe_1024x768.bmp",
         };
-        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(typeof(MainWindow));
         private readonly string exeName = ConfigurationManager.AppSettings["Executable"];
 
         public MainWindow()
@@ -54,14 +54,15 @@ namespace SimsWidescreenPatcher
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
         {
             log.Info("Clicked browse button.");
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = $"{this.exeName}|{this.exeName}.exe|All files (*.*)|*.*";
-            if (openFileDialog.ShowDialog() == true)
+            var openFileDialog = new OpenFileDialog
             {
-                FileDialog.Text = openFileDialog.FileName;
-                log.Info($"Selected {FileDialog.Text}");
-                CheckForBackup(FileDialog.Text);
-            }
+                Filter = $"{exeName}|{exeName}.exe|All files (*.*)|*.*",
+                RestoreDirectory = true // Necessary to fix bug on Windows XP where openfiledialog will change the program's current working directory
+            };
+            if (openFileDialog.ShowDialog() != true) return;
+            FileDialog.Text = openFileDialog.FileName;
+            log.Info($"Selected {FileDialog.Text}");
+            CheckForBackup(FileDialog.Text);
         }
 
         private void PatchButton_Click(object sender, RoutedEventArgs e)
@@ -73,8 +74,6 @@ namespace SimsWidescreenPatcher
                 {
                     log.Info("Before patch md5 is: " + GetMd5(FileDialog.Text));
                     log.Info("Resolution chosen is: " + WidthTextBox.Text + "x" + HeightTextBox.Text);
-                    if (DgVoodoo2Checkbox.IsChecked == true)
-                        ExtractVoodooZips(FileDialog.Text);
                     if (EditFile(FileDialog.Text))
                     {
                         log.Info("After patch md5 is: " + GetMd5(FileDialog.Text));
@@ -89,9 +88,9 @@ namespace SimsWidescreenPatcher
                             log.Info("Resize UI elements checkbox is not checked, not resizing or copying graphics.");
                         }
                         UninstallButton.IsEnabled = true;
-                        string width = $"{int.Parse(WidthTextBox.Text):X4}";
+                        var width = $"{int.Parse(WidthTextBox.Text):X4}";
                         width = width.Substring(2) + width.Substring(0, 2);
-                        string height = $"{int.Parse(HeightTextBox.Text):X4}";
+                        var height = $"{int.Parse(HeightTextBox.Text):X4}";
                         height = height.Substring(2) + height.Substring(0, 2);
                         ConfigurationManager.AppSettings["WidthPattern"] = width;
                         ConfigurationManager.AppSettings["HeightPattern"] = height;
@@ -113,7 +112,7 @@ namespace SimsWidescreenPatcher
             else
             {
                 log.Info("No file was selected.");
-                MessageBox.Show($"Please select your {this.exeName}.exe.");
+                MessageBox.Show($"Please select your {exeName}.exe.");
             }
         }
 
@@ -131,15 +130,15 @@ namespace SimsWidescreenPatcher
 
         private void CheckForBackup(string path)
         {
-            string directory = Path.GetDirectoryName(path);
-            UninstallButton.IsEnabled = File.Exists($@"{directory}\{this.exeName} Backup.exe");
+            var directory = Path.GetDirectoryName(path);
+            UninstallButton.IsEnabled = File.Exists($@"{directory}\{exeName} Backup.exe");
         }
 
         private void BackupFile(string path)
         {
             log.Info("Creating backup.");
-            string filename = Path.GetFileNameWithoutExtension(path);
-            string directory = Path.GetDirectoryName(path);
+            var filename = Path.GetFileNameWithoutExtension(path);
+            var directory = Path.GetDirectoryName(path);
             if (!File.Exists($@"{directory}\{filename} Backup.exe"))
             {
                 File.Copy(path, $@"{directory}\{filename} Backup.exe");
@@ -152,42 +151,18 @@ namespace SimsWidescreenPatcher
             }
         }
 
-        private void ExtractVoodooZips(string path)
-        {
-            string directory = Path.GetDirectoryName(path);
-            TryRemoveDgVoodoo(directory);
-            foreach (var zip in new string[] { @"Content\D3DCompiler_47.zip", @"Content\dgVoodoo2_64.zip" })
-            {
-                log.Info($"Extracting {zip}");
-                ZipFile.Read(zip).ExtractAll($@"{directory}\");
-            }
-
-            log.Info("Deleting unneeded directories.");
-            foreach (var file in Directory.GetFiles($@"{directory}\MS\x86"))
-                File.Move(file, $@"{directory}\{Path.GetFileName(file)}");
-            DeleteDirectory($@"{directory}\3Dfx");
-            DeleteDirectory($@"{directory}\Doc");
-            DeleteDirectory($@"{directory}\MS");
-
-            log.Info("Editing dgvoodoo.conf.");
-            string text = File.ReadAllText($@"{directory}\dgVoodoo.conf");
-            text = text.Replace("dgVoodooWatermark                   = true", "dgVoodooWatermark                   = false");
-            text = text.Replace("FastVideoMemoryAccess               = false", "FastVideoMemoryAccess               = true");
-            File.WriteAllText($@"{directory}\dgVoodoo.conf", text);
-        }
-
         private bool EditFile(string path)
         {
             log.Info($"Hex editing {path}");
-            string widthPattern = ConfigurationManager.AppSettings["WidthPattern"];
-            string betweenPattern = ConfigurationManager.AppSettings["BetweenPattern"];
-            string heightPattern = ConfigurationManager.AppSettings["HeightPattern"];
-            byte[] width = BitConverter.GetBytes(int.Parse(WidthTextBox.Text));
-            byte[] height = BitConverter.GetBytes(int.Parse(HeightTextBox.Text));
-            Pattern.Byte[] pattern = Pattern.Transform(widthPattern + " " + betweenPattern + " " + heightPattern);
-            byte[] bytes = File.ReadAllBytes(path);
+            var widthPattern = ConfigurationManager.AppSettings["WidthPattern"];
+            var betweenPattern = ConfigurationManager.AppSettings["BetweenPattern"];
+            var heightPattern = ConfigurationManager.AppSettings["HeightPattern"];
+            var width = BitConverter.GetBytes(int.Parse(WidthTextBox.Text));
+            var height = BitConverter.GetBytes(int.Parse(HeightTextBox.Text));
+            var pattern = Pattern.Transform(widthPattern + " " + betweenPattern + " " + heightPattern);
+            var bytes = File.ReadAllBytes(path);
 
-            if (Pattern.Find(bytes, pattern, out long foundOffset))
+            if (Pattern.Find(bytes, pattern, out var foundOffset))
             {
                 BackupFile(FileDialog.Text);
                 log.Info(widthPattern + " " + betweenPattern + " " + heightPattern + " found at " + foundOffset);
@@ -207,9 +182,9 @@ namespace SimsWidescreenPatcher
 
         private void CopyGraphics(string path)
         {
-            string directory = Path.GetDirectoryName(path);
-            int width = int.Parse(WidthTextBox.Text);
-            int height = int.Parse(HeightTextBox.Text);
+            var directory = Path.GetDirectoryName(path);
+            var width = int.Parse(WidthTextBox.Text);
+            var height = int.Parse(HeightTextBox.Text);
 
             CreateDirectory($@"{directory}\UIGraphics\Community");
             CreateDirectory($@"{directory}\UIGraphics\CPanel\Backgrounds");
@@ -220,7 +195,7 @@ namespace SimsWidescreenPatcher
             CreateDirectory($@"{directory}\UIGraphics\Visland");
             CreateDirectory($@"{directory}\UIGraphics\Downtown");
 
-            ScaleImage(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
+            ScalePanelBack(@"Content\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", $@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp", width, 100);
             foreach (var i in images)
             {
                 if (!File.Exists($@"Content\UIGraphics\{i}"))
@@ -228,12 +203,12 @@ namespace SimsWidescreenPatcher
                     log.Info($@"Couldn't find Content\UIGraphics\{i}");
                     continue;
                 }
-                CompositeImage(@"Content\blackbackground.png", $@"Content\UIGraphics\{i}", $@"{directory}\UIGraphics\{i}", width, height);
+                CompositeImage("#000000", $@"Content\UIGraphics\{i}", $@"{directory}\UIGraphics\{i}", width, height);
             }
             if (File.Exists(@"Content\UIGraphics\Downtown\largeback.bmp"))
             {
                 foreach (var i in largeBackLocations)
-                    CompositeImage(@"Content\bluebackground.png", @"Content\UIGraphics\Downtown\largeback.bmp", $@"{directory}\{i}", width, height);
+                    CompositeImage(@"#000052", @"Content\UIGraphics\Downtown\largeback.bmp", $@"{directory}\{i}", width, height);
             }
             else
             {
@@ -242,7 +217,7 @@ namespace SimsWidescreenPatcher
             if (File.Exists(@"Content\UIGraphics\StudioTown\dlgframe_1024x768.bmp"))
             {
                 foreach (var i in dlgFrameLocations)
-                    CompositeImage(@"Content\bluebackground.png", @"Content\UIGraphics\StudioTown\dlgframe_1024x768.bmp", $@"{directory}\{i}", width, height);
+                    CompositeImage(@"#000052", @"Content\UIGraphics\StudioTown\dlgframe_1024x768.bmp", $@"{directory}\{i}", width, height);
             }
             else
             {
@@ -284,51 +259,48 @@ namespace SimsWidescreenPatcher
             }
         }
 
-        private void CompositeImage(string background, string overlay, string output, int width, int height)
+        private void CompositeImage(string hexColorCode, string input, string output, int width, int height)
         {
-            using (var compositeImage = new MagickImage(overlay))
+            var sb = new StringBuilder($"convert.exe -size {width}x{height} canvas:\"{hexColorCode}\" \"{input}\" " +
+                                       $"-gravity center -composite -depth 8 -type palette \"BMP3:{output}\"");
+            log.Info(sb.ToString());
+            var psi = new ProcessStartInfo("cmd", "/c" + sb)
             {
-                using (var baseImage = new MagickImage(background))
-                {
-                    log.Info($@"Compositing {overlay} over {background} to {output}");
-                    var size = new MagickGeometry(width, height);
-                    size.IgnoreAspectRatio = true;
-                    baseImage.Resize(size);
-                    baseImage.Composite(compositeImage, Gravity.Center);
-                    baseImage.Depth = 8;
-                    baseImage.Settings.Compression = ImageMagick.CompressionMethod.RLE;
-                    baseImage.Settings.Format = MagickFormat.Bmp3;
-                    baseImage.ColorType = ColorType.Palette;
-                    baseImage.Alpha(AlphaOption.Off);
-                    baseImage.Write(output);
-                }
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+            using (var process = new Process())
+            {
+                process.StartInfo = psi;
+                process.Start();
+                process.WaitForExit();
             }
         }
 
-        private void ScaleImage(string input, string output, int width, int height)
+        private void ScalePanelBack(string input, string output, int width, int height)
         {
-            using (var img = new MagickImage(input))
+            var left = new ImageSize { Width = 286, Height = 100, X = 0, Y = 0 };
+            var middle = new ImageSize { Width = 500, Height = 100, X = 286, Y = 0 };
+            var right = new ImageSize { Width = 18, Height = 100, X = left.Width + middle.Width, Y = 0 };
+            var sb = new StringBuilder();
+            sb.Append($"convert.exe \"{input}\" +repage -write mpr:img +delete " +
+                           $"( mpr:img -crop {left} ) +append " +
+                           $"( mpr:img -crop {middle} -resize {width - left.Width - right.Width}x100! -geometry +{middle.X} ) +append " +
+                           $"( mpr:img -crop {right} -geometry +{width - right.Width} ) +append " +
+                           $"-depth 8 -type palette \"BMP3:{output}\"");
+            log.Info(sb.ToString());
+            var psi = new ProcessStartInfo("cmd", "/c" + sb)
             {
-                var left = img.Clone(0, 0, 286, 100);
-                var middle = img.Clone(left.Width, 0, 500, 100);
-                var right = img.Clone(left.Width + middle.Width, 0, 18, 100);
-                middle.Resize(new MagickGeometry(width - left.Width - right.Width, height) { IgnoreAspectRatio = true });
-                left.Page = new MagickGeometry("+0+0");
-                middle.Page = new MagickGeometry($"+{left.Width}+0");
-                right.Page = new MagickGeometry($"+{left.Width + middle.Width}+0");
-                using (var images = new MagickImageCollection())
-                {
-                    images.Add(left);
-                    images.Add(middle);
-                    images.Add(right);
-                    var merged = images.Merge();
-                    merged.Depth = 8;
-                    merged.Settings.Compression = ImageMagick.CompressionMethod.RLE;
-                    merged.Settings.Format = MagickFormat.Bmp3;
-                    merged.ColorType = ColorType.Palette;
-                    merged.Alpha(AlphaOption.Off);
-                    merged.Write(output);
-                }
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+            using (var process = new Process())
+            {
+                process.StartInfo = psi;
+                process.Start();
+                process.WaitForExit();
             }
         }
 
@@ -336,10 +308,10 @@ namespace SimsWidescreenPatcher
         {
             log.Info("Uninstall button pressed.");
             ConfigurationManager.RefreshSection("appSettings");
-            string directory = Path.GetDirectoryName(FileDialog.Text);
+            var directory = Path.GetDirectoryName(FileDialog.Text);
             File.SetAttributes(FileDialog.Text, FileAttributes.Normal);
             File.Delete(FileDialog.Text);
-            File.Move($@"{directory}\{this.exeName} Backup.exe", $@"{directory}\{this.exeName}.exe");
+            File.Move($@"{directory}\{exeName} Backup.exe", $@"{directory}\{exeName}.exe");
             TryRemoveDgVoodoo(directory);
             UninstallButton.IsEnabled = false;
             MessageBox.Show("Uninstalled.");
@@ -374,14 +346,6 @@ namespace SimsWidescreenPatcher
         private void TryRemoveDgVoodoo(string directory)
         {
             log.Info("Deleting previous installation.");
-            DeleteFile($@"{directory}\d3dcompiler_47.dll");
-            DeleteFile($@"{directory}\D3D8.dll");
-            DeleteFile($@"{directory}\D3D9.dll");
-            DeleteFile($@"{directory}\D3DImm.dll");
-            DeleteFile($@"{directory}\DDraw.dll");
-            DeleteFile($@"{directory}\dgVoodoo.conf");
-            DeleteFile($@"{directory}\dgVoodooCpl.exe");
-            DeleteFile($@"{directory}\QuickGuide.html");
             DeleteFile($@"{directory}\UIGraphics\cpanel\Backgrounds\PanelBack.bmp");
             foreach (var i in images)
                 DeleteFile($@"{directory}\UIGraphics\{i}");
@@ -389,16 +353,19 @@ namespace SimsWidescreenPatcher
                 DeleteFile($@"{directory}\{i}");
             foreach (var i in dlgFrameLocations)
                 DeleteFile($@"{directory}\{i}");
-            DeleteDirectory($@"{directory}\3Dfx");
-            DeleteDirectory($@"{directory}\Doc");
-            DeleteDirectory($@"{directory}\MS");
         }
 
-        private void HeightTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private struct ImageSize
         {
-            if (int.TryParse(HeightTextBox.Text, out int height))
-                if (height > 1080)
-                    DgVoodoo2Checkbox.IsChecked = true;
+            public int Width;
+            public int Height;
+            public int X;
+            public int Y;
+
+            public override string ToString()
+            {
+                return $"{Width}x{Height}+{X}+{Y}";
+            }
         }
     }
 }

@@ -35,7 +35,7 @@ namespace SimsWidescreenPatcher
 
         private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            string errorMessage = string.Format("An unhandled exception occurred: {0}", e.Exception.Message);
+            var errorMessage = string.Format("An unhandled exception occurred: {0}", e.Exception.Message);
             log.Error(errorMessage);
             log.Error(e.Exception.StackTrace);
             log.Error(e.Exception.InnerException);
