@@ -186,15 +186,15 @@ public class MainWindowViewModel : ViewModelBase
         IsBusy = true;
         var progress = new Progress<double>(percent => { Progress = percent; });
 
-        if (SelectedWrapper is WrapperUtility.Wrapper.DDrawCompat)
-        {
-            var result = await OpenCustomYesNoDialogAsync("DDrawCompat Settings", "Enable borderless fullscreen?");
-            if (result is not null && result.Result)
-            {
-                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
-                    DDrawCompatEnums.BorderlessFullscreen);
-            }
-        }
+        //if (SelectedWrapper is WrapperUtility.Wrapper.DDrawCompat)
+        //{
+        //    var result = await OpenCustomYesNoDialogAsync("DDrawCompat Settings", "Enable borderless fullscreen?");
+        //    if (result is not null && result.Result)
+        //    {
+        //        await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
+        //            DDrawCompatEnums.BorderlessFullscreen);
+        //    }
+        //}
 
         await Task.Run(() => PatchUtility.Patch(Path, SelectedResolution!.Width, SelectedResolution.Height));
         await Task.Run(() =>
@@ -213,20 +213,20 @@ public class MainWindowViewModel : ViewModelBase
     private async Task OnClickedUninstall()
     {
         IsBusy = true;
-        var ddrawSettingsPath = CheckDDrawCompatIniService.DDrawCompatSettingsExist(Path);
-        if (!string.IsNullOrWhiteSpace(ddrawSettingsPath))
-        {
-            var result = await OpenCustomYesNoDialogAsync("Uninstall", $"DDrawCompat settings found at\n{ddrawSettingsPath}\n\nDo you wish to remove it?");
-            if (result is not null && result.Result)
-            {
-                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
-                    DDrawCompatEnums.BorderlessFullscreen);
-            }
-            if (result is not null && result.Result)
-            {
-                RemoveDDrawCompatSettingsService.Remove(ddrawSettingsPath);
-            }
-        }
+        //var ddrawSettingsPath = CheckDDrawCompatIniService.DDrawCompatSettingsExist(Path);
+        //if (!string.IsNullOrWhiteSpace(ddrawSettingsPath))
+        //{
+        //    var result = await OpenCustomYesNoDialogAsync("Uninstall", $"DDrawCompat settings found at\n{ddrawSettingsPath}\n\nDo you wish to remove it?");
+        //    if (result is not null && result.Result)
+        //    {
+        //        await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
+        //            DDrawCompatEnums.BorderlessFullscreen);
+        //    }
+        //    if (result is not null && result.Result)
+        //    {
+        //        RemoveDDrawCompatSettingsService.Remove(ddrawSettingsPath);
+        //    }
+        //}
 
         await Task.Run(() => UninstallUtility.Uninstall(Path));
         _previouslyPatched.Remove(Path);
