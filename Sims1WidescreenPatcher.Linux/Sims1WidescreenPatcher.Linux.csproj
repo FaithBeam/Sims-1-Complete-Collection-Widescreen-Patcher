@@ -11,9 +11,9 @@
         <Authors>FaithBeam</Authors>
         <Company>Sims1WidescreenPatcher</Company>
         <Product>Sims1WidescreenPatcher</Product>
-        <AssemblyVersion>3.2.2</AssemblyVersion>
-        <FileVersion>3.2.2</FileVersion>
-        <InformationalVersion>3.2.2</InformationalVersion>
+        <AssemblyVersion>3.2.3</AssemblyVersion>
+        <FileVersion>3.2.3</FileVersion>
+        <InformationalVersion>3.2.3</InformationalVersion>
         <ApplicationIcon>..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico</ApplicationIcon>
         <SelfContained>true</SelfContained>
         <PublishSingleFile>true</PublishSingleFile>
