@@ -119,7 +119,7 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     public AvaloniaList<WrapperUtility.Wrapper> Wrappers { get; } =
-        new(WrapperUtility.Wrapper.None, WrapperUtility.Wrapper.DgVoodoo2, WrapperUtility.Wrapper.DDrawCompat);
+        new(WrapperUtility.Wrapper.DDrawCompat, WrapperUtility.Wrapper.DgVoodoo2, WrapperUtility.Wrapper.None);
 
     public WrapperUtility.Wrapper SelectedWrapper
     {
