@@ -59,7 +59,7 @@ You can select between two graphics wrappers, [DgVoodoo2](http://dege.freeweb.hu
 | **DDrawCompat** | ✅       | ❌     | ❌     |
 
 **Note:**
-If you use DDrawCompat and are using a monitor with G-Sync enabled, your game will crash if you are using exclusive fullscreen mode. Please be sure to enable __Borderless Fullscreen mode__ when prompted during the patch.
+If you use DDrawCompat and are using a monitor with G-Sync enabled, your game will crash in exclusive fullscreen mode. Please be sure to enable __Borderless Fullscreen mode__ when prompted during the patch to avoid this issue.
 
 ## Uninstall
 
