@@ -39,7 +39,7 @@ public class LinuxResolutionService: IResolutionsService
         {
             var split = m.Value.Split("x");
             var newRes = new Resolution(int.Parse(split[0]), int.Parse(split[1]));
-            if (!resolutions.Contains(newRes, Resolution.WidthHeightComparer))
+            if (!resolutions.Contains(newRes, Resolution.WidthHeightComparer) && newRes.Width >= 800 && newRes.Height >=600)
             {
                 resolutions.Add(newRes);
             }

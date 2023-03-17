@@ -59,10 +59,10 @@ public class WindowsResolutionsService : IResolutionsService
         var i = 0;
         while (EnumDisplaySettings(null, i, ref vDevMode))
         {
-            var resolution = new Resolution(vDevMode.dmPelsWidth, vDevMode.dmPelsHeight);
-            if (!resolutions.Contains(resolution, Resolution.WidthHeightComparer))
+            var newRes = new Resolution(vDevMode.dmPelsWidth, vDevMode.dmPelsHeight);
+            if (!resolutions.Contains(newRes, Resolution.WidthHeightComparer) && newRes.Width >= 800 && newRes.Height >= 600)
             {
-                resolutions.Add(resolution);
+                resolutions.Add(newRes);
             }
             i++;
         }
