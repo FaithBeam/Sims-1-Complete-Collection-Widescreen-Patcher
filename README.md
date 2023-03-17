@@ -37,7 +37,7 @@ This program patches `The Sims 1` to a custom resolution.
 2. Extract everything from the zip
 3. (Windows) Run Sims1WidescreenPatcher.exe as administrator
 4. Select your Sims.exe
-5. Enter your preferred resolution
+5. Enter your preferred resolution & wrapper
 6. Click Patch
 7. Run "The Sims...800x600" shortcut or create your own from Sims.exe
 
