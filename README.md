@@ -43,7 +43,7 @@ This program patches **The Sims 1** to a custom resolution.
 
 **MacOS Notes**
 
-* Disable the quarantine attribute on the bundle with this Terminal command: ```sudo xattr -r -d com.apple.quarantine Sims1WidescreenPatcher.app/```
+* Disable the quarantine attribute on the bundle with this Terminal command: ```sudo xattr -r -d com.apple.quarantine ~/Downloads/artifacts/Sims1WidescreenPatcher.app/```
 * If you can't select the Sims.exe because it is installed in an app bundle from Wineskin Winery, click [here](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/MacOS---How-to-Enter-an-App-Bundle-to-Select-Sims-Exe) for a workaround.
 
 ## Graphics Wrappers
