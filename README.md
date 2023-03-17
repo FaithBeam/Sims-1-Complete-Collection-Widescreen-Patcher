@@ -2,7 +2,7 @@
 
 This program patches **The Sims 1** to a custom resolution.
 
-![Untitled](https://i.imgur.com/BwRreNH.png)
+![The Sims 1 Widescreen Patcher](https://i.imgur.com/PdKHV0k.png)
 
 ## Requirements
 
@@ -36,9 +36,9 @@ This program patches **The Sims 1** to a custom resolution.
 1. Download the latest [release](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/releases)
 2. Extract everything from the zip
 3. (Windows) Run Sims1WidescreenPatcher.exe as administrator
-4. Select your Sims.exe
-5. Enter your preferred resolution & wrapper
-6. Click Patch
+4. Locate and select your Sims.exe
+5. Select your preferred resolution & wrapper
+6. Click "Patch" and answer any prompts that appear
 7. Run "The Sims...800x600" shortcut or create your own from Sims.exe
 
 **MacOS Notes**
@@ -58,12 +58,12 @@ You can select between two graphics wrappers, [DgVoodoo2](http://dege.freeweb.hu
 | **DGVoodoo2**   | ✅       | ✅     | ❌     |
 | **DDrawCompat** | ✅       | ❌     | ❌     |
 
-**Note**
-If you use DDrawCompat and are using a GSync monitor, your game will crash. Refer to this page for the fix: [DDrawCompat-GSync-Fix](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/DDrawCompat-GSync-Fix)
+**Note:**
+If you use DDrawCompat and are using a monitor with G-Sync enabled, your game will crash if you are using exclusive fullscreen mode. Please be sure to enable __Borderless Fullscreen mode__ when prompted during the patch.
 
 ## Uninstall
 
-If you want to go back to your original Sims executable, select the uninstall button.
+To unpatch and return to the original executale, locate your Sims.exe again and choose "Uninstall." Answer any prompts that appear.
 
 ## Wiki
 
