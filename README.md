@@ -1,12 +1,12 @@
 # The Sims 1 Widescreen Patcher
 
-This program patches `The Sims 1` to a custom resolution.
+This program patches **The Sims 1** to a custom resolution.
 
 ![Untitled](https://i.imgur.com/BwRreNH.png)
 
 ## Requirements
 
-* NoCD/Crack Sims Executable
+* NoCD/Cracked Sims Executable
   * This exe cannot be previously patched to a custom resolution. For example, if you downloaded a crack that was patched to 1080p, this program will not work.
 
 **Linux**
