@@ -23,5 +23,11 @@ public static class DDrawCompatSettingsService
                     break;
             }
         }
+        await sw.WriteLineAsync("CPUAffinity=all # the default (1) caused major issues, crashes, and lag after ddrawcompat 0.4.0");
+        await sw.WriteLineAsync("DisplayResolution=app # the default setting (desktop) has performance and AA issues in TS1");
+        await sw.WriteLineAsync("ResolutionScale=display(1) # increases 3d rendering (Sim) resolution to your native display resolution")
+        await sw.WriteLineAsync("SoftwareDevice=hal # redirect software rendering to the GPU, fixes anti-aliasing in cases where the driver cannot access CPU depth buffers"); 
+        await sw.WriteLineAsync("DisplayRefreshRate=desktop # removes erroneous lock to 60fps on higher refresh rate displays when vsync is enabled");
+        await sw.WriteLineAsync("AltTabFix=keepvidmem # fixes crashes/bugs when using Alt+Tab");
     }
 }
