@@ -2,5 +2,6 @@
 
 public enum DDrawCompatEnums
 {
-    BorderlessFullscreen
+    BorderlessFullscreen,
+    ExclusiveFullscreen
 }
