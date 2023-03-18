@@ -5,3 +5,4 @@ public enum DDrawCompatEnums
     BorderlessFullscreen,
     ExclusiveFullscreen
 }
+
