@@ -28,8 +28,8 @@
         <CFBundleName>Sims1WidescreenPatcher</CFBundleName> <!-- Also defines .app file name -->
         <CFBundleDisplayName>Sims1WidescreenPatcher</CFBundleDisplayName>
         <CFBundleIdentifier>com.example</CFBundleIdentifier>
-        <CFBundleVersion>3.3</CFBundleVersion>
-        <CFBundleShortVersionString>3.3</CFBundleShortVersionString>
+        <CFBundleVersion>3.3.0</CFBundleVersion>
+        <CFBundleShortVersionString>3.3.0</CFBundleShortVersionString>
         <CFBundlePackageType>APPL</CFBundlePackageType>
         <CFBundleExecutable>Sims1WidescreenPatcher</CFBundleExecutable>
         <CFBundleIconFile>SimsICO.ico</CFBundleIconFile> <!-- Will be copied from output directory -->
