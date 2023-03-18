@@ -30,5 +30,5 @@ public static class DDrawCompatSettingsService
         await sw.WriteLineAsync("ResolutionScale=display(1)"); // enables full-res Sims on supported hardware
         await sw.WriteLineAsync("DisplayRefreshRate=desktop"); // removes erroneous lock to 60fps on higher refresh rate displays when vsync is enabled
         await sw.WriteLineAsync("AltTabFix=keepvidmem"); // fixes crashes/bugs when using Alt+Tab
-        }
+    }
 }
