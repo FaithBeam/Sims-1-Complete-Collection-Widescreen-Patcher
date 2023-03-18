@@ -1,12 +1,12 @@
 # The Sims 1 Widescreen Patcher
 
-This program patches `The Sims 1` to a custom resolution.
+This program patches **The Sims 1** to a custom resolution.
 
-![Untitled](https://i.imgur.com/BwRreNH.png)
+![The Sims 1 Widescreen Patcher](https://i.imgur.com/PdKHV0k.png)
 
 ## Requirements
 
-* NoCD/Crack Sims Executable
+* NoCD/Cracked Sims Executable
   * This exe cannot be previously patched to a custom resolution. For example, if you downloaded a crack that was patched to 1080p, this program will not work.
 
 **Linux**
@@ -36,14 +36,14 @@ This program patches `The Sims 1` to a custom resolution.
 1. Download the latest [release](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/releases)
 2. Extract everything from the zip
 3. (Windows) Run Sims1WidescreenPatcher.exe as administrator
-4. Select your Sims.exe
-5. Enter your preferred resolution & wrapper
-6. Click Patch
+4. Locate and select your Sims.exe
+5. Select your preferred resolution & wrapper
+6. Click "Patch" and answer any prompts that appear
 7. Run "The Sims...800x600" shortcut or create your own from Sims.exe
 
 **MacOS Notes**
 
-* Disable the quarantine attribute on the bundle with this Terminal command: ```sudo xattr -r -d com.apple.quarantine Sims1WidescreenPatcher.app/```
+* Disable the quarantine attribute on the bundle with this Terminal command: ```sudo xattr -r -d com.apple.quarantine ~/Downloads/artifacts/Sims1WidescreenPatcher.app/```
 * If you can't select the Sims.exe because it is installed in an app bundle from Wineskin Winery, click [here](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/MacOS---How-to-Enter-an-App-Bundle-to-Select-Sims-Exe) for a workaround.
 
 ## Graphics Wrappers
@@ -58,18 +58,20 @@ You can select between two graphics wrappers, [DgVoodoo2](http://dege.freeweb.hu
 | **DGVoodoo2**   | ✅       | ✅     | ❌     |
 | **DDrawCompat** | ✅       | ❌     | ❌     |
 
-**Note**
-If you use DDrawCompat and are using a GSync monitor, your game will crash. Refer to this page for the fix: [DDrawCompat-GSync-Fix](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/DDrawCompat-GSync-Fix)
+**Note:**
+If you use DDrawCompat and are using a monitor with G-Sync enabled, your game will crash in exclusive fullscreen mode. Please be sure to enable __Borderless Fullscreen mode__ when prompted during the patch to avoid this issue.
 
 ## Uninstall
 
-If you want to go back to your original Sims executable, select the uninstall button.
+To unpatch and return to the original executale, locate your Sims.exe again and choose "Uninstall." Answer any prompts that appear.
 
 ## Wiki
 
 [General Sims recommendations to fix common issues](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/General-Sims-Recommendations)
 
-[Windowed/Borderless Windowed/FSR Upscaling](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Windowed,-Borderless-Windowed,-FSR-Upscaling)
+[Configure DDrawCompat Wrapper](https://github.com/narzoul/DDrawCompat/wiki/Configuration)
+
+[Windowed/Borderless Fullscreen/FSR Upscaling](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Windowed,-Borderless-Fullscreen,-FSR-Upscaling)
 
 [Screenshots](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Screenshots)
 
