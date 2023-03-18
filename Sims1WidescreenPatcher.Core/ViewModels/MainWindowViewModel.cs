@@ -226,6 +226,11 @@ public class MainWindowViewModel : ViewModelBase
                 $"DDrawCompat settings were found at:\n{ddrawSettingsPath}\n\nDo you wish to remove them?");
             if (result is not null && result.Result)
             {
+                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
+                    DDrawCompatEnums.BorderlessFullscreen);
+            }
+            if (result is not null && result.Result)
+            {
                 RemoveDDrawCompatSettingsService.Remove(ddrawSettingsPath);
             }
         }
