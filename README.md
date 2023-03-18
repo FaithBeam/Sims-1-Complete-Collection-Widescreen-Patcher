@@ -71,7 +71,7 @@ To unpatch and return to the original executale, locate your Sims.exe again and 
 
 [Configure DDrawCompat Wrapper](https://github.com/narzoul/DDrawCompat/wiki/Configuration)
 
-[Windowed/Borderless Fullscreen/FSR Upscaling](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Windowed,-Borderless-Windowed,-FSR-Upscaling)
+[Windowed/Borderless Fullscreen/FSR Upscaling](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Windowed,-Borderless-Fullscreen,-FSR-Upscaling)
 
 [Screenshots](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Screenshots)
 
