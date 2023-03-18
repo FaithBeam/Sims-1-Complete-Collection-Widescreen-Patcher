@@ -32,3 +32,4 @@ public static class DDrawCompatSettingsService
         await sw.WriteLineAsync("AltTabFix=keepvidmem"); // fixes crashes/bugs when using Alt+Tab
     }
 }
+
