@@ -222,7 +222,8 @@ public class MainWindowViewModel : ViewModelBase
         var ddrawSettingsPath = CheckDDrawCompatIniService.DDrawCompatSettingsExist(Path);
         if (!string.IsNullOrWhiteSpace(ddrawSettingsPath))
         {
-            var result = await OpenCustomYesNoDialogAsync("Uninstall", $"DDrawCompat settings were found at:\n{ddrawSettingsPath}\n\nDo you wish to remove them?");
+            var result = await OpenCustomYesNoDialogAsync("Uninstall", 
+                $"DDrawCompat settings were found at:\n{ddrawSettingsPath}\n\nDo you wish to remove them?");
             if (result is not null && result.Result)
             {
                 await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
