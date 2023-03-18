@@ -153,14 +153,14 @@ public class MainWindowViewModel : ViewModelBase
         var vm = new CustomInformationDialogViewModel(title, message);
         await ShowCustomInformationDialog.Handle(vm);
     }
-      
+
     private async Task<YesNoDialogResponse?> OpenCustomYesNoDialogAsync(string title, string message)
     {
         var vm = new CustomYesNoDialogViewModel(title, message);
         var result = await ShowCustomYesNoDialog.Handle(vm);
         return result;
     }
-    
+
     private async Task OpenCustomResolutionDialogAsync()
     {
         var vm = new CustomResolutionDialogViewModel();
@@ -188,7 +188,8 @@ public class MainWindowViewModel : ViewModelBase
 
         if (SelectedWrapper is WrapperUtility.Wrapper.DDrawCompat)
         {
-            var result = await OpenCustomYesNoDialogAsync("DDrawCompat Settings", "Enable borderless fullscreen mode?\n(Choosing \"no\" may cause issues on variable refresh rate displays.)");
+            var result = await OpenCustomYesNoDialogAsync("DDrawCompat Settings", 
+                "Enable borderless fullscreen mode?\n(Choosing \"no\" may cause issues on variable refresh rate displays.)");
             if (result is not null && result.Result)
             {
                 await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
