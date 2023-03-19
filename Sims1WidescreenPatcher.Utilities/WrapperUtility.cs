@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.InteropServices;
 using Serilog;
 
 namespace Sims1WidescreenPatcher.Utilities;
@@ -12,10 +13,26 @@ public static class WrapperUtility
         DgVoodoo2
     }
 
-    private static string[] _ddrawCompatResources = {"ddraw.dll"};
+    private static string[] _ddrawCompatResources = { "ddraw.dll" };
 
     private static string[] _dgvoodooResources =
         {"D3D8.dll", "D3DImm.dll", "DDraw.dll", "dgVoodoo.conf", "dgVoodooCpl.exe"};
+
+    public static List<Wrapper> GetWrappers()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            return new List<Wrapper> { Wrapper.DDrawCompat, Wrapper.DgVoodoo2, Wrapper.None };
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            return new List<Wrapper> { Wrapper.None, Wrapper.DgVoodoo2 };
+        }
+        else
+        {
+            return new List<Wrapper> { Wrapper.None };
+        }
+    }
 
     public static async Task ExtractWrapper(Wrapper wrapper, string path)
     {

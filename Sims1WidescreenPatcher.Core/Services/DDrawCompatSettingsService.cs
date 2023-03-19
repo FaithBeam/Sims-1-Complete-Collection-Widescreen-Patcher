@@ -28,7 +28,8 @@ public static class DDrawCompatSettingsService
         }
         await sw.WriteLineAsync("CPUAffinity=all");  // the default was changed to 1 in 0.4.0 which was the culprit for the major issues, crashes, and lag 
         await sw.WriteLineAsync("ResolutionScale=display(1)"); // enables full-res Sims on supported hardware
-        await sw.WriteLineAsync("DisplayRefreshRate=desktop"); // removes erroneous lock to 60fps on higher refresh rate displays when vsync is enabled
+        await sw.WriteLineAsync("DisplayRefreshRate=desktop"); // removes erroneous lock to 60fps on higher-than-60hz displays when vsync is enabled
         await sw.WriteLineAsync("AltTabFix=keepvidmem"); // fixes crashes/bugs when using Alt+Tab
     }
 }
+
