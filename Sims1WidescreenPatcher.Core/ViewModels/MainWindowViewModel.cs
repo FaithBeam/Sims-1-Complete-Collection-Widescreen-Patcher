@@ -1,5 +1,6 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Input;
 using Avalonia.Collections;
 using ReactiveUI;
@@ -118,8 +119,7 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public AvaloniaList<WrapperUtility.Wrapper> Wrappers { get; } =
-        new(WrapperUtility.Wrapper.DDrawCompat, WrapperUtility.Wrapper.DgVoodoo2, WrapperUtility.Wrapper.None);
+    public AvaloniaList<WrapperUtility.Wrapper> Wrappers => new(WrapperUtility.GetWrappers());
 
     public WrapperUtility.Wrapper SelectedWrapper
     {
