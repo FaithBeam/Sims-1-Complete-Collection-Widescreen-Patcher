@@ -2,7 +2,7 @@ name: .NET
 
 env:
   PACK_ID: Sims1WidescreenPatcher
-  PACK_VER: 3.2.3
+  PACK_VER: 3.3.0
 
 on: 
   push:

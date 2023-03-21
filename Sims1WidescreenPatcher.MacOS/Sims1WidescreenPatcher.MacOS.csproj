@@ -12,10 +12,10 @@
         <Authors>FaithBeam</Authors>
         <Company>Sims1WidescreenPatcher</Company>
         <Product>Sims1WidescreenPatcher</Product>
-        <AssemblyVersion>3.2.3</AssemblyVersion>
-        <FileVersion>3.2.3</FileVersion>
-        <PackageVersion>3.2.3</PackageVersion>
-        <InformationalVersion>3.2.3</InformationalVersion>
+        <AssemblyVersion>3.3.0</AssemblyVersion>
+        <FileVersion>3.3.0</FileVersion>
+        <PackageVersion>3.3.0</PackageVersion>
+        <InformationalVersion>3.3.0</InformationalVersion>
         <ApplicationIcon>..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico</ApplicationIcon>
         <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
         <UseAppHost>true</UseAppHost>
@@ -28,8 +28,8 @@
         <CFBundleName>Sims1WidescreenPatcher</CFBundleName> <!-- Also defines .app file name -->
         <CFBundleDisplayName>Sims1WidescreenPatcher</CFBundleDisplayName>
         <CFBundleIdentifier>com.example</CFBundleIdentifier>
-        <CFBundleVersion>3.2.3</CFBundleVersion>
-        <CFBundleShortVersionString>3.2.3</CFBundleShortVersionString>
+        <CFBundleVersion>3.3.0</CFBundleVersion>
+        <CFBundleShortVersionString>3.3.0</CFBundleShortVersionString>
         <CFBundlePackageType>APPL</CFBundlePackageType>
         <CFBundleExecutable>Sims1WidescreenPatcher</CFBundleExecutable>
         <CFBundleIconFile>SimsICO.ico</CFBundleIconFile> <!-- Will be copied from output directory -->

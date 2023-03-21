@@ -1,5 +1,6 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Input;
 using Avalonia.Collections;
 using ReactiveUI;
@@ -118,8 +119,7 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public AvaloniaList<WrapperUtility.Wrapper> Wrappers { get; } =
-        new(WrapperUtility.Wrapper.None, WrapperUtility.Wrapper.DgVoodoo2, WrapperUtility.Wrapper.DDrawCompat);
+    public AvaloniaList<WrapperUtility.Wrapper> Wrappers => new(WrapperUtility.GetWrappers());
 
     public WrapperUtility.Wrapper SelectedWrapper
     {
@@ -153,14 +153,14 @@ public class MainWindowViewModel : ViewModelBase
         var vm = new CustomInformationDialogViewModel(title, message);
         await ShowCustomInformationDialog.Handle(vm);
     }
-    
+
     private async Task<YesNoDialogResponse?> OpenCustomYesNoDialogAsync(string title, string message)
     {
         var vm = new CustomYesNoDialogViewModel(title, message);
         var result = await ShowCustomYesNoDialog.Handle(vm);
         return result;
     }
-    
+
     private async Task OpenCustomResolutionDialogAsync()
     {
         var vm = new CustomResolutionDialogViewModel();
@@ -186,15 +186,21 @@ public class MainWindowViewModel : ViewModelBase
         IsBusy = true;
         var progress = new Progress<double>(percent => { Progress = percent; });
 
-        //if (SelectedWrapper is WrapperUtility.Wrapper.DDrawCompat)
-        //{
-        //    var result = await OpenCustomYesNoDialogAsync("DDrawCompat Settings", "Enable borderless fullscreen?");
-        //    if (result is not null && result.Result)
-        //    {
-        //        await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
-        //            DDrawCompatEnums.BorderlessFullscreen);
-        //    }
-        //}
+        if (SelectedWrapper is WrapperUtility.Wrapper.DDrawCompat)
+        {
+            var result = await OpenCustomYesNoDialogAsync("DDrawCompat Settings", 
+                "Enable borderless fullscreen mode?\n(Choosing \"no\" may cause issues on variable refresh rate displays.)");
+            if (result is not null && result.Result)
+            {
+                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
+                    DDrawCompatEnums.BorderlessFullscreen);
+            }
+            else
+            {
+                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path, 
+                    DDrawCompatEnums.ExclusiveFullscreen);
+            }
+        }
 
         await Task.Run(() => PatchUtility.Patch(Path, SelectedResolution!.Width, SelectedResolution.Height));
         await Task.Run(() =>
@@ -213,20 +219,21 @@ public class MainWindowViewModel : ViewModelBase
     private async Task OnClickedUninstall()
     {
         IsBusy = true;
-        //var ddrawSettingsPath = CheckDDrawCompatIniService.DDrawCompatSettingsExist(Path);
-        //if (!string.IsNullOrWhiteSpace(ddrawSettingsPath))
-        //{
-        //    var result = await OpenCustomYesNoDialogAsync("Uninstall", $"DDrawCompat settings found at\n{ddrawSettingsPath}\n\nDo you wish to remove it?");
-        //    if (result is not null && result.Result)
-        //    {
-        //        await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
-        //            DDrawCompatEnums.BorderlessFullscreen);
-        //    }
-        //    if (result is not null && result.Result)
-        //    {
-        //        RemoveDDrawCompatSettingsService.Remove(ddrawSettingsPath);
-        //    }
-        //}
+        var ddrawSettingsPath = CheckDDrawCompatIniService.DDrawCompatSettingsExist(Path);
+        if (!string.IsNullOrWhiteSpace(ddrawSettingsPath))
+        {
+            var result = await OpenCustomYesNoDialogAsync("Uninstall", 
+                $"DDrawCompat settings were found at:\n{ddrawSettingsPath}\n\nDo you wish to remove them?");
+            if (result is not null && result.Result)
+            {
+                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
+                    DDrawCompatEnums.BorderlessFullscreen);
+            }
+            if (result is not null && result.Result)
+            {
+                RemoveDDrawCompatSettingsService.Remove(ddrawSettingsPath);
+            }
+        }
 
         await Task.Run(() => UninstallUtility.Uninstall(Path));
         _previouslyPatched.Remove(Path);

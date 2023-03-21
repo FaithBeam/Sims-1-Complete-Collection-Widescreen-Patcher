@@ -29,10 +29,10 @@ public class MacOsResolutionService : IResolutionsService
         {
             CgsDisplayMode mode = default;
             CGSGetDisplayModeDescriptionOfLength(id, i, ref mode, Marshal.SizeOf(mode));
-            var resolution = new Resolution((int)mode.width, (int)mode.height);
-            if (!resolutions.Contains(resolution, Resolution.WidthHeightComparer))
+            var newRes = new Resolution((int)mode.width, (int)mode.height);
+            if (!resolutions.Contains(newRes, Resolution.WidthHeightComparer) && newRes.Width >= 800 & newRes.Height >= 600)
             {
-                resolutions.Add(resolution);
+                resolutions.Add(newRes);
             }
         }
         Log.Debug("Resolutions {@Resolutions}", resolutions);
