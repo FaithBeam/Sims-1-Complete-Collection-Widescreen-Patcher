@@ -20,7 +20,7 @@
       <Compile Update="Resources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>Resource1.resx</DependentUpon>
+        <DependentUpon>Resources.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 
@@ -29,9 +29,8 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <None Remove="Resources\DDrawCompat\ddraw.dll" />
-      <EmbeddedResource Include="Resources\DDrawCompat\ddraw.dll" />
       <None Remove="Resources\DgVoodoo2\D3D8.dll" />
+      <EmbeddedResource Include="Resources\DDrawCompat\ddraw.dll" />
       <EmbeddedResource Include="Resources\DgVoodoo2\D3D8.dll" />
       <None Remove="Resources\DgVoodoo2\D3DImm.dll" />
       <EmbeddedResource Include="Resources\DgVoodoo2\D3DImm.dll" />
@@ -41,6 +40,10 @@
       <EmbeddedResource Include="Resources\DgVoodoo2\dgVoodoo.conf" />
       <None Remove="Resources\DgVoodoo2\dgVoodooCpl.exe" />
       <EmbeddedResource Include="Resources\DgVoodoo2\dgVoodooCpl.exe" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Resources\DDrawCompat\fix\" />
     </ItemGroup>
 
 </Project>

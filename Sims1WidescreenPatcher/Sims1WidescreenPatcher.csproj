@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ApplicationIcon>SimsICO.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="SimsICO.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sims1WidescreenPatcher.Linux\Sims1WidescreenPatcher.Linux.csproj" />
+    <ProjectReference Include="..\Sims1WidescreenPatcher.MacOS\Sims1WidescreenPatcher.MacOS.csproj" />
+    <ProjectReference Include="..\Sims1WidescreenPatcher.UI\Sims1WidescreenPatcher.UI.csproj" />
+    <ProjectReference Include="..\Sims1WidescreenPatcher.Windows\Sims1WidescreenPatcher.Windows.csproj" />
+  </ItemGroup>
+
+</Project>

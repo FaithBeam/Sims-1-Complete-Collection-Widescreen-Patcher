@@ -47,7 +47,7 @@
 					<Label>Resolution</Label>
 					<ComboBox Margin="0 0 5 0"
 						  x:Name="ResolutionCombo"
-						  Items="{Binding Resolutions}"
+						  ItemsSource="{Binding Resolutions}"
 						  SelectedItem="{Binding SelectedResolution}"
 						  HorizontalAlignment="Stretch">
 						<ToolTip.Tip>
@@ -60,8 +60,8 @@
 					<Label>Wrapper</Label>
 					<ComboBox Margin="0 0 5 0"
 						  x:Name="WrapperCombo"
-						  Items="{Binding Wrappers}"
-						  SelectedItem="{Binding SelectedWrapper}"
+						  ItemsSource="{Binding Wrappers}"
+						  SelectedIndex="{Binding SelectedWrapperIndex}"
 						  HorizontalAlignment="Stretch">
 						<ToolTip.Tip>
 							<TextBlock Text="DDrawCompat: High framerate. Use this for borderless fullscreen. Press Shift+F11 for in-game menu. View the wiki for more settings. (Windows only)&#x0a;&#x0a;DgVoodoo2: Low/Medium framerate. Use if DDrawCompat doesn't work. (Windows and Linux only)&#x0a;&#x0a;None: Low framerate. Use if DgVoodoo2 and DDrawCompat don't work."></TextBlock>

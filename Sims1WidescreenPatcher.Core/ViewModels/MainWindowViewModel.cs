@@ -1,6 +1,5 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Input;
 using Avalonia.Collections;
 using ReactiveUI;
@@ -8,7 +7,7 @@ using Sims1WidescreenPatcher.Core.Enums;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Utilities;
-using Splat;
+using Sims1WidescreenPatcher.Utilities.Models;
 
 namespace Sims1WidescreenPatcher.Core.ViewModels;
 
@@ -16,7 +15,10 @@ public class MainWindowViewModel : ViewModelBase
 {
     #region Fields
 
-    private WrapperUtility.Wrapper _selectedWrapper;
+    private readonly CustomYesNoDialogViewModel _customYesNoDialogViewModel;
+    private readonly CustomResolutionDialogViewModel _customResolutionDialogViewModel;
+    private IWrapper _selectedWrapper;
+    private int _selectedWrapperIndex;
     private Resolution? _selectedResolution;
     private string _path = "";
     private bool _isBusy;
@@ -29,8 +31,12 @@ public class MainWindowViewModel : ViewModelBase
 
     #region Constructor
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(IResolutionsService resolutionsService,
+        CustomYesNoDialogViewModel customYesNoDialogViewModel,
+        CustomResolutionDialogViewModel customResolutionDialogViewModel)
     {
+        _customYesNoDialogViewModel = customYesNoDialogViewModel;
+        _customResolutionDialogViewModel = customResolutionDialogViewModel;
         this.WhenAnyValue(x => x.Path).Subscribe(x => System.Diagnostics.Debug.WriteLine(x));
         _hasBackup = this
             .WhenAnyValue(x => x.Path, x => x.IsBusy, (path, isBusy) => PatchUtility.SimsBackupExists(path))
@@ -58,11 +64,10 @@ public class MainWindowViewModel : ViewModelBase
         UninstallCommand = ReactiveCommand.CreateFromTask(OnClickedUninstall, canUninstall);
         OpenFile = ReactiveCommand.CreateFromTask(OpenFileAsync);
         ShowOpenFileDialog = new Interaction<Unit, string>();
-        var resolutionsService = Locator.Current.GetService<IResolutionsService>();
         Resolutions = new AvaloniaList<Resolution>(resolutionsService?.GetResolutions() ?? Array.Empty<Resolution>())
             { new(-1, -1) };
         SelectedResolution = Resolutions.FirstOrDefault() ?? new Resolution(1920, 1080);
-        SelectedWrapper = Wrappers.FirstOrDefault();
+        SelectedWrapperIndex = 0;
         ShowCustomResolutionDialog = new Interaction<CustomResolutionDialogViewModel, Resolution?>();
         CustomResolutionCommand = ReactiveCommand.CreateFromTask(OpenCustomResolutionDialogAsync);
         ShowCustomYesNoDialog = new Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?>();
@@ -119,12 +124,18 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public AvaloniaList<WrapperUtility.Wrapper> Wrappers => new(WrapperUtility.GetWrappers());
+    public AvaloniaList<IWrapper> Wrappers => new(WrapperUtility.GetWrappers());
 
-    public WrapperUtility.Wrapper SelectedWrapper
+    public IWrapper SelectedWrapper
     {
         get => _selectedWrapper;
         set => this.RaiseAndSetIfChanged(ref _selectedWrapper, value);
+    }
+
+    public int SelectedWrapperIndex
+    {
+        get => _selectedWrapperIndex;
+        set => this.RaiseAndSetIfChanged(ref _selectedWrapperIndex, value);
     }
 
     public double Progress
@@ -156,15 +167,15 @@ public class MainWindowViewModel : ViewModelBase
 
     private async Task<YesNoDialogResponse?> OpenCustomYesNoDialogAsync(string title, string message)
     {
-        var vm = new CustomYesNoDialogViewModel(title, message);
-        var result = await ShowCustomYesNoDialog.Handle(vm);
+        _customYesNoDialogViewModel.Title = title;
+        _customYesNoDialogViewModel.Message = message;
+        var result = await ShowCustomYesNoDialog.Handle(_customYesNoDialogViewModel);
         return result;
     }
 
     private async Task OpenCustomResolutionDialogAsync()
     {
-        var vm = new CustomResolutionDialogViewModel();
-        var res = await ShowCustomResolutionDialog.Handle(vm);
+        var res = await ShowCustomResolutionDialog.Handle(_customResolutionDialogViewModel);
         if (res is { Width: > 0, Height: > 0 })
         {
             Resolutions.Insert(Resolutions.Count - 1, res);
@@ -186,9 +197,9 @@ public class MainWindowViewModel : ViewModelBase
         IsBusy = true;
         var progress = new Progress<double>(percent => { Progress = percent; });
 
-        if (SelectedWrapper is WrapperUtility.Wrapper.DDrawCompat)
+        if (SelectedWrapper is DDrawCompatWrapper { Version: "0.4.0" })
         {
-            var result = await OpenCustomYesNoDialogAsync("DDrawCompat Settings", 
+            var result = await OpenCustomYesNoDialogAsync("DDrawCompat Settings",
                 "Enable borderless fullscreen mode?\n(Choosing \"no\" may cause issues on variable refresh rate displays.)");
             if (result is not null && result.Result)
             {
@@ -197,7 +208,7 @@ public class MainWindowViewModel : ViewModelBase
             }
             else
             {
-                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path, 
+                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
                     DDrawCompatEnums.ExclusiveFullscreen);
             }
         }
@@ -206,7 +217,7 @@ public class MainWindowViewModel : ViewModelBase
         await Task.Run(() =>
             Images.Images.ModifySimsUi(Path, SelectedResolution!.Width, SelectedResolution.Height, progress));
 
-        if (SelectedWrapper != WrapperUtility.Wrapper.None)
+        if (SelectedWrapper is not NoneWrapper)
         {
             await Task.Run(() => WrapperUtility.RemoveWrapper(Path));
             await Task.Run(() => WrapperUtility.ExtractWrapper(SelectedWrapper, Path));
@@ -222,13 +233,14 @@ public class MainWindowViewModel : ViewModelBase
         var ddrawSettingsPath = CheckDDrawCompatIniService.DDrawCompatSettingsExist(Path);
         if (!string.IsNullOrWhiteSpace(ddrawSettingsPath))
         {
-            var result = await OpenCustomYesNoDialogAsync("Uninstall", 
+            var result = await OpenCustomYesNoDialogAsync("Uninstall",
                 $"DDrawCompat settings were found at:\n{ddrawSettingsPath}\n\nDo you wish to remove them?");
             if (result is not null && result.Result)
             {
                 await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
                     DDrawCompatEnums.BorderlessFullscreen);
             }
+
             if (result is not null && result.Result)
             {
                 RemoveDDrawCompatSettingsService.Remove(ddrawSettingsPath);

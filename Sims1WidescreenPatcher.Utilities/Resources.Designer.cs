@@ -103,6 +103,16 @@ namespace Sims1WidescreenPatcher.Utilities {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] ddraw2 {
+            get {
+                object obj = ResourceManager.GetObject("ddraw2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] dgVoodoo {
             get {
                 object obj = ResourceManager.GetObject("dgVoodoo", resourceCulture);

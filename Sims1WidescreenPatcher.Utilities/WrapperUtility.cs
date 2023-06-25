@@ -1,40 +1,40 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using Serilog;
+using Sims1WidescreenPatcher.Utilities.Models;
 
 namespace Sims1WidescreenPatcher.Utilities;
 
 public static class WrapperUtility
 {
-    public enum Wrapper
-    {
-        None,
-        DDrawCompat,
-        DgVoodoo2
-    }
-
     private static string[] _ddrawCompatResources = { "ddraw.dll" };
 
     private static string[] _dgvoodooResources =
         {"D3D8.dll", "D3DImm.dll", "DDraw.dll", "dgVoodoo.conf", "dgVoodooCpl.exe"};
 
-    public static List<Wrapper> GetWrappers()
+    public static List<IWrapper> GetWrappers()
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            return new List<Wrapper> { Wrapper.DDrawCompat, Wrapper.DgVoodoo2, Wrapper.None };
+            /* Return different ddrawcompat versions depending on Windows version.
+               Windows 10 and newer get ddrawcompat 0.4.0
+               Windows 8.1 and older get ddrawcompat 0.4.0+win7.fix
+             */
+            return Environment.OSVersion.Version.Major >= 10 ?
+                new List<IWrapper> { new DDrawCompatWrapper("0.4.0"), new DgVoodoo2Wrapper(), new NoneWrapper() } :
+                new List<IWrapper> { new DDrawCompatWrapper("0.4.0+win7.fix"), new DgVoodoo2Wrapper(), new NoneWrapper() };
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            return new List<Wrapper> { Wrapper.None, Wrapper.DgVoodoo2 };
+            return new List<IWrapper> { new NoneWrapper(), new DgVoodoo2Wrapper() };
         }
         else
         {
-            return new List<Wrapper> { Wrapper.None };
+            return new List<IWrapper> { new NoneWrapper() };
         }
     }
 
-    public static async Task ExtractWrapper(Wrapper wrapper, string path)
+    public static async Task ExtractWrapper(IWrapper wrapper, string path)
     {
         Log.Information("Begin extract wrapper");
         Log.Debug("Wrapper {@Wrapper}", wrapper);
@@ -45,17 +45,25 @@ public static class WrapperUtility
         var resourceStream = "Sims1WidescreenPatcher.Utilities.Resources.";
         string[] resources;
 
+        
         switch (wrapper)
         {
-            case Wrapper.DDrawCompat:
-                resourceStream += "DDrawCompat";
+            case DDrawCompatWrapper w:
+                if (w.Version == "0.4.0")
+                {
+                    resourceStream += @"DDrawCompat";
+                }
+                else
+                {
+                    resourceStream += @"DDrawCompat\fix";
+                }
                 resources = _ddrawCompatResources;
                 break;
-            case Wrapper.DgVoodoo2:
+            case DgVoodoo2Wrapper:
                 resourceStream += "DgVoodoo2";
                 resources = _dgvoodooResources;
                 break;
-            case Wrapper.None:
+            case NoneWrapper:
                 return;
             default:
                 throw new ArgumentOutOfRangeException(nameof(wrapper), wrapper, null);
