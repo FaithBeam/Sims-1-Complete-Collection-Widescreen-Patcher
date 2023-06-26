@@ -4,10 +4,7 @@ env:
   PACK_ID: Sims1WidescreenPatcher
   PACK_VER: 3.3.0
 
-on: 
-  push:
-    branches:
-      - master
+on: []
 
 jobs:
   linux:
@@ -23,6 +20,7 @@ jobs:
       - name: Publish
         run: dotnet publish Sims1WidescreenPatcher.Linux/Sims1WidescreenPatcher.Linux.csproj -c Release -o artifacts
       - name: Upload a Build Artifact
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v3.1.0
         with:
           name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+linux.x64
@@ -41,6 +39,7 @@ jobs:
       - name: Publish
         run: dotnet publish Sims1WidescreenPatcher.Windows/Sims1WidescreenPatcher.Windows.csproj -c Release -o artifacts
       - name: Upload a Build Artifact
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v3.1.0
         with:
           name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+win.x64
@@ -65,8 +64,8 @@ jobs:
       - name: Tar to Preserve Permissions
         run: tar -cvf Sims1WidescreenPatcher.${{ env.PACK_VER }}+macOS.x64.tar artifacts/
       - name: Upload a Build Artifact
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v3.1.0
         with:
           name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+macOS.x64
           path: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+macOS.x64.tar
-    
