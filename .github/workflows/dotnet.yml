@@ -56,7 +56,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore Sims1WidescreenPatcher.MacOS/Sims1WidescreenPatcher.MacOS.csproj -r osx-x64
       - name: Publish
-        run: dotnet msbuild Sims1WidescreenPatcher.MacOS/Sims1WidescreenPatcher.MacOS.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net6.0
+        run: dotnet msbuild Sims1WidescreenPatcher.MacOS/Sims1WidescreenPatcher.MacOS.csproj -t:BundleApp -p:RuntimeIdentifier=osx-x64 -p:UseAppHost=true -p:Configuration=Release -p:TargetFramework=net6.0
       - name: Move App Bundle to Artifacts
         run: mkdir artifacts && mv Sims1WidescreenPatcher.MacOS/bin/Release/net6.0/osx-x64/publish/Sims1WidescreenPatcher.app artifacts/
       - name: Set Executable
