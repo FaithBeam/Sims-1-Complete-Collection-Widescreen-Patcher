@@ -17,7 +17,6 @@ public class MainWindowViewModel : ViewModelBase
 
     private readonly CustomYesNoDialogViewModel _customYesNoDialogViewModel;
     private readonly CustomResolutionDialogViewModel _customResolutionDialogViewModel;
-    private IWrapper _selectedWrapper;
     private int _selectedWrapperIndex;
     private Resolution? _selectedResolution;
     private string _path = "";
@@ -126,12 +125,6 @@ public class MainWindowViewModel : ViewModelBase
 
     public AvaloniaList<IWrapper> Wrappers => new(WrapperUtility.GetWrappers());
 
-    public IWrapper SelectedWrapper
-    {
-        get => _selectedWrapper;
-        set => this.RaiseAndSetIfChanged(ref _selectedWrapper, value);
-    }
-
     public int SelectedWrapperIndex
     {
         get => _selectedWrapperIndex;
@@ -197,7 +190,9 @@ public class MainWindowViewModel : ViewModelBase
         IsBusy = true;
         var progress = new Progress<double>(percent => { Progress = percent; });
 
-        if (SelectedWrapper is DDrawCompatWrapper { Version: "0.4.0" })
+        var selectedWrapper = Wrappers[SelectedWrapperIndex];
+
+        if (selectedWrapper is DDrawCompatWrapper { Version: "0.4.0" })
         {
             var result = await OpenCustomYesNoDialogAsync("DDrawCompat Settings",
                 "Enable borderless fullscreen mode?\n(Choosing \"no\" may cause issues on variable refresh rate displays.)");
@@ -217,10 +212,10 @@ public class MainWindowViewModel : ViewModelBase
         await Task.Run(() =>
             Images.Images.ModifySimsUi(Path, SelectedResolution!.Width, SelectedResolution.Height, progress));
 
-        if (SelectedWrapper is not NoneWrapper)
+        if (selectedWrapper is not NoneWrapper)
         {
             await Task.Run(() => WrapperUtility.RemoveWrapper(Path));
-            await Task.Run(() => WrapperUtility.ExtractWrapper(SelectedWrapper, Path));
+            await Task.Run(() => WrapperUtility.ExtractWrapper(selectedWrapper, Path));
         }
 
         _previouslyPatched.Add(Path);
