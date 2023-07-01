@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Windows.Input;
 using Avalonia.Collections;
+using Avalonia.Platform.Storage;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Enums;
 using Sims1WidescreenPatcher.Core.Models;
@@ -21,10 +22,10 @@ public class MainWindowViewModel : ViewModelBase
     private Resolution? _selectedResolution;
     private string _path = "";
     private bool _isBusy;
-    private double _progress;
     private readonly ObservableAsPropertyHelper<bool> _hasBackup;
     private readonly ObservableAsPropertyHelper<bool> _isValidSimsExe;
     private readonly List<string> _previouslyPatched = new();
+    private readonly ProgressPct _progress;
 
     #endregion
 
@@ -32,13 +33,15 @@ public class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel(IResolutionsService resolutionsService,
         CustomYesNoDialogViewModel customYesNoDialogViewModel,
-        CustomResolutionDialogViewModel customResolutionDialogViewModel)
+        CustomResolutionDialogViewModel customResolutionDialogViewModel,
+        ProgressPct progress)
     {
+        _progress = progress;
         _customYesNoDialogViewModel = customYesNoDialogViewModel;
         _customResolutionDialogViewModel = customResolutionDialogViewModel;
         this.WhenAnyValue(x => x.Path).Subscribe(x => System.Diagnostics.Debug.WriteLine(x));
         _hasBackup = this
-            .WhenAnyValue(x => x.Path, x => x.IsBusy, (path, isBusy) => PatchUtility.SimsBackupExists(path))
+            .WhenAnyValue(x => x.Path, x => x.IsBusy, (path, _) => PatchUtility.SimsBackupExists(path))
             .ToProperty(this, x => x.HasBackup, deferSubscription: true);
         _isValidSimsExe = this
             .WhenAnyValue(x => x.Path, PatchUtility.IsValidSims)
@@ -62,8 +65,8 @@ public class MainWindowViewModel : ViewModelBase
         PatchCommand = ReactiveCommand.CreateFromTask(OnClickedPatch, canPatch);
         UninstallCommand = ReactiveCommand.CreateFromTask(OnClickedUninstall, canUninstall);
         OpenFile = ReactiveCommand.CreateFromTask(OpenFileAsync);
-        ShowOpenFileDialog = new Interaction<Unit, string>();
-        Resolutions = new AvaloniaList<Resolution>(resolutionsService?.GetResolutions() ?? Array.Empty<Resolution>())
+        ShowOpenFileDialog = new Interaction<Unit, IStorageFile?>();
+        Resolutions = new AvaloniaList<Resolution>(resolutionsService.GetResolutions())
             { new(-1, -1) };
         SelectedResolution = Resolutions.FirstOrDefault() ?? new Resolution(1920, 1080);
         SelectedWrapperIndex = 0;
@@ -71,6 +74,11 @@ public class MainWindowViewModel : ViewModelBase
         CustomResolutionCommand = ReactiveCommand.CreateFromTask(OpenCustomResolutionDialogAsync);
         ShowCustomYesNoDialog = new Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?>();
         ShowCustomInformationDialog = new Interaction<CustomInformationDialogViewModel, Unit>();
+
+        this.WhenAnyValue(x => x.Progress, 
+            (p) => 
+                p >= 100)
+            .Subscribe(_ => OpenCustomInformationDialogAsync("Progress", "Patched! You may close this application now."));
     }
 
     #endregion
@@ -80,7 +88,7 @@ public class MainWindowViewModel : ViewModelBase
     public ICommand PatchCommand { get; }
     public ICommand UninstallCommand { get; }
     public ICommand OpenFile { get; }
-    public Interaction<Unit, string> ShowOpenFileDialog { get; }
+    public Interaction<Unit, IStorageFile?> ShowOpenFileDialog { get; }
     public ICommand CustomResolutionCommand { get; }
     public Interaction<CustomResolutionDialogViewModel, Resolution?> ShowCustomResolutionDialog { get; }
     public Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?> ShowCustomYesNoDialog { get; }
@@ -131,22 +139,7 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _selectedWrapperIndex, value);
     }
 
-    public double Progress
-    {
-        get => _progress;
-        set
-        {
-            if (value >= 100)
-            {
-                this.RaiseAndSetIfChanged(ref _progress, 0);
-                OpenFinishedPatchPopup();
-            }
-            else
-            {
-                this.RaiseAndSetIfChanged(ref _progress, value);
-            }
-        }
-    }
+    public double Progress => _progress.Progress;
 
     #endregion
 
@@ -178,17 +171,16 @@ public class MainWindowViewModel : ViewModelBase
 
     private async Task OpenFileAsync()
     {
-        var fileName = await ShowOpenFileDialog.Handle(Unit.Default);
-        if (!string.IsNullOrWhiteSpace(fileName))
+        var storageFile = await ShowOpenFileDialog.Handle(Unit.Default);
+        if (storageFile is not null)
         {
-            Path = fileName;
+            Path = storageFile.Path.LocalPath;
         }
     }
 
     private async Task OnClickedPatch()
     {
         IsBusy = true;
-        var progress = new Progress<double>(percent => { Progress = percent; });
 
         var selectedWrapper = Wrappers[SelectedWrapperIndex];
 
@@ -210,7 +202,7 @@ public class MainWindowViewModel : ViewModelBase
 
         await Task.Run(() => PatchUtility.Patch(Path, SelectedResolution!.Width, SelectedResolution.Height));
         await Task.Run(() =>
-            Images.Images.ModifySimsUi(Path, SelectedResolution!.Width, SelectedResolution.Height, progress));
+            Images.Images.ModifySimsUi(Path, SelectedResolution!.Width, SelectedResolution.Height, _progress));
 
         if (selectedWrapper is not NoneWrapper)
         {
@@ -243,14 +235,10 @@ public class MainWindowViewModel : ViewModelBase
         }
 
         await Task.Run(() => UninstallUtility.Uninstall(Path));
+        await Task.Run(() => Images.Images.RemoveGraphics(Path));
         _previouslyPatched.Remove(Path);
         IsBusy = false;
         await OpenCustomInformationDialogAsync("Progress", "Uninstalled");
-    }
-
-    private async Task OpenFinishedPatchPopup()
-    {
-        await OpenCustomInformationDialogAsync("Progress", "Patched! You may close this application now.");
     }
 
     #endregion

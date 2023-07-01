@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Models;
@@ -20,7 +21,7 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
         this.WhenActivated(d =>
         {
             if (ViewModel == null) return;
-            d(ViewModel.ShowOpenFileDialog.RegisterHandler(ShowOpenFileDialog));
+            d(ViewModel.ShowOpenFileDialog.RegisterHandler(ShowOpenFileDialogAsync));
             d(ViewModel!.ShowCustomResolutionDialog.RegisterHandler(ShowCustomResolutionDialogAsync));
             d(ViewModel!.ShowCustomYesNoDialog.RegisterHandler(ShowCustomYesNoDialogAsync));
             d(ViewModel!.ShowCustomInformationDialog.RegisterHandler(ShowCustomInformationDialogAsync));
@@ -63,29 +64,14 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
         interaction.SetOutput(result);
     }
 
-    private async Task ShowOpenFileDialog(InteractionContext<Unit, string> interaction)
+    private async Task ShowOpenFileDialogAsync(InteractionContext<Unit, IStorageFile?> interaction)
     {
-        var dialog = new OpenFileDialog
+        var fileNames = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Filters = new List<FileDialogFilter>
-            {
-                new()
-                {
-                    Extensions = new List<string> { "exe" },
-                    Name = "Sims executable (Sims.exe)"
-                }
-            },
+            Title = "Select Sims.exe",
             AllowMultiple = false,
-            Title = "Select Sims.exe"
-        };
-        var fileNames = await dialog.ShowAsync(this);
-        if (fileNames is not null && fileNames.Any())
-        {
-            interaction.SetOutput(fileNames[0]);
-        }
-        else
-        {
-            interaction.SetOutput("");
-        }
+            FileTypeFilter = new FilePickerFileType[] {new ("Sims.exe") {Patterns = new []{"Sims.exe"}}}
+        });
+        interaction.SetOutput(fileNames.Any() ? fileNames[0] : null);
     }
 }

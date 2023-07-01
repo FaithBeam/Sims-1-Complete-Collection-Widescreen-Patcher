@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using Serilog;
 using Sims1WidescreenPatcher.Utilities.Models;

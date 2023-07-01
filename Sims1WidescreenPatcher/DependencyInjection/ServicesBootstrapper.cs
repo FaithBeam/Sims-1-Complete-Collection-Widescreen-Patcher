@@ -1,6 +1,8 @@
-﻿using Sims1WidescreenPatcher.Core.Services;
+﻿using Sims1WidescreenPatcher.Core.Models;
+using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Linux.Services;
 using Sims1WidescreenPatcher.MacOS.Services;
+using Sims1WidescreenPatcher.Utilities.Models;
 using Sims1WidescreenPatcher.Windows.Services;
 using Splat;
 using System.Runtime.InteropServices;
@@ -11,7 +13,7 @@ namespace Sims1WidescreenPatcher.DependencyInjection
     {
         public static void RegisterServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            //RegisterCommonServices(services, resolver);
+            RegisterCommonServices(services, resolver);
             RegisterPlatformSpecificServices(services, resolver);
         }
 
@@ -37,7 +39,7 @@ namespace Sims1WidescreenPatcher.DependencyInjection
 
         private static void RegisterCommonServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            throw new NotImplementedException();
+            services.RegisterLazySingleton(() => new ProgressPct());
         }
     }
 }

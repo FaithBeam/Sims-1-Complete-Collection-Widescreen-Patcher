@@ -13,4 +13,8 @@
       <PackageReference Include="Sims.Far" Version="3.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Sims1WidescreenPatcher.Utilities\Sims1WidescreenPatcher.Utilities.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using Sims.Far;
 using Sims1WidescreenPatcher.Images.Models;
+using Sims1WidescreenPatcher.Utilities.Models;
 
 namespace Sims1WidescreenPatcher.Images;
 
@@ -44,7 +45,7 @@ public static class Images
         Log.Debug("Sims directory {@Dir}", dir);
         Log.Debug("Delete {Delete}", deletePath);
         File.Delete(deletePath);
-        
+
         foreach (var i in BlackBackground)
         {
             deletePath = $"{dir}/UIGraphics/{i.Replace('\\', Path.DirectorySeparatorChar)}";
@@ -65,14 +66,14 @@ public static class Images
             Log.Debug("Delete: {Delete}", deletePath);
             File.Delete(deletePath);
         }
-        
+
         Log.Information("End remove graphics");
     }
 
-    public static void ModifySimsUi(string path, int width, int height, IProgress<double> progress)
+    public static void ModifySimsUi(string path, int width, int height, ProgressPct progress)
     {
         Log.Information("Begin scaling Sims UI files");
-        
+
         var dir = Path.GetDirectoryName(path) ?? string.Empty;
         var uigraphicsFarPath = Path.Combine(dir, "UIGraphics/UIGraphics.far");
         var far = new Far(uigraphicsFarPath);
@@ -82,11 +83,11 @@ public static class Images
         Log.Debug("Width {@Width}", width);
         Log.Debug("Height {@Height}", height);
         Log.Debug("UIGraphics.far path {@UIGraphicsFarPath}", uigraphicsFarPath);
-        
+
         #region Create Jobs
 
         Log.Information("Create jobs");
-        
+
         if (far.Manifest.ManifestEntries.Any(x => x.Filename == @"cpanel\Backgrounds\PanelBack.bmp"))
         {
             jobs.Add(new ScalePanelbackJob(far.GetBytes(@"cpanel\Backgrounds\PanelBack.bmp"),
@@ -103,19 +104,19 @@ public static class Images
                 $"{dir}/UIGraphics/{i.Replace('\\', Path.DirectorySeparatorChar)}", width, 150)));
 
         Log.Information("End create jobs");
-        
-        # endregion
+
+        #endregion
 
         var totalJobs = jobs.Count;
         var current = 0;
         var lockObject = new object();
-        
+
         Log.Debug("Total jobs {@TotalJobs}", totalJobs);
 
         #region Run Jobs
 
         Log.Information("Begin run jobs");
-        
+
         Parallel.ForEach(jobs, job =>
         {
             Log.Debug("Begin job: {@Job}", job);
@@ -123,15 +124,15 @@ public static class Images
             lock (lockObject)
             {
                 current++;
-                var calc = current / (double) totalJobs * 100;
-                progress.Report(calc);
+                var calc = current / (double)totalJobs * 100;
+                progress.Progress = calc;
             }
         });
 
         Log.Information("End run jobs");
-        
+
         #endregion
-        
+
         Log.Information("End modify Sims UI");
     }
 }
