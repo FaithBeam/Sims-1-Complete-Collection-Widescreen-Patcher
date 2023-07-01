@@ -17,6 +17,7 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.0.0-rc1.1" />
     <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-rc1.1" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
     <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
   </ItemGroup>
@@ -27,5 +28,20 @@
     <ProjectReference Include="..\Sims1WidescreenPatcher.UI\Sims1WidescreenPatcher.UI.csproj" />
     <ProjectReference Include="..\Sims1WidescreenPatcher.Windows\Sims1WidescreenPatcher.Windows.csproj" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <CFBundleName>Sims1WidescreenPatcher</CFBundleName>
+    <!-- Also defines .app file name -->
+    <CFBundleDisplayName>Sims1WidescreenPatcher</CFBundleDisplayName>
+    <CFBundleIdentifier>com.example</CFBundleIdentifier>
+    <CFBundleVersion>3.3.0</CFBundleVersion>
+    <CFBundleShortVersionString>3.3.0</CFBundleShortVersionString>
+    <CFBundlePackageType>APPL</CFBundlePackageType>
+    <CFBundleExecutable>Sims1WidescreenPatcher</CFBundleExecutable>
+    <CFBundleIconFile>SimsICO.ico</CFBundleIconFile>
+    <!-- Will be copied from output directory -->
+    <NSPrincipalClass>NSApplication</NSPrincipalClass>
+    <NSHighResolutionCapable>true</NSHighResolutionCapable>
+  </PropertyGroup>
 
 </Project>
