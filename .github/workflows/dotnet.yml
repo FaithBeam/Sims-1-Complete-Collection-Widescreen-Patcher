@@ -2,7 +2,7 @@ name: .NET
 
 env:
   PACK_ID: Sims1WidescreenPatcher
-  PACK_VER: 3.3.0
+  PACK_VER: 3.4.0
 
 on: push
 
@@ -18,9 +18,9 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -r linux-x64
       - name: Publish
-        run: dotnet publish Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -c Release -o artifacts
+        run: dotnet publish Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -c Release -o artifacts -p:VersionPrefix=${{ env.PACK_VER }}
       - name: Upload a Build Artifact
-        if: github.ref == 'refs/heads/master'
+        if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master'
         uses: actions/upload-artifact@v3.1.0
         with:
           name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+linux.x64
@@ -37,9 +37,9 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -r win-x64
       - name: Publish
-        run: dotnet publish Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -c Release -o artifacts
+        run: dotnet publish Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -c Release -o artifacts -p:VersionPrefix=${{ env.PACK_VER }}
       - name: Upload a Build Artifact
-        if: github.ref == 'refs/heads/master'
+        if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master'
         uses: actions/upload-artifact@v3.1.0
         with:
           name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+win.x64
@@ -56,7 +56,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -r osx-x64
       - name: Publish
-        run: dotnet msbuild Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -t:BundleApp -p:RuntimeIdentifier=osx-x64 -p:UseAppHost=true -p:Configuration=Release -p:TargetFramework=net6.0
+        run: dotnet msbuild Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -t:BundleApp -p:RuntimeIdentifier=osx-x64 -p:UseAppHost=true -p:Configuration=Release -p:TargetFramework=net6.0 -p:VersionPrefix=${{ env.PACK_VER }}
       - name: Move App Bundle to Artifacts
         run: mkdir artifacts && mv Sims1WidescreenPatcher/bin/Release/net6.0/osx-x64/publish/Sims1WidescreenPatcher.app artifacts/
       - name: Set Executable
@@ -64,7 +64,7 @@ jobs:
       - name: Tar to Preserve Permissions
         run: tar -cvf Sims1WidescreenPatcher.${{ env.PACK_VER }}+macOS.x64.tar artifacts/
       - name: Upload a Build Artifact
-        if: github.ref == 'refs/heads/master'
+        if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master'
         uses: actions/upload-artifact@v3.1.0
         with:
           name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+macOS.x64
