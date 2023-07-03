@@ -4,7 +4,9 @@ env:
   PACK_ID: Sims1WidescreenPatcher
   PACK_VER: 3.4.0
 
-on: push
+on: 
+  push:
+  pull_request:
 
 jobs:
   linux:
