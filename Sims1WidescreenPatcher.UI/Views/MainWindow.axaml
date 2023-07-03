@@ -27,6 +27,7 @@
 				<TextBox Grid.Column="0"
 					 Margin="0 0 5 0"
 					 x:Name="FileDialog"
+					 Watermark="Path to Sims.exe"
 					 Text="{Binding Path}" />
 				<Button Grid.Column="1"
 					x:Name="BrowseButton"
