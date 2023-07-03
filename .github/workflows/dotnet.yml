@@ -2,12 +2,11 @@ name: .NET
 
 env:
   PACK_ID: Sims1WidescreenPatcher
-  PACK_VER: 3.3.0
+  PACK_VER: 3.4.0
 
 on: 
   push:
-    branches:
-      - master
+  pull_request:
 
 jobs:
   linux:
@@ -19,10 +18,11 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: Restore dependencies
-        run: dotnet restore Sims1WidescreenPatcher.Linux/Sims1WidescreenPatcher.Linux.csproj -r linux-x64
+        run: dotnet restore Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -r linux-x64
       - name: Publish
-        run: dotnet publish Sims1WidescreenPatcher.Linux/Sims1WidescreenPatcher.Linux.csproj -c Release -o artifacts
+        run: dotnet publish Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -c Release -o artifacts -p:VersionPrefix=${{ env.PACK_VER }} -p:PublishSingleFile=true -p:SelfContained=true -p:DebugType=embedded -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:PublishTrimmed=true -p:RuntimeIdentifier=linux-x64
       - name: Upload a Build Artifact
+        if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master'
         uses: actions/upload-artifact@v3.1.0
         with:
           name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+linux.x64
@@ -37,17 +37,18 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: Restore dependencies
-        run: dotnet restore Sims1WidescreenPatcher.Windows/Sims1WidescreenPatcher.Windows.csproj -r win-x64
+        run: dotnet restore Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -r win-x64
       - name: Publish
-        run: dotnet publish Sims1WidescreenPatcher.Windows/Sims1WidescreenPatcher.Windows.csproj -c Release -o artifacts
+        run: dotnet publish Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -c Release -o artifacts -p:VersionPrefix=${{ env.PACK_VER }} -p:PublishSingleFile=true -p:SelfContained=true -p:DebugType=embedded -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:PublishTrimmed=true -p:RuntimeIdentifier=win-x64
       - name: Upload a Build Artifact
+        if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master'
         uses: actions/upload-artifact@v3.1.0
         with:
           name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+win.x64
           path: artifacts/Sims1WidescreenPatcher.exe
 
   macos:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET
@@ -55,18 +56,18 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: Restore dependencies
-        run: dotnet restore Sims1WidescreenPatcher.MacOS/Sims1WidescreenPatcher.MacOS.csproj -r osx-x64
+        run: dotnet restore Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -r osx-x64
       - name: Publish
-        run: dotnet msbuild Sims1WidescreenPatcher.MacOS/Sims1WidescreenPatcher.MacOS.csproj -t:BundleApp -p:Configuration=Release
+        run: dotnet msbuild Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -t:BundleApp -p:RuntimeIdentifier=osx-x64 -p:UseAppHost=true -p:Configuration=Release -p:TargetFramework=net6.0 -p:VersionPrefix=${{ env.PACK_VER }} -p:PublishSingleFile=true -p:SelfContained=true -p:DebugType=embedded -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:PublishTrimmed=true
       - name: Move App Bundle to Artifacts
-        run: mkdir artifacts && mv Sims1WidescreenPatcher.MacOS/bin/Release/net6.0/osx-x64/publish/Sims1WidescreenPatcher.app artifacts/
+        run: mkdir artifacts && mv Sims1WidescreenPatcher/bin/Release/net6.0/osx-x64/publish/Sims1WidescreenPatcher.app artifacts/
       - name: Set Executable
         run: chmod -R +x artifacts/Sims1WidescreenPatcher.app/Contents/MacOS/
       - name: Tar to Preserve Permissions
         run: tar -cvf Sims1WidescreenPatcher.${{ env.PACK_VER }}+macOS.x64.tar artifacts/
       - name: Upload a Build Artifact
+        if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master'
         uses: actions/upload-artifact@v3.1.0
         with:
           name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+macOS.x64
           path: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+macOS.x64.tar
-    

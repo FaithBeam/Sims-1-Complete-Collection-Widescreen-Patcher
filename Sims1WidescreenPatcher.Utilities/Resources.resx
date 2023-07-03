@@ -125,7 +125,7 @@
     <value>Resources\DgVoodoo2\D3DImm.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="ddraw" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\DDrawCompat\ddraw.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>Resources\DDrawCompat\0.3.2\ddraw.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="DDraw1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\DgVoodoo2\DDraw.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

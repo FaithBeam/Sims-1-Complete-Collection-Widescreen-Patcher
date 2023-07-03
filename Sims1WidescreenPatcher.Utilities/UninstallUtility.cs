@@ -17,7 +17,7 @@ public static class UninstallUtility
         Log.Debug("Move {@BackupPath} to {@Destination}", backupPath, path);
         File.Move(backupPath, path);
         WrapperUtility.RemoveWrapper(path);
-        Images.Images.RemoveGraphics(path);
+        
         Log.Information("Finish uninstall");
     }
 }

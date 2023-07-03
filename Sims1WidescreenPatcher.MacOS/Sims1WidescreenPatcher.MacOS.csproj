@@ -1,72 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <OutputType>WinExe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
-        <TrimMode>copyused</TrimMode>
-        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-        <AssemblyName>Sims1WidescreenPatcher</AssemblyName>
-        <RootNamespace>Sims1WidescreenPatcher</RootNamespace>
-        <PackageId>Sims1WidescreenPatcher</PackageId>
-        <Authors>FaithBeam</Authors>
-        <Company>Sims1WidescreenPatcher</Company>
-        <Product>Sims1WidescreenPatcher</Product>
-        <AssemblyVersion>3.3.0</AssemblyVersion>
-        <FileVersion>3.3.0</FileVersion>
-        <PackageVersion>3.3.0</PackageVersion>
-        <InformationalVersion>3.3.0</InformationalVersion>
-        <ApplicationIcon>..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico</ApplicationIcon>
-        <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
-        <UseAppHost>true</UseAppHost>
-        <SelfContained>true</SelfContained>
-        <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
-        <UseAppHost>true</UseAppHost>
-        <SelfContained>true</SelfContained>
-    </PropertyGroup>
-    <PropertyGroup>
-        <CFBundleName>Sims1WidescreenPatcher</CFBundleName> <!-- Also defines .app file name -->
-        <CFBundleDisplayName>Sims1WidescreenPatcher</CFBundleDisplayName>
-        <CFBundleIdentifier>com.example</CFBundleIdentifier>
-        <CFBundleVersion>3.3.0</CFBundleVersion>
-        <CFBundleShortVersionString>3.3.0</CFBundleShortVersionString>
-        <CFBundlePackageType>APPL</CFBundlePackageType>
-        <CFBundleExecutable>Sims1WidescreenPatcher</CFBundleExecutable>
-        <CFBundleIconFile>SimsICO.ico</CFBundleIconFile> <!-- Will be copied from output directory -->
-        <NSPrincipalClass>NSApplication</NSPrincipalClass>
-        <NSHighResolutionCapable>true</NSHighResolutionCapable>
-    </PropertyGroup>
-    <ItemGroup>
-        <AvaloniaResource Include="Assets\**" />
-        <None Remove=".gitignore" />
-        <None Include="..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico">
-          <Link>SimsICO.ico</Link>
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-    <ItemGroup>
-        <!--This helps with theme dll-s trimming.
-        If you will publish your application in self-contained mode with p:PublishTrimmed=true and it will use Fluent theme Default theme will be trimmed from the output and vice versa.
-        https://github.com/AvaloniaUI/Avalonia/issues/5593 -->
-        <TrimmableAssembly Include="Avalonia.Themes.Fluent" />
-        <TrimmableAssembly Include="Avalonia.Themes.Default" />
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.0.0-preview2" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview2" />
-        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview2" />
-        <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview2" />
-        <PackageReference Include="DotNet.Bundle" Version="0.9.13" />
-        <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
-        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-        <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
-    </ItemGroup>
-    <ItemGroup>
-      <UpToDateCheckInput Remove="Assets\avalonia-logo.ico" />
-      <UpToDateCheckInput Remove="Views\MainWindow.axaml" />
-    </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\Sims1WidescreenPatcher.UI\Sims1WidescreenPatcher.UI.csproj" />
-    </ItemGroup>
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+		<PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Sims1WidescreenPatcher.UI\Sims1WidescreenPatcher.UI.csproj" />
+	</ItemGroup>
 </Project>

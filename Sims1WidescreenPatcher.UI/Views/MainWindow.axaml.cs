@@ -2,36 +2,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.ViewModels;
+using Splat;
 
 namespace Sims1WidescreenPatcher.UI.Views;
 
-public class MainWindow : ReactiveWindow<MainWindowViewModel>
+public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 {
     public MainWindow()
     {
         InitializeComponent();
-#if DEBUG
-        this.AttachDevTools();
-#endif
+        DataContext = Locator.Current.GetService<MainWindowViewModel>();
         this.WhenActivated(d =>
         {
-            if (ViewModel != null) d(ViewModel.ShowOpenFileDialog.RegisterHandler(ShowOpenFileDialog));
+            if (ViewModel == null) return;
+            d(ViewModel.ShowOpenFileDialog.RegisterHandler(ShowOpenFileDialogAsync));
             d(ViewModel!.ShowCustomResolutionDialog.RegisterHandler(ShowCustomResolutionDialogAsync));
             d(ViewModel!.ShowCustomYesNoDialog.RegisterHandler(ShowCustomYesNoDialogAsync));
             d(ViewModel!.ShowCustomInformationDialog.RegisterHandler(ShowCustomInformationDialogAsync));
         });
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 
     private async Task ShowCustomInformationDialogAsync(
@@ -46,7 +40,8 @@ public class MainWindow : ReactiveWindow<MainWindowViewModel>
         interaction.SetOutput(result);
     }
 
-    private async Task ShowCustomYesNoDialogAsync(InteractionContext<CustomYesNoDialogViewModel, YesNoDialogResponse?> interaction)
+    private async Task ShowCustomYesNoDialogAsync(
+        InteractionContext<CustomYesNoDialogViewModel, YesNoDialogResponse?> interaction)
     {
         var dialog = new CustomYesNoDialog
         {
@@ -69,29 +64,14 @@ public class MainWindow : ReactiveWindow<MainWindowViewModel>
         interaction.SetOutput(result);
     }
 
-    private async Task ShowOpenFileDialog(InteractionContext<Unit, string> interaction)
+    private async Task ShowOpenFileDialogAsync(InteractionContext<Unit, IStorageFile?> interaction)
     {
-        var dialog = new OpenFileDialog
+        var fileNames = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Filters = new List<FileDialogFilter>
-            {
-                new()
-                {
-                    Extensions = new List<string> {"exe"},
-                    Name = "Sims executable (Sims.exe)"
-                }
-            },
+            Title = "Select Sims.exe",
             AllowMultiple = false,
-            Title = "Select Sims.exe"
-        };
-        var fileNames = await dialog.ShowAsync(this);
-        if (fileNames is not null && fileNames.Any())
-        {
-            interaction.SetOutput(fileNames[0]);
-        }
-        else
-        {
-            interaction.SetOutput("");
-        }
+            FileTypeFilter = new FilePickerFileType[] {new ("Sims.exe") {Patterns = new []{"Sims.exe"}}}
+        });
+        interaction.SetOutput(fileNames.Any() ? fileNames[0] : null);
     }
 }

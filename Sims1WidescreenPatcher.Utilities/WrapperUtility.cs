@@ -1,71 +1,75 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using Serilog;
+using Sims1WidescreenPatcher.Utilities.Models;
 
 namespace Sims1WidescreenPatcher.Utilities;
 
 public static class WrapperUtility
 {
-    public enum Wrapper
-    {
-        None,
-        DDrawCompat,
-        DgVoodoo2
-    }
+    private static string[] _ddrawCompat040Resources = { @"DDrawCompat._0._4._0.ddraw.dll" };
+    private static string[] _ddrawCompat032Resources = { @"DDrawCompat._0._3._2.ddraw.dll" };
+    private static string[] _dgvoodooResources = { @"DgVoodoo2.D3D8.dll", @"DgVoodoo2.D3DImm.dll", @"DgVoodoo2.DDraw.dll", @"DgVoodoo2.dgVoodoo.conf", @"DgVoodoo2.dgVoodooCpl.exe" };
 
-    private static string[] _ddrawCompatResources = { "ddraw.dll" };
-
-    private static string[] _dgvoodooResources =
-        {"D3D8.dll", "D3DImm.dll", "DDraw.dll", "dgVoodoo.conf", "dgVoodooCpl.exe"};
-
-    public static List<Wrapper> GetWrappers()
+    public static List<IWrapper> GetWrappers()
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            return new List<Wrapper> { Wrapper.DDrawCompat, Wrapper.DgVoodoo2, Wrapper.None };
+            /* Return different ddrawcompat versions depending on Windows version.
+               Windows 10 and newer get ddrawcompat 0.4.0
+               Windows 8.1 and older get ddrawcompat 0.3.2
+             */
+            return Environment.OSVersion.Version.Major >= 10 ?
+                new List<IWrapper> { new DDrawCompatWrapper("0.4.0"), new DgVoodoo2Wrapper(), new NoneWrapper() } :
+                new List<IWrapper> { new DDrawCompatWrapper("0.3.2"), new DgVoodoo2Wrapper(), new NoneWrapper() };
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            return new List<Wrapper> { Wrapper.None, Wrapper.DgVoodoo2 };
+            return new List<IWrapper> { new NoneWrapper(), new DgVoodoo2Wrapper() };
         }
         else
         {
-            return new List<Wrapper> { Wrapper.None };
+            return new List<IWrapper> { new NoneWrapper() };
         }
     }
 
-    public static async Task ExtractWrapper(Wrapper wrapper, string path)
+    public static async Task ExtractWrapper(IWrapper wrapper, string path)
     {
         Log.Information("Begin extract wrapper");
         Log.Debug("Wrapper {@Wrapper}", wrapper);
         Log.Debug("Path {@Path}", path);
-        System.Diagnostics.Debug.WriteLine(Assembly.GetExecutingAssembly().FullName);
-        System.Diagnostics.Debug.WriteLine(Assembly.GetExecutingAssembly().GetManifestResourceNames());
         var dir = Path.GetDirectoryName(path) ?? string.Empty;
         var resourceStream = "Sims1WidescreenPatcher.Utilities.Resources.";
-        string[] resources;
+        var resources = new string[] { };
 
         switch (wrapper)
         {
-            case Wrapper.DDrawCompat:
-                resourceStream += "DDrawCompat";
-                resources = _ddrawCompatResources;
+            case DDrawCompatWrapper w:
+                if (w.Version == "0.4.0")
+                {
+                    resources = _ddrawCompat040Resources;
+                }
+                else
+                {
+                    resources = _ddrawCompat032Resources;
+                }
                 break;
-            case Wrapper.DgVoodoo2:
-                resourceStream += "DgVoodoo2";
+            case DgVoodoo2Wrapper:
                 resources = _dgvoodooResources;
                 break;
-            case Wrapper.None:
-                return;
+            case NoneWrapper:
+                break;
             default:
-                throw new ArgumentOutOfRangeException(nameof(wrapper), wrapper, null);
+                throw new ArgumentOutOfRangeException(nameof(wrapper), wrapper, "");
         }
 
         foreach (var resource in resources)
         {
-            var currentResource = $"{resourceStream}.{resource}";
+            var currentResource = $"{resourceStream}{resource}";
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(currentResource);
-            var dest = Path.Combine(dir, resource);
+            var resourceSplit = resource.Split('.');
+            var combined = resourceSplit[resourceSplit.Length - 2] + "." + resourceSplit[resourceSplit.Length - 1];
+            var dest = Path.Combine(dir, combined);
             using var fs = File.Create(dest);
             await stream!.CopyToAsync(fs);
             Log.Debug("Copied {@Resource} to {@Path}", resource, dest);
@@ -78,9 +82,11 @@ public static class WrapperUtility
         Log.Information("Begin remove wrapper");
         Log.Debug("Path {@Path}", path);
         var dir = Path.GetDirectoryName(path) ?? string.Empty;
-        foreach (var item in _ddrawCompatResources.Concat(_dgvoodooResources))
+        foreach (var item in _ddrawCompat040Resources.Concat(_ddrawCompat032Resources).Concat(_dgvoodooResources))
         {
-            var delete = Path.Combine(dir, item);
+            var itemSplit = item.Split('.');
+            var combined = itemSplit[itemSplit.Length - 2] + "." + itemSplit[itemSplit.Length - 1];
+            var delete = Path.Combine(dir, combined);
             File.Delete(delete);
             Log.Debug("Delete {@File}", delete);
         }
