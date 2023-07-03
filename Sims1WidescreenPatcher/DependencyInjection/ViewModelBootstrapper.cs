@@ -1,6 +1,6 @@
 ﻿using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Core.ViewModels;
-using Sims1WidescreenPatcher.Utilities.Models;
+using Sims1WidescreenPatcher.Utilities.Services;
 using Splat;
 
 namespace Sims1WidescreenPatcher.DependencyInjection
@@ -15,7 +15,7 @@ namespace Sims1WidescreenPatcher.DependencyInjection
                 resolver.GetService<IResolutionsService>()!,
                 resolver.GetService<CustomYesNoDialogViewModel>()!,
                 resolver.GetService<CustomResolutionDialogViewModel>()!,
-                resolver.GetService<ProgressPct>()!));
+                resolver.GetService<IProgressService>()!));
         }
     }
 }

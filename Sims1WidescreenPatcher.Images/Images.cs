@@ -2,6 +2,7 @@
 using Sims.Far;
 using Sims1WidescreenPatcher.Images.Models;
 using Sims1WidescreenPatcher.Utilities.Models;
+using Sims1WidescreenPatcher.Utilities.Services;
 
 namespace Sims1WidescreenPatcher.Images;
 
@@ -70,7 +71,7 @@ public static class Images
         Log.Information("End remove graphics");
     }
 
-    public static void ModifySimsUi(string path, int width, int height, ProgressPct progress)
+    public static void ModifySimsUi(string path, int width, int height, IProgressService progressService)
     {
         Log.Information("Begin scaling Sims UI files");
 
@@ -125,7 +126,7 @@ public static class Images
             {
                 current++;
                 var calc = current / (double)totalJobs * 100;
-                progress.Progress = calc;
+                progressService.UpdateProgress(calc);
             }
         });
 

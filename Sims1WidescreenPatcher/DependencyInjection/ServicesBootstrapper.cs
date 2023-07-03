@@ -3,6 +3,7 @@ using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Linux.Services;
 using Sims1WidescreenPatcher.MacOS.Services;
 using Sims1WidescreenPatcher.Utilities.Models;
+using Sims1WidescreenPatcher.Utilities.Services;
 using Sims1WidescreenPatcher.Windows.Services;
 using Splat;
 using System.Runtime.InteropServices;
@@ -39,7 +40,7 @@ namespace Sims1WidescreenPatcher.DependencyInjection
 
         private static void RegisterCommonServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            services.RegisterLazySingleton(() => new ProgressPct());
+            services.RegisterLazySingleton<IProgressService>(() => new ProgressService());
         }
     }
 }

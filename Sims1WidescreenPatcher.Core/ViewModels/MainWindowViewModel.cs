@@ -9,6 +9,7 @@ using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Utilities;
 using Sims1WidescreenPatcher.Utilities.Models;
+using Sims1WidescreenPatcher.Utilities.Services;
 
 namespace Sims1WidescreenPatcher.Core.ViewModels;
 
@@ -25,7 +26,8 @@ public class MainWindowViewModel : ViewModelBase
     private readonly ObservableAsPropertyHelper<bool> _hasBackup;
     private readonly ObservableAsPropertyHelper<bool> _isValidSimsExe;
     private readonly List<string> _previouslyPatched = new();
-    private readonly ProgressPct _progress;
+    private readonly IProgressService _progressService;
+    private readonly ObservableAsPropertyHelper<double> _progress;
 
     #endregion
 
@@ -34,9 +36,9 @@ public class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel(IResolutionsService resolutionsService,
         CustomYesNoDialogViewModel customYesNoDialogViewModel,
         CustomResolutionDialogViewModel customResolutionDialogViewModel,
-        ProgressPct progress)
+        IProgressService progressService)
     {
-        _progress = progress;
+        _progressService = progressService;
         _customYesNoDialogViewModel = customYesNoDialogViewModel;
         _customResolutionDialogViewModel = customResolutionDialogViewModel;
         this.WhenAnyValue(x => x.Path).Subscribe(x => System.Diagnostics.Debug.WriteLine(x));
@@ -75,10 +77,20 @@ public class MainWindowViewModel : ViewModelBase
         ShowCustomYesNoDialog = new Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?>();
         ShowCustomInformationDialog = new Interaction<CustomInformationDialogViewModel, Unit>();
 
-        this.WhenAnyValue(x => x.Progress, 
-            (p) => 
-                p >= 100)
-            .Subscribe(_ => OpenCustomInformationDialogAsync("Progress", "Patched! You may close this application now."));
+        var progressPct = Observable.FromEventPattern<NewProgressEventArgs>(_progressService, "NewProgressEventHandler");
+        progressPct
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(async e =>
+        {
+            if (e.EventArgs.Progress >= 100)
+            {
+                await OpenCustomInformationDialogAsync("Progress", "Patched! You may close this application now.");
+                _progressService.UpdateProgress(0.0);
+            }
+        });
+        _progress = progressPct
+            .Select(x => x.EventArgs.Progress)
+            .ToProperty(this, x => x.Progress);
     }
 
     #endregion
@@ -139,7 +151,7 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _selectedWrapperIndex, value);
     }
 
-    public double Progress => _progress.Progress;
+    public double Progress => _progress.Value;
 
     #endregion
 
@@ -202,7 +214,7 @@ public class MainWindowViewModel : ViewModelBase
 
         await Task.Run(() => PatchUtility.Patch(Path, SelectedResolution!.Width, SelectedResolution.Height));
         await Task.Run(() =>
-            Images.Images.ModifySimsUi(Path, SelectedResolution!.Width, SelectedResolution.Height, _progress));
+            Images.Images.ModifySimsUi(Path, SelectedResolution!.Width, SelectedResolution.Height, _progressService));
 
         if (selectedWrapper is not NoneWrapper)
         {
