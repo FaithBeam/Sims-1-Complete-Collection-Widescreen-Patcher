@@ -28,6 +28,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly List<string> _previouslyPatched = new();
     private readonly IProgressService _progressService;
     private readonly ObservableAsPropertyHelper<double> _progress;
+    private readonly IFindSimsPathService _findSimsPathService;
 
     #endregion
 
@@ -36,7 +37,8 @@ public class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel(IResolutionsService resolutionsService,
         CustomYesNoDialogViewModel customYesNoDialogViewModel,
         CustomResolutionDialogViewModel customResolutionDialogViewModel,
-        IProgressService progressService)
+        IProgressService progressService,
+        IFindSimsPathService findSimsPathService)
     {
         _progressService = progressService;
         _customYesNoDialogViewModel = customYesNoDialogViewModel;
@@ -76,6 +78,8 @@ public class MainWindowViewModel : ViewModelBase
         CustomResolutionCommand = ReactiveCommand.CreateFromTask(OpenCustomResolutionDialogAsync);
         ShowCustomYesNoDialog = new Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?>();
         ShowCustomInformationDialog = new Interaction<CustomInformationDialogViewModel, Unit>();
+        _findSimsPathService = findSimsPathService;
+        Path = _findSimsPathService.FindSimsPath();
 
         var progressPct = Observable.FromEventPattern<NewProgressEventArgs>(_progressService, "NewProgressEventHandler");
         progressPct
