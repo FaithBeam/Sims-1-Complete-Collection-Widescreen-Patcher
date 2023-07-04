@@ -1,12 +1,11 @@
-﻿using Sims1WidescreenPatcher.Core.Models;
-using Sims1WidescreenPatcher.Core.Services;
+﻿using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Linux.Services;
 using Sims1WidescreenPatcher.MacOS.Services;
-using Sims1WidescreenPatcher.Utilities.Models;
 using Sims1WidescreenPatcher.Utilities.Services;
 using Sims1WidescreenPatcher.Windows.Services;
 using Splat;
 using System.Runtime.InteropServices;
+using FindSimsPathService = Sims1WidescreenPatcher.Windows.Services.FindSimsPathService;
 
 namespace Sims1WidescreenPatcher.DependencyInjection
 {
@@ -32,6 +31,7 @@ namespace Sims1WidescreenPatcher.DependencyInjection
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 services.RegisterLazySingleton<IResolutionsService>(() => new LinuxResolutionService());
+                services.Register<IFindSimsPathService>(() => new Linux.Services.FindSimsPathService());
             }
             else
             {

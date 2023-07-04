@@ -12,6 +12,7 @@
 		<FileVersion>3.3.0</FileVersion>
 		<InformationalVersion>3.3.0</InformationalVersion>
 		<ApplicationIcon>..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico</ApplicationIcon>
+		<LangVersion>default</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<AvaloniaResource Include="Assets\**" />
