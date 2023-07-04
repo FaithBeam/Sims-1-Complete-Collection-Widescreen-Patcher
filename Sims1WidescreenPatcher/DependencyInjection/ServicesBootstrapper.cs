@@ -27,6 +27,7 @@ namespace Sims1WidescreenPatcher.DependencyInjection
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 services.RegisterLazySingleton<IResolutionsService>(() => new MacOsResolutionService());
+                services.Register<IFindSimsPathService>(() => new MacOS.Services.FindSimsPathService());
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
