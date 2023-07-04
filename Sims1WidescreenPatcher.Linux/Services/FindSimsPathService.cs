@@ -4,8 +4,5 @@ namespace Sims1WidescreenPatcher.Linux.Services;
 
 public class FindSimsPathService : IFindSimsPathService
 {
-    public string FindSimsPath()
-    {
-        return string.Empty;
-    }
+    public string FindSimsPath() => string.Empty;
 }
