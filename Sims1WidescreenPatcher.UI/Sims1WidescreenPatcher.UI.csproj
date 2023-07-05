@@ -32,6 +32,18 @@
         <DependentUpon>App.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="Dialogs\CustomInformationDialog.axaml.cs">
+        <DependentUpon>CustomInformationDialog.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Dialogs\CustomResolutionDialog.axaml.cs">
+        <DependentUpon>CustomResolutionDialog.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Dialogs\CustomYesNoDialog.axaml.cs">
+        <DependentUpon>CustomYesNoDialog.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 
 </Project>
