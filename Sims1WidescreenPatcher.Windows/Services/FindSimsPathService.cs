@@ -12,7 +12,8 @@ public class FindSimsPathService : IFindSimsPathService
         try
         {
             using var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Maxis\The Sims");
-            var val = key.GetValue("InstallPath").ToString();
+            var val = key?.GetValue("InstallPath")?.ToString();
+            if (string.IsNullOrWhiteSpace(val)) return string.Empty;
             var path = Path.Combine(val, "Sims.exe");
             return path;
         }
