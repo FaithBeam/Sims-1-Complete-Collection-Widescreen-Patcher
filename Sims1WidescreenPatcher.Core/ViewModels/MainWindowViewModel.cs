@@ -85,13 +85,11 @@ public class MainWindowViewModel : ViewModelBase
         progressPct
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(async e =>
-        {
-            if (e.EventArgs.Progress >= 100)
             {
+                if (e.EventArgs.Progress < 100) return;
                 await OpenCustomInformationDialogAsync("Progress", "Patched! You may close this application now.");
                 _progressService.UpdateProgress(0.0);
-            }
-        });
+            });
         _progress = progressPct
             .Select(x => x.EventArgs.Progress)
             .ToProperty(this, x => x.Progress);
