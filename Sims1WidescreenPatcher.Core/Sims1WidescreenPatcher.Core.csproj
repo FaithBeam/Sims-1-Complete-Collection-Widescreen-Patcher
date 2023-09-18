@@ -8,8 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Avalonia" Version="11.0.0" />
-      <PackageReference Include="ReactiveUI" Version="19.2.1" />
+      <PackageReference Include="Avalonia" Version="11.0.4" />
+      <PackageReference Include="ReactiveUI" Version="19.4.1" />
     </ItemGroup>
 
     <ItemGroup>

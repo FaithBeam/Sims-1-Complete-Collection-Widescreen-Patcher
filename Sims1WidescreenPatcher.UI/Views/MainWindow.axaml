@@ -2,7 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModels1="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
+        xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
+        xmlns:converters="clr-namespace:Sims1WidescreenPatcher.UI.Converters"
         mc:Ignorable="d"
         Height="150"
         Width="600"
@@ -13,9 +14,13 @@
         Title="Sims 1 Widescreen Patcher">
 
 	<Design.DataContext>
-		<viewModels1:MainWindowViewModel />
+		<viewModels:MainWindowViewModel />
 	</Design.DataContext>
 
+	<Window.Resources>
+		<converters:ResolutionColorCodingConverter x:Key="ResolutionColorCodingConverter" />
+	</Window.Resources>
+	
 	<Grid IsSharedSizeScope="True">
 		<StackPanel Margin="5">
 			<!--Row 1-->
@@ -55,6 +60,12 @@
 							<TextBlock Text="Resolutions supported by your monitor.&#x0a;&#x0a;800x600 and 1024x768 are the two default resolutions for The Sims.&#x0a;&#x0a;1600xX resolutions have game breaking graphical issues.">
 							</TextBlock>
 						</ToolTip.Tip>
+						
+						<ComboBox.Styles>
+							<Style Selector="ComboBox > ComboBoxItem">
+								<Setter Property="Background" Value="{Binding Converter={StaticResource ResolutionColorCodingConverter}}" />
+							</Style>
+						</ComboBox.Styles>
 					</ComboBox>
 				</StackPanel>
 				<StackPanel Grid.Column="1">

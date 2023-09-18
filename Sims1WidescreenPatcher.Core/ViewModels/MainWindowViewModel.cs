@@ -29,6 +29,9 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IProgressService _progressService;
     private readonly ObservableAsPropertyHelper<double> _progress;
     private readonly IFindSimsPathService _findSimsPathService;
+    private readonly AvaloniaList<Resolution> _resolutionsSource;
+    private AvaloniaList<Resolution> _filteredResolutions;
+    private AspectRatio? _currentAspectRatio;
 
     #endregion
 
@@ -70,9 +73,10 @@ public class MainWindowViewModel : ViewModelBase
         UninstallCommand = ReactiveCommand.CreateFromTask(OnClickedUninstall, canUninstall);
         OpenFile = ReactiveCommand.CreateFromTask(OpenFileAsync);
         ShowOpenFileDialog = new Interaction<Unit, IStorageFile?>();
-        Resolutions = new AvaloniaList<Resolution>(resolutionsService.GetResolutions())
+        _resolutionsSource = new AvaloniaList<Resolution>(resolutionsService.GetResolutions())
             { new(-1, -1) };
-        SelectedResolution = Resolutions.FirstOrDefault() ?? new Resolution(1920, 1080);
+        _filteredResolutions = _resolutionsSource;
+        SelectedResolution = Resolutions.First();
         SelectedWrapperIndex = 0;
         ShowCustomResolutionDialog = new Interaction<CustomResolutionDialogViewModel, Resolution?>();
         CustomResolutionCommand = ReactiveCommand.CreateFromTask(OpenCustomResolutionDialogAsync);
@@ -80,8 +84,9 @@ public class MainWindowViewModel : ViewModelBase
         ShowCustomInformationDialog = new Interaction<CustomInformationDialogViewModel, Unit>();
         _findSimsPathService = findSimsPathService;
         Path = _findSimsPathService.FindSimsPath();
-
-        var progressPct = Observable.FromEventPattern<NewProgressEventArgs>(_progressService, "NewProgressEventHandler");
+        
+        var progressPct =
+            Observable.FromEventPattern<NewProgressEventArgs>(_progressService, "NewProgressEventHandler");
         progressPct
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(async e =>
@@ -94,6 +99,7 @@ public class MainWindowViewModel : ViewModelBase
             .Select(x => x.EventArgs.Progress)
             .ToProperty(this, x => x.Progress);
     }
+
 
     #endregion
 
@@ -127,7 +133,13 @@ public class MainWindowViewModel : ViewModelBase
     private bool HasBackup => _hasBackup.Value;
     private bool IsValidSimsExe => _isValidSimsExe.Value;
 
-    public AvaloniaList<Resolution> Resolutions { get; }
+    public AspectRatio? AspectRatio
+    {
+        get => _currentAspectRatio;
+        set => this.RaiseAndSetIfChanged(ref _currentAspectRatio, value);
+    }
+
+    public AvaloniaList<Resolution> Resolutions => _filteredResolutions;
 
     public Resolution? SelectedResolution
     {

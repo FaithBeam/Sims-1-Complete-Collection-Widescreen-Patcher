@@ -1,4 +1,6 @@
-﻿namespace Sims1WidescreenPatcher.Core.Models;
+﻿using System.Numerics;
+
+namespace Sims1WidescreenPatcher.Core.Models;
 
 public class Resolution
 {
@@ -25,13 +27,14 @@ public class Resolution
     public static IEqualityComparer<Resolution>? WidthHeightComparer { get; } = new WidthHeightEqualityComparer();
 
     public int Width { get; }
-
     public int Height { get; }
+    public AspectRatio AspectRatio { get; }
 
     public Resolution(int width, int height)
     {
         Width = width;
         Height = height;
+        AspectRatio = new AspectRatio(width, height);
     }
 
     public override string ToString()
@@ -40,6 +43,6 @@ public class Resolution
         {
             return @"<Custom Resolution>";
         }
-        return $"{Width}x{Height}";
+        return $"{Width}x{Height} ({AspectRatio})";
     }
 }
