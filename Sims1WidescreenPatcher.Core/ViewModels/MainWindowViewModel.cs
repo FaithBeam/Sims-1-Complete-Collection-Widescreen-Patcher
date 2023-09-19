@@ -1,8 +1,10 @@
-﻿using System.Reactive;
+﻿using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using Avalonia.Collections;
 using Avalonia.Platform.Storage;
+using DynamicData;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Enums;
 using Sims1WidescreenPatcher.Core.Models;
@@ -29,8 +31,8 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IProgressService _progressService;
     private readonly ObservableAsPropertyHelper<double> _progress;
     private readonly IFindSimsPathService _findSimsPathService;
-    private readonly AvaloniaList<Resolution> _resolutionsSource;
-    private AvaloniaList<Resolution> _filteredResolutions;
+    private readonly SourceList<Resolution> _resolutionSource = new();
+    private readonly ReadOnlyObservableCollection<Resolution> _resolutions;
     private AspectRatio? _currentAspectRatio;
 
     #endregion
@@ -73,9 +75,10 @@ public class MainWindowViewModel : ViewModelBase
         UninstallCommand = ReactiveCommand.CreateFromTask(OnClickedUninstall, canUninstall);
         OpenFile = ReactiveCommand.CreateFromTask(OpenFileAsync);
         ShowOpenFileDialog = new Interaction<Unit, IStorageFile?>();
-        _resolutionsSource = new AvaloniaList<Resolution>(resolutionsService.GetResolutions())
-            { new(-1, -1) };
-        _filteredResolutions = _resolutionsSource;
+        _resolutionSource.Connect()
+            .Bind(out _resolutions)
+            .Subscribe();
+        _resolutionSource.AddRange(resolutionsService.GetResolutions());
         SelectedResolution = Resolutions.First();
         SelectedWrapperIndex = 0;
         ShowCustomResolutionDialog = new Interaction<CustomResolutionDialogViewModel, Resolution?>();
@@ -139,7 +142,7 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _currentAspectRatio, value);
     }
 
-    public AvaloniaList<Resolution> Resolutions => _filteredResolutions;
+    public ReadOnlyObservableCollection<Resolution> Resolutions => _resolutions;
 
     public Resolution? SelectedResolution
     {
@@ -190,7 +193,7 @@ public class MainWindowViewModel : ViewModelBase
         var res = await ShowCustomResolutionDialog.Handle(_customResolutionDialogViewModel);
         if (res is { Width: > 0, Height: > 0 })
         {
-            Resolutions.Insert(Resolutions.Count - 1, res);
+            _resolutionSource.Add(res);
             SelectedResolution = res;
         }
     }
