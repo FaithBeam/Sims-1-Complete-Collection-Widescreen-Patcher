@@ -19,6 +19,7 @@
 
 	<Window.Resources>
 		<converters:ResolutionColorCodingConverter x:Key="ResolutionColorCodingConverter" />
+		<converters:AspectRatioConverter x:Key="AspectRatioConverter" />
 	</Window.Resources>
 	
 	<Grid IsSharedSizeScope="True">
@@ -51,7 +52,7 @@
 				<StackPanel Grid.Column="0"
 				            Margin="0 0 5 0">
 					<Label>Aspect Ratio</Label>
-					<TextBox Watermark="Aspect Ratio Filter"></TextBox>
+					<TextBox Watermark="Aspect Ratio Filter" Text="{Binding AspectRatio, Converter={StaticResource AspectRatioConverter}}" />
 				</StackPanel>
 				<StackPanel Grid.Column="1">
 					<Label>Resolution</Label>

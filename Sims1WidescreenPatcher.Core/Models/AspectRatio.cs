@@ -17,6 +17,17 @@ public class AspectRatio : IEqualityComparer<AspectRatio>
         return $"{_numerator}:{_denominator}";
     }
 
+    public static bool operator ==(AspectRatio obj1, AspectRatio obj2)
+    {
+        return (obj1._numerator == obj2._numerator
+             && obj1._denominator == obj2._denominator);
+    }
+
+    public static bool operator !=(AspectRatio obj1, AspectRatio obj2)
+    {
+        return !(obj1 == obj2);
+    }
+
     private void CalculateAspectRatio(int width, int height)
     {
         var gcd = BigInteger.GreatestCommonDivisor(width, height);

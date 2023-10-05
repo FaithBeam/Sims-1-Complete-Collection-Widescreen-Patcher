@@ -2,7 +2,7 @@
 
 namespace Sims1WidescreenPatcher.Core.Models;
 
-public class Resolution
+public class Resolution : IComparable<Resolution>
 {
     private sealed class WidthHeightEqualityComparer : IEqualityComparer<Resolution>
     {
@@ -39,10 +39,15 @@ public class Resolution
 
     public override string ToString()
     {
-        if (Width == -1 && Height == -1)
-        {
-            return @"<Custom Resolution>";
-        }
         return $"{Width}x{Height} ({AspectRatio})";
+    }
+
+    public int CompareTo(Resolution? other)
+    {
+        if (ReferenceEquals(this, other)) return 0;
+        if (ReferenceEquals(null, other)) return 1;
+        var widthComparison = Width.CompareTo(other.Width);
+        if (widthComparison != 0) return widthComparison;
+        return Height.CompareTo(other.Height);
     }
 }

@@ -33,7 +33,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IFindSimsPathService _findSimsPathService;
     private readonly SourceList<Resolution> _resolutionSource = new();
     private readonly ReadOnlyObservableCollection<Resolution> _resolutions;
-    private AspectRatio? _currentAspectRatio;
+    private AspectRatio _selectedAspectRatio;
 
     #endregion
 
@@ -48,7 +48,8 @@ public class MainWindowViewModel : ViewModelBase
         _progressService = progressService;
         _customYesNoDialogViewModel = customYesNoDialogViewModel;
         _customResolutionDialogViewModel = customResolutionDialogViewModel;
-        this.WhenAnyValue(x => x.Path).Subscribe(x => System.Diagnostics.Debug.WriteLine(x));
+        this.WhenAnyValue(x => x.Path)
+            .Subscribe(x => System.Diagnostics.Debug.WriteLine(x));
         _hasBackup = this
             .WhenAnyValue(x => x.Path, x => x.IsBusy, (path, _) => PatchUtility.SimsBackupExists(path))
             .ToProperty(this, x => x.HasBackup, deferSubscription: true);
@@ -62,20 +63,25 @@ public class MainWindowViewModel : ViewModelBase
                     !hasBackup &&
                     validSimsExe &&
                     !_previouslyPatched.Contains(path) &&
-                    !isBusy
-            ).DistinctUntilChanged();
+                    !isBusy)
+            .DistinctUntilChanged();
         var canUninstall = this
             .WhenAnyValue(x => x.IsBusy, x => x.Path, x => x.HasBackup,
                 (isBusy, path, hasBackup) =>
                     !string.IsNullOrWhiteSpace(path) &&
                     !isBusy &&
-                    hasBackup
-            ).DistinctUntilChanged();
+                    hasBackup)
+            .DistinctUntilChanged();
         PatchCommand = ReactiveCommand.CreateFromTask(OnClickedPatch, canPatch);
         UninstallCommand = ReactiveCommand.CreateFromTask(OnClickedUninstall, canUninstall);
         OpenFile = ReactiveCommand.CreateFromTask(OpenFileAsync);
         ShowOpenFileDialog = new Interaction<Unit, IStorageFile?>();
-        _resolutionSource.Connect()
+        var aspectRatioFilter = this.WhenAnyValue(x => x.AspectRatio)
+            .Select(CreatePredicate);
+        _resolutionSource
+            .Connect()
+            .Filter(aspectRatioFilter)
+            .Sort(Comparer<Resolution>.Default)
             .Bind(out _resolutions)
             .Subscribe();
         _resolutionSource.AddRange(resolutionsService.GetResolutions());
@@ -88,8 +94,8 @@ public class MainWindowViewModel : ViewModelBase
         _findSimsPathService = findSimsPathService;
         Path = _findSimsPathService.FindSimsPath();
         
-        var progressPct =
-            Observable.FromEventPattern<NewProgressEventArgs>(_progressService, "NewProgressEventHandler");
+        var progressPct = Observable
+            .FromEventPattern<NewProgressEventArgs>(_progressService, "NewProgressEventHandler");
         progressPct
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(async e =>
@@ -103,6 +109,15 @@ public class MainWindowViewModel : ViewModelBase
             .ToProperty(this, x => x.Progress);
     }
 
+    private Func<Resolution, bool> CreatePredicate(AspectRatio? ar)
+    {
+        if (ar is null)
+        {
+            return resolution => true;
+        }
+
+        return resolution => resolution.AspectRatio == ar;
+    }
 
     #endregion
 
@@ -136,10 +151,10 @@ public class MainWindowViewModel : ViewModelBase
     private bool HasBackup => _hasBackup.Value;
     private bool IsValidSimsExe => _isValidSimsExe.Value;
 
-    public AspectRatio? AspectRatio
+    public AspectRatio AspectRatio
     {
-        get => _currentAspectRatio;
-        set => this.RaiseAndSetIfChanged(ref _currentAspectRatio, value);
+        get => _selectedAspectRatio;
+        set => this.RaiseAndSetIfChanged(ref _selectedAspectRatio, value);
     }
 
     public ReadOnlyObservableCollection<Resolution> Resolutions => _resolutions;
@@ -149,9 +164,9 @@ public class MainWindowViewModel : ViewModelBase
         get => _selectedResolution;
         set
         {
-            if (value is { Width: -1, Height: -1 })
+            if (value is null)
             {
-                CustomResolutionCommand.Execute(null);
+                this.RaiseAndSetIfChanged(ref _selectedResolution, _resolutions.First());
             }
             else
             {
