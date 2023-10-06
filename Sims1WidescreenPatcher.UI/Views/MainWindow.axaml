@@ -58,7 +58,7 @@
 					<Label>Resolution</Label>
 					<ComboBox Margin="0 0 5 0"
 						  x:Name="ResolutionCombo"
-						  ItemsSource="{Binding Resolutions}"
+						  ItemsSource="{Binding FilteredResolutions}"
 						  SelectedItem="{Binding SelectedResolution}"
 						  HorizontalAlignment="Stretch">
 						<ToolTip.Tip>
@@ -76,7 +76,8 @@
 				<Button Grid.Column="2"
 				        VerticalAlignment="Bottom"
 				        HorizontalAlignment="Stretch"
-				        HorizontalContentAlignment="Center">Add Resolution</Button>
+				        HorizontalContentAlignment="Center"
+				        Command="{Binding CustomResolutionCommand}">Add Resolution</Button>
 			</Grid>
 			<!--Row 3-->
 			<Grid Margin="0 5 0 0">

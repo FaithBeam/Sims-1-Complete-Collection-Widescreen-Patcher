@@ -23,6 +23,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly CustomResolutionDialogViewModel _customResolutionDialogViewModel;
     private int _selectedWrapperIndex;
     private Resolution? _selectedResolution;
+    private AspectRatio _selectedAspectRatio;
     private string _path = "";
     private bool _isBusy;
     private readonly ObservableAsPropertyHelper<bool> _hasBackup;
@@ -32,8 +33,9 @@ public class MainWindowViewModel : ViewModelBase
     private readonly ObservableAsPropertyHelper<double> _progress;
     private readonly IFindSimsPathService _findSimsPathService;
     private readonly SourceList<Resolution> _resolutionSource = new();
-    private readonly ReadOnlyObservableCollection<Resolution> _resolutions;
-    private AspectRatio _selectedAspectRatio;
+    private readonly ReadOnlyObservableCollection<Resolution> _filteredResolutions;
+    private readonly SourceList<AspectRatio> _aspectRatioSource = new();
+    private readonly ReadOnlyObservableCollection<AspectRatio> _filteredAspectRatios;
 
     #endregion
 
@@ -76,16 +78,24 @@ public class MainWindowViewModel : ViewModelBase
         UninstallCommand = ReactiveCommand.CreateFromTask(OnClickedUninstall, canUninstall);
         OpenFile = ReactiveCommand.CreateFromTask(OpenFileAsync);
         ShowOpenFileDialog = new Interaction<Unit, IStorageFile?>();
-        var aspectRatioFilter = this.WhenAnyValue(x => x.AspectRatio)
-            .Select(CreatePredicate);
+        var resolutionFilter = this.WhenAnyValue(x => x.AspectRatio)
+            .Select(CreateResolutionPredicate);
         _resolutionSource
             .Connect()
-            .Filter(aspectRatioFilter)
+            .Filter(resolutionFilter)
             .Sort(Comparer<Resolution>.Default)
-            .Bind(out _resolutions)
+            .Bind(out _filteredResolutions)
+            .Subscribe();
+        var aspectRatioFilter = this.WhenAnyValue(x => x.FilteredResolutions)
+            .Select(CreateAspectRatioPredicate);
+        _aspectRatioSource
+            .Connect()
+            .Filter(aspectRatioFilter)
+            .Sort(Comparer<AspectRatio>.Default)
+            .Bind(out _filteredAspectRatios)
             .Subscribe();
         _resolutionSource.AddRange(resolutionsService.GetResolutions());
-        SelectedResolution = Resolutions.First();
+        SelectedResolution = FilteredResolutions.First();
         SelectedWrapperIndex = 0;
         ShowCustomResolutionDialog = new Interaction<CustomResolutionDialogViewModel, Resolution?>();
         CustomResolutionCommand = ReactiveCommand.CreateFromTask(OpenCustomResolutionDialogAsync);
@@ -109,7 +119,7 @@ public class MainWindowViewModel : ViewModelBase
             .ToProperty(this, x => x.Progress);
     }
 
-    private Func<Resolution, bool> CreatePredicate(AspectRatio? ar)
+    private Func<Resolution, bool> CreateResolutionPredicate(AspectRatio? ar)
     {
         if (ar is null)
         {
@@ -117,6 +127,21 @@ public class MainWindowViewModel : ViewModelBase
         }
 
         return resolution => resolution.AspectRatio == ar;
+    }
+
+    private Func<AspectRatio, bool> CreateAspectRatioPredicate(Resolution? r)
+    {
+        if (r is null)
+        {
+            return aspectRatio => false;
+        }
+
+        if (_filteredAspectRatios.Any(x => x == r.AspectRatio))
+        {
+            return aspectRatio => false;
+        }
+
+        return aspectRatio => true;
     }
 
     #endregion
@@ -157,7 +182,7 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _selectedAspectRatio, value);
     }
 
-    public ReadOnlyObservableCollection<Resolution> Resolutions => _resolutions;
+    public ReadOnlyObservableCollection<Resolution> FilteredResolutions => _filteredResolutions;
 
     public Resolution? SelectedResolution
     {
@@ -166,7 +191,7 @@ public class MainWindowViewModel : ViewModelBase
         {
             if (value is null)
             {
-                this.RaiseAndSetIfChanged(ref _selectedResolution, _resolutions.First());
+                this.RaiseAndSetIfChanged(ref _selectedResolution, _filteredResolutions.First());
             }
             else
             {
