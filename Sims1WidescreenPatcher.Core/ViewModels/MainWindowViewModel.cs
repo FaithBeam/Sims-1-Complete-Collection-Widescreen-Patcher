@@ -23,9 +23,10 @@ public class MainWindowViewModel : ViewModelBase
     private readonly CustomResolutionDialogViewModel _customResolutionDialogViewModel;
     private int _selectedWrapperIndex;
     private Resolution? _selectedResolution;
-    private AspectRatio _selectedAspectRatio;
+    private AspectRatio _selectedSelectedAspectRatio;
     private string _path = "";
     private bool _isBusy;
+    private bool _isResolutionsColored;
     private readonly ObservableAsPropertyHelper<bool> _hasBackup;
     private readonly ObservableAsPropertyHelper<bool> _isValidSimsExe;
     private readonly List<string> _previouslyPatched = new();
@@ -34,8 +35,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IFindSimsPathService _findSimsPathService;
     private readonly SourceList<Resolution> _resolutionSource = new();
     private readonly ReadOnlyObservableCollection<Resolution> _filteredResolutions;
-    private readonly SourceList<AspectRatio> _aspectRatioSource = new();
-    private readonly ReadOnlyObservableCollection<AspectRatio> _filteredAspectRatios;
+    private readonly ReadOnlyObservableCollection<AspectRatio> _aspectRatios;
 
     #endregion
 
@@ -78,25 +78,25 @@ public class MainWindowViewModel : ViewModelBase
         UninstallCommand = ReactiveCommand.CreateFromTask(OnClickedUninstall, canUninstall);
         OpenFile = ReactiveCommand.CreateFromTask(OpenFileAsync);
         ShowOpenFileDialog = new Interaction<Unit, IStorageFile?>();
-        var resolutionFilter = this.WhenAnyValue(x => x.AspectRatio)
+        var resolutionFilter = this.WhenAnyValue(x => x.SelectedAspectRatio)
             .Select(CreateResolutionPredicate);
         _resolutionSource
             .Connect()
             .Filter(resolutionFilter)
             .Sort(Comparer<Resolution>.Default)
             .Bind(out _filteredResolutions)
-            .Subscribe();
-        var aspectRatioFilter = this.WhenAnyValue(x => x.FilteredResolutions)
-            .Select(CreateAspectRatioPredicate);
-        _aspectRatioSource
+            .Subscribe(x => SelectedResolution = x.Last().Item.Current);
+        _resolutionSource
             .Connect()
-            .Filter(aspectRatioFilter)
+            .DistinctValues(x => x.AspectRatio)
             .Sort(Comparer<AspectRatio>.Default)
-            .Bind(out _filteredAspectRatios)
+            .Bind(out _aspectRatios)
             .Subscribe();
+        
         _resolutionSource.AddRange(resolutionsService.GetResolutions());
         SelectedResolution = FilteredResolutions.First();
         SelectedWrapperIndex = 0;
+        SelectedAspectRatio = null;
         ShowCustomResolutionDialog = new Interaction<CustomResolutionDialogViewModel, Resolution?>();
         CustomResolutionCommand = ReactiveCommand.CreateFromTask(OpenCustomResolutionDialogAsync);
         ShowCustomYesNoDialog = new Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?>();
@@ -127,21 +127,6 @@ public class MainWindowViewModel : ViewModelBase
         }
 
         return resolution => resolution.AspectRatio == ar;
-    }
-
-    private Func<AspectRatio, bool> CreateAspectRatioPredicate(Resolution? r)
-    {
-        if (r is null)
-        {
-            return aspectRatio => false;
-        }
-
-        if (_filteredAspectRatios.Any(x => x == r.AspectRatio))
-        {
-            return aspectRatio => false;
-        }
-
-        return aspectRatio => true;
     }
 
     #endregion
@@ -176,11 +161,19 @@ public class MainWindowViewModel : ViewModelBase
     private bool HasBackup => _hasBackup.Value;
     private bool IsValidSimsExe => _isValidSimsExe.Value;
 
-    public AspectRatio AspectRatio
+    public AspectRatio? SelectedAspectRatio
     {
-        get => _selectedAspectRatio;
-        set => this.RaiseAndSetIfChanged(ref _selectedAspectRatio, value);
+        get => _selectedSelectedAspectRatio;
+        set => this.RaiseAndSetIfChanged(ref _selectedSelectedAspectRatio, value);
     }
+
+    public bool IsResolutionsColored
+    {
+        get => _isResolutionsColored;
+        set => this.RaiseAndSetIfChanged(ref _isResolutionsColored, value);
+    }
+
+    public ReadOnlyObservableCollection<AspectRatio> AspectRatios => _aspectRatios;
 
     public ReadOnlyObservableCollection<Resolution> FilteredResolutions => _filteredResolutions;
 
@@ -191,7 +184,7 @@ public class MainWindowViewModel : ViewModelBase
         {
             if (value is null)
             {
-                this.RaiseAndSetIfChanged(ref _selectedResolution, _filteredResolutions.First());
+                this.RaiseAndSetIfChanged(ref _selectedResolution, _filteredResolutions.FirstOrDefault());
             }
             else
             {

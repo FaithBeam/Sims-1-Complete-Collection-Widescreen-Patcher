@@ -10,6 +10,7 @@ public class CustomResolutionDialogViewModel : ViewModelBase
 
     private string _width = "";
     private string _height = "";
+    private readonly ObservableAsPropertyHelper<AspectRatio?> _aspectRatio;
 
     #endregion
 
@@ -18,6 +19,16 @@ public class CustomResolutionDialogViewModel : ViewModelBase
     public CustomResolutionDialogViewModel()
     {
         OkCommand = ReactiveCommand.Create(() => new Resolution(int.Parse(Width), int.Parse(Height)));
+        _aspectRatio = this
+            .WhenAnyValue(x => x.Width, x => x.Height, (w, h) =>
+            {
+                if (!int.TryParse(w, out var width) || !int.TryParse(h, out var height))
+                {
+                    return null;
+                }
+                return new AspectRatio(width, height);
+            })
+            .ToProperty(this, x => x.AspectRatio);
     }
 
     #endregion
@@ -41,6 +52,8 @@ public class CustomResolutionDialogViewModel : ViewModelBase
         get => _height;
         set => this.RaiseAndSetIfChanged(ref _height, value);
     }
+
+    public AspectRatio? AspectRatio => _aspectRatio.Value;
 
     #endregion
 }

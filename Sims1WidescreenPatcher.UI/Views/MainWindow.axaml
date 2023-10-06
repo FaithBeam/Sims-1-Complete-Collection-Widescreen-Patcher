@@ -19,7 +19,6 @@
 
 	<Window.Resources>
 		<converters:ResolutionColorCodingConverter x:Key="ResolutionColorCodingConverter" />
-		<converters:AspectRatioConverter x:Key="AspectRatioConverter" />
 	</Window.Resources>
 	
 	<Grid IsSharedSizeScope="True">
@@ -47,12 +46,16 @@
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="2*" />
 					<ColumnDefinition Width="2*" />
+					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" SharedSizeGroup="button" />
 				</Grid.ColumnDefinitions>
 				<StackPanel Grid.Column="0"
 				            Margin="0 0 5 0">
 					<Label>Aspect Ratio</Label>
-					<TextBox Watermark="Aspect Ratio Filter" Text="{Binding AspectRatio, Converter={StaticResource AspectRatioConverter}}" />
+					<ComboBox SelectedItem="{Binding SelectedAspectRatio}"
+					          ItemsSource="{Binding AspectRatios}">
+						<ToolTip.Tip>Filter the resolutions by aspect ratio.</ToolTip.Tip>
+					</ComboBox>
 				</StackPanel>
 				<StackPanel Grid.Column="1">
 					<Label>Resolution</Label>
@@ -60,20 +63,33 @@
 						  x:Name="ResolutionCombo"
 						  ItemsSource="{Binding FilteredResolutions}"
 						  SelectedItem="{Binding SelectedResolution}"
-						  HorizontalAlignment="Stretch">
+						  HorizontalAlignment="Stretch"
+						  Classes.ShouldColor="{Binding IsResolutionsColored}"
+						  Classes.ShouldNotColor="{Binding !IsResolutionsColored}">
 						<ToolTip.Tip>
 							<TextBlock Text="Resolutions supported by your monitor.&#x0a;&#x0a;800x600 and 1024x768 are the two default resolutions for The Sims.&#x0a;&#x0a;1600xX resolutions have game breaking graphical issues.">
 							</TextBlock>
 						</ToolTip.Tip>
 						
 						<ComboBox.Styles>
-							<Style Selector="ComboBox > ComboBoxItem">
+							<Style Selector="ComboBox.ShouldColor > ComboBoxItem">
 								<Setter Property="Background" Value="{Binding Converter={StaticResource ResolutionColorCodingConverter}}" />
+							</Style>
+							<Style Selector="ComboBox.ShouldNotColor > ComboBoxItem">
+								<Setter Property="Background" Value="Gray" />
 							</Style>
 						</ComboBox.Styles>
 					</ComboBox>
 				</StackPanel>
-				<Button Grid.Column="2"
+				<StackPanel Orientation="Horizontal" Grid.Column="2">
+					<CheckBox VerticalAlignment="Bottom"
+					          MaxWidth="24"
+					          IsChecked="{Binding IsResolutionsColored}">
+						<ToolTip.Tip>Enable or disable the color-coding for resolutions based on their aspect ratios.</ToolTip.Tip>
+					</CheckBox>
+					<Label Padding="0 3 3 6" VerticalAlignment="Bottom">Color Code</Label>
+				</StackPanel>
+				<Button Grid.Column="3"
 				        VerticalAlignment="Bottom"
 				        HorizontalAlignment="Stretch"
 				        HorizontalContentAlignment="Center"
