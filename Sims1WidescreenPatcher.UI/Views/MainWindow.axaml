@@ -112,7 +112,7 @@
 								<Setter Property="Background" Value="{Binding Converter={StaticResource ResolutionColorCodingConverter}}" />
 							</Style>
 							<Style Selector="ComboBox.ShouldNotColor > ComboBoxItem">
-								<Setter Property="Background" Value="Gray" />
+								<Setter Property="Background" Value="{DynamicResource ComboBoxItemBackground}" />
 							</Style>
 						</ComboBox.Styles>
 					</ComboBox>
