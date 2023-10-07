@@ -68,7 +68,7 @@ public class ResolutionColorCodingConverter : IValueConverter
 
         if (s == "Pointerover")
         {
-            if (r.Width % 1600 == 0)
+            if (r.Width == 1600)
             {
                 if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
                 {
@@ -107,7 +107,7 @@ public class ResolutionColorCodingConverter : IValueConverter
         
         if (s == "Selected")
         {
-            if (r.Width % 1600 == 0)
+            if (r.Width == 1600)
             {
                 if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
                 {
