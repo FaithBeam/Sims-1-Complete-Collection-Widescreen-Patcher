@@ -99,7 +99,6 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
             .Filter(resolutionFilter)
             .Sort(resolutionSort)
             .Bind(out _filteredResolutions)
-            // .Throttle(TimeSpan.FromMilliseconds(100))
             .Subscribe(GetNewSelectedResolution);
         _resolutionSource
             .Connect()
@@ -287,7 +286,6 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
         }
         
         _resolutionSource.Add(res);
-        // SelectedResolution = res;
     }
 
     private async Task OpenFileAsync()
