@@ -42,7 +42,7 @@
 					Content="Browse" />
 			</Grid>
 			<!--Row 2-->
-			<Grid Margin="0 5 0 0" ColumnDefinitions="Auto,Auto,2*,Auto">
+			<Grid Margin="0 5 0 0" ColumnDefinitions="*,Auto,2*,Auto">
 				<StackPanel Grid.Column="0"
 				            Margin="0 0 5 0">
 					<Label>Aspect Ratio</Label>

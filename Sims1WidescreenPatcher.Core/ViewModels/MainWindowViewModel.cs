@@ -98,6 +98,7 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
             .Filter(resolutionFilter)
             .Sort(resolutionSort)
             .Bind(out _filteredResolutions)
+            .Throttle(TimeSpan.FromMilliseconds(100))
             .Subscribe(x => SelectedResolution = FilteredResolutions.First());
         _resolutionSource
             .Connect()
