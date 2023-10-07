@@ -1,6 +1,8 @@
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
@@ -88,5 +90,28 @@ public partial class MainWindow : ReactiveWindow<IMainWindowViewModel>
             return;
         }
         ViewModel.SortByAspectRatio = !ViewModel.SortByAspectRatio;
+    }
+
+    private void AspectRatioComboBox_OnTapped(object sender, TappedEventArgs e)
+    {
+        switch (e.KeyModifiers)
+        {
+            case KeyModifiers.Control:
+                if (ViewModel is null)
+                {
+                    return;
+                }
+
+                ViewModel.SelectedAspectRatio = null;
+                var combo = (ComboBox)sender;
+                combo.IsDropDownOpen = false;
+                break;
+            case KeyModifiers.None:
+            case KeyModifiers.Alt:
+            case KeyModifiers.Shift:
+            case KeyModifiers.Meta:
+            default:
+                return;
+        }
     }
 }

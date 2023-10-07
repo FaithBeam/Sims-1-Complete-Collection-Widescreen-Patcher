@@ -46,11 +46,19 @@
 				<StackPanel Grid.Column="0"
 				            Margin="0 0 5 0">
 					<Label>Aspect Ratio</Label>
-					<ComboBox HorizontalAlignment="Stretch"
+					<ComboBox x:Name="AspectRatioComboBox"
+					          HorizontalAlignment="Stretch"
 					          SelectedItem="{Binding SelectedAspectRatio}"
-					          ItemsSource="{Binding AspectRatios}">
+					          ItemsSource="{Binding AspectRatios}"
+					          Tapped="AspectRatioComboBox_OnTapped">
 					</ComboBox>
-					<ToolTip.Tip>Filter the resolutions by aspect ratio.</ToolTip.Tip>
+					<ToolTip.Tip>
+						<TextBlock>
+							Filter the resolutions by aspect ratio.
+							<LineBreak />
+							You can reset this to none by holding ctrl and clicking this combo box.
+						</TextBlock>
+					</ToolTip.Tip>
 				</StackPanel>
 				<StackPanel Grid.Column="1">
 					<StackPanel Orientation="Horizontal">
@@ -87,8 +95,7 @@
 						  Classes.ShouldColor="{Binding IsResolutionsColored}"
 						  Classes.ShouldNotColor="{Binding !IsResolutionsColored}">
 						<ToolTip.Tip>
-							<TextBlock Text="Resolutions supported by your monitor.&#x0a;&#x0a;800x600 and 1024x768 are the two default resolutions for The Sims.&#x0a;&#x0a;1600xX resolutions have game breaking graphical issues.">
-							</TextBlock>
+							<TextBlock Text="Resolutions supported by your monitor.&#x0a;&#x0a;800x600 and 1024x768 are the two default resolutions for The Sims.&#x0a;&#x0a;1600xX resolutions have game breaking graphical issues." />
 						</ToolTip.Tip>
 						
 						<ComboBox.Styles>
