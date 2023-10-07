@@ -39,7 +39,7 @@ public class ResolutionColorCodingConverter : IValueConverter
 
         if (s == "Background")
         {
-            if (r.Width % 1600 == 0)
+            if (r.Width == 1600)
             {
                 if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
                 {
