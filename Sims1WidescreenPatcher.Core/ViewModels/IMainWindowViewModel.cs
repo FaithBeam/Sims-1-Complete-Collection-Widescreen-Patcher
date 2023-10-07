@@ -23,7 +23,6 @@ public interface IMainWindowViewModel
     string Path { get; set; }
     AspectRatio? SelectedAspectRatio { get; set; }
     bool SortByAspectRatio { get; set; }
-    bool IsResolutionsColored { get; set; }
     ReadOnlyObservableCollection<AspectRatio> AspectRatios { get; }
     ReadOnlyObservableCollection<Resolution> FilteredResolutions { get; }
     Resolution? SelectedResolution { get; set; }
