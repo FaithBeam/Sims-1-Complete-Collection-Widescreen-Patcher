@@ -24,6 +24,7 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     private readonly ICustomResolutionDialogViewModel _customResolutionDialogViewModel;
     private int _selectedWrapperIndex;
     private Resolution? _selectedResolution;
+    private Resolution _previousResolution;
     private AspectRatio? _selectedSelectedAspectRatio;
     private string _path = "";
     private bool _isBusy;
@@ -98,8 +99,8 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
             .Filter(resolutionFilter)
             .Sort(resolutionSort)
             .Bind(out _filteredResolutions)
-            .Throttle(TimeSpan.FromMilliseconds(100))
-            .Subscribe(x => SelectedResolution = FilteredResolutions.First());
+            // .Throttle(TimeSpan.FromMilliseconds(100))
+            .Subscribe(GetNewSelectedResolution);
         _resolutionSource
             .Connect()
             .DistinctValues(x => x.AspectRatio)
@@ -193,12 +194,9 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
         {
             if (value is null)
             {
-                this.RaiseAndSetIfChanged(ref _selectedResolution, _filteredResolutions.FirstOrDefault());
+                _previousResolution = _selectedResolution;
             }
-            else
-            {
-                this.RaiseAndSetIfChanged(ref _selectedResolution, value);
-            }
+            this.RaiseAndSetIfChanged(ref _selectedResolution, value);
         }
     }
 
@@ -215,6 +213,46 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     #endregion
 
     #region Methods
+    
+    private void GetNewSelectedResolution(IChangeSet<Resolution> changeSet)
+    {
+        if (changeSet.Moves > 0)
+        {
+            SelectedResolution ??= _previousResolution;
+            return;
+        }
+        foreach (var change in changeSet)
+        {
+            switch (change.Reason)
+            {
+                case ListChangeReason.Add:
+                    SelectedResolution = change.Item.Current;
+                    break;
+                case ListChangeReason.AddRange:
+                    if (FilteredResolutions.All(x => x != SelectedResolution))
+                    {
+                        SelectedResolution = change.Range.First();
+                        return;
+                    }
+                    break;
+                case ListChangeReason.Replace:
+                    break;
+                case ListChangeReason.Remove:
+                    break;
+                case ListChangeReason.RemoveRange:
+                    SelectedResolution = FilteredResolutions.First();
+                    return;
+                case ListChangeReason.Refresh:
+                    break;
+                case ListChangeReason.Moved:
+                    break;
+                case ListChangeReason.Clear:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
 
     private Func<Resolution, bool> CreateResolutionPredicate(AspectRatio? ar)
     {
@@ -243,11 +281,13 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     private async Task OpenCustomResolutionDialogAsync()
     {
         var res = await ShowCustomResolutionDialog.Handle(_customResolutionDialogViewModel);
-        if (res is { Width: > 0, Height: > 0 })
+        if (res is null)
         {
-            _resolutionSource.Add(res);
-            SelectedResolution = res;
+            return;
         }
+        
+        _resolutionSource.Add(res);
+        // SelectedResolution = res;
     }
 
     private async Task OpenFileAsync()
