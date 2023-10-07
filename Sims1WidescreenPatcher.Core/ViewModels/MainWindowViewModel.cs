@@ -98,7 +98,7 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
             .Filter(resolutionFilter)
             .Sort(resolutionSort)
             .Bind(out _filteredResolutions)
-            .Subscribe(x => SelectedResolution = x.Last().Item.Current);
+            .Subscribe(x => SelectedResolution = FilteredResolutions.First());
         _resolutionSource
             .Connect()
             .DistinctValues(x => x.AspectRatio)
