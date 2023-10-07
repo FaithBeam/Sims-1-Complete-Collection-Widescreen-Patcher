@@ -176,6 +176,12 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
         set => this.RaiseAndSetIfChanged(ref _sortByAspectRatio, value);
     }
 
+    public bool IsResolutionsColored
+    {
+        get => _isResolutionsColored;
+        set => this.RaiseAndSetIfChanged(ref _isResolutionsColored, value);
+    }
+
     public ReadOnlyObservableCollection<AspectRatio> AspectRatios => _aspectRatios;
 
     public ReadOnlyObservableCollection<Resolution> FilteredResolutions => _filteredResolutions;

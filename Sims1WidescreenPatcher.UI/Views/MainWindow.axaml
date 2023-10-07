@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
+        xmlns:converters="clr-namespace:Sims1WidescreenPatcher.UI.Converters"
         mc:Ignorable="d"
         Height="150"
         Width="600"
@@ -15,6 +16,10 @@
 	<Design.DataContext>
 		<viewModels:MainWindowViewModel />
 	</Design.DataContext>
+
+	<Window.Resources>
+		<converters:ResolutionColorCodingConverter x:Key="ResolutionColorCodingConverter" />
+	</Window.Resources>
 	
 	<Grid IsSharedSizeScope="True">
 		<StackPanel Margin="5">
@@ -57,7 +62,18 @@
 					</ToolTip.Tip>
 				</StackPanel>
 				<StackPanel Grid.Column="1">
-						<Label Content="" />
+					<StackPanel Orientation="Horizontal">
+						<CheckBox VerticalAlignment="Bottom"
+						          MaxWidth="24"
+						          IsChecked="{Binding IsResolutionsColored}">
+						</CheckBox>
+						<Label x:Name="IsResolutionsColoredLabel" 
+						       Padding="0 3 3 6"
+						       VerticalAlignment="Bottom"
+						       Content="Color Code"
+						       PointerPressed="IsResolutionsColoredLabel_OnPointerPressed" />
+						<ToolTip.Tip>Color code the resolutions by their aspect ratio</ToolTip.Tip>
+					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<CheckBox IsChecked="{Binding SortByAspectRatio}"
 						          MaxWidth="24">
@@ -76,7 +92,9 @@
 						  x:Name="ResolutionCombo"
 						  ItemsSource="{Binding FilteredResolutions}"
 						  SelectedItem="{Binding SelectedResolution}"
-						  HorizontalAlignment="Stretch">
+						  HorizontalAlignment="Stretch"
+						  Classes.ShouldColor="{Binding IsResolutionsColored}"
+						  Classes.ShouldNotColor="{Binding !IsResolutionsColored}">
 						<ToolTip.Tip>
 							<TextBlock>
 								Resolutions supported by your monitor.
@@ -88,6 +106,15 @@
 								<TextBlock Text="1600xX" Foreground="LightCoral" /> resolutions have game breaking graphical issues.
 							</TextBlock>
 						</ToolTip.Tip>
+						
+						<ComboBox.Styles>
+							<Style Selector="ComboBox.ShouldColor > ComboBoxItem">
+								<Setter Property="Background" Value="{Binding Converter={StaticResource ResolutionColorCodingConverter}}" />
+							</Style>
+							<Style Selector="ComboBox.ShouldNotColor > ComboBoxItem">
+								<Setter Property="Background" Value="{DynamicResource ComboBoxItemBackground}" />
+							</Style>
+						</ComboBox.Styles>
 					</ComboBox>
 				</StackPanel>
 				<StackPanel Grid.Column="3">

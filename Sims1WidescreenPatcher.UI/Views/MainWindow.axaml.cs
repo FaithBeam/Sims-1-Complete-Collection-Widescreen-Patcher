@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -71,6 +72,15 @@ public partial class MainWindow : ReactiveWindow<IMainWindowViewModel>
             FileTypeFilter = new FilePickerFileType[] {new ("Sims.exe") {Patterns = new []{"Sims.exe"}}}
         });
         interaction.SetOutput(fileNames.Any() ? fileNames[0] : null);
+    }
+
+    private void IsResolutionsColoredLabel_OnPointerPressed(object sender, PointerPressedEventArgs e)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+        ViewModel.IsResolutionsColored = !ViewModel.IsResolutionsColored;
     }
 
     private void SortByAspectRatioLabel_OnPointerPressed(object sender, PointerPressedEventArgs e)
