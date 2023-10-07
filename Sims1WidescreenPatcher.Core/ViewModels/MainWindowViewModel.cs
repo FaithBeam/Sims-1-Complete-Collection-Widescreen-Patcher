@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Avalonia.Collections;
 using Avalonia.Platform.Storage;
 using DynamicData;
+using DynamicData.Binding;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Enums;
 using Sims1WidescreenPatcher.Core.Models;
@@ -23,16 +24,16 @@ public class MainWindowViewModel : ViewModelBase
     private readonly CustomResolutionDialogViewModel _customResolutionDialogViewModel;
     private int _selectedWrapperIndex;
     private Resolution? _selectedResolution;
-    private AspectRatio _selectedSelectedAspectRatio;
+    private AspectRatio? _selectedSelectedAspectRatio;
     private string _path = "";
     private bool _isBusy;
     private bool _isResolutionsColored;
+    private bool _sortByAspectRatio;
     private readonly ObservableAsPropertyHelper<bool> _hasBackup;
     private readonly ObservableAsPropertyHelper<bool> _isValidSimsExe;
     private readonly List<string> _previouslyPatched = new();
     private readonly IProgressService _progressService;
     private readonly ObservableAsPropertyHelper<double> _progress;
-    private readonly IFindSimsPathService _findSimsPathService;
     private readonly SourceList<Resolution> _resolutionSource = new();
     private readonly ReadOnlyObservableCollection<Resolution> _filteredResolutions;
     private readonly ReadOnlyObservableCollection<AspectRatio> _aspectRatios;
@@ -80,10 +81,21 @@ public class MainWindowViewModel : ViewModelBase
         ShowOpenFileDialog = new Interaction<Unit, IStorageFile?>();
         var resolutionFilter = this.WhenAnyValue(x => x.SelectedAspectRatio)
             .Select(CreateResolutionPredicate);
+        IObservable<IComparer<Resolution>> resolutionSort = this
+            .WhenAnyValue(x => x.SortByAspectRatio)
+            .Select(x => x
+                ? SortExpressionComparer<Resolution>
+                    .Ascending(r => r.AspectRatio.Numerator)
+                    .ThenByAscending(r => r.AspectRatio.Denominator)
+                    .ThenByAscending(r => r.Width)
+                    .ThenByAscending(r => r.Height)
+                : SortExpressionComparer<Resolution>
+                    .Ascending(r => r.Width)
+                    .ThenByAscending(r => r.Height));
         _resolutionSource
             .Connect()
             .Filter(resolutionFilter)
-            .Sort(Comparer<Resolution>.Default)
+            .Sort(resolutionSort)
             .Bind(out _filteredResolutions)
             .Subscribe(x => SelectedResolution = x.Last().Item.Current);
         _resolutionSource
@@ -101,8 +113,7 @@ public class MainWindowViewModel : ViewModelBase
         CustomResolutionCommand = ReactiveCommand.CreateFromTask(OpenCustomResolutionDialogAsync);
         ShowCustomYesNoDialog = new Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?>();
         ShowCustomInformationDialog = new Interaction<CustomInformationDialogViewModel, Unit>();
-        _findSimsPathService = findSimsPathService;
-        Path = _findSimsPathService.FindSimsPath();
+        Path = findSimsPathService.FindSimsPath();
         
         var progressPct = Observable
             .FromEventPattern<NewProgressEventArgs>(_progressService, "NewProgressEventHandler");
@@ -117,16 +128,6 @@ public class MainWindowViewModel : ViewModelBase
         _progress = progressPct
             .Select(x => x.EventArgs.Progress)
             .ToProperty(this, x => x.Progress);
-    }
-
-    private Func<Resolution, bool> CreateResolutionPredicate(AspectRatio? ar)
-    {
-        if (ar is null)
-        {
-            return resolution => true;
-        }
-
-        return resolution => resolution.AspectRatio == ar;
     }
 
     #endregion
@@ -165,6 +166,12 @@ public class MainWindowViewModel : ViewModelBase
     {
         get => _selectedSelectedAspectRatio;
         set => this.RaiseAndSetIfChanged(ref _selectedSelectedAspectRatio, value);
+    }
+
+    public bool SortByAspectRatio
+    {
+        get => _sortByAspectRatio;
+        set => this.RaiseAndSetIfChanged(ref _sortByAspectRatio, value);
     }
 
     public bool IsResolutionsColored
@@ -207,6 +214,19 @@ public class MainWindowViewModel : ViewModelBase
 
     #region Methods
 
+    // private SortExpressionComparer<Resolution> GetResolutionComparer(bool sortByAspectRatio) =>
+    //     sortByAspectRatio ? SortExpressionComparer<Resolution>.Ascending(x => x.Width) : SortExpressionComparer<Resolution>.Descending(x => x.Width);
+
+    private Func<Resolution, bool> CreateResolutionPredicate(AspectRatio? ar)
+    {
+        if (ar is null)
+        {
+            return _ => true;
+        }
+
+        return resolution => resolution.AspectRatio == ar;
+    }
+    
     private async Task OpenCustomInformationDialogAsync(string title, string message)
     {
         var vm = new CustomInformationDialogViewModel(title, message);

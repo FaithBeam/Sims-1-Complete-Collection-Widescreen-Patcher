@@ -81,13 +81,24 @@
 						</ComboBox.Styles>
 					</ComboBox>
 				</StackPanel>
-				<StackPanel Orientation="Horizontal" Grid.Column="2">
-					<CheckBox VerticalAlignment="Bottom"
-					          MaxWidth="24"
-					          IsChecked="{Binding IsResolutionsColored}">
-						<ToolTip.Tip>Enable or disable the color-coding for resolutions based on their aspect ratios.</ToolTip.Tip>
-					</CheckBox>
-					<Label Padding="0 3 3 6" VerticalAlignment="Bottom">Color Code</Label>
+				<StackPanel Grid.Column="2">
+					<StackPanel Orientation="Horizontal">
+						<CheckBox IsChecked="{Binding SortByAspectRatio}"
+						          MaxWidth="24">
+							<ToolTip.Tip>Sort the resolutions by their aspect ratio</ToolTip.Tip>
+						</CheckBox>
+						<Label Padding="0 3 3 6"
+						       VerticalAlignment="Center"
+						       Content="Sort by Aspect Ratio" />
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<CheckBox VerticalAlignment="Bottom"
+						          MaxWidth="24"
+						          IsChecked="{Binding IsResolutionsColored}">
+							<ToolTip.Tip>Color code the resolutions by their aspect ratio</ToolTip.Tip>
+						</CheckBox>
+						<Label Padding="0 3 3 6" VerticalAlignment="Bottom">Color Code</Label>
+					</StackPanel>
 				</StackPanel>
 				<Button Grid.Column="3"
 				        VerticalAlignment="Bottom"
