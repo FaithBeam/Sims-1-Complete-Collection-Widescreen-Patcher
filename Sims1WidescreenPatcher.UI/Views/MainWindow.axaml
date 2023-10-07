@@ -57,7 +57,7 @@
 							Filter the resolutions by aspect ratio.
 							<LineBreak />
 							<LineBreak />
-							You can reset this to none by holding ctrl and clicking this combo box.
+							You can reset this by holding ctrl and clicking this combo box.
 						</TextBlock>
 					</ToolTip.Tip>
 				</StackPanel>
