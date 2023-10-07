@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
@@ -73,5 +74,23 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
             FileTypeFilter = new FilePickerFileType[] {new ("Sims.exe") {Patterns = new []{"Sims.exe"}}}
         });
         interaction.SetOutput(fileNames.Any() ? fileNames[0] : null);
+    }
+
+    private void IsResolutionsColoredLabel_OnPointerPressed(object sender, PointerPressedEventArgs e)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+        ViewModel.IsResolutionsColored = !ViewModel.IsResolutionsColored;
+    }
+
+    private void SortByAspectRatioLabel_OnPointerPressed(object sender, PointerPressedEventArgs e)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+        ViewModel.SortByAspectRatio = !ViewModel.SortByAspectRatio;
     }
 }

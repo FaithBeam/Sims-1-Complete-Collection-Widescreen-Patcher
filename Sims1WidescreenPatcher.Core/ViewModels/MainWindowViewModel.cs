@@ -81,7 +81,7 @@ public class MainWindowViewModel : ViewModelBase
         ShowOpenFileDialog = new Interaction<Unit, IStorageFile?>();
         var resolutionFilter = this.WhenAnyValue(x => x.SelectedAspectRatio)
             .Select(CreateResolutionPredicate);
-        IObservable<IComparer<Resolution>> resolutionSort = this
+        var resolutionSort = this
             .WhenAnyValue(x => x.SortByAspectRatio)
             .Select(x => x
                 ? SortExpressionComparer<Resolution>
