@@ -8,6 +8,7 @@ namespace Sims1WidescreenPatcher.DependencyInjection
 		{
 			ServicesBootstrapper.RegisterServices(services, resolver);
 			ViewModelBootstrapper.RegisterViewModels(services, resolver);
+			ViewBootstrapper.RegisterViews(services, resolver);
 		}
 	}
 }

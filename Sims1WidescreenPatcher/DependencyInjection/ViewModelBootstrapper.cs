@@ -16,7 +16,8 @@ namespace Sims1WidescreenPatcher.DependencyInjection
                 resolver.GetService<CustomYesNoDialogViewModel>()!,
                 resolver.GetService<CustomResolutionDialogViewModel>()!,
                 resolver.GetService<IProgressService>()!,
-                resolver.GetService<IFindSimsPathService>()!));
+                resolver.GetService<IFindSimsPathService>()!),
+                typeof(IMainWindowViewModel));
         }
     }
 }

@@ -16,7 +16,7 @@ using Sims1WidescreenPatcher.Utilities.Services;
 
 namespace Sims1WidescreenPatcher.Core.ViewModels;
 
-public class MainWindowViewModel : ViewModelBase
+public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
 {
     #region Fields
 
@@ -79,7 +79,8 @@ public class MainWindowViewModel : ViewModelBase
         UninstallCommand = ReactiveCommand.CreateFromTask(OnClickedUninstall, canUninstall);
         OpenFile = ReactiveCommand.CreateFromTask(OpenFileAsync);
         ShowOpenFileDialog = new Interaction<Unit, IStorageFile?>();
-        var resolutionFilter = this.WhenAnyValue(x => x.SelectedAspectRatio)
+        var resolutionFilter = this
+            .WhenAnyValue(x => x.SelectedAspectRatio)
             .Select(CreateResolutionPredicate);
         var resolutionSort = this
             .WhenAnyValue(x => x.SortByAspectRatio)
@@ -213,9 +214,6 @@ public class MainWindowViewModel : ViewModelBase
     #endregion
 
     #region Methods
-
-    // private SortExpressionComparer<Resolution> GetResolutionComparer(bool sortByAspectRatio) =>
-    //     sortByAspectRatio ? SortExpressionComparer<Resolution>.Ascending(x => x.Width) : SortExpressionComparer<Resolution>.Descending(x => x.Width);
 
     private Func<Resolution, bool> CreateResolutionPredicate(AspectRatio? ar)
     {

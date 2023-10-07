@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
@@ -15,10 +13,10 @@ namespace Sims1WidescreenPatcher.UI.Views;
 
 public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 {
-    public MainWindow()
+    public MainWindow(IMainWindowViewModel viewModel)
     {
         InitializeComponent();
-        DataContext = Locator.Current.GetService<MainWindowViewModel>();
+        DataContext = viewModel;
         this.WhenActivated(d =>
         {
             if (ViewModel == null) return;
