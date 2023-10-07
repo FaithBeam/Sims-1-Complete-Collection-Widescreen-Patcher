@@ -7,11 +7,10 @@ using Avalonia.ReactiveUI;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.ViewModels;
-using Splat;
 
 namespace Sims1WidescreenPatcher.UI.Views;
 
-public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
+public partial class MainWindow : ReactiveWindow<IMainWindowViewModel>
 {
     public MainWindow(IMainWindowViewModel viewModel)
     {
@@ -51,8 +50,7 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
         interaction.SetOutput(result);
     }
 
-    private async Task ShowCustomResolutionDialogAsync(
-        InteractionContext<CustomResolutionDialogViewModel, Resolution?> interaction)
+    private async Task ShowCustomResolutionDialogAsync(InteractionContext<ICustomResolutionDialogViewModel, Resolution?> interaction)
     {
         var dialog = new CustomResolutionDialog
         {

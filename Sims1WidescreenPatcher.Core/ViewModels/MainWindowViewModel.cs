@@ -21,7 +21,7 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     #region Fields
 
     private readonly CustomYesNoDialogViewModel _customYesNoDialogViewModel;
-    private readonly CustomResolutionDialogViewModel _customResolutionDialogViewModel;
+    private readonly ICustomResolutionDialogViewModel _customResolutionDialogViewModel;
     private int _selectedWrapperIndex;
     private Resolution? _selectedResolution;
     private AspectRatio? _selectedSelectedAspectRatio;
@@ -44,7 +44,7 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
 
     public MainWindowViewModel(IResolutionsService resolutionsService,
         CustomYesNoDialogViewModel customYesNoDialogViewModel,
-        CustomResolutionDialogViewModel customResolutionDialogViewModel,
+        ICustomResolutionDialogViewModel customResolutionDialogViewModel,
         IProgressService progressService,
         IFindSimsPathService findSimsPathService)
     {
@@ -110,7 +110,7 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
         SelectedResolution = FilteredResolutions.First();
         SelectedWrapperIndex = 0;
         SelectedAspectRatio = null;
-        ShowCustomResolutionDialog = new Interaction<CustomResolutionDialogViewModel, Resolution?>();
+        ShowCustomResolutionDialog = new Interaction<ICustomResolutionDialogViewModel, Resolution?>();
         CustomResolutionCommand = ReactiveCommand.CreateFromTask(OpenCustomResolutionDialogAsync);
         ShowCustomYesNoDialog = new Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?>();
         ShowCustomInformationDialog = new Interaction<CustomInformationDialogViewModel, Unit>();
@@ -140,7 +140,7 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     public ICommand OpenFile { get; }
     public Interaction<Unit, IStorageFile?> ShowOpenFileDialog { get; }
     public ICommand CustomResolutionCommand { get; }
-    public Interaction<CustomResolutionDialogViewModel, Resolution?> ShowCustomResolutionDialog { get; }
+    public Interaction<ICustomResolutionDialogViewModel, Resolution?> ShowCustomResolutionDialog { get; }
     public Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?> ShowCustomYesNoDialog { get; }
     public Interaction<CustomInformationDialogViewModel, Unit> ShowCustomInformationDialog { get; }
 

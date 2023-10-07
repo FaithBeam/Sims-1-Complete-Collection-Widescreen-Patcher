@@ -4,7 +4,7 @@ using Sims1WidescreenPatcher.Core.Models;
 
 namespace Sims1WidescreenPatcher.Core.ViewModels;
 
-public class CustomResolutionDialogViewModel : ViewModelBase
+public class CustomResolutionDialogViewModel : ViewModelBase, ICustomResolutionDialogViewModel
 {
     #region Fields
 
