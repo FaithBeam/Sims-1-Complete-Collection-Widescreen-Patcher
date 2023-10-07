@@ -102,7 +102,7 @@
 								<LineBreak />
 								800x600 and 1024x768 are the two default resolutions for The Sims.
 								<LineBreak />
-								<TextBlock Text="Green" Foreground="Green" /> resolutions match the aspect ratio (4:3) of the two default resolutions.
+								<TextBlock Text="Green" Foreground="LimeGreen" /> resolutions match the aspect ratio (4:3) of the two default resolutions.
 								<LineBreak />
 								<TextBlock Text="Red" Foreground="Red" /> resolutions have game breaking graphical issues, and it's recommended to avoid them.
 							</TextBlock>
