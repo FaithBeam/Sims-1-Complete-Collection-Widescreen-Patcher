@@ -102,17 +102,30 @@
 								<LineBreak />
 								800x600 and 1024x768 are the two default resolutions for The Sims.
 								<LineBreak />
+								<TextBlock Text="Green" Foreground="Green" /> resolutions match the aspect ratio (4:3) of the two default resolutions.
 								<LineBreak />
-								<TextBlock Text="1600xX" Foreground="LightCoral" /> resolutions have game breaking graphical issues.
+								<TextBlock Text="Red" Foreground="Red" /> resolutions have game breaking graphical issues, and it's recommended to avoid them.
 							</TextBlock>
 						</ToolTip.Tip>
 						
 						<ComboBox.Styles>
 							<Style Selector="ComboBox.ShouldColor > ComboBoxItem">
-								<Setter Property="Background" Value="{Binding Converter={StaticResource ResolutionColorCodingConverter}}" />
+								<Setter Property="Background" Value="{Binding Converter={StaticResource ResolutionColorCodingConverter}, ConverterParameter='Background'}" />
+							</Style>
+							<Style Selector="ComboBox.ShouldColor > ComboBoxItem:pointerover /template/ ContentPresenter">
+								<Setter Property="Background" Value="{Binding Converter={StaticResource ResolutionColorCodingConverter}, ConverterParameter='Pointerover'}" />
+							</Style>
+							<Style Selector="ComboBox.ShouldColor > ComboBoxItem:selected /template/ ContentPresenter">
+								<Setter Property="Background" Value="{Binding Converter={StaticResource ResolutionColorCodingConverter}, ConverterParameter='Selected'}" />
 							</Style>
 							<Style Selector="ComboBox.ShouldNotColor > ComboBoxItem">
 								<Setter Property="Background" Value="{DynamicResource ComboBoxItemBackground}" />
+							</Style>
+							<Style Selector="ComboBox.ShouldNotColor > ComboBoxItem:pointerover /template/ ContentPresenter">
+								<Setter Property="Background" Value="{DynamicResource ComboBoxItemBackgroundPointerOver}" />
+							</Style>
+							<Style Selector="ComboBox.ShouldNotColor > ComboBoxItem:selected /template/ ContentPresenter">
+								<Setter Property="Background" Value="{DynamicResource ComboBoxItemBackgroundSelected}" />
 							</Style>
 						</ComboBox.Styles>
 					</ComboBox>

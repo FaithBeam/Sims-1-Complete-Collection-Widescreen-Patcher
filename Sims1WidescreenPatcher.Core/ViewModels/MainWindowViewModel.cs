@@ -27,7 +27,7 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     private AspectRatio? _selectedSelectedAspectRatio;
     private string _path = "";
     private bool _isBusy;
-    private bool _isResolutionsColored;
+    private bool _isResolutionsColored = true;
     private bool _sortByAspectRatio;
     private readonly ObservableAsPropertyHelper<bool> _hasBackup;
     private readonly ObservableAsPropertyHelper<bool> _isValidSimsExe;
