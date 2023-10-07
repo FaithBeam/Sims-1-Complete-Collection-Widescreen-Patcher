@@ -103,7 +103,7 @@
 								800x600 and 1024x768 are the two default resolutions for The Sims.
 								<LineBreak />
 								<LineBreak />
-								1600xX resolutions have game breaking graphical issues.
+								<TextBlock Text="1600xX" Foreground="LightCoral" /> resolutions have game breaking graphical issues.
 							</TextBlock>
 						</ToolTip.Tip>
 						
@@ -141,13 +141,13 @@
 					          HorizontalAlignment="Stretch">
 						<ToolTip.Tip>
 							<TextBlock>
-								DDrawCompat: High framerate. Use this for borderless fullscreen. Press Shift+F11 for in-game menu. View the wiki for more settings. (Windows only)
+								<TextBlock Text="DDrawCompat" FontWeight="Bold" />: High framerate. Use this for borderless fullscreen. Press Shift+F11 for in-game menu. View the wiki for more settings. (Windows only)
 								<LineBreak />
 								<LineBreak />
-								DgVoodoo2: Low/Medium framerate. Use if DDrawCompat doesn't work. (Windows and Linux only)
+								<TextBlock Text="DgVoodoo2" FontWeight="Bold" />: Low/Medium framerate. Use if DDrawCompat doesn't work. (Windows and Linux only)
 								<LineBreak />
 								<LineBreak />
-								None: Low framerate. Use if DgVoodoo2 and DDrawCompat don't work.
+								<TextBlock Text="None" FontWeight="Bold" />: Low framerate. Use if DgVoodoo2 and DDrawCompat don't work.
 							</TextBlock>
 						</ToolTip.Tip>
 					</ComboBox>
