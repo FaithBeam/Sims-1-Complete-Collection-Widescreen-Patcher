@@ -1,4 +1,5 @@
 ﻿using System.Reactive;
+using System.Reactive.Linq;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Models;
 
@@ -28,6 +29,7 @@ public class CustomResolutionDialogViewModel : ViewModelBase, ICustomResolutionD
                 }
                 return new AspectRatio(width, height);
             })
+            .Throttle(TimeSpan.FromMilliseconds(100))
             .ToProperty(this, x => x.AspectRatio);
     }
 

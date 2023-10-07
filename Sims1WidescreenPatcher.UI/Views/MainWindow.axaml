@@ -104,7 +104,9 @@
 				<StackPanel Grid.Column="3">
 					<!-- Empty label for spacing and alignment purposes -->
 					<Label Content="" />
-					<Button Command="{Binding CustomResolutionCommand}">Add Resolution</Button>
+					<Button Command="{Binding CustomResolutionCommand}" Content="Add Resolution">
+						<ToolTip.Tip>Add a custom resolution</ToolTip.Tip>
+					</Button>
 				</StackPanel>
 			</Grid>
 			<!--Row 3-->
