@@ -2,33 +2,33 @@
 
 This program patches **The Sims 1** to a custom resolution.
 
-![The Sims 1 Widescreen Patcher](https://i.imgur.com/PdKHV0k.png)
+![The Sims 1 Widescreen Patcher](https://i.imgur.com/b8BU9lG.png)
 
 ## Requirements
 
-* NoCD/Cracked Sims Executable
-  * This exe cannot be previously patched to a custom resolution. For example, if you downloaded a crack that was patched to 1080p, this program will not work.
+- NoCD/Cracked Sims Executable
+  - This exe cannot be previously patched to a custom resolution. For example, if you downloaded a crack that was patched to 1080p, this program will not work.
 
 **Linux**
 
-* xrandr
-  * Ubuntu ```sudo apt install xrandr``` 
-  * Fedora ```sudo dnf install xrandr```
+- xrandr
+  - Ubuntu `sudo apt install xrandr`
+  - Fedora `sudo dnf install xrandr`
 
 ### OS Version Compatability
 
 | Windows |
-|---------|
-|    11   |
-|    10   |
-|  7 SP 1 |
+| ------- |
+| 11      |
+| 10      |
+| 7 SP 1  |
 
 | Ubuntu | Fedora |
-|--------|--------|
+| ------ | ------ |
 | 16.04+ | 33+    |
 
 | macOS  |
-|--------|
+| ------ |
 | 10.15+ |
 
 ## Usage
@@ -43,8 +43,8 @@ This program patches **The Sims 1** to a custom resolution.
 
 **MacOS Notes**
 
-* Disable the quarantine attribute on the bundle with this Terminal command: ```sudo xattr -r -d com.apple.quarantine ~/Downloads/artifacts/Sims1WidescreenPatcher.app/```
-* If you can't select the Sims.exe because it is installed in an app bundle from Wineskin Winery, click [here](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/MacOS---How-to-Enter-an-App-Bundle-to-Select-Sims-Exe) for a workaround.
+- Disable the quarantine attribute on the bundle with this Terminal command: `sudo xattr -r -d com.apple.quarantine ~/Downloads/artifacts/Sims1WidescreenPatcher.app/`
+- If you can't select the Sims.exe because it is installed in an app bundle from Wineskin Winery, click [here](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/MacOS---How-to-Enter-an-App-Bundle-to-Select-Sims-Exe) for a workaround.
 
 ## Graphics Wrappers
 
@@ -53,13 +53,13 @@ You can select between two graphics wrappers, [DgVoodoo2](http://dege.freeweb.hu
 **Wrapper OS Compatability**
 
 |                 | Windows | Linux | macOS |
-|-----------------|---------|-------|-------|
-| **None**        | ✅       | ✅     | ✅     |
-| **DGVoodoo2**   | ✅       | ✅     | ❌     |
-| **DDrawCompat** | ✅       | ❌     | ❌     |
+| --------------- | ------- | ----- | ----- |
+| **None**        | ✅      | ✅    | ✅    |
+| **DGVoodoo2**   | ✅      | ✅    | ❌    |
+| **DDrawCompat** | ✅      | ❌    | ❌    |
 
 **Note:**
-If you use DDrawCompat and are using a monitor with G-Sync enabled, your game will crash in exclusive fullscreen mode. Please be sure to enable __Borderless Fullscreen mode__ when prompted during the patch to avoid this issue.
+If you use DDrawCompat and are using a monitor with G-Sync enabled, your game will crash in exclusive fullscreen mode. Please be sure to enable **Borderless Fullscreen mode** when prompted during the patch to avoid this issue.
 
 ## Uninstall
 
