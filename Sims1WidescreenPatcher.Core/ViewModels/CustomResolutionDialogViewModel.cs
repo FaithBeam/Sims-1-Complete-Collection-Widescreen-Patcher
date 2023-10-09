@@ -1,15 +1,17 @@
 ﻿using System.Reactive;
+using System.Reactive.Linq;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Models;
 
 namespace Sims1WidescreenPatcher.Core.ViewModels;
 
-public class CustomResolutionDialogViewModel : ViewModelBase
+public class CustomResolutionDialogViewModel : ViewModelBase, ICustomResolutionDialogViewModel
 {
     #region Fields
 
     private string _width = "";
     private string _height = "";
+    private readonly ObservableAsPropertyHelper<AspectRatio?> _aspectRatio;
 
     #endregion
 
@@ -18,6 +20,17 @@ public class CustomResolutionDialogViewModel : ViewModelBase
     public CustomResolutionDialogViewModel()
     {
         OkCommand = ReactiveCommand.Create(() => new Resolution(int.Parse(Width), int.Parse(Height)));
+        _aspectRatio = this
+            .WhenAnyValue(x => x.Width, x => x.Height, (w, h) =>
+            {
+                if (!int.TryParse(w, out var width) || !int.TryParse(h, out var height))
+                {
+                    return null;
+                }
+                return new AspectRatio(width, height);
+            })
+            .Throttle(TimeSpan.FromMilliseconds(100))
+            .ToProperty(this, x => x.AspectRatio);
     }
 
     #endregion
@@ -41,6 +54,8 @@ public class CustomResolutionDialogViewModel : ViewModelBase
         get => _height;
         set => this.RaiseAndSetIfChanged(ref _height, value);
     }
+
+    public AspectRatio? AspectRatio => _aspectRatio.Value;
 
     #endregion
 }

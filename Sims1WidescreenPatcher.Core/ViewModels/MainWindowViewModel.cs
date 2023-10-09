@@ -1,8 +1,11 @@
-﻿using System.Reactive;
+﻿using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using Avalonia.Collections;
 using Avalonia.Platform.Storage;
+using DynamicData;
+using DynamicData.Binding;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Enums;
 using Sims1WidescreenPatcher.Core.Models;
@@ -13,22 +16,28 @@ using Sims1WidescreenPatcher.Utilities.Services;
 
 namespace Sims1WidescreenPatcher.Core.ViewModels;
 
-public class MainWindowViewModel : ViewModelBase
+public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
 {
     #region Fields
 
     private readonly CustomYesNoDialogViewModel _customYesNoDialogViewModel;
-    private readonly CustomResolutionDialogViewModel _customResolutionDialogViewModel;
+    private readonly ICustomResolutionDialogViewModel _customResolutionDialogViewModel;
     private int _selectedWrapperIndex;
     private Resolution? _selectedResolution;
+    private Resolution? _previousResolution;
+    private AspectRatio? _selectedSelectedAspectRatio;
     private string _path = "";
     private bool _isBusy;
+    private bool _isResolutionsColored = true;
+    private bool _sortByAspectRatio;
     private readonly ObservableAsPropertyHelper<bool> _hasBackup;
     private readonly ObservableAsPropertyHelper<bool> _isValidSimsExe;
     private readonly List<string> _previouslyPatched = new();
     private readonly IProgressService _progressService;
     private readonly ObservableAsPropertyHelper<double> _progress;
-    private readonly IFindSimsPathService _findSimsPathService;
+    private readonly SourceList<Resolution> _resolutionSource = new();
+    private readonly ReadOnlyObservableCollection<Resolution> _filteredResolutions;
+    private readonly ReadOnlyObservableCollection<AspectRatio> _aspectRatios;
 
     #endregion
 
@@ -36,14 +45,15 @@ public class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel(IResolutionsService resolutionsService,
         CustomYesNoDialogViewModel customYesNoDialogViewModel,
-        CustomResolutionDialogViewModel customResolutionDialogViewModel,
+        ICustomResolutionDialogViewModel customResolutionDialogViewModel,
         IProgressService progressService,
         IFindSimsPathService findSimsPathService)
     {
         _progressService = progressService;
         _customYesNoDialogViewModel = customYesNoDialogViewModel;
         _customResolutionDialogViewModel = customResolutionDialogViewModel;
-        this.WhenAnyValue(x => x.Path).Subscribe(x => System.Diagnostics.Debug.WriteLine(x));
+        this.WhenAnyValue(x => x.Path)
+            .Subscribe(x => System.Diagnostics.Debug.WriteLine(x));
         _hasBackup = this
             .WhenAnyValue(x => x.Path, x => x.IsBusy, (path, _) => PatchUtility.SimsBackupExists(path))
             .ToProperty(this, x => x.HasBackup, deferSubscription: true);
@@ -57,31 +67,58 @@ public class MainWindowViewModel : ViewModelBase
                     !hasBackup &&
                     validSimsExe &&
                     !_previouslyPatched.Contains(path) &&
-                    !isBusy
-            ).DistinctUntilChanged();
+                    !isBusy)
+            .DistinctUntilChanged();
         var canUninstall = this
             .WhenAnyValue(x => x.IsBusy, x => x.Path, x => x.HasBackup,
                 (isBusy, path, hasBackup) =>
                     !string.IsNullOrWhiteSpace(path) &&
                     !isBusy &&
-                    hasBackup
-            ).DistinctUntilChanged();
+                    hasBackup)
+            .DistinctUntilChanged();
         PatchCommand = ReactiveCommand.CreateFromTask(OnClickedPatch, canPatch);
         UninstallCommand = ReactiveCommand.CreateFromTask(OnClickedUninstall, canUninstall);
         OpenFile = ReactiveCommand.CreateFromTask(OpenFileAsync);
         ShowOpenFileDialog = new Interaction<Unit, IStorageFile?>();
-        Resolutions = new AvaloniaList<Resolution>(resolutionsService.GetResolutions())
-            { new(-1, -1) };
-        SelectedResolution = Resolutions.FirstOrDefault() ?? new Resolution(1920, 1080);
+        var resolutionFilter = this
+            .WhenAnyValue(x => x.SelectedAspectRatio)
+            .Select(CreateResolutionPredicate);
+        var resolutionSort = this
+            .WhenAnyValue(x => x.SortByAspectRatio)
+            .Select(x => x
+                ? SortExpressionComparer<Resolution>
+                    .Ascending(r => r.AspectRatio.Numerator)
+                    .ThenByAscending(r => r.AspectRatio.Denominator)
+                    .ThenByAscending(r => r.Width)
+                    .ThenByAscending(r => r.Height)
+                : SortExpressionComparer<Resolution>
+                    .Ascending(r => r.Width)
+                    .ThenByAscending(r => r.Height));
+        _resolutionSource
+            .Connect()
+            .Filter(resolutionFilter)
+            .Sort(resolutionSort)
+            .Bind(out _filteredResolutions)
+            .Subscribe(GetNewSelectedResolution);
+        _resolutionSource
+            .Connect()
+            .DistinctValues(x => x.AspectRatio)
+            .Sort(Comparer<AspectRatio>.Default)
+            .Bind(out _aspectRatios)
+            .Subscribe();
+        
+        _resolutionSource.AddRange(resolutionsService.GetResolutions());
+        SelectedResolution = FilteredResolutions.First();
         SelectedWrapperIndex = 0;
-        ShowCustomResolutionDialog = new Interaction<CustomResolutionDialogViewModel, Resolution?>();
+        SelectedAspectRatio = null;
+        ShowCustomResolutionDialog = new Interaction<ICustomResolutionDialogViewModel, Resolution?>();
         CustomResolutionCommand = ReactiveCommand.CreateFromTask(OpenCustomResolutionDialogAsync);
         ShowCustomYesNoDialog = new Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?>();
         ShowCustomInformationDialog = new Interaction<CustomInformationDialogViewModel, Unit>();
-        _findSimsPathService = findSimsPathService;
-        Path = _findSimsPathService.FindSimsPath();
-
-        var progressPct = Observable.FromEventPattern<NewProgressEventArgs>(_progressService, "NewProgressEventHandler");
+        Path = findSimsPathService.FindSimsPath();
+        
+        var progressPct = Observable
+            .FromEventPattern<NewProgressEventArgs>(_progressService, "NewProgressEventHandler");
         progressPct
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(async e =>
@@ -104,7 +141,7 @@ public class MainWindowViewModel : ViewModelBase
     public ICommand OpenFile { get; }
     public Interaction<Unit, IStorageFile?> ShowOpenFileDialog { get; }
     public ICommand CustomResolutionCommand { get; }
-    public Interaction<CustomResolutionDialogViewModel, Resolution?> ShowCustomResolutionDialog { get; }
+    public Interaction<ICustomResolutionDialogViewModel, Resolution?> ShowCustomResolutionDialog { get; }
     public Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?> ShowCustomYesNoDialog { get; }
     public Interaction<CustomInformationDialogViewModel, Unit> ShowCustomInformationDialog { get; }
 
@@ -127,21 +164,38 @@ public class MainWindowViewModel : ViewModelBase
     private bool HasBackup => _hasBackup.Value;
     private bool IsValidSimsExe => _isValidSimsExe.Value;
 
-    public AvaloniaList<Resolution> Resolutions { get; }
+    public AspectRatio? SelectedAspectRatio
+    {
+        get => _selectedSelectedAspectRatio;
+        set => this.RaiseAndSetIfChanged(ref _selectedSelectedAspectRatio, value);
+    }
+
+    public bool SortByAspectRatio
+    {
+        get => _sortByAspectRatio;
+        set => this.RaiseAndSetIfChanged(ref _sortByAspectRatio, value);
+    }
+
+    public bool IsResolutionsColored
+    {
+        get => _isResolutionsColored;
+        set => this.RaiseAndSetIfChanged(ref _isResolutionsColored, value);
+    }
+
+    public ReadOnlyObservableCollection<AspectRatio> AspectRatios => _aspectRatios;
+
+    public ReadOnlyObservableCollection<Resolution> FilteredResolutions => _filteredResolutions;
 
     public Resolution? SelectedResolution
     {
         get => _selectedResolution;
         set
         {
-            if (value is { Width: -1, Height: -1 })
+            if (value is null)
             {
-                CustomResolutionCommand.Execute(null);
+                _previousResolution = _selectedResolution;
             }
-            else
-            {
-                this.RaiseAndSetIfChanged(ref _selectedResolution, value);
-            }
+            this.RaiseAndSetIfChanged(ref _selectedResolution, value);
         }
     }
 
@@ -158,7 +212,57 @@ public class MainWindowViewModel : ViewModelBase
     #endregion
 
     #region Methods
+    
+    private void GetNewSelectedResolution(IChangeSet<Resolution> changeSet)
+    {
+        if (changeSet.Moves > 0)
+        {
+            SelectedResolution ??= _previousResolution;
+            return;
+        }
+        foreach (var change in changeSet)
+        {
+            switch (change.Reason)
+            {
+                case ListChangeReason.Add:
+                    SelectedResolution = change.Item.Current;
+                    break;
+                case ListChangeReason.AddRange:
+                    if (FilteredResolutions.All(x => x != SelectedResolution))
+                    {
+                        SelectedResolution = change.Range.First();
+                        return;
+                    }
+                    break;
+                case ListChangeReason.Replace:
+                    break;
+                case ListChangeReason.Remove:
+                    break;
+                case ListChangeReason.RemoveRange:
+                    SelectedResolution = FilteredResolutions.First();
+                    return;
+                case ListChangeReason.Refresh:
+                    break;
+                case ListChangeReason.Moved:
+                    break;
+                case ListChangeReason.Clear:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
 
+    private Func<Resolution, bool> CreateResolutionPredicate(AspectRatio? ar)
+    {
+        if (ar is null)
+        {
+            return _ => true;
+        }
+
+        return resolution => resolution.AspectRatio == ar;
+    }
+    
     private async Task OpenCustomInformationDialogAsync(string title, string message)
     {
         var vm = new CustomInformationDialogViewModel(title, message);
@@ -176,11 +280,12 @@ public class MainWindowViewModel : ViewModelBase
     private async Task OpenCustomResolutionDialogAsync()
     {
         var res = await ShowCustomResolutionDialog.Handle(_customResolutionDialogViewModel);
-        if (res is { Width: > 0, Height: > 0 })
+        if (res is null)
         {
-            Resolutions.Insert(Resolutions.Count - 1, res);
-            SelectedResolution = res;
+            return;
         }
+        
+        _resolutionSource.Add(res);
     }
 
     private async Task OpenFileAsync()

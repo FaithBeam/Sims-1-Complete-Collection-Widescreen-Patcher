@@ -2,7 +2,7 @@
 
 This program patches **The Sims 1** to a custom resolution.
 
-![The Sims 1 Widescreen Patcher](https://i.imgur.com/PdKHV0k.png)
+![The Sims 1 Widescreen Patcher](https://i.imgur.com/b8BU9lG.png)
 
 ## Requirements
 

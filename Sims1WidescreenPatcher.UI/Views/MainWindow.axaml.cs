@@ -1,8 +1,9 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
@@ -12,12 +13,13 @@ using Splat;
 
 namespace Sims1WidescreenPatcher.UI.Views;
 
-public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
+public partial class MainWindow : ReactiveWindow<IMainWindowViewModel>
 {
-    public MainWindow()
+    public MainWindow() : this(Locator.Current.GetService<IMainWindowViewModel>() ?? throw new InvalidOperationException()) {}
+    public MainWindow(IMainWindowViewModel viewModel)
     {
         InitializeComponent();
-        DataContext = Locator.Current.GetService<MainWindowViewModel>();
+        DataContext = viewModel;
         this.WhenActivated(d =>
         {
             if (ViewModel == null) return;
@@ -52,8 +54,7 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
         interaction.SetOutput(result);
     }
 
-    private async Task ShowCustomResolutionDialogAsync(
-        InteractionContext<CustomResolutionDialogViewModel, Resolution?> interaction)
+    private async Task ShowCustomResolutionDialogAsync(InteractionContext<ICustomResolutionDialogViewModel, Resolution?> interaction)
     {
         var dialog = new CustomResolutionDialog
         {
@@ -73,5 +74,46 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
             FileTypeFilter = new FilePickerFileType[] {new ("Sims.exe") {Patterns = new []{"Sims.exe"}}}
         });
         interaction.SetOutput(fileNames.Any() ? fileNames[0] : null);
+    }
+
+    private void IsResolutionsColoredLabel_OnPointerPressed(object sender, PointerPressedEventArgs e)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+        ViewModel.IsResolutionsColored = !ViewModel.IsResolutionsColored;
+    }
+
+    private void SortByAspectRatioLabel_OnPointerPressed(object sender, PointerPressedEventArgs e)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+        ViewModel.SortByAspectRatio = !ViewModel.SortByAspectRatio;
+    }
+
+    private void AspectRatioComboBox_OnTapped(object sender, TappedEventArgs e)
+    {
+        switch (e.KeyModifiers)
+        {
+            case KeyModifiers.Control:
+                if (ViewModel is null)
+                {
+                    return;
+                }
+
+                ViewModel.SelectedAspectRatio = null;
+                var combo = (ComboBox)sender;
+                combo.IsDropDownOpen = false;
+                break;
+            case KeyModifiers.None:
+            case KeyModifiers.Alt:
+            case KeyModifiers.Shift:
+            case KeyModifiers.Meta:
+            default:
+                return;
+        }
     }
 }

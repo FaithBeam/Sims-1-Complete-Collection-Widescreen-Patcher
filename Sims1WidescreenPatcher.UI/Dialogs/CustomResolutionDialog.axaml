@@ -11,7 +11,8 @@
         d:DesignHeight="80"
         x:Class="Sims1WidescreenPatcher.UI.Views.CustomResolutionDialog"
         Title="Enter Custom Resolution"
-        SizeToContent="Height">
+        SizeToContent="Height"
+        Icon="/Assets/SimsICO.ico">
     <Design.DataContext>
         <viewModels:CustomResolutionDialogViewModel />
     </Design.DataContext>
@@ -33,14 +34,20 @@
                     <Label Content="Height" />
                     <TextBox Text="{Binding Height}" />
                 </StackPanel>
-                <Button Grid.Column="2"
-                        Name="CancelButton"
-                        Margin="0 0 5 0"
-                        Content="Cancel"
-                        Click="CancelButton_OnClick"
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center" />
+                <StackPanel Grid.Column="2"
+                            VerticalAlignment="Bottom">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Aspect Ratio = " />
+                        <Label Content="{Binding AspectRatio, TargetNullValue='???'}"/>
+                    </StackPanel>
+                    <Button Name="CancelButton"
+                            Margin="0 0 5 0"
+                            Content="Cancel"
+                            Click="CancelButton_OnClick"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center" />
+                </StackPanel>
                 <Button Grid.Column="3"
                         Content="Ok"
                         Command="{Binding OkCommand}"

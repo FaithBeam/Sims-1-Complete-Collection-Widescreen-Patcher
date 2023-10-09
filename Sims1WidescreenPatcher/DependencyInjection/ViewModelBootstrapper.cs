@@ -9,14 +9,15 @@ namespace Sims1WidescreenPatcher.DependencyInjection
     {
         public static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
-            services.Register(() => new CustomResolutionDialogViewModel());
+            services.Register(() => new CustomResolutionDialogViewModel(), typeof(ICustomResolutionDialogViewModel));
             services.Register(() => new CustomYesNoDialogViewModel());
             services.Register(() => new MainWindowViewModel(
-                resolver.GetService<IResolutionsService>()!,
-                resolver.GetService<CustomYesNoDialogViewModel>()!,
-                resolver.GetService<CustomResolutionDialogViewModel>()!,
-                resolver.GetService<IProgressService>()!,
-                resolver.GetService<IFindSimsPathService>()!));
+                resolver.GetService<IResolutionsService>() ?? throw new InvalidOperationException(),
+                resolver.GetService<CustomYesNoDialogViewModel>() ?? throw new InvalidOperationException(),
+                resolver.GetService<ICustomResolutionDialogViewModel>() ?? throw new InvalidOperationException(),
+                resolver.GetService<IProgressService>() ?? throw new InvalidOperationException(),
+                resolver.GetService<IFindSimsPathService>() ?? throw new InvalidOperationException()),
+                typeof(IMainWindowViewModel));
         }
     }
 }
