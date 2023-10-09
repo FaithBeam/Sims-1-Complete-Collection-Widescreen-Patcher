@@ -24,7 +24,7 @@ public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
     private readonly ICustomResolutionDialogViewModel _customResolutionDialogViewModel;
     private int _selectedWrapperIndex;
     private Resolution? _selectedResolution;
-    private Resolution _previousResolution;
+    private Resolution? _previousResolution;
     private AspectRatio? _selectedSelectedAspectRatio;
     private string _path = "";
     private bool _isBusy;
