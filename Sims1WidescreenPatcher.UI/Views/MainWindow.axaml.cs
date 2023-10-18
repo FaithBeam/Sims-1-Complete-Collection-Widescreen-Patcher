@@ -30,8 +30,7 @@ public partial class MainWindow : ReactiveWindow<IMainWindowViewModel>
         });
     }
 
-    private async Task ShowCustomInformationDialogAsync(
-        InteractionContext<CustomInformationDialogViewModel, Unit> interaction)
+    private async Task ShowCustomInformationDialogAsync(IInteractionContext<CustomInformationDialogViewModel, Unit> interaction)
     {
         var dialog = new CustomInformationDialog
         {
@@ -42,8 +41,7 @@ public partial class MainWindow : ReactiveWindow<IMainWindowViewModel>
         interaction.SetOutput(result);
     }
 
-    private async Task ShowCustomYesNoDialogAsync(
-        InteractionContext<CustomYesNoDialogViewModel, YesNoDialogResponse?> interaction)
+    private async Task ShowCustomYesNoDialogAsync(IInteractionContext<CustomYesNoDialogViewModel, YesNoDialogResponse?> interaction)
     {
         var dialog = new CustomYesNoDialog
         {
@@ -54,7 +52,7 @@ public partial class MainWindow : ReactiveWindow<IMainWindowViewModel>
         interaction.SetOutput(result);
     }
 
-    private async Task ShowCustomResolutionDialogAsync(InteractionContext<ICustomResolutionDialogViewModel, Resolution?> interaction)
+    private async Task ShowCustomResolutionDialogAsync(IInteractionContext<ICustomResolutionDialogViewModel, Resolution?> interaction)
     {
         var dialog = new CustomResolutionDialog
         {
@@ -65,7 +63,7 @@ public partial class MainWindow : ReactiveWindow<IMainWindowViewModel>
         interaction.SetOutput(result);
     }
 
-    private async Task ShowOpenFileDialogAsync(InteractionContext<Unit, IStorageFile?> interaction)
+    private async Task ShowOpenFileDialogAsync(IInteractionContext<Unit, IStorageFile?> interaction)
     {
         var fileNames = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
