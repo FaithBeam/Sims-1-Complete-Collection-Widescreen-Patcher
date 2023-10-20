@@ -5,8 +5,6 @@ using Sims1WidescreenPatcher.Utilities.Services;
 using Sims1WidescreenPatcher.Windows.Services;
 using Splat;
 using System.Runtime.InteropServices;
-using Avalonia;
-using Avalonia.Styling;
 using FindSimsPathService = Sims1WidescreenPatcher.Windows.Services.FindSimsPathService;
 
 namespace Sims1WidescreenPatcher.DependencyInjection

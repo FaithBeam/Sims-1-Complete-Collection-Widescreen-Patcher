@@ -1,0 +1,18 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Sims1WidescreenPatcher.UI.UserControls.Checkbox">
+    
+    <Design.DataContext>
+        <viewModels:CheckboxViewModel />
+    </Design.DataContext>
+    
+    <StackPanel Orientation="Horizontal"
+                PointerPressed="InputElement_OnPointerPressed">
+        <CheckBox IsChecked="{Binding Checked}"></CheckBox>
+        <Label Content="{Binding Label}" />
+    </StackPanel>
+</UserControl>

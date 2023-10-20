@@ -1,0 +1,15 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.Tabs;assembly=Sims1WidescreenPatcher.Core"
+             xmlns:customcontrols="clr-namespace:Sims1WidescreenPatcher.UI.UserControls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Sims1WidescreenPatcher.UI.Tabs.OptionalTab">
+    
+    <Design.DataContext>
+        <viewModels:OptionalTabViewModel />
+    </Design.DataContext>
+    
+    <customcontrols:Checkbox DataContext="{Binding UnlockCheatsViewModel}" />
+</UserControl>
