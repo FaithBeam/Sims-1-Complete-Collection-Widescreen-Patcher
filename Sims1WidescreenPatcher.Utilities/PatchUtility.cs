@@ -9,7 +9,7 @@ public static class PatchUtility
 
     public static bool IsValidSims(string path)
     {
-        if (string.IsNullOrWhiteSpace(path)) return false;
+        if (string.IsNullOrWhiteSpace(path) || !File.Exists(path)) return false;
         Log.Information("Begin check Sims executable is valid");
         var pattern = Pattern.Transform(BytePattern);
         var bytes = File.ReadAllBytes(path);
@@ -53,7 +53,7 @@ public static class PatchUtility
 
     public static bool SimsBackupExists(string path)
     {
-        if (string.IsNullOrWhiteSpace(path)) return false;
+        if (string.IsNullOrWhiteSpace(path) || !File.Exists(path)) return false;
         Log.Information("Begin check backup exists for Sims executable");
         Log.Debug("Path {Path}", path);
         var fileName = Path.GetFileNameWithoutExtension(path);
@@ -67,7 +67,7 @@ public static class PatchUtility
 
     private static void BackupSims(string path)
     {
-        if (string.IsNullOrWhiteSpace(path)) return;
+        if (string.IsNullOrWhiteSpace(path) || !File.Exists(path)) return;
         Log.Information("Begin backup of Sims executable");
         var fileName = Path.GetFileNameWithoutExtension(path);
         var dir = Path.GetDirectoryName(path) ?? string.Empty;

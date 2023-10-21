@@ -15,7 +15,7 @@ public class FindSimsPathService : IFindSimsPathService
             var val = key?.GetValue("InstallPath")?.ToString();
             if (string.IsNullOrWhiteSpace(val)) return string.Empty;
             var path = Path.Combine(val, "Sims.exe");
-            return path;
+            return File.Exists(path) ? path : string.Empty;
         }
         catch (Exception)
         {
