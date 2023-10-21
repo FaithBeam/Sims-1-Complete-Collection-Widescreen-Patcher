@@ -9,7 +9,7 @@ public static class PatchUtility
 
     public static bool IsValidSims(string path)
     {
-        if (string.IsNullOrWhiteSpace(path)) return false;
+        if (string.IsNullOrWhiteSpace(path) || !File.Exists(path)) return false;
         Log.Information("Begin check Sims executable is valid");
         var pattern = Pattern.Transform(BytePattern);
         var bytes = File.ReadAllBytes(path);

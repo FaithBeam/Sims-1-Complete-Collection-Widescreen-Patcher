@@ -1,4 +1,5 @@
 ﻿using PatternFinder;
+using Sims1WidescreenPatcher.Core.Models;
 
 namespace Sims1WidescreenPatcher.Core.Services;
 
@@ -6,26 +7,32 @@ public class CheatsService : ICheatsService
 {
     private const string DisableCheatsPattern = "00 56 90 90";
     private const string EnableCheatsPattern = "00 56 75 04";
+    private readonly IAppState _appState;
 
-    public bool CheatsEnabled(string simsExePath)
+    public CheatsService(IAppState appState)
     {
-        var (found, _, _) = FindPattern(simsExePath, DisableCheatsPattern);
+        _appState = appState;
+    }
+
+    public bool CheatsEnabled()
+    {
+        var (found, _, _) = FindPattern(DisableCheatsPattern);
         return found;
     }
 
-    public void EnableCheats(string simsExePath)
+    public void EnableCheats()
     {
-        EditSimsExe(simsExePath, EnableCheatsPattern, new Tuple<byte, byte>(144, 144));
+        EditSimsExe( EnableCheatsPattern, new Tuple<byte, byte>(144, 144));
     }
 
-    public void DisableCheats(string simsExePath)
+    public void DisableCheats()
     {
-        EditSimsExe(simsExePath, DisableCheatsPattern, new Tuple<byte, byte>(117, 4));
+        EditSimsExe( DisableCheatsPattern, new Tuple<byte, byte>(117, 4));
     }
 
-    private void EditSimsExe(string simsExePath, string pattern, Tuple<byte, byte> replacementBytes)
+    private void EditSimsExe(string pattern, Tuple<byte, byte> replacementBytes)
     {
-        var (found, offset, bytes) = FindPattern(simsExePath, pattern);
+        var (found, offset, bytes) = FindPattern(pattern);
         if (!found)
         {
             return;
@@ -34,27 +41,27 @@ public class CheatsService : ICheatsService
         bytes![offset + 2] = replacementBytes.Item1;
         bytes[offset + 2 + 1] = replacementBytes.Item2;
         
-        WriteChanges(simsExePath, bytes);
+        WriteChanges(bytes);
     }
 
-    private void WriteChanges(string simsExePath, byte[] bytes)
+    private void WriteChanges(byte[] bytes)
     {
-        File.SetAttributes(simsExePath, FileAttributes.Normal);
-        File.WriteAllBytes(simsExePath, bytes);
+        File.SetAttributes(_appState.SimsExePath, FileAttributes.Normal);
+        File.WriteAllBytes(_appState.SimsExePath, bytes);
     }
 
-    private (bool found, long offset, byte[]? bytes) FindPattern(string simsExePath, string pattern)
+    private (bool found, long offset, byte[]? bytes) FindPattern(string pattern)
     {
-        if (!File.Exists(simsExePath))
+        if (string.IsNullOrWhiteSpace(_appState.SimsExePath) || !File.Exists(_appState.SimsExePath))
         {
             return (false, 0, null);
         }
 
         var patternBytes = Pattern.Transform(pattern);
-        var bytes = File.ReadAllBytes(simsExePath);
+        var bytes = File.ReadAllBytes(_appState.SimsExePath);
         if (!Pattern.Find(bytes, patternBytes, out var offset))
         {
-            throw new Exception($"Could not find pattern {EnableCheatsPattern} in {simsExePath}");
+            return (false, 0, null);
         }
 
         return (true, offset, bytes);

@@ -2,7 +2,7 @@
 
 public interface ICheatsService
 {
-    bool CheatsEnabled(string simsExePath);
-    void EnableCheats(string simsExePath);
-    void DisableCheats(string simsExePath);
+    bool CheatsEnabled();
+    void EnableCheats();
+    void DisableCheats();
 }

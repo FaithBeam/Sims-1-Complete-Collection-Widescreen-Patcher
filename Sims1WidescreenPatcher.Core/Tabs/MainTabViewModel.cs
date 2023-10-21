@@ -38,6 +38,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     private readonly SourceList<Resolution> _resolutionSource = new();
     private readonly ReadOnlyObservableCollection<Resolution> _filteredResolutions;
     private readonly ReadOnlyObservableCollection<AspectRatio> _aspectRatios;
+    private IAppState AppState { get; }
 
     #endregion
 
@@ -48,9 +49,10 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         ICustomResolutionDialogViewModel customResolutionDialogViewModel,
         IProgressService progressService,
         IFindSimsPathService findSimsPathService,
-        CheckboxViewModelFactory ucVmFactory)
+        CheckboxViewModelFactory ucVmFactory, IAppState appState)
     {
         _progressService = progressService;
+        AppState = appState;
         ResolutionsColoredCbVm = (CheckboxViewModel)ucVmFactory.Create("Color Code");
         ResolutionsColoredCbVm.Checked = true;
         ResolutionsColoredCbVm.ToolTipText = "Color code the resolutions by their aspect ratio";
@@ -58,8 +60,9 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         SortByAspectRatioCbVm.ToolTipText = "Sort the resolutions by their aspect ratio";
         _customYesNoDialogViewModel = customYesNoDialogViewModel;
         _customResolutionDialogViewModel = customResolutionDialogViewModel;
-        this.WhenAnyValue(x => x.Path)
-            .Subscribe(x => System.Diagnostics.Debug.WriteLine(x));
+        this
+            .WhenAnyValue(x => x.Path)
+            .Subscribe(x => AppState.SimsExePath = x);
         _hasBackup = this
             .WhenAnyValue(x => x.Path, x => x.IsBusy, (path, _) => PatchUtility.SimsBackupExists(path))
             .ToProperty(this, x => x.HasBackup, deferSubscription: true);
@@ -157,7 +160,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
     public string Path
     {
-        get => _path;
+        get => _path!;
         set => this.RaiseAndSetIfChanged(ref _path, value);
     }
 

@@ -11,24 +11,19 @@
         <viewModels:OptionalTabViewModel />
     </Design.DataContext>
     
+    <UserControl.Styles>
+        <StyleInclude Source="../Styles/OptionalTabStyles.axaml" />
+    </UserControl.Styles>
+    
     <StackPanel>
         <customcontrols:Checkbox DataContext="{Binding UnlockCheatsViewModel}" />
         <Button HorizontalAlignment="Right"
                 Background="#007bff"
-                Content="Apply">
-            <Button.Styles>
-                <Style Selector="Button">
-                    <Setter Property="Opacity" Value="0" />
-                </Style>
-                <Style Selector="Button:pointerover">
-                    <Setter Property="Opacity" Value="1" />
-                </Style>
-            </Button.Styles>
-            <Button.Transitions>
-                <Transitions>
-                    <DoubleTransition Property="Opacity" Duration="0:0:5" />
-                </Transitions>
-            </Button.Transitions>
-        </Button>
+                Content="Apply"
+                IsVisible="False"
+                IsEnabled="{Binding ApplyBtnVisible}"
+                Classes.Hidden="{Binding !ApplyBtnVisible}"
+                Classes.Visible="{Binding ApplyBtnVisible}"
+                Command="{Binding ApplyCommand}"/>
     </StackPanel>
 </UserControl>
