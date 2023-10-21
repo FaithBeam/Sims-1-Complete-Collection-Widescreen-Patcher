@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Sims1WidescreenPatcher.Core.ViewModels;
 using Sims1WidescreenPatcher.UI.Views;
 using Splat;
 
@@ -17,7 +18,10 @@ public partial class App : Application
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 		{
-			desktop.MainWindow = Locator.Current.GetService<MainWindow>();
+			desktop.MainWindow = new MainWindow()
+			{
+				DataContext = Locator.Current.GetService<IMainWindowViewModel>()
+			};
 		}
 
 		base.OnFrameworkInitializationCompleted();

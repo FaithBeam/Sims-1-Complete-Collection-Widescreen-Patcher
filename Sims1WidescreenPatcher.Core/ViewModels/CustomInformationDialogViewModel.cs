@@ -2,7 +2,6 @@
 
 public class CustomInformationDialogViewModel : ViewModelBase
 {
-    public CustomInformationDialogViewModel() : this("Default Title", "Default message.") {}
     public CustomInformationDialogViewModel(string title, string message)
     {
         Title = title;

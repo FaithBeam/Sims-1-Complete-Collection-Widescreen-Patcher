@@ -1,15 +1,15 @@
-﻿using Splat;
+﻿using Autofac;
+using Splat;
 
-namespace Sims1WidescreenPatcher.DependencyInjection
+namespace Sims1WidescreenPatcher.DependencyInjection;
+
+public static class Bootstrapper
 {
-	public static class Bootstrapper
+	public static void Register(ContainerBuilder services)
 	{
-		public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
-		{
-			ServicesBootstrapper.RegisterServices(services, resolver);
-			FactoryBootstrapper.RegisterFactories(services, resolver);
-			ViewModelBootstrapper.RegisterViewModels(services, resolver);
-			ViewBootstrapper.RegisterViews(services, resolver);
-		}
+		ServicesBootstrapper.RegisterServices(services);
+		FactoryBootstrapper.RegisterFactories(services);
+		ViewModelBootstrapper.RegisterViewModels(services);
+		ViewBootstrapper.RegisterViews(services);
 	}
 }

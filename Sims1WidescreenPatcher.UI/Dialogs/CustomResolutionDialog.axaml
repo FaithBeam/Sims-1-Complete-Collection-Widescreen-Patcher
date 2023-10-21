@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterOwner"
         d:DesignWidth="450"
         d:DesignHeight="80"
-        x:Class="Sims1WidescreenPatcher.UI.Views.CustomResolutionDialog"
+        x:Class="Sims1WidescreenPatcher.UI.Dialogs.CustomResolutionDialog"
         Title="Enter Custom Resolution"
         SizeToContent="Height"
         Icon="/Assets/SimsICO.ico">

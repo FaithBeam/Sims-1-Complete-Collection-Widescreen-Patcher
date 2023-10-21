@@ -11,8 +11,8 @@ using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Tabs;
 using Sims1WidescreenPatcher.Core.ViewModels;
 using Sims1WidescreenPatcher.UI.Views;
-using Splat;
 using CustomInformationDialog = Sims1WidescreenPatcher.UI.Dialogs.CustomInformationDialog;
+using CustomResolutionDialog = Sims1WidescreenPatcher.UI.Dialogs.CustomResolutionDialog;
 
 namespace Sims1WidescreenPatcher.UI.Tabs;
 
@@ -21,21 +21,18 @@ public partial class MainTab : ReactiveUserControl<IMainTabViewModel>
     private TopLevel? _topLevel;
     private Window? _window;
     
-    public MainTab() : this(Locator.Current.GetService<IMainTabViewModel>() ?? throw new InvalidOperationException()) {}
-    
-    public MainTab(IMainTabViewModel viewModel)
+    public MainTab()
     {
         InitializeComponent();
-        DataContext = viewModel;
         this.WhenActivated(d =>
         {
             if (ViewModel == null) return;
             _topLevel = TopLevel.GetTopLevel(this);
             _window = (Window)_topLevel!;
             d(ViewModel.ShowOpenFileDialog.RegisterHandler(ShowOpenFileDialogAsync));
-            d(ViewModel!.ShowCustomResolutionDialog.RegisterHandler(ShowCustomResolutionDialogAsync));
-            d(ViewModel!.ShowCustomYesNoDialog.RegisterHandler(ShowCustomYesNoDialogAsync));
-            d(ViewModel!.ShowCustomInformationDialog.RegisterHandler(ShowCustomInformationDialogAsync));
+            d(ViewModel.ShowCustomResolutionDialog.RegisterHandler(ShowCustomResolutionDialogAsync));
+            d(ViewModel.ShowCustomYesNoDialog.RegisterHandler(ShowCustomYesNoDialogAsync));
+            d(ViewModel.ShowCustomInformationDialog.RegisterHandler(ShowCustomInformationDialogAsync));
         });
     }
     

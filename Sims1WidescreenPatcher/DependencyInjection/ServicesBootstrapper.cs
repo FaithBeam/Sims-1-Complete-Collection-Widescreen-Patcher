@@ -3,36 +3,36 @@ using Sims1WidescreenPatcher.Linux.Services;
 using Sims1WidescreenPatcher.MacOS.Services;
 using Sims1WidescreenPatcher.Utilities.Services;
 using Sims1WidescreenPatcher.Windows.Services;
-using Splat;
 using System.Runtime.InteropServices;
+using Autofac;
 using FindSimsPathService = Sims1WidescreenPatcher.Windows.Services.FindSimsPathService;
 
 namespace Sims1WidescreenPatcher.DependencyInjection
 {
     public static class ServicesBootstrapper
     {
-        public static void RegisterServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        public static void RegisterServices(ContainerBuilder services)
         {
-            RegisterCommonServices(services, resolver);
-            RegisterPlatformSpecificServices(services, resolver);
+            RegisterCommonServices(services);
+            RegisterPlatformSpecificServices(services);
         }
 
-        private static void RegisterPlatformSpecificServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        private static void RegisterPlatformSpecificServices(ContainerBuilder services)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                services.RegisterLazySingleton<IResolutionsService>(() => new WindowsResolutionsService());
-                services.Register<IFindSimsPathService>(() => new FindSimsPathService());
+                services.RegisterType<WindowsResolutionsService>().As<IResolutionsService>().SingleInstance();
+                services.RegisterType<FindSimsPathService>().As<IFindSimsPathService>();
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                services.RegisterLazySingleton<IResolutionsService>(() => new MacOsResolutionService());
-                services.Register<IFindSimsPathService>(() => new MacOS.Services.FindSimsPathService());
+                services.RegisterType<MacOsResolutionService>().As<IResolutionsService>().SingleInstance();
+                services.RegisterType<MacOS.Services.FindSimsPathService>().As<IFindSimsPathService>();
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                services.RegisterLazySingleton<IResolutionsService>(() => new LinuxResolutionService());
-                services.Register<IFindSimsPathService>(() => new Linux.Services.FindSimsPathService());
+                services.RegisterType<LinuxResolutionService>().As<IResolutionsService>().SingleInstance();
+                services.RegisterType<Linux.Services.FindSimsPathService>().As<IFindSimsPathService>();
             }
             else
             {
@@ -40,10 +40,10 @@ namespace Sims1WidescreenPatcher.DependencyInjection
             }
         }
 
-        private static void RegisterCommonServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        private static void RegisterCommonServices(ContainerBuilder services)
         {
-            services.RegisterLazySingleton<IProgressService>(() => new ProgressService());
-            services.Register<ICheatsService>(() => new CheatsService());
+            services.RegisterType<ProgressService>().As<IProgressService>().SingleInstance();
+            services.RegisterType<CheatsService>().As<ICheatsService>();
         }
     }
 }

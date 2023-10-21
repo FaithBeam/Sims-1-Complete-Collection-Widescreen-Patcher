@@ -24,11 +24,11 @@
 	<TabControl Classes="p-0">
 		<TabItem Classes="tabitem"
 		         Header="Main">
-			<tabs:MainTab />
+			<tabs:MainTab DataContext="{Binding MainTabViewModel}"/>
 		</TabItem>
 		<TabItem Classes="tabitem"
 		         Header="Optional">
-			<tabs:OptionalTab />
+			<tabs:OptionalTab DataContext="{Binding OptionalTabViewModel}" />
 		</TabItem>
 	</TabControl>
 </Window>

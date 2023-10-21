@@ -1,31 +1,18 @@
-﻿using Sims1WidescreenPatcher.Core.Factories;
-using Sims1WidescreenPatcher.Core.Services;
+﻿using Autofac;
 using Sims1WidescreenPatcher.Core.Tabs;
 using Sims1WidescreenPatcher.Core.ViewModels;
-using Sims1WidescreenPatcher.Utilities.Services;
-using Splat;
 
 namespace Sims1WidescreenPatcher.DependencyInjection
 {
     public static class ViewModelBootstrapper
     {
-        public static void RegisterViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+        public static void RegisterViewModels(ContainerBuilder services)
         {
-            services.Register(() => new CustomResolutionDialogViewModel(), typeof(ICustomResolutionDialogViewModel));
-            services.Register(() => new CustomYesNoDialogViewModel());
-            services.Register(() => new MainWindowViewModel(), typeof(IMainWindowViewModel));
-            services.Register(() => new MainTabViewModel(
-                resolver.GetService<IResolutionsService>() ?? throw new InvalidOperationException(),
-                resolver.GetService<CustomYesNoDialogViewModel>() ?? throw new InvalidOperationException(),
-                resolver.GetService<ICustomResolutionDialogViewModel>() ?? throw new InvalidOperationException(),
-                resolver.GetService<IProgressService>() ?? throw new InvalidOperationException(),
-                resolver.GetService<IFindSimsPathService>() ?? throw new InvalidOperationException(),
-                resolver.GetService<CheckboxViewModelFactory>() ?? throw new InvalidOperationException()),
-                typeof(IMainTabViewModel));
-            services.Register(() => new OptionalTabViewModel(
-                resolver.GetService<CheckboxViewModelFactory>() ?? throw new InvalidOperationException(),
-                resolver.GetService<ICheatsService>() ?? throw new InvalidOperationException()),
-                typeof(IOptionalTabViewModel));
+            services.RegisterType<CustomResolutionDialogViewModel>().As<ICustomResolutionDialogViewModel>();
+            services.RegisterType<CustomYesNoDialogViewModel>().AsSelf();
+            services.RegisterType<MainWindowViewModel>().As<IMainWindowViewModel>();
+            services.RegisterType<MainTabViewModel>().As<IMainTabViewModel>();
+            services.RegisterType<OptionalTabViewModel>().As<IOptionalTabViewModel>();
         }
     }
 }

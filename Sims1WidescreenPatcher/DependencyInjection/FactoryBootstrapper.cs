@@ -1,12 +1,12 @@
-﻿using Sims1WidescreenPatcher.Core.Factories;
-using Splat;
+﻿using Autofac;
+using Sims1WidescreenPatcher.Core.Factories;
 
 namespace Sims1WidescreenPatcher.DependencyInjection;
 
 public static class FactoryBootstrapper
 {
-    public static void RegisterFactories(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
+    public static void RegisterFactories(ContainerBuilder services)
     {
-        services.Register(() => new CheckboxViewModelFactory());
+        services.RegisterType<CheckboxViewModelFactory>().AsSelf();
     }
 }

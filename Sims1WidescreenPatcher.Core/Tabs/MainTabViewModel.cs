@@ -15,7 +15,6 @@ using Sims1WidescreenPatcher.Core.ViewModels;
 using Sims1WidescreenPatcher.Utilities;
 using Sims1WidescreenPatcher.Utilities.Models;
 using Sims1WidescreenPatcher.Utilities.Services;
-using Splat;
 
 namespace Sims1WidescreenPatcher.Core.Tabs;
 
@@ -44,22 +43,12 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
     #region Constructor
 
-    public MainTabViewModel() : this(
-        Locator.Current.GetService<IResolutionsService>() ?? throw new InvalidOperationException(),
-        Locator.Current.GetService<CustomYesNoDialogViewModel>() ?? throw new InvalidOperationException(),
-        Locator.Current.GetService<ICustomResolutionDialogViewModel>() ?? throw new InvalidOperationException(),
-        Locator.Current.GetService<IProgressService>() ?? throw new InvalidOperationException(),
-        Locator.Current.GetService<IFindSimsPathService>() ?? throw new InvalidOperationException(),
-        Locator.Current.GetService<CheckboxViewModelFactory>() ?? throw new InvalidOperationException())
-    {
-    }
-
     public MainTabViewModel(IResolutionsService resolutionsService,
         CustomYesNoDialogViewModel customYesNoDialogViewModel,
         ICustomResolutionDialogViewModel customResolutionDialogViewModel,
         IProgressService progressService,
         IFindSimsPathService findSimsPathService,
-        IUserControlViewModelCreator ucVmFactory)
+        CheckboxViewModelFactory ucVmFactory)
     {
         _progressService = progressService;
         ResolutionsColoredCbVm = (CheckboxViewModel)ucVmFactory.Create("Color Code");

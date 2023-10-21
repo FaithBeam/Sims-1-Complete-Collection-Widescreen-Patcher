@@ -1,21 +1,12 @@
-﻿using System;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using Avalonia.ReactiveUI;
 using Sims1WidescreenPatcher.Core.Tabs;
-using Splat;
 
 namespace Sims1WidescreenPatcher.UI.Tabs;
 
-public partial class OptionalTab : UserControl
+public partial class OptionalTab : ReactiveUserControl<IOptionalTabViewModel>
 {
-    public OptionalTab() : this(Locator.Current.GetService<IOptionalTabViewModel>() ?? throw new InvalidOperationException())
-    {
-    }
-
-    public OptionalTab(IOptionalTabViewModel viewModel)
+    public OptionalTab()
     {
         InitializeComponent();
-        DataContext = viewModel;
     }
 }

@@ -12,8 +12,6 @@ public class CheckboxViewModel : ReactiveObject, ICheckboxViewModel
         ToolTipText = toolTipText;
     }
 
-    public CheckboxViewModel() : this("Default label", "Default tooltip") {}
-
     public string Label { get; set; }
     
     public string ToolTipText { get; set; }

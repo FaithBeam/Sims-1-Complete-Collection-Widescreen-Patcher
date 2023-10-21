@@ -1,11 +1,13 @@
 ﻿using System.Reflection;
+using Autofac;
 using Avalonia;
 using Avalonia.ReactiveUI;
+using ReactiveUI;
 using Serilog;
 using Serilog.Formatting.Compact;
 using Sims1WidescreenPatcher.DependencyInjection;
 using Sims1WidescreenPatcher.UI;
-using Splat;
+using Splat.Autofac;
 
 namespace Sims1WidescreenPatcher;
 
@@ -28,7 +30,16 @@ internal static class Program
 		Log.Information("{@Name}", name);
 		Log.Information("{@Version}", informationalVersion);
 		Log.Information("{@OSInformation}", osNameAndVersion);
-		RegisterDependencies();
+		var builder = new ContainerBuilder();
+		Bootstrapper.Register(builder);
+		builder.RegisterType<AvaloniaActivationForViewFetcher>().As<IActivationForViewFetcher>().SingleInstance();
+		var autofacResolver = builder.UseAutofacDependencyResolver();
+		builder.RegisterInstance(autofacResolver);
+		autofacResolver.InitializeReactiveUI();
+		var container = builder.Build();
+		autofacResolver.SetLifetimeScope(container);
+		RxApp.MainThreadScheduler = AvaloniaScheduler.Instance;
+		
 		try
 		{
 			BuildAvaloniaApp()
@@ -45,10 +56,5 @@ internal static class Program
 	private static AppBuilder BuildAvaloniaApp()
 		=> AppBuilder.Configure<App>()
 			.UsePlatformDetect()
-			.LogToTrace()
-			.UseReactiveUI();
-
-	private static void RegisterDependencies() =>
-		Bootstrapper.Register(Locator.CurrentMutable, Locator.Current);
-
+			.LogToTrace();
 }
