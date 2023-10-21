@@ -5,8 +5,13 @@ namespace Sims1WidescreenPatcher.Core.Factories;
 
 public class CheckboxViewModelFactory: UserControlViewModelCreator
 {
-    public override IReactiveObject FactoryMethod(string label)
+    public override IReactiveObject Create(string label)
     {
-        return new CheckboxViewModel(label);
+        return new CheckboxViewModel(label, "");
+    }
+
+    public IReactiveObject Create(string label, string tooltip)
+    {
+        return new CheckboxViewModel(label, tooltip);
     }
 }

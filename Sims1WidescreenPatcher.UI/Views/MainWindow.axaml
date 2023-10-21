@@ -21,7 +21,7 @@
 		<StyleInclude Source="../Styles/TabStyles.axaml"></StyleInclude>
 	</Window.Styles>
 
-	<TabControl Classes="tabcontrol">
+	<TabControl Classes="p-0">
 		<TabItem Classes="tabitem"
 		         Header="Main">
 			<tabs:MainTab />

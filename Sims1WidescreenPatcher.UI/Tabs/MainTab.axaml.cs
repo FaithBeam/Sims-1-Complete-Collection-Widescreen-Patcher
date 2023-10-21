@@ -86,24 +86,6 @@ public partial class MainTab : ReactiveUserControl<IMainTabViewModel>
         }
     }
 
-    private void IsResolutionsColoredLabel_OnPointerPressed(object sender, PointerPressedEventArgs e)
-    {
-        if (ViewModel is null)
-        {
-            return;
-        }
-        ViewModel.IsResolutionsColored = !ViewModel.IsResolutionsColored;
-    }
-
-    private void SortByAspectRatioLabel_OnPointerPressed(object sender, PointerPressedEventArgs e)
-    {
-        if (ViewModel is null)
-        {
-            return;
-        }
-        ViewModel.SortByAspectRatio = !ViewModel.SortByAspectRatio;
-    }
-
     private void AspectRatioComboBox_OnTapped(object sender, TappedEventArgs e)
     {
         switch (e.KeyModifiers)

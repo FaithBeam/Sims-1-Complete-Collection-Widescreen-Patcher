@@ -3,16 +3,30 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
+             xmlns:converters="clr-namespace:Sims1WidescreenPatcher.UI.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Sims1WidescreenPatcher.UI.UserControls.Checkbox">
-    
+
     <Design.DataContext>
         <viewModels:CheckboxViewModel />
     </Design.DataContext>
     
+    <UserControl.Resources>
+        <converters:ToolTipShownConverter x:Key="ToolTipShownConverter" />
+    </UserControl.Resources>
+
     <StackPanel Orientation="Horizontal"
                 PointerPressed="InputElement_OnPointerPressed">
-        <CheckBox IsChecked="{Binding Checked}"></CheckBox>
+        <!-- Hack to not show tooltip when there is no value for bound ToolTipText -->
+        <StackPanel.Styles>
+            <Style Selector="ToolTip">
+                <Setter Property="Background" Value="{Binding ToolTipText, Converter={StaticResource ToolTipShownConverter}}" />
+            </Style>
+        </StackPanel.Styles>
+        <CheckBox IsChecked="{Binding Checked}" />
         <Label Content="{Binding Label}" />
+        <ToolTip.Tip>
+            <TextBlock Text="{Binding ToolTipText}" />
+        </ToolTip.Tip>
     </StackPanel>
 </UserControl>

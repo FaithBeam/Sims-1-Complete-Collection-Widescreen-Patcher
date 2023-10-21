@@ -8,6 +8,7 @@ using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Enums;
+using Sims1WidescreenPatcher.Core.Factories;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Core.ViewModels;
@@ -44,28 +45,28 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     #region Constructor
 
     public MainTabViewModel() : this(
-        Locator.Current.GetService<ICheckboxViewModel>() ?? throw new InvalidOperationException(),
-        Locator.Current.GetService<ICheckboxViewModel>() ?? throw new InvalidOperationException(),
         Locator.Current.GetService<IResolutionsService>() ?? throw new InvalidOperationException(),
         Locator.Current.GetService<CustomYesNoDialogViewModel>() ?? throw new InvalidOperationException(),
         Locator.Current.GetService<ICustomResolutionDialogViewModel>() ?? throw new InvalidOperationException(),
         Locator.Current.GetService<IProgressService>() ?? throw new InvalidOperationException(),
-        Locator.Current.GetService<IFindSimsPathService>() ?? throw new InvalidOperationException())
+        Locator.Current.GetService<IFindSimsPathService>() ?? throw new InvalidOperationException(),
+        Locator.Current.GetService<CheckboxViewModelFactory>() ?? throw new InvalidOperationException())
     {
     }
 
-    public MainTabViewModel(ICheckboxViewModel resolutionsColoredCbVm, ICheckboxViewModel sortByAspectRatioCbVm,
-        IResolutionsService resolutionsService,
+    public MainTabViewModel(IResolutionsService resolutionsService,
         CustomYesNoDialogViewModel customYesNoDialogViewModel,
         ICustomResolutionDialogViewModel customResolutionDialogViewModel,
         IProgressService progressService,
-        IFindSimsPathService findSimsPathService)
+        IFindSimsPathService findSimsPathService,
+        IUserControlViewModelCreator ucVmFactory)
     {
         _progressService = progressService;
-        ResolutionsColoredCbVm = resolutionsColoredCbVm;
+        ResolutionsColoredCbVm = (CheckboxViewModel)ucVmFactory.Create("Color Code");
         ResolutionsColoredCbVm.Checked = true;
-        ResolutionsColoredCbVm.Label = "";
-        SortByAspectRatioCbVm = sortByAspectRatioCbVm;
+        ResolutionsColoredCbVm.ToolTipText = "Color code the resolutions by their aspect ratio";
+        SortByAspectRatioCbVm = (CheckboxViewModel)ucVmFactory.Create("Sort by Aspect Ratio");
+        SortByAspectRatioCbVm.ToolTipText = "Sort the resolutions by their aspect ratio";
         _customYesNoDialogViewModel = customYesNoDialogViewModel;
         _customResolutionDialogViewModel = customResolutionDialogViewModel;
         this.WhenAnyValue(x => x.Path)
@@ -186,9 +187,9 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         set => this.RaiseAndSetIfChanged(ref _selectedSelectedAspectRatio, value);
     }
 
-    public ICheckboxViewModel ResolutionsColoredCbVm { get; }
+    public ICheckboxViewModel ResolutionsColoredCbVm { get; set; }
 
-    public ICheckboxViewModel SortByAspectRatioCbVm { get; }
+    public ICheckboxViewModel SortByAspectRatioCbVm { get; set; }
 
     public ReadOnlyObservableCollection<AspectRatio> AspectRatios => _aspectRatios;
 

@@ -43,6 +43,7 @@ namespace Sims1WidescreenPatcher.DependencyInjection
         private static void RegisterCommonServices(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
         {
             services.RegisterLazySingleton<IProgressService>(() => new ProgressService());
+            services.Register<ICheatsService>(() => new CheatsService());
         }
     }
 }

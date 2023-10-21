@@ -19,10 +19,12 @@ namespace Sims1WidescreenPatcher.DependencyInjection
                 resolver.GetService<CustomYesNoDialogViewModel>() ?? throw new InvalidOperationException(),
                 resolver.GetService<ICustomResolutionDialogViewModel>() ?? throw new InvalidOperationException(),
                 resolver.GetService<IProgressService>() ?? throw new InvalidOperationException(),
-                resolver.GetService<IFindSimsPathService>() ?? throw new InvalidOperationException()),
+                resolver.GetService<IFindSimsPathService>() ?? throw new InvalidOperationException(),
+                resolver.GetService<CheckboxViewModelFactory>() ?? throw new InvalidOperationException()),
                 typeof(IMainTabViewModel));
             services.Register(() => new OptionalTabViewModel(
-                resolver.GetService<CheckboxViewModelFactory>() ?? throw new InvalidOperationException()),
+                resolver.GetService<CheckboxViewModelFactory>() ?? throw new InvalidOperationException(),
+                resolver.GetService<ICheatsService>() ?? throw new InvalidOperationException()),
                 typeof(IOptionalTabViewModel));
         }
     }

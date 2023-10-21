@@ -6,14 +6,17 @@ public class CheckboxViewModel : ReactiveObject, ICheckboxViewModel
 {
     private bool _checked;
 
-    public CheckboxViewModel(string label)
+    public CheckboxViewModel(string label, string toolTipText)
     {
         Label = label;
+        ToolTipText = toolTipText;
     }
 
-    public CheckboxViewModel() : this("Default label") {}
+    public CheckboxViewModel() : this("Default label", "Default tooltip") {}
 
-    public string Label { get; }
+    public string Label { get; set; }
+    
+    public string ToolTipText { get; set; }
     
     public bool Checked
     {

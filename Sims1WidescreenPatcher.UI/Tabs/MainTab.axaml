@@ -16,6 +16,10 @@
 		<converters:ResolutionColorCodingConverter x:Key="ResolutionColorCodingConverter" />
 	</Control.Resources>
 	
+	<UserControl.Styles>
+		<StyleInclude Source="../Styles/CheckboxStyles.axaml" />
+	</UserControl.Styles>
+	
 	<Grid IsSharedSizeScope="True">
 		<StackPanel Margin="5">
 			<!--Row 1-->
@@ -57,31 +61,8 @@
 					</ToolTip.Tip>
 				</StackPanel>
 				<StackPanel Grid.Column="1">
-					<userControls:Checkbox />
-					<userControls:Checkbox />
-					<StackPanel Orientation="Horizontal">
-						<CheckBox VerticalAlignment="Bottom"
-						          MaxWidth="24"
-						          IsChecked="{Binding IsResolutionsColored}">
-						</CheckBox>
-						<Label x:Name="IsResolutionsColoredLabel" 
-						       Padding="0 3 3 6"
-						       VerticalAlignment="Bottom"
-						       Content="Color Code"
-						       PointerPressed="IsResolutionsColoredLabel_OnPointerPressed" />
-						<ToolTip.Tip>Color code the resolutions by their aspect ratio</ToolTip.Tip>
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<CheckBox IsChecked="{Binding SortByAspectRatio}"
-						          MaxWidth="24">
-						</CheckBox>
-						<Label x:Name="SortByAspectRatioLabel"
-						       Padding="0 3 3 6"
-						       VerticalAlignment="Center"
-						       Content="Sort by Aspect Ratio" 
-						       PointerPressed="SortByAspectRatioLabel_OnPointerPressed"/>
-						<ToolTip.Tip>Sort the resolutions by their aspect ratio</ToolTip.Tip>
-					</StackPanel>
+					<userControls:Checkbox DataContext="{Binding ResolutionsColoredCbVm}" />
+					<userControls:Checkbox DataContext="{Binding SortByAspectRatioCbVm}" />
 				</StackPanel>
 				<StackPanel Grid.Column="2">
 					<Label>Resolution</Label>
@@ -90,8 +71,8 @@
 						  ItemsSource="{Binding FilteredResolutions}"
 						  SelectedItem="{Binding SelectedResolution}"
 						  HorizontalAlignment="Stretch"
-						  Classes.ShouldColor="{Binding IsResolutionsColored}"
-						  Classes.ShouldNotColor="{Binding !IsResolutionsColored}">
+						  Classes.ShouldColor="{Binding ResolutionsColoredCbVm.Checked}"
+						  Classes.ShouldNotColor="{Binding !ResolutionsColoredCbVm.Checked}">
 						<ToolTip.Tip>
 							<TextBlock>
 								Resolutions supported by your monitor.

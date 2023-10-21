@@ -2,7 +2,7 @@
 
 namespace Sims1WidescreenPatcher.Core.Factories;
 
-public abstract class UserControlViewModelCreator
+public abstract class UserControlViewModelCreator : IUserControlViewModelCreator
 {
-    public abstract IReactiveObject FactoryMethod(string arg0);
+    public abstract IReactiveObject Create(string arg0);
 }
