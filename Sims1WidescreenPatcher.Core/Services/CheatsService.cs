@@ -20,6 +20,17 @@ public class CheatsService : ICheatsService
         return found;
     }
 
+    /// <summary>
+    /// Determine if the sims exe can be patched to enable all cheats
+    /// </summary>
+    /// <returns></returns>
+    public bool CanEnableCheats()
+    {
+        var (disablePatternFound, _, _) = FindPattern(DisableCheatsPattern);
+        var (enablePatternFound, _, _) = FindPattern(EnableCheatsPattern);
+        return disablePatternFound || enablePatternFound;
+    }
+
     public void EnableCheats()
     {
         EditSimsExe( EnableCheatsPattern, new Tuple<byte, byte>(144, 144));

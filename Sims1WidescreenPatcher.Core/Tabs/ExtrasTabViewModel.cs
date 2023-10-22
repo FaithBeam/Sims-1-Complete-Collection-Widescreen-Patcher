@@ -37,7 +37,7 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
 
         this
             .WhenAnyValue(x => x.AppState.SimsExePath)
-            .Select(_ => AppState.SimsExePathExists)
+            .Select(_ => AppState.SimsExePathExists && _cheatsService.CanEnableCheats())
             .Subscribe(x => UnlockCheatsViewModel.IsEnabled = x);
 
         ApplyCommand = ReactiveCommand.CreateFromTask(OnApplyClickedAsync);
