@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
@@ -11,6 +12,7 @@ using Sims1WidescreenPatcher.Core.Enums;
 using Sims1WidescreenPatcher.Core.Factories;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services;
+using Sims1WidescreenPatcher.Core.Validations;
 using Sims1WidescreenPatcher.Core.ViewModels;
 using Sims1WidescreenPatcher.Utilities;
 using Sims1WidescreenPatcher.Utilities.Models;
@@ -158,6 +160,8 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
     #region Properties
 
+    [Required]
+    [FileExists]
     public string Path
     {
         get => _path!;
@@ -365,4 +369,5 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     }
 
     #endregion
+    
 }
