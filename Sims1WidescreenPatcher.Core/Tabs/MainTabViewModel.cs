@@ -160,7 +160,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
     #region Properties
 
-    [Required]
+    [RequiredAlt]
     [FileExists]
     public string Path
     {
