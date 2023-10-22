@@ -4,9 +4,9 @@ using Sims1WidescreenPatcher.Core.Tabs;
 
 namespace Sims1WidescreenPatcher.UI.Tabs;
 
-public partial class OptionalTab : ReactiveUserControl<IOptionalTabViewModel>
+public partial class ExtrasTab : ReactiveUserControl<IExtrasTabViewModel>
 {
-    public OptionalTab()
+    public ExtrasTab()
     {
         InitializeComponent();
         this.WhenActivated(d =>

@@ -3,6 +3,7 @@
 public interface ICheckboxViewModel
 {
     string Label { get; set; }
-    bool Checked { get; set; }
     string ToolTipText { get; set; }
+    bool Checked { get; set; }
+    bool IsEnabled { get; }
 }

@@ -4,12 +4,12 @@ namespace Sims1WidescreenPatcher.Core.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
 {
-    public MainWindowViewModel(IMainTabViewModel mainTabViewModel, IOptionalTabViewModel optionalTabViewModel)
+    public MainWindowViewModel(IMainTabViewModel mainTabViewModel, IExtrasTabViewModel extrasTabViewModel)
     {
         MainTabViewModel = mainTabViewModel;
-        OptionalTabViewModel = optionalTabViewModel;
+        ExtrasTabViewModel = extrasTabViewModel;
     }
 
     public IMainTabViewModel? MainTabViewModel { get; }
-    public IOptionalTabViewModel? OptionalTabViewModel { get; }
+    public IExtrasTabViewModel? ExtrasTabViewModel { get; }
 }

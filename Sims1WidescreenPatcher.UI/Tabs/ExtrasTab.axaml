@@ -5,18 +5,22 @@
              xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.Tabs;assembly=Sims1WidescreenPatcher.Core"
              xmlns:customcontrols="clr-namespace:Sims1WidescreenPatcher.UI.UserControls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Sims1WidescreenPatcher.UI.Tabs.OptionalTab">
+             x:Class="Sims1WidescreenPatcher.UI.Tabs.ExtrasTab">
     
     <Design.DataContext>
-        <viewModels:OptionalTabViewModel />
+        <viewModels:ExtrasTabViewModel />
     </Design.DataContext>
     
     <UserControl.Styles>
-        <StyleInclude Source="../Styles/OptionalTabStyles.axaml" />
+        <StyleInclude Source="../Styles/ExtrasTabStyles.axaml" />
+        <StyleInclude Source="../Styles/CheckboxStyles.axaml" />
     </UserControl.Styles>
     
-    <StackPanel>
-        <customcontrols:Checkbox DataContext="{Binding UnlockCheatsViewModel}" />
+    
+    
+    <StackPanel Margin="5">
+        <customcontrols:Checkbox DataContext="{Binding UnlockCheatsViewModel}"
+                                 IsEnabled="{Binding IsEnabled}" />
         <Button HorizontalAlignment="Right"
                 Background="#007bff"
                 Content="Apply"

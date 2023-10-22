@@ -10,6 +10,6 @@ public static class ViewBootstrapper
     {
         services.RegisterType<MainWindow>();
         services.RegisterType<MainTab>();
-        services.RegisterType<OptionalTab>();
+        services.RegisterType<ExtrasTab>();
     }
 }

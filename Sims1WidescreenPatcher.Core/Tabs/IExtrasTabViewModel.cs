@@ -3,7 +3,7 @@ using ReactiveUI;
 
 namespace Sims1WidescreenPatcher.Core.Tabs;
 
-public interface IOptionalTabViewModel
+public interface IExtrasTabViewModel
 {
     IDisposable SuppressChangeNotifications();
     bool AreChangeNotificationsEnabled();

@@ -10,23 +10,28 @@
     <Design.DataContext>
         <viewModels:CheckboxViewModel />
     </Design.DataContext>
-    
+
     <UserControl.Resources>
         <converters:ToolTipShownConverter x:Key="ToolTipShownConverter" />
     </UserControl.Resources>
 
-    <StackPanel Orientation="Horizontal"
-                PointerPressed="InputElement_OnPointerPressed">
-        <!-- Hack to not show tooltip when there is no value for bound ToolTipText -->
-        <StackPanel.Styles>
-            <Style Selector="ToolTip">
-                <Setter Property="Background" Value="{Binding ToolTipText, Converter={StaticResource ToolTipShownConverter}}" />
-            </Style>
-        </StackPanel.Styles>
-        <CheckBox IsChecked="{Binding Checked}" />
-        <Label Content="{Binding Label}" />
+    <UserControl.Styles>
+        <StyleInclude Source="../Styles/CheckboxStyles.axaml" />
+    </UserControl.Styles>
+    
+    <CheckBox IsChecked="{Binding Checked}"
+              MinHeight="0"
+              Content="{Binding Label}">
         <ToolTip.Tip>
             <TextBlock Text="{Binding ToolTipText}" />
         </ToolTip.Tip>
-    </StackPanel>
+        <CheckBox.Styles>
+            <!-- Hack to not show tooltip when there is no value for bound ToolTipText -->
+            <Style Selector="ToolTip">
+                <Setter Property="Background"
+                        Value="{Binding ToolTipText, Converter={StaticResource ToolTipShownConverter}}" />
+            </Style>
+        </CheckBox.Styles>
+    </CheckBox>
+
 </UserControl>

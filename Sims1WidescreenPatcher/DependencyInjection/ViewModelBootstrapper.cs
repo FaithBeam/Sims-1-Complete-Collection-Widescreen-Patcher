@@ -12,7 +12,7 @@ namespace Sims1WidescreenPatcher.DependencyInjection
             services.RegisterType<CustomYesNoDialogViewModel>().AsSelf();
             services.RegisterType<MainWindowViewModel>().As<IMainWindowViewModel>();
             services.RegisterType<MainTabViewModel>().As<IMainTabViewModel>();
-            services.RegisterType<OptionalTabViewModel>().As<IOptionalTabViewModel>();
+            services.RegisterType<ExtrasTabViewModel>().As<IExtrasTabViewModel>();
         }
     }
 }

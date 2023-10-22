@@ -27,8 +27,8 @@
 			<tabs:MainTab DataContext="{Binding MainTabViewModel}"/>
 		</TabItem>
 		<TabItem Classes="tabitem"
-		         Header="Optional">
-			<tabs:OptionalTab DataContext="{Binding OptionalTabViewModel}" />
+		         Header="Extras">
+			<tabs:ExtrasTab DataContext="{Binding ExtrasTabViewModel}" />
 		</TabItem>
 	</TabControl>
 </Window>

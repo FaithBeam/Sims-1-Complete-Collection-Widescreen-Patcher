@@ -8,14 +8,14 @@ using Sims1WidescreenPatcher.Core.ViewModels;
 
 namespace Sims1WidescreenPatcher.Core.Tabs;
 
-public class OptionalTabViewModel : ViewModelBase, IOptionalTabViewModel
+public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
 {
     private readonly ICheatsService _cheatsService;
     private readonly ObservableAsPropertyHelper<bool> _applyBtnVisible;
     private CheckboxSelectionSnapshot _previousSnapshot;
     private IAppState AppState { get; }
 
-    public OptionalTabViewModel(CheckboxViewModelFactory creator, ICheatsService cheatsService, IAppState appState)
+    public ExtrasTabViewModel(CheckboxViewModelFactory creator, ICheatsService cheatsService, IAppState appState)
     {
         _cheatsService = cheatsService;
         AppState = appState;
@@ -34,6 +34,11 @@ public class OptionalTabViewModel : ViewModelBase, IOptionalTabViewModel
                 return !x.Item1.Equals(x.previousSnapshot);
             })
             .ToProperty(this, x => x.ApplyBtnVisible);
+
+        this
+            .WhenAnyValue(x => x.AppState.SimsExePath)
+            .Select(_ => AppState.SimsExePathExists)
+            .Subscribe(x => UnlockCheatsViewModel.IsEnabled = x);
 
         ApplyCommand = ReactiveCommand.CreateFromTask(OnApplyClickedAsync);
     }
