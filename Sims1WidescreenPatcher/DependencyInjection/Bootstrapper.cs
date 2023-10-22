@@ -10,6 +10,5 @@ public static class Bootstrapper
 		ServicesBootstrapper.RegisterServices(services);
 		FactoryBootstrapper.RegisterFactories(services);
 		ViewModelBootstrapper.RegisterViewModels(services);
-		ViewBootstrapper.RegisterViews(services);
 	}
 }
