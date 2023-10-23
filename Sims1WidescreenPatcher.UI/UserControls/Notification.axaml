@@ -5,29 +5,33 @@
              xmlns:vm="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Sims1WidescreenPatcher.UI.UserControls.Notification">
-    
+
     <UserControl.DataContext>
         <vm:NotificationViewModel />
     </UserControl.DataContext>
-    
+
     <UserControl.Styles>
         <StyleInclude Source="../Styles/NotificationStyles.axaml" />
     </UserControl.Styles>
 
-    <Canvas x:Name="Canvas" Width="180"
-            Height="70"
+    <Canvas x:Name="Canvas"
+            Width="182"
+            Height="72"
             Classes.Hidden="{Binding !IsVisible}"
             Classes.Visible="{Binding IsVisible}">
-        <Rectangle x:Name="Rectangle" Width="180" Height="70" Fill="LightBlue"
-                   Opacity="0.4" RadiusX="20" RadiusY="20" />
+        <Border BorderBrush="White" BorderThickness="1" CornerRadius="20">
+            <Rectangle x:Name="Rectangle" Width="180" Height="70" Fill="LightBlue"
+                       Opacity="0.4" RadiusX="20" RadiusY="20" />
+        </Border>
         <DockPanel Width="{Binding Width, ElementName=Canvas}"
                    Height="{Binding Height, ElementName=Canvas}">
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
-                <Label Padding="0" Content="More info in the " VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <Button Padding="0" Foreground="Blue" Background="Transparent" Content="Wiki!" DockPanel.Dock="Right" Command="{Binding WikiCommand}" />
+                <Label Padding="0" Content="More info in the " VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <Button Padding="0" Foreground="Blue" Background="Transparent" Content="Wiki!" DockPanel.Dock="Right"
+                        Command="{Binding WikiCommand}" />
             </StackPanel>
         </DockPanel>
-        
+
     </Canvas>
 </UserControl>
