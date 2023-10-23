@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:tabs="clr-namespace:Sims1WidescreenPatcher.UI.Tabs"
         xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
+        xmlns:usercontrols="clr-namespace:Sims1WidescreenPatcher.UI.UserControls"
         mc:Ignorable="d"
         Height="150"
         Width="600"
@@ -21,14 +22,29 @@
 		<StyleInclude Source="../Styles/TabStyles.axaml"></StyleInclude>
 	</Window.Styles>
 
-	<TabControl Classes="p-0">
-		<TabItem Classes="tabitem"
-		         Header="Main">
-			<tabs:MainTab DataContext="{Binding MainTabViewModel}"/>
-		</TabItem>
-		<TabItem Classes="tabitem"
-		         Header="Extras">
-			<tabs:ExtrasTab DataContext="{Binding ExtrasTabViewModel}" />
-		</TabItem>
-	</TabControl>
+	<Panel x:Name="MainWindowPanel" PointerPressed="MainWindowPanel_OnPointerPressed">
+		<usercontrols:Notification x:Name="Notification"
+		                           IsEnabled="{Binding IsVisible}"
+		                           IsVisible="{Binding IsVisible}"
+		                           ZIndex="1"
+		                           DataContext="{Binding NotificationViewModel}"
+		                           HorizontalAlignment="Right"
+		                           VerticalAlignment="Top"/>
+		<TabControl x:Name="TabControl"
+		            Classes="p-0"
+		            PointerPressed="TabControl_OnPointerPressed">
+			<TabItem x:Name="MainTabItem"
+			         Classes="tabitem"
+			         Header="Main"
+			         PointerPressed="MainTabItem_OnPointerPressed">
+				<tabs:MainTab DataContext="{Binding MainTabViewModel}"/>
+			</TabItem>
+			<TabItem Classes="tabitem"
+			         x:Name="ExtrasTabItem"
+			         Header="Extras"
+			         PointerPressed="ExtrasTabItem_OnPointerPressed">
+				<tabs:ExtrasTab DataContext="{Binding ExtrasTabViewModel}" />
+			</TabItem>
+		</TabControl>
+	</Panel>
 </Window>

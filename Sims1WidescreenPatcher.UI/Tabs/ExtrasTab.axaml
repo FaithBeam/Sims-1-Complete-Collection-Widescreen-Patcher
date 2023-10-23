@@ -5,29 +5,35 @@
              xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.Tabs;assembly=Sims1WidescreenPatcher.Core"
              xmlns:customcontrols="clr-namespace:Sims1WidescreenPatcher.UI.UserControls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Sims1WidescreenPatcher.UI.Tabs.ExtrasTab">
-    
+             x:Class="Sims1WidescreenPatcher.UI.Tabs.ExtrasTab"
+             x:Name="ExtrasTabUserControl">
+
     <Design.DataContext>
         <viewModels:ExtrasTabViewModel />
     </Design.DataContext>
-    
+
     <UserControl.Styles>
         <StyleInclude Source="../Styles/ExtrasTabStyles.axaml" />
         <StyleInclude Source="../Styles/CheckboxStyles.axaml" />
     </UserControl.Styles>
-    
-    
-    
-    <StackPanel Margin="5">
-        <customcontrols:Checkbox DataContext="{Binding UnlockCheatsViewModel}"
-                                 IsEnabled="{Binding IsEnabled}" />
-        <Button HorizontalAlignment="Right"
-                Background="#007bff"
-                Content="Apply"
-                IsVisible="False"
-                IsEnabled="{Binding ApplyBtnVisible}"
-                Classes.Hidden="{Binding !ApplyBtnVisible}"
-                Classes.Visible="{Binding ApplyBtnVisible}"
-                Command="{Binding ApplyCommand}"/>
-    </StackPanel>
+
+    <Panel x:Name="ExtrasTabRootPanel">
+        <DockPanel x:Name="ExtrasTabDockPanel">
+            <StackPanel Margin="5"
+                        DockPanel.Dock="Top">
+                <customcontrols:Checkbox DataContext="{Binding UnlockCheatsViewModel}"
+                                         IsEnabled="{Binding IsEnabled}" />
+            </StackPanel>
+            <Button HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    DockPanel.Dock="Bottom"
+                    Background="#007bff"
+                    Content="Apply"
+                    IsVisible="False"
+                    IsEnabled="{Binding ApplyBtnVisible}"
+                    Classes.Hidden="{Binding !ApplyBtnVisible}"
+                    Classes.Visible="{Binding ApplyBtnVisible}"
+                    Command="{Binding ApplyCommand}" />
+        </DockPanel>
+    </Panel>
 </UserControl>

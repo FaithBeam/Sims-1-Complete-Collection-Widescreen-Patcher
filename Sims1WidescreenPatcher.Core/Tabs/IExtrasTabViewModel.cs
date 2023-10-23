@@ -1,16 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System.Reactive;
 using ReactiveUI;
+using Sims1WidescreenPatcher.Core.ViewModels;
 
 namespace Sims1WidescreenPatcher.Core.Tabs;
 
 public interface IExtrasTabViewModel
 {
-    IDisposable SuppressChangeNotifications();
-    bool AreChangeNotificationsEnabled();
-    IDisposable DelayChangeNotifications();
-    IObservable<IReactivePropertyChangedEventArgs<IReactiveObject>> Changing { get; }
-    IObservable<IReactivePropertyChangedEventArgs<IReactiveObject>> Changed { get; }
-    IObservable<Exception> ThrownExceptions { get; }
-    event PropertyChangingEventHandler? PropertyChanging;
-    event PropertyChangedEventHandler? PropertyChanged;
+    ReactiveCommand<Unit, Unit> ApplyCommand { get; }
+    CheckboxViewModel UnlockCheatsViewModel { get; }
+    bool ApplyBtnVisible { get; }
 }

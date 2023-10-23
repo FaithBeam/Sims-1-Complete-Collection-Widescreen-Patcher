@@ -20,7 +20,7 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
         _cheatsService = cheatsService;
         AppState = appState;
         UnlockCheatsViewModel = (CheckboxViewModel)creator.Create("Unlock Cheats");
-        UnlockCheatsViewModel.ToolTipText = "Unlock all cheats";
+        UnlockCheatsViewModel.ToolTipText = "Unlock cheats that are normally disabled";
         UnlockCheatsViewModel.Checked = _cheatsService.CheatsEnabled();
         _previousSnapshot = new CheckboxSelectionSnapshot(UnlockCheatsViewModel.Checked);
         // make apply button visible/invisible if it is different from the previous state
@@ -45,7 +45,6 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
 
     private async Task OnApplyClickedAsync()
     {
-        PreviousSnapshot = new CheckboxSelectionSnapshot(UnlockCheatsViewModel.Checked);
         await Task.Run(() =>
         {
             if (UnlockCheatsViewModel.Checked)
@@ -57,6 +56,7 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
                 _cheatsService.DisableCheats();
             }
         });
+        PreviousSnapshot = new CheckboxSelectionSnapshot(UnlockCheatsViewModel.Checked);
     }
 
     private CheckboxSelectionSnapshot PreviousSnapshot

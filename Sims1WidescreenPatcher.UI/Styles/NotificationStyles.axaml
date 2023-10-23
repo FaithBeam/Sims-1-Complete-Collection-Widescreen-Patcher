@@ -1,0 +1,42 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+        </Border>
+    </Design.PreviewWith>
+
+    <!--#region FadeButton-->
+    <Style Selector="Canvas.Hidden">
+        <Style.Animations>
+            <Animation Duration="0:0:1.0" FillMode="Forward" Easing="CubicEaseOut">
+                <KeyFrame Cue="0%">
+                    <!-- <Setter Property="TranslateTransform.Y" Value="0" /> -->
+                    <Setter Property="Opacity" Value="1" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <!-- <Setter Property="TranslateTransform.Y" Value="100" /> -->
+                    <Setter Property="Opacity" Value="0" />
+                    <Setter Property="IsVisible" Value="False" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+    <Style Selector="Canvas.Visible">
+        <Style.Animations>
+            <Animation Duration="0:0:1.0" FillMode="Forward" Easing="CubicEaseOut">
+                <KeyFrame Cue="0%">
+                    <Setter Property="IsVisible" Value="True" />
+                    <!-- <Setter Property="TranslateTransform.Y" Value="100" /> -->
+                    <Setter Property="Opacity" Value="0" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <!-- <Setter Property="TranslateTransform.Y" Value="0" /> -->
+                    <Setter Property="Opacity" Value="1" />
+                    <Setter Property="IsVisible" Value="True" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+    <!--#endregion-->
+</Styles>
