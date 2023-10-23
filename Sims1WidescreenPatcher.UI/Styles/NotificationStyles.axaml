@@ -11,11 +11,11 @@
         <Style.Animations>
             <Animation Duration="0:0:1.0" FillMode="Forward" Easing="CubicEaseOut">
                 <KeyFrame Cue="0%">
-                    <!-- <Setter Property="TranslateTransform.Y" Value="0" /> -->
+                    <Setter Property="TranslateTransform.Y" Value="0" />
                     <Setter Property="Opacity" Value="1" />
                 </KeyFrame>
                 <KeyFrame Cue="100%">
-                    <!-- <Setter Property="TranslateTransform.Y" Value="100" /> -->
+                    <Setter Property="TranslateTransform.Y" Value="-100" />
                     <Setter Property="Opacity" Value="0" />
                     <Setter Property="IsVisible" Value="False" />
                 </KeyFrame>
@@ -27,11 +27,11 @@
             <Animation Duration="0:0:1.0" FillMode="Forward" Easing="CubicEaseOut">
                 <KeyFrame Cue="0%">
                     <Setter Property="IsVisible" Value="True" />
-                    <!-- <Setter Property="TranslateTransform.Y" Value="100" /> -->
+                    <Setter Property="TranslateTransform.Y" Value="-100" />
                     <Setter Property="Opacity" Value="0" />
                 </KeyFrame>
                 <KeyFrame Cue="100%">
-                    <!-- <Setter Property="TranslateTransform.Y" Value="0" /> -->
+                    <Setter Property="TranslateTransform.Y" Value="0" />
                     <Setter Property="Opacity" Value="1" />
                     <Setter Property="IsVisible" Value="True" />
                 </KeyFrame>
