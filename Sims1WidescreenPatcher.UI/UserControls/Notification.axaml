@@ -19,16 +19,30 @@
             Height="72"
             Classes.Hidden="{Binding !IsVisible}"
             Classes.Visible="{Binding IsVisible}">
-        <Border BorderBrush="White" BorderThickness="1" CornerRadius="20">
-            <Rectangle x:Name="Rectangle" Width="180" Height="70" Fill="LightBlue"
-                       Opacity="0.4" RadiusX="20" RadiusY="20" />
+        <Border BorderBrush="White"
+                BorderThickness="1"
+                CornerRadius="20">
+            <Rectangle x:Name="Rectangle"
+                       Width="180"
+                       Height="70"
+                       Fill="LightBlue"
+                       Opacity="0.4"
+                       RadiusX="20"
+                       RadiusY="20" />
         </Border>
         <DockPanel Width="{Binding Width, ElementName=Canvas}"
                    Height="{Binding Height, ElementName=Canvas}">
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
-                <Label Padding="0" Content="More info in the " VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <Button Padding="0" Foreground="Blue" Background="Transparent" Content="Wiki!" DockPanel.Dock="Right"
+                <Label Padding="0"
+                       Content="More info in the "
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center" />
+                <Button Padding="0"
+                        Foreground="Blue"
+                        Background="Transparent"
+                        Content="Wiki"
+                        DockPanel.Dock="Right"
                         Command="{Binding WikiCommand}" />
             </StackPanel>
         </DockPanel>

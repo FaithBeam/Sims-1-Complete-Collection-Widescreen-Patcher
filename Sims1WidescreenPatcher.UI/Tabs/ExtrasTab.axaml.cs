@@ -11,8 +11,8 @@ public partial class ExtrasTab : ReactiveUserControl<IExtrasTabViewModel>
         InitializeComponent();
         this.WhenActivated(d =>
         {
-            Width = UiDimensions.Width;
-            Height = UiDimensions.Height;
+            // Width = UiDimensions.Width;
+            // Height = UiDimensions.Height;
         });
     }
 }

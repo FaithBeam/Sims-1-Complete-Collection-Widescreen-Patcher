@@ -22,7 +22,10 @@
 		<StyleInclude Source="../Styles/TabStyles.axaml"></StyleInclude>
 	</Window.Styles>
 
-	<Panel x:Name="MainWindowPanel" PointerPressed="MainWindowPanel_OnPointerPressed">
+	<Panel x:Name="MainWindowPanel"
+	       PointerPressed="MainWindowPanel_OnPointerPressed"
+	       Width="600"
+	       Height="224">
 		<usercontrols:Notification x:Name="Notification"
 		                           IsEnabled="{Binding IsVisible}"
 		                           IsVisible="{Binding IsVisible}"
