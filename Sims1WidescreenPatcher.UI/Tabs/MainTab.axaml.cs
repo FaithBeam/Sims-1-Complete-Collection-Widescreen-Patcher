@@ -33,8 +33,6 @@ public partial class MainTab : ReactiveUserControl<IMainTabViewModel>
             d(ViewModel.ShowCustomResolutionDialog.RegisterHandler(ShowCustomResolutionDialogAsync));
             d(ViewModel.ShowCustomYesNoDialog.RegisterHandler(ShowCustomYesNoDialogAsync));
             d(ViewModel.ShowCustomInformationDialog.RegisterHandler(ShowCustomInformationDialogAsync));
-            UiDimensions.Width = _window.Width;
-            UiDimensions.Height = _window.Height;
         });
     }
 
