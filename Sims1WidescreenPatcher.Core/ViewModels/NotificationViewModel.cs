@@ -13,7 +13,7 @@ public class NotificationViewModel : ViewModelBase, INotificationViewModel
     public NotificationViewModel()
     {
         WikiCommand = ReactiveCommand.Create(() =>
-            OpenUrl("https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki"));
+            OpenUrl("https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Extras"));
     }
 
     public ReactiveCommand<Unit, Unit> WikiCommand { get; }
