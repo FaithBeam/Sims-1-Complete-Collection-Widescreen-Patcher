@@ -17,23 +17,21 @@
         <StyleInclude Source="../Styles/CheckboxStyles.axaml" />
     </UserControl.Styles>
 
-    <Panel x:Name="ExtrasTabRootPanel">
-        <DockPanel x:Name="ExtrasTabDockPanel">
-            <StackPanel Margin="5"
-                        DockPanel.Dock="Top">
-                <customcontrols:Checkbox DataContext="{Binding UnlockCheatsViewModel}"
-                                         IsEnabled="{Binding IsEnabled}" />
-            </StackPanel>
-            <Button HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    DockPanel.Dock="Bottom"
-                    Background="#007bff"
-                    Content="Apply"
-                    IsVisible="False"
-                    IsEnabled="{Binding ApplyBtnVisible}"
-                    Classes.Hidden="{Binding !ApplyBtnVisible}"
-                    Classes.Visible="{Binding ApplyBtnVisible}"
-                    Command="{Binding ApplyCommand}" />
-        </DockPanel>
-    </Panel>
+    <DockPanel x:Name="ExtrasTabDockPanel"
+               Margin="5">
+        <StackPanel DockPanel.Dock="Top">
+            <customcontrols:Checkbox DataContext="{Binding UnlockCheatsViewModel}"
+                                     IsEnabled="{Binding IsEnabled}" />
+        </StackPanel>
+        <Button HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                DockPanel.Dock="Bottom"
+                Background="#007bff"
+                Content="Apply"
+                IsVisible="False"
+                IsEnabled="{Binding ApplyBtnVisible}"
+                Classes.Hidden="{Binding !ApplyBtnVisible}"
+                Classes.Visible="{Binding ApplyBtnVisible}"
+                Command="{Binding ApplyCommand}" />
+    </DockPanel>
 </UserControl>
