@@ -27,6 +27,7 @@
 	       Width="600"
 	       Height="224">
 		<usercontrols:Notification x:Name="Notification"
+		                           Margin="5"
 		                           IsEnabled="{Binding IsVisible}"
 		                           IsVisible="{Binding IsVisible}"
 		                           ZIndex="1"
