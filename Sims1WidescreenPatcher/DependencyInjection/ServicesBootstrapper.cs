@@ -42,6 +42,7 @@ namespace Sims1WidescreenPatcher.DependencyInjection
 
         private static void RegisterCommonServices(ContainerBuilder services)
         {
+            services.RegisterType<PatchFileService>().As<IPatchFileService>();
             services.RegisterType<ProgressService>().As<IProgressService>().SingleInstance();
             services.RegisterType<CheatsService>().As<ICheatsService>();
         }

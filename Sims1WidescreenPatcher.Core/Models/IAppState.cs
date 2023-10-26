@@ -4,4 +4,5 @@ public interface IAppState
 {
     string? SimsExePath { get; set; }
     bool SimsExePathExists { get; }
+    Resolution? Resolution { get; set; }
 }

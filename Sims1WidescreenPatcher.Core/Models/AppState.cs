@@ -5,6 +5,7 @@ namespace Sims1WidescreenPatcher.Core.Models;
 public class AppState : ReactiveObject, IAppState
 {
     private string? _simsExePath;
+    private Resolution? _resolution;
 
     public string? SimsExePath
     {
@@ -13,4 +14,10 @@ public class AppState : ReactiveObject, IAppState
     }
 
     public bool SimsExePathExists => File.Exists(SimsExePath);
+
+    public Resolution? Resolution
+    {
+        get => _resolution;
+        set => this.RaiseAndSetIfChanged(ref _resolution, value);
+    }
 }

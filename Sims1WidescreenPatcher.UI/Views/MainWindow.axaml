@@ -19,7 +19,7 @@
 	</Design.DataContext>
 	
 	<Window.Styles>
-		<StyleInclude Source="../Styles/TabStyles.axaml"></StyleInclude>
+		<StyleInclude Source="../Styles/TabStyles.axaml" />
 	</Window.Styles>
 
 	<Panel x:Name="MainWindowPanel"
