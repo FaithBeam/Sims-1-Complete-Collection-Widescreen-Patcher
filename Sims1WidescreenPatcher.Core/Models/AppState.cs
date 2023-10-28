@@ -15,6 +15,29 @@ public class AppState : ReactiveObject, IAppState
 
     public bool SimsExePathExists => File.Exists(SimsExePath);
 
+    public string SimsBackupPath
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(SimsExePath))
+            {
+                return "";
+            }
+            const string backupName = "Sims Backup.exe";
+            var parent = Directory.GetParent(SimsExePath)!.ToString();
+            return Path.Combine(parent, backupName);
+        }
+    }
+
+    public bool SimsBackupExists
+    {
+        get
+        {
+            var backup = SimsBackupPath;
+            return !string.IsNullOrWhiteSpace(backup) && File.Exists(backup);
+        }
+    }
+
     public Resolution? Resolution
     {
         get => _resolution;

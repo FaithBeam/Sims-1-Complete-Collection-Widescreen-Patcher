@@ -13,6 +13,7 @@ using Sims1WidescreenPatcher.Core.ViewModels;
 using Sims1WidescreenPatcher.UI.Views;
 using CustomInformationDialog = Sims1WidescreenPatcher.UI.Dialogs.CustomInformationDialog;
 using CustomResolutionDialog = Sims1WidescreenPatcher.UI.Dialogs.CustomResolutionDialog;
+using CustomYesNoDialog = Sims1WidescreenPatcher.UI.Dialogs.CustomYesNoDialog;
 
 namespace Sims1WidescreenPatcher.UI.Tabs;
 

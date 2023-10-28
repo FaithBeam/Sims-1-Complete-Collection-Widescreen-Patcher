@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using Serilog;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services;
+using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.Windows.Services
 {

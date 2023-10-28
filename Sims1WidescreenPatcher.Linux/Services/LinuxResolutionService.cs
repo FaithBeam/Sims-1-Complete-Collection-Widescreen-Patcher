@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Serilog;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services;
+using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.Linux.Services
 {

@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.Win32;
 using Sims1WidescreenPatcher.Core.Services;
+using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.Windows.Services;
 

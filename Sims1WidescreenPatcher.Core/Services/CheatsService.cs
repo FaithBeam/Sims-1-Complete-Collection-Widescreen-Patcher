@@ -1,4 +1,5 @@
 ﻿using Sims1WidescreenPatcher.Core.Models;
+using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.Core.Services;
 

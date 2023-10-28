@@ -3,7 +3,7 @@ using Avalonia.ReactiveUI;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.ViewModels;
 
-namespace Sims1WidescreenPatcher.UI.Views;
+namespace Sims1WidescreenPatcher.UI.Dialogs;
 
 public partial class CustomYesNoDialog : ReactiveWindow<CustomYesNoDialogViewModel>
 {

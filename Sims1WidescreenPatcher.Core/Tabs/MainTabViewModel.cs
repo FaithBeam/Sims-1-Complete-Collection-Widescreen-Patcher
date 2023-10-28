@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
@@ -12,6 +11,7 @@ using Sims1WidescreenPatcher.Core.Enums;
 using Sims1WidescreenPatcher.Core.Factories;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services;
+using Sims1WidescreenPatcher.Core.Services.Interfaces;
 using Sims1WidescreenPatcher.Core.Validations;
 using Sims1WidescreenPatcher.Core.ViewModels;
 using Sims1WidescreenPatcher.Utilities;
@@ -40,6 +40,8 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     private readonly SourceList<Resolution> _resolutionSource = new();
     private readonly ReadOnlyObservableCollection<Resolution> _filteredResolutions;
     private readonly ReadOnlyObservableCollection<AspectRatio> _aspectRatios;
+    private readonly IResolutionPatchService _resolutionPatchService;
+    private readonly IUninstallService _uninstallService;
     private IAppState AppState { get; }
 
     #endregion
@@ -51,10 +53,13 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         ICustomResolutionDialogViewModel customResolutionDialogViewModel,
         IProgressService progressService,
         IFindSimsPathService findSimsPathService,
-        CheckboxViewModelFactory ucVmFactory, IAppState appState)
+        CheckboxViewModelFactory ucVmFactory, IAppState appState, IResolutionPatchService resolutionPatchService,
+        IUninstallService uninstallService)
     {
         _progressService = progressService;
         AppState = appState;
+        _resolutionPatchService = resolutionPatchService;
+        _uninstallService = uninstallService;
         ResolutionsColoredCbVm = (CheckboxViewModel)ucVmFactory.Create("Color Code");
         ResolutionsColoredCbVm.Checked = true;
         ResolutionsColoredCbVm.ToolTipText = "Color code the resolutions by their aspect ratio";
@@ -65,11 +70,16 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         this
             .WhenAnyValue(x => x.Path)
             .Subscribe(x => AppState.SimsExePath = x);
+        this
+            .WhenAnyValue(x => x.SelectedResolution)
+            .Subscribe(x => AppState.Resolution = x);
         _hasBackup = this
-            .WhenAnyValue(x => x.Path, x => x.IsBusy, (path, _) => PatchUtility.SimsBackupExists(path))
+            .WhenAnyValue(x => x.Path, x => x.IsBusy)
+            .Select(_ => _resolutionPatchService.BackupExists())
             .ToProperty(this, x => x.HasBackup, deferSubscription: true);
         _isValidSimsExe = this
-            .WhenAnyValue(x => x.Path, PatchUtility.IsValidSims)
+            .WhenAnyValue(x => x.Path)
+            .Select(_ => _resolutionPatchService.CanPatchResolution())
             .ToProperty(this, x => x.IsValidSimsExe, deferSubscription: true);
         var canPatch = this
             .WhenAnyValue(x => x.IsBusy, x => x.Path, x => x.IsValidSimsExe, x => x.HasBackup,
@@ -327,7 +337,8 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
             }
         }
 
-        await Task.Run(() => PatchUtility.Patch(Path, SelectedResolution!.Width, SelectedResolution.Height));
+        await Task.Run(() => _resolutionPatchService.CreateBackup());
+        await Task.Run(() => _resolutionPatchService.EditSimsExe());
         await Task.Run(() =>
             Images.Images.ModifySimsUi(Path, SelectedResolution!.Width, SelectedResolution.Height, _progressService));
 
@@ -361,7 +372,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
             }
         }
 
-        await Task.Run(() => UninstallUtility.Uninstall(Path));
+        await Task.Run(() => _uninstallService.Uninstall());
         await Task.Run(() => Images.Images.RemoveGraphics(Path));
         _previouslyPatched.Remove(Path);
         IsBusy = false;
@@ -369,5 +380,4 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     }
 
     #endregion
-    
 }

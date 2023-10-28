@@ -10,7 +10,7 @@
         MinWidth="300"
         MinHeight="100"
         CanResize="False"
-        x:Class="Sims1WidescreenPatcher.UI.Views.CustomYesNoDialog"
+        x:Class="Sims1WidescreenPatcher.UI.Dialogs.CustomYesNoDialog"
         Title="{Binding Title}">
     <Design.DataContext>
         <vm:CustomYesNoDialogViewModel />
