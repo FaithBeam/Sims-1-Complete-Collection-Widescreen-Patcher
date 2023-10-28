@@ -29,7 +29,6 @@
 		<usercontrols:Notification x:Name="Notification"
 		                           Margin="5"
 		                           IsEnabled="{Binding IsVisible}"
-		                           IsVisible="{Binding IsVisible}"
 		                           ZIndex="1"
 		                           DataContext="{Binding NotificationViewModel}"
 		                           HorizontalAlignment="Right"
