@@ -1,16 +1,14 @@
 ﻿using ImageMagick;
 
-namespace Sims1WidescreenPatcher.Images.Models;
+namespace Sims1WidescreenPatcher.Core.Models;
 
-public class ScalePanelbackJob : BaseImageProcessingJob
+public class ScalePanelBackJob : BaseImageProcessingJob
 {
-    public ScalePanelbackJob(byte[] bytes, string output, int width, int height) : base(bytes, output, width, height)
-    {
-    }
-
     public override void Run()
     {
-        using var image = new MagickImage(ImageBytes);
+        base.Run();
+        
+        using var image = new MagickImage(ImageBytes!);
         var left = image.Clone(0, 0, 286, 100);
         var middle = image.Clone(left.Width, 0, 500, 100);
         var right = image.Clone(left.Width + middle.Width, 0, 18, 100);
@@ -24,6 +22,6 @@ public class ScalePanelbackJob : BaseImageProcessingJob
         imageCollection.Add(right);
         var merged = imageCollection.Merge();
         SetCommonBmpSettings((MagickImage)merged);
-        merged.Write(Output);
+        merged.Write(Output!);
     }
 }

@@ -42,6 +42,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     private readonly ReadOnlyObservableCollection<AspectRatio> _aspectRatios;
     private readonly IResolutionPatchService _resolutionPatchService;
     private readonly IUninstallService _uninstallService;
+    private readonly IImagesService _imagesService;
     private IAppState AppState { get; }
 
     #endregion
@@ -54,12 +55,13 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         IProgressService progressService,
         IFindSimsPathService findSimsPathService,
         CheckboxViewModelFactory ucVmFactory, IAppState appState, IResolutionPatchService resolutionPatchService,
-        IUninstallService uninstallService)
+        IUninstallService uninstallService, IImagesService imagesService)
     {
         _progressService = progressService;
         AppState = appState;
         _resolutionPatchService = resolutionPatchService;
         _uninstallService = uninstallService;
+        _imagesService = imagesService;
         ResolutionsColoredCbVm = (CheckboxViewModel)ucVmFactory.Create("Color Code");
         ResolutionsColoredCbVm.Checked = true;
         ResolutionsColoredCbVm.ToolTipText = "Color code the resolutions by their aspect ratio";
@@ -339,8 +341,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
         await Task.Run(() => _resolutionPatchService.CreateBackup());
         await Task.Run(() => _resolutionPatchService.EditSimsExe());
-        await Task.Run(() =>
-            Images.Images.ModifySimsUi(Path, SelectedResolution!.Width, SelectedResolution.Height, _progressService));
+        await Task.Run(() => _imagesService.Install());
 
         if (selectedWrapper is not NoneWrapper)
         {
@@ -373,7 +374,6 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         }
 
         await Task.Run(() => _uninstallService.Uninstall());
-        await Task.Run(() => Images.Images.RemoveGraphics(Path));
         _previouslyPatched.Remove(Path);
         IsBusy = false;
         await OpenCustomInformationDialogAsync("Progress", "Uninstalled");

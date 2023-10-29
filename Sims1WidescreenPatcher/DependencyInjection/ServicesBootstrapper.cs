@@ -5,6 +5,7 @@ using Sims1WidescreenPatcher.Utilities.Services;
 using Sims1WidescreenPatcher.Windows.Services;
 using System.Runtime.InteropServices;
 using Autofac;
+using Sims.Far;
 using Sims1WidescreenPatcher.Core.Services.Interfaces;
 using FindSimsPathService = Sims1WidescreenPatcher.Windows.Services.FindSimsPathService;
 
@@ -43,11 +44,13 @@ namespace Sims1WidescreenPatcher.DependencyInjection
 
         private static void RegisterCommonServices(ContainerBuilder services)
         {
+            services.RegisterType<Far>().As<IFar>();
             services.RegisterType<PatchFileService>().As<IPatchFileService>();
             services.RegisterType<ProgressService>().As<IProgressService>().SingleInstance();
             services.RegisterType<CheatsService>().As<ICheatsService>();
             services.RegisterType<ResolutionPatchService>().As<IResolutionPatchService>();
             services.RegisterType<UninstallService>().As<IUninstallService>();
+            services.RegisterType<ImagesService>().As<IImagesService>();
         }
     }
 }

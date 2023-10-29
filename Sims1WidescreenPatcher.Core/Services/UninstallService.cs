@@ -7,10 +7,12 @@ namespace Sims1WidescreenPatcher.Core.Services;
 public class UninstallService : IUninstallService
 {
     private readonly IAppState _appState;
+    private readonly IImagesService _imagesService;
 
-    public UninstallService(IAppState appState)
+    public UninstallService(IAppState appState, IImagesService imagesService)
     {
         _appState = appState;
+        _imagesService = imagesService;
     }
 
     public void Uninstall()
@@ -22,6 +24,8 @@ public class UninstallService : IUninstallService
             File.Move(_appState.SimsBackupPath, _appState.SimsExePath);
             
             WrapperUtility.RemoveWrapper(_appState.SimsExePath);
+            
+            _imagesService.Uninstall();
         }
         else
         {

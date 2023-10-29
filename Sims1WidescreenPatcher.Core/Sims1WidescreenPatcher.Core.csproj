@@ -10,11 +10,12 @@
     <ItemGroup>
       <PackageReference Include="Avalonia" Version="11.0.5" />
       <PackageReference Include="DynamicData" Version="8.0.2" />
+      <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="13.4.0" />
       <PackageReference Include="ReactiveUI" Version="19.5.1" />
+      <PackageReference Include="Sims.Far" Version="3.2.2" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Sims1WidescreenPatcher.Images\Sims1WidescreenPatcher.Images.csproj" />
       <ProjectReference Include="..\Sims1WidescreenPatcher.Utilities\Sims1WidescreenPatcher.Utilities.csproj" />
     </ItemGroup>
 
