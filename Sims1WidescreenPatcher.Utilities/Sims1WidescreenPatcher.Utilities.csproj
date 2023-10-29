@@ -42,4 +42,8 @@
       <EmbeddedResource Include="Resources\DgVoodoo2\dgVoodooCpl.exe" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Services\" />
+    </ItemGroup>
+
 </Project>

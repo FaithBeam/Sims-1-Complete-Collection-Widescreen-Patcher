@@ -1,7 +1,6 @@
 ﻿using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Linux.Services;
 using Sims1WidescreenPatcher.MacOS.Services;
-using Sims1WidescreenPatcher.Utilities.Services;
 using Sims1WidescreenPatcher.Windows.Services;
 using System.Runtime.InteropServices;
 using Autofac;

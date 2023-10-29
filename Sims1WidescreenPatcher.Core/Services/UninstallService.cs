@@ -8,11 +8,13 @@ public class UninstallService : IUninstallService
 {
     private readonly IAppState _appState;
     private readonly IImagesService _imagesService;
+    private readonly IProgressService _progressService;
 
-    public UninstallService(IAppState appState, IImagesService imagesService)
+    public UninstallService(IAppState appState, IImagesService imagesService, IProgressService progressService)
     {
         _appState = appState;
         _imagesService = imagesService;
+        _progressService = progressService;
     }
 
     public void Uninstall()
@@ -22,10 +24,12 @@ public class UninstallService : IUninstallService
             File.SetAttributes(_appState.SimsExePath, FileAttributes.Normal);
             File.Delete(_appState.SimsExePath);
             File.Move(_appState.SimsBackupPath, _appState.SimsExePath);
-            
+
             WrapperUtility.RemoveWrapper(_appState.SimsExePath);
-            
+
             _imagesService.Uninstall();
+            
+            _progressService.UpdateUninstall();
         }
         else
         {

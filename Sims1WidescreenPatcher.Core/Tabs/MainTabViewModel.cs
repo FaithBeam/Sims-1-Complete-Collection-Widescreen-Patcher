@@ -16,7 +16,6 @@ using Sims1WidescreenPatcher.Core.Validations;
 using Sims1WidescreenPatcher.Core.ViewModels;
 using Sims1WidescreenPatcher.Utilities;
 using Sims1WidescreenPatcher.Utilities.Models;
-using Sims1WidescreenPatcher.Utilities.Services;
 
 namespace Sims1WidescreenPatcher.Core.Tabs;
 
@@ -39,6 +38,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     private readonly ObservableAsPropertyHelper<string> _progressStatus;
     private readonly ObservableAsPropertyHelper<string> _progressStatus2;
     private readonly SourceList<Resolution> _resolutionSource = new();
+    private readonly IProgressService _progressService;
     private readonly ReadOnlyObservableCollection<Resolution> _filteredResolutions;
     private readonly ReadOnlyObservableCollection<AspectRatio> _aspectRatios;
     private readonly IResolutionPatchService _resolutionPatchService;
@@ -58,6 +58,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         IUninstallService uninstallService, IImagesService imagesService, IProgressService progressService)
     {
         AppState = appState;
+        _progressService = progressService;
         _resolutionPatchService = resolutionPatchService;
         _uninstallService = uninstallService;
         _imagesService = imagesService;
@@ -139,23 +140,15 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         ShowCustomInformationDialog = new Interaction<CustomInformationDialogViewModel, Unit>();
         Path = findSimsPathService.FindSimsPath();
 
-        var progressPct = Observable
+        var progressEvt = Observable
             .FromEventPattern<NewProgressEventArgs>(progressService, "NewProgressEventHandler");
-        progressPct
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(async e =>
-            {
-                if (e.EventArgs.Progress < 100) return;
-                await OpenCustomInformationDialogAsync("Progress", "Patched! You may close this application now.");
-                progressService.UpdateProgress(0.0);
-            });
-        _progressPct = progressPct
+        _progressPct = progressEvt
             .Select(x => x.EventArgs.Progress)
             .ToProperty(this, x => x.Progress);
-        _progressStatus = progressPct
+        _progressStatus = progressEvt
             .Select(x => x.EventArgs.Status)
             .ToProperty(this, x => x.ProgressStatus);
-        _progressStatus2 = progressPct
+        _progressStatus2 = progressEvt
             .Select(x => x.EventArgs.Status2)
             .ToProperty(this, x => x.ProgressStatus2);
     }
@@ -181,7 +174,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     [FileExists]
     public string Path
     {
-        get => _path!;
+        get => _path;
         set => this.RaiseAndSetIfChanged(ref _path, value);
     }
 
@@ -357,17 +350,21 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         }
 
         _previouslyPatched.Add(Path);
+
+        await OpenCustomInformationDialogAsync("Progress", "Patched! You may close this application now.");
+        _progressService.UpdateProgress(0.0);
+
         IsBusy = false;
     }
 
     private async Task OnClickedUninstall()
     {
         IsBusy = true;
-        var ddrawSettingsPath = CheckDDrawCompatIniService.DDrawCompatSettingsExist(Path);
-        if (!string.IsNullOrWhiteSpace(ddrawSettingsPath))
+        var dDrawSettingsPath = CheckDDrawCompatIniService.DDrawCompatSettingsExist(Path);
+        if (!string.IsNullOrWhiteSpace(dDrawSettingsPath))
         {
             var result = await OpenCustomYesNoDialogAsync("Uninstall",
-                $"DDrawCompat settings were found at:\n{ddrawSettingsPath}\n\nDo you wish to remove them?");
+                $"DDrawCompat settings were found at:\n{dDrawSettingsPath}\n\nDo you wish to remove them?");
             if (result is not null && result.Result)
             {
                 await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
@@ -376,7 +373,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
             if (result is not null && result.Result)
             {
-                RemoveDDrawCompatSettingsService.Remove(ddrawSettingsPath);
+                RemoveDDrawCompatSettingsService.Remove(dDrawSettingsPath);
             }
         }
 

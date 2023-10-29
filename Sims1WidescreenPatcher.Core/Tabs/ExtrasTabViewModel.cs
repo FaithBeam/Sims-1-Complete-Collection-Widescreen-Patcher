@@ -6,6 +6,7 @@ using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Core.Services.Interfaces;
 using Sims1WidescreenPatcher.Core.ViewModels;
+using Sims1WidescreenPatcher.Utilities.Models;
 
 namespace Sims1WidescreenPatcher.Core.Tabs;
 
@@ -16,7 +17,8 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
     private CheckboxSelectionSnapshot _previousSnapshot;
     private IAppState AppState { get; }
 
-    public ExtrasTabViewModel(CheckboxViewModelFactory creator, ICheatsService cheatsService, IAppState appState)
+    public ExtrasTabViewModel(CheckboxViewModelFactory creator, ICheatsService cheatsService, IAppState appState,
+        IProgressService progressService)
     {
         _cheatsService = cheatsService;
         AppState = appState;
@@ -40,6 +42,17 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
             .WhenAnyValue(x => x.AppState.SimsExePath)
             .Select(_ => AppState.SimsExePathExists && _cheatsService.CanEnableCheats())
             .Subscribe(x => UnlockCheatsViewModel.IsEnabled = x);
+
+        var uninstallEvt = Observable
+            .FromEventPattern<NewUninstallEventArgs>(progressService, "NewUninstallEventHandler");
+        // When the sims exe is uninstalled, check for the validity of these checkboxes
+        uninstallEvt
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ =>
+            {
+                UnlockCheatsViewModel.Checked = _cheatsService.CheatsEnabled();
+                PreviousSnapshot = new CheckboxSelectionSnapshot(UnlockCheatsViewModel.Checked);
+            });
 
         ApplyCommand = ReactiveCommand.CreateFromTask(OnApplyClickedAsync);
     }
