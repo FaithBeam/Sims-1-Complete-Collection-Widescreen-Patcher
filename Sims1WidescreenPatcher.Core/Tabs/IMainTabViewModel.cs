@@ -7,7 +7,6 @@ using Avalonia.Platform.Storage;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.ViewModels;
-using Sims1WidescreenPatcher.Utilities.Models;
 
 namespace Sims1WidescreenPatcher.Core.Tabs;
 

@@ -8,14 +8,13 @@ using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Enums;
+using Sims1WidescreenPatcher.Core.Events;
 using Sims1WidescreenPatcher.Core.Factories;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Core.Services.Interfaces;
 using Sims1WidescreenPatcher.Core.Validations;
 using Sims1WidescreenPatcher.Core.ViewModels;
-using Sims1WidescreenPatcher.Utilities;
-using Sims1WidescreenPatcher.Utilities.Models;
 
 namespace Sims1WidescreenPatcher.Core.Tabs;
 
@@ -39,6 +38,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     private readonly ObservableAsPropertyHelper<string> _progressStatus2;
     private readonly SourceList<Resolution> _resolutionSource = new();
     private readonly IProgressService _progressService;
+    private readonly IWrapperService _wrapperService;
     private readonly ReadOnlyObservableCollection<Resolution> _filteredResolutions;
     private readonly ReadOnlyObservableCollection<AspectRatio> _aspectRatios;
     private readonly IResolutionPatchService _resolutionPatchService;
@@ -55,10 +55,12 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         ICustomResolutionDialogViewModel customResolutionDialogViewModel,
         IFindSimsPathService findSimsPathService,
         CheckboxViewModelFactory ucVmFactory, IAppState appState, IResolutionPatchService resolutionPatchService,
-        IUninstallService uninstallService, IImagesService imagesService, IProgressService progressService)
+        IUninstallService uninstallService, IImagesService imagesService, IProgressService progressService,
+        IWrapperService wrapperService)
     {
         AppState = appState;
         _progressService = progressService;
+        _wrapperService = wrapperService;
         _resolutionPatchService = resolutionPatchService;
         _uninstallService = uninstallService;
         _imagesService = imagesService;
@@ -215,7 +217,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         }
     }
 
-    public AvaloniaList<IWrapper> Wrappers => new(WrapperUtility.GetWrappers());
+    public AvaloniaList<IWrapper> Wrappers => new(_wrapperService.GetWrappers());
 
     public int SelectedWrapperIndex
     {
@@ -345,8 +347,8 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
         if (selectedWrapper is not NoneWrapper)
         {
-            await Task.Run(() => WrapperUtility.RemoveWrapper(Path));
-            await Task.Run(() => WrapperUtility.ExtractWrapper(selectedWrapper, Path));
+            await Task.Run(() => _wrapperService.Uninstall());
+            await Task.Run(() => _wrapperService.Install(selectedWrapper));
         }
 
         _previouslyPatched.Add(Path);

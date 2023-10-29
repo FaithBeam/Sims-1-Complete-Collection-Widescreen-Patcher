@@ -1,4 +1,4 @@
-﻿namespace Sims1WidescreenPatcher.Utilities.Models;
+﻿namespace Sims1WidescreenPatcher.Core.Events;
 
 public class NewProgressEventArgs
 {

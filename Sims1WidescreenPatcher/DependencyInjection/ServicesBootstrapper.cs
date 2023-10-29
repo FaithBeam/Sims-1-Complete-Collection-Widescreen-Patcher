@@ -48,6 +48,7 @@ namespace Sims1WidescreenPatcher.DependencyInjection
             services.RegisterType<ProgressService>().As<IProgressService>().SingleInstance();
             services.RegisterType<CheatsService>().As<ICheatsService>();
             services.RegisterType<ResolutionPatchService>().As<IResolutionPatchService>();
+            services.RegisterType<WrapperService>().As<IWrapperService>();
             services.RegisterType<UninstallService>().As<IUninstallService>();
             services.RegisterType<ImagesService>().As<IImagesService>();
         }

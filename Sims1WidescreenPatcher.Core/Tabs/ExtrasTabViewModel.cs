@@ -1,12 +1,12 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
 using ReactiveUI;
+using Sims1WidescreenPatcher.Core.Events;
 using Sims1WidescreenPatcher.Core.Factories;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Core.Services.Interfaces;
 using Sims1WidescreenPatcher.Core.ViewModels;
-using Sims1WidescreenPatcher.Utilities.Models;
 
 namespace Sims1WidescreenPatcher.Core.Tabs;
 

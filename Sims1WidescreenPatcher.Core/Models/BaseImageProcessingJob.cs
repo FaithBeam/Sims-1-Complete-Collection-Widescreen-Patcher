@@ -1,5 +1,4 @@
 ﻿using ImageMagick;
-using Serilog;
 
 namespace Sims1WidescreenPatcher.Core.Models;
 
@@ -22,7 +21,6 @@ public abstract class BaseImageProcessingJob
         }
         var destDir = Path.GetDirectoryName(Output);
         if (destDir == null || Directory.Exists(destDir)) return;
-        Log.Information("Created directory {@Directory}", destDir);
         Directory.CreateDirectory(destDir);
         if (ImageBytes is null || string.IsNullOrWhiteSpace(Output))
         {
