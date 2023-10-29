@@ -142,10 +142,9 @@ public class ImagesService : IImagesService
     {
         if (string.IsNullOrWhiteSpace(_uiGraphicsPath) || string.IsNullOrWhiteSpace(path)) return;
         var combined = CombineWithUiGraphicsPath(path);
-        var normalized = NormalizeString(combined);
-        if (File.Exists(normalized))
+        if (File.Exists(combined))
         {
-            File.Delete(normalized);
+            File.Delete(combined);
         }
     }
 
@@ -156,7 +155,7 @@ public class ImagesService : IImagesService
             throw new Exception("UIGraphics path is null");
         }
 
-        return Path.Combine(_uiGraphicsPath, image);
+        return NormalizeString(Path.Combine(_uiGraphicsPath, image));
     }
 
     private static string NormalizeString(string path)
