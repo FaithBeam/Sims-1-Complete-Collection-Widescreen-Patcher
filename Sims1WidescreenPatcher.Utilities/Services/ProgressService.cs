@@ -6,10 +6,15 @@ public class ProgressService : IProgressService
 {
     public event EventHandler<NewProgressEventArgs>? NewProgressEventHandler;
 
-    public void UpdateProgress(double pct)
+    public void UpdateProgress(double pct, string status, string status2)
     {
-        var args = new NewProgressEventArgs(pct);
+        var args = new NewProgressEventArgs(pct, status, status2);
         var handler = NewProgressEventHandler;
         handler?.Invoke(this, args);
+    }
+
+    public void UpdateProgress(double pct)
+    {
+        UpdateProgress(pct, string.Empty, string.Empty);
     }
 }

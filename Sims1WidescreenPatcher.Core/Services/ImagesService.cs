@@ -64,7 +64,7 @@ public class ImagesService : IImagesService
             {
                 current++;
                 var calc = current / (double)totalJobs * 100;
-                _progressService.UpdateProgress(calc);
+                _progressService.UpdateProgress(calc, $"{current}/{totalJobs}", $"Scaling {job.BaseImageName}");
             }
         });
     }

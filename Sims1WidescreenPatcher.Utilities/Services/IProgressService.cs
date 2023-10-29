@@ -7,5 +7,6 @@ namespace Sims1WidescreenPatcher.Utilities.Services
         event EventHandler<NewProgressEventArgs>? NewProgressEventHandler;
 
         void UpdateProgress(double pct);
+        void UpdateProgress(double pct, string status, string status2);
     }
 }

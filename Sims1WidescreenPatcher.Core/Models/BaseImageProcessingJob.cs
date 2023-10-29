@@ -7,6 +7,7 @@ public abstract class BaseImageProcessingJob
 {
     public byte[]? ImageBytes;
     public string? Output;
+    public string? BaseImageName;
     public int Width;
     public int Height;
 
@@ -15,6 +16,10 @@ public abstract class BaseImageProcessingJob
     /// </summary>
     public virtual void Run()
     {
+        if (!string.IsNullOrWhiteSpace(Output))
+        {
+            BaseImageName = Path.GetFileName(Output);
+        }
         var destDir = Path.GetDirectoryName(Output);
         if (destDir == null || Directory.Exists(destDir)) return;
         Log.Information("Created directory {@Directory}", destDir);

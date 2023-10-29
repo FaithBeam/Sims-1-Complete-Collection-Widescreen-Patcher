@@ -189,7 +189,19 @@
             <!--Row 4-->
             <Grid>
                 <StackPanel>
-                    <Label Padding="2">Progress</Label>
+                    <Grid ColumnDefinitions="*,*,*">
+                        <Label Padding="2"
+                               HorizontalAlignment="Left"
+                               Content="Progress"/>
+                        <Label Grid.Column="1"
+                               HorizontalAlignment="Center"
+                               Content="{Binding ProgressStatus}"/>
+                        <Label Grid.Column="2"
+                               HorizontalAlignment="Right"
+                               FontSize="8"
+                               VerticalAlignment="Bottom"
+                               Content="{Binding ProgressStatus2}"/>
+                    </Grid>
                     <ProgressBar x:Name="ProgressBar"
                                  Minimum="0"
                                  Maximum="100"

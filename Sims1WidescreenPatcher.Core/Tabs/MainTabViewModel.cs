@@ -35,8 +35,9 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     private readonly ObservableAsPropertyHelper<bool> _hasBackup;
     private readonly ObservableAsPropertyHelper<bool> _isValidSimsExe;
     private readonly List<string> _previouslyPatched = new();
-    private readonly IProgressService _progressService;
-    private readonly ObservableAsPropertyHelper<double> _progress;
+    private readonly ObservableAsPropertyHelper<double> _progressPct;
+    private readonly ObservableAsPropertyHelper<string> _progressStatus;
+    private readonly ObservableAsPropertyHelper<string> _progressStatus2;
     private readonly SourceList<Resolution> _resolutionSource = new();
     private readonly ReadOnlyObservableCollection<Resolution> _filteredResolutions;
     private readonly ReadOnlyObservableCollection<AspectRatio> _aspectRatios;
@@ -52,12 +53,10 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     public MainTabViewModel(IResolutionsService resolutionsService,
         CustomYesNoDialogViewModel customYesNoDialogViewModel,
         ICustomResolutionDialogViewModel customResolutionDialogViewModel,
-        IProgressService progressService,
         IFindSimsPathService findSimsPathService,
         CheckboxViewModelFactory ucVmFactory, IAppState appState, IResolutionPatchService resolutionPatchService,
-        IUninstallService uninstallService, IImagesService imagesService)
+        IUninstallService uninstallService, IImagesService imagesService, IProgressService progressService)
     {
-        _progressService = progressService;
         AppState = appState;
         _resolutionPatchService = resolutionPatchService;
         _uninstallService = uninstallService;
@@ -141,18 +140,24 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         Path = findSimsPathService.FindSimsPath();
 
         var progressPct = Observable
-            .FromEventPattern<NewProgressEventArgs>(_progressService, "NewProgressEventHandler");
+            .FromEventPattern<NewProgressEventArgs>(progressService, "NewProgressEventHandler");
         progressPct
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(async e =>
             {
                 if (e.EventArgs.Progress < 100) return;
                 await OpenCustomInformationDialogAsync("Progress", "Patched! You may close this application now.");
-                _progressService.UpdateProgress(0.0);
+                progressService.UpdateProgress(0.0);
             });
-        _progress = progressPct
+        _progressPct = progressPct
             .Select(x => x.EventArgs.Progress)
             .ToProperty(this, x => x.Progress);
+        _progressStatus = progressPct
+            .Select(x => x.EventArgs.Status)
+            .ToProperty(this, x => x.ProgressStatus);
+        _progressStatus2 = progressPct
+            .Select(x => x.EventArgs.Status2)
+            .ToProperty(this, x => x.ProgressStatus2);
     }
 
     #endregion
@@ -225,7 +230,9 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         set => this.RaiseAndSetIfChanged(ref _selectedWrapperIndex, value);
     }
 
-    public double Progress => _progress.Value;
+    public double Progress => _progressPct.Value;
+    public string ProgressStatus => _progressStatus.Value;
+    public string ProgressStatus2 => _progressStatus2.Value;
 
     #endregion
 
