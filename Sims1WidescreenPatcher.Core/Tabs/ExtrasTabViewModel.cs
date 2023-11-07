@@ -23,7 +23,7 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
         _cheatsService = cheatsService;
         AppState = appState;
         UnlockCheatsViewModel = (CheckboxViewModel)creator.Create("Unlock Cheats");
-        UnlockCheatsViewModel.ToolTipText = "Unlock cheats that were disabled in the release build the game";
+        UnlockCheatsViewModel.ToolTipText = "Unlock cheats that were disabled in the release build of the game.";
         UnlockCheatsViewModel.Checked = _cheatsService.CheatsEnabled();
         _previousSnapshot = new CheckboxSelectionSnapshot(UnlockCheatsViewModel.Checked);
         // make apply button visible/invisible if it is different from the previous state
