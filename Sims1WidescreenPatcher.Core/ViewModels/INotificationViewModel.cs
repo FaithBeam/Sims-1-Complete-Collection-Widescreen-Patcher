@@ -8,4 +8,5 @@ public interface INotificationViewModel
     ReactiveCommand<Unit, Unit> WikiCommand { get; }
     bool IsVisible { get; set; }
     bool HasBeenShown { get; set; }
+    ReactiveCommand<Unit, Unit> OkCommand { get; }
 }

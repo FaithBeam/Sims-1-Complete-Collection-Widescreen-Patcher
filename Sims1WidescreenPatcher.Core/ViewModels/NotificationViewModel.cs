@@ -9,13 +9,15 @@ public class NotificationViewModel : ViewModelBase, INotificationViewModel
 {
     private bool _isVisible;
     private bool _hasBeenShown;
-    
+
     public NotificationViewModel()
     {
         WikiCommand = ReactiveCommand.Create(() =>
             OpenUrl("https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Extras"));
+        OkCommand = ReactiveCommand.Create(() => { IsVisible = false; });
     }
 
+    public ReactiveCommand<Unit, Unit> OkCommand { get; }
     public ReactiveCommand<Unit, Unit> WikiCommand { get; }
 
     public bool IsVisible
@@ -29,7 +31,7 @@ public class NotificationViewModel : ViewModelBase, INotificationViewModel
         get => _hasBeenShown;
         set => this.RaiseAndSetIfChanged(ref _hasBeenShown, value);
     }
-    
+
     // https://stackoverflow.com/a/43232486
     private void OpenUrl(string url)
     {
