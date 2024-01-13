@@ -1,4 +1,5 @@
 using Sims1WidescreenPatcher.Core.Services;
+using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.MacOS.Services;
 

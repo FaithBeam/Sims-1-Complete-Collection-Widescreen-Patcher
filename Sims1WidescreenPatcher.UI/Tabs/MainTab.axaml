@@ -1,0 +1,215 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.Tabs;assembly=Sims1WidescreenPatcher.Core"
+             xmlns:userControls="clr-namespace:Sims1WidescreenPatcher.UI.UserControls"
+             xmlns:converters="clr-namespace:Sims1WidescreenPatcher.UI.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Sims1WidescreenPatcher.UI.Tabs.MainTab">
+
+    <Design.DataContext>
+        <viewModels:MainTabViewModel />
+    </Design.DataContext>
+
+    <Control.Resources>
+        <converters:ResolutionColorCodingConverter x:Key="ResolutionColorCodingConverter" />
+    </Control.Resources>
+
+    <Grid IsSharedSizeScope="True">
+        <StackPanel Margin="5">
+            <!--Row 1-->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="80" SharedSizeGroup="button" />
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0"
+                         Margin="0 0 5 0"
+                         x:Name="FileDialog"
+                         Watermark="Path to Sims.exe"
+                         Text="{Binding Path}" />
+                <Button Grid.Column="1"
+                        x:Name="BrowseButton"
+                        Command="{Binding OpenFile}"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Content="Browse" />
+            </Grid>
+            <!--Row 2-->
+            <Grid ColumnDefinitions="*,Auto,2*,Auto">
+                <StackPanel Grid.Column="0"
+                            Margin="0 0 5 0"
+                            VerticalAlignment="Bottom">
+                    <Label>Aspect Ratio</Label>
+                    <ComboBox x:Name="AspectRatioComboBox"
+                              HorizontalAlignment="Stretch"
+                              SelectedItem="{Binding SelectedAspectRatio}"
+                              ItemsSource="{Binding AspectRatios}"
+                              Tapped="AspectRatioComboBox_OnTapped">
+                    </ComboBox>
+                    <ToolTip.Tip>
+                        <TextBlock>
+                            Filter the resolutions by aspect ratio.
+                            <LineBreak />
+                            <LineBreak />
+                            You can reset this by holding ctrl and clicking this combo box.
+                        </TextBlock>
+                    </ToolTip.Tip>
+                </StackPanel>
+                <StackPanel Grid.Column="1"
+                            VerticalAlignment="Bottom"
+                            Margin="0 0 5 0">
+                    <userControls:Checkbox DataContext="{Binding ResolutionsColoredCbVm}" />
+                    <userControls:Checkbox DataContext="{Binding SortByAspectRatioCbVm}"
+                                           Margin="0 5 0 0" />
+                </StackPanel>
+                <StackPanel Grid.Column="2"
+                            VerticalAlignment="Bottom">
+                    <Label>Resolution</Label>
+                    <ComboBox Margin="0 0 5 0"
+                              x:Name="ResolutionCombo"
+                              ItemsSource="{Binding FilteredResolutions}"
+                              SelectedItem="{Binding SelectedResolution}"
+                              HorizontalAlignment="Stretch"
+                              Classes.ShouldColor="{Binding ResolutionsColoredCbVm.Checked}"
+                              Classes.ShouldNotColor="{Binding !ResolutionsColoredCbVm.Checked}">
+                        <ToolTip.Tip>
+                            <TextBlock>
+                                Resolutions supported by your monitor.
+                                <LineBreak />
+                                <LineBreak />
+                                800x600 and 1024x768 are the two default resolutions for The Sims.
+                                <LineBreak />
+                                <TextBlock Text="Green" Foreground="LimeGreen" /> resolutions match the aspect ratio (4:3) of the two default resolutions.
+                                <LineBreak />
+                                <TextBlock Text="Red" Foreground="Red" /> resolutions have game breaking graphical issues, and it's recommended to avoid them.
+                            </TextBlock>
+                        </ToolTip.Tip>
+
+                        <ComboBox.Styles>
+                            <Style Selector="ComboBox.ShouldColor > ComboBoxItem">
+                                <Setter Property="Background"
+                                        Value="{Binding Converter={StaticResource ResolutionColorCodingConverter}, ConverterParameter='Background'}" />
+                            </Style>
+                            <Style
+                                Selector="ComboBox.ShouldColor > ComboBoxItem:pointerover /template/ ContentPresenter">
+                                <Setter Property="Background"
+                                        Value="{Binding Converter={StaticResource ResolutionColorCodingConverter}, ConverterParameter='Pointerover'}" />
+                            </Style>
+                            <Style Selector="ComboBox.ShouldColor > ComboBoxItem:selected /template/ ContentPresenter">
+                                <Setter Property="Background"
+                                        Value="{Binding Converter={StaticResource ResolutionColorCodingConverter}, ConverterParameter='Selected'}" />
+                            </Style>
+                            <Style Selector="ComboBox.ShouldNotColor > ComboBoxItem">
+                                <Setter Property="Background" Value="{DynamicResource ComboBoxItemBackground}" />
+                            </Style>
+                            <Style
+                                Selector="ComboBox.ShouldNotColor > ComboBoxItem:pointerover /template/ ContentPresenter">
+                                <Setter Property="Background"
+                                        Value="{DynamicResource ComboBoxItemBackgroundPointerOver}" />
+                            </Style>
+                            <Style
+                                Selector="ComboBox.ShouldNotColor > ComboBoxItem:selected /template/ ContentPresenter">
+                                <Setter Property="Background" Value="{DynamicResource ComboBoxItemBackgroundSelected}" />
+                            </Style>
+                        </ComboBox.Styles>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Grid.Column="3"
+                            VerticalAlignment="Bottom">
+                    <!-- Empty label for spacing and alignment purposes -->
+                    <!-- <Label Content="" /> -->
+                    <Button Command="{Binding CustomResolutionCommand}" Content="Add Resolution">
+                        <ToolTip.Tip>Add a custom resolution</ToolTip.Tip>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <!--Row 3-->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" SharedSizeGroup="button" />
+                    <ColumnDefinition Width="*" SharedSizeGroup="button" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <Label>Wrapper</Label>
+                    <ComboBox Margin="0 0 5 0"
+                              x:Name="WrapperCombo"
+                              ItemsSource="{Binding Wrappers}"
+                              SelectedIndex="{Binding SelectedWrapperIndex}"
+                              HorizontalAlignment="Stretch">
+                        <ToolTip.Tip>
+                            <TextBlock>
+                                <TextBlock Text="DDrawCompat" FontWeight="Bold" />: High framerate. Use this for borderless fullscreen. Press Shift+F11 for in-game menu. View the wiki for more settings. (Windows only)
+                                <LineBreak />
+                                <LineBreak />
+                                <TextBlock Text="DgVoodoo2" FontWeight="Bold" />: Low/Medium framerate. Use if DDrawCompat doesn't work. (Windows and Linux only)
+                                <LineBreak />
+                                <LineBreak />
+                                <TextBlock Text="None" FontWeight="Bold" />: Low framerate. Use if DgVoodoo2 and DDrawCompat don't work.
+                            </TextBlock>
+                        </ToolTip.Tip>
+                    </ComboBox>
+                </StackPanel>
+                <Button Grid.Column="1"
+                        Margin="0 0 5 0"
+                        x:Name="UninstallButton"
+                        Command="{Binding UninstallCommand}"
+                        Content="Uninstall"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center">
+                    <Button.Styles>
+                        <Style Selector="Button">
+                            <Setter Property="Background" Value="{DynamicResource ButtonBackground}" />
+                        </Style>
+                        <Style Selector="Button:pointerover /template/ ContentPresenter">
+                            <Setter Property="Background" Value="IndianRed" />
+                        </Style>
+                    </Button.Styles>
+                </Button>
+                <Button Grid.Column="2"
+                        x:Name="PatchButton"
+                        Command="{Binding PatchCommand}"
+                        Content="Patch"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center">
+                    <Button.Styles>
+                        <Style Selector="Button">
+                            <Setter Property="Background" Value="{DynamicResource ButtonBackground}" />
+                        </Style>
+                        <Style Selector="Button:pointerover /template/ ContentPresenter">
+                            <Setter Property="Background" Value="LightGreen" />
+                        </Style>
+                    </Button.Styles>
+                </Button>
+            </Grid>
+            <!--Row 4-->
+            <Grid>
+                <StackPanel>
+                    <Grid ColumnDefinitions="*,*,*">
+                        <Label Padding="2"
+                               HorizontalAlignment="Left"
+                               Content="Progress"/>
+                        <Label Grid.Column="1"
+                               HorizontalAlignment="Center"
+                               Content="{Binding ProgressStatus}"/>
+                        <Label Grid.Column="2"
+                               HorizontalAlignment="Right"
+                               FontSize="8"
+                               VerticalAlignment="Bottom"
+                               Content="{Binding ProgressStatus2}"/>
+                    </Grid>
+                    <ProgressBar x:Name="ProgressBar"
+                                 Minimum="0"
+                                 Maximum="100"
+                                 ShowProgressText="True"
+                                 Value="{Binding Progress}" />
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Grid>
+
+</UserControl>

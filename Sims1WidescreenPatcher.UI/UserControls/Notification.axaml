@@ -1,0 +1,92 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Sims1WidescreenPatcher.UI.UserControls.Notification">
+
+    <UserControl.DataContext>
+        <vm:NotificationViewModel />
+    </UserControl.DataContext>
+
+    <UserControl.Styles>
+        <StyleInclude Source="../Styles/NotificationStyles.axaml" />
+    </UserControl.Styles>
+
+    <Canvas x:Name="Canvas"
+            Width="182"
+            Height="72"
+            Classes.Hidden="{Binding !IsVisible}"
+            Classes.Visible="{Binding IsVisible}">
+        <Rectangle x:Name="Rectangle"
+                   Width="180"
+                   Height="70"
+                   Fill="#000052"
+                   RadiusX="1"
+                   RadiusY="1"/>
+        <Grid Width="{Binding Width, ElementName=Canvas}"
+              Height="{Binding Height, ElementName=Canvas}"
+              RowDefinitions="*,*,*">
+            <Label Grid.Row="0"
+                   Content="Did You Know?"
+                   FontFamily="Comic Sans MS"
+                   Foreground="#8e94c2"
+                   Padding="0"
+                   HorizontalAlignment="Center" />
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top">
+                <Label Padding="0"
+                       Content="More info in the "
+                       FontFamily="Comic Sans MS"
+                       FontSize="12"
+                       Foreground="#8e94c2"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center" />
+                <Button Padding="0"
+                        Foreground="Blue"
+                        Background="Transparent"
+                        Content="Wiki"
+                        FontFamily="Comic Sans MS"
+                        FontSize="12"
+                        Command="{Binding WikiCommand}" />
+            </StackPanel>
+            <Button Grid.Row="2"
+                    Foreground="#8e94c2"
+                    Background="#00528d"
+                    CornerRadius="7"
+                    HorizontalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    VerticalAlignment="Top"
+                    Padding="0"
+                    Width="70"
+                    Height="20"
+                    BorderBrush="#01345e"
+                    BorderThickness="1"
+                    FontFamily="Comic Sans MS"
+                    Command="{Binding OkCommand}">
+                <Button.RenderTransform>
+                    <SkewTransform AngleX="-15" />
+                </Button.RenderTransform>
+                <Button.Styles>
+                    <Style Selector="Button:pointerover /template/ ContentPresenter">
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="Background" Value="#00528d" />
+                    </Style>
+                    <Style Selector="Button:pressed /template/ ContentPresenter">
+                        <Setter Property="RenderTransform" Value="scale(0.90)" />
+                        <Setter Property="Foreground" Value="#01ffff" />
+                    </Style>
+                </Button.Styles>
+                <TextBlock Text="OK">
+                    <TextBlock.RenderTransform>
+                        <SkewTransform AngleX="15" />
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </Button>
+        </Grid>
+    </Canvas>
+</UserControl>

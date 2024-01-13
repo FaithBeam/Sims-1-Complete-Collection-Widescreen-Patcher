@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
@@ -10,12 +10,20 @@
     <ItemGroup>
       <PackageReference Include="Avalonia" Version="11.0.5" />
       <PackageReference Include="DynamicData" Version="8.0.2" />
+      <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="13.4.0" />
+      <PackageReference Include="PatternFinder" Version="1.0.2" />
       <PackageReference Include="ReactiveUI" Version="19.5.1" />
+      <PackageReference Include="Sims.Far" Version="3.2.2" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Sims1WidescreenPatcher.Images\Sims1WidescreenPatcher.Images.csproj" />
-      <ProjectReference Include="..\Sims1WidescreenPatcher.Utilities\Sims1WidescreenPatcher.Utilities.csproj" />
+      <EmbeddedResource Include="Resources\DDrawCompat\0.3.2\ddraw.dll" />
+      <EmbeddedResource Include="Resources\DDrawCompat\0.4.0\ddraw.dll" />
+      <EmbeddedResource Include="Resources\DgVoodoo2\D3D8.dll" />
+      <EmbeddedResource Include="Resources\DgVoodoo2\D3DImm.dll" />
+      <EmbeddedResource Include="Resources\DgVoodoo2\DDraw.dll" />
+      <EmbeddedResource Include="Resources\DgVoodoo2\dgVoodoo.conf" />
+      <EmbeddedResource Include="Resources\DgVoodoo2\dgVoodooCpl.exe" />
     </ItemGroup>
 
 </Project>

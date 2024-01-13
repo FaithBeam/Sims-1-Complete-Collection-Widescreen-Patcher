@@ -4,7 +4,7 @@ using Avalonia.ReactiveUI;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.ViewModels;
 
-namespace Sims1WidescreenPatcher.UI.Views;
+namespace Sims1WidescreenPatcher.UI.Dialogs;
 
 public partial class CustomResolutionDialog : ReactiveWindow<CustomResolutionDialogViewModel>
 {
@@ -14,7 +14,7 @@ public partial class CustomResolutionDialog : ReactiveWindow<CustomResolutionDia
         
         this.WhenActivated(d =>
         {
-            if (ViewModel != null) d(ViewModel!.OkCommand.Subscribe(Close));
+            if (ViewModel != null) d(ViewModel.OkCommand.Subscribe(Close));
         });
     }
 

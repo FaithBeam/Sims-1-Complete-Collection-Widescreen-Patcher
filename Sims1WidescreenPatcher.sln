@@ -9,10 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sims1WidescreenPatcher.Core
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sims1WidescreenPatcher.UI", "Sims1WidescreenPatcher.UI\Sims1WidescreenPatcher.UI.csproj", "{60E8F422-0F65-421F-8D9A-D87EBBDC3F2A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sims1WidescreenPatcher.Utilities", "Sims1WidescreenPatcher.Utilities\Sims1WidescreenPatcher.Utilities.csproj", "{6FF36FED-9279-410E-8A61-DD8FE4209912}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sims1WidescreenPatcher.Images", "Sims1WidescreenPatcher.Images\Sims1WidescreenPatcher.Images.csproj", "{8F0524B7-0102-44BC-BBCE-1E8EBE82BD45}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sims1WidescreenPatcher", "Sims1WidescreenPatcher\Sims1WidescreenPatcher.csproj", "{47AC305A-E1C6-4F84-9059-800BBEA7CA5E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sims1WidescreenPatcher.Linux", "Sims1WidescreenPatcher.Linux\Sims1WidescreenPatcher.Linux.csproj", "{420CA96C-CCF1-4DB9-827D-17E4B3214974}"
@@ -37,14 +33,6 @@ Global
 		{60E8F422-0F65-421F-8D9A-D87EBBDC3F2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60E8F422-0F65-421F-8D9A-D87EBBDC3F2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60E8F422-0F65-421F-8D9A-D87EBBDC3F2A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6FF36FED-9279-410E-8A61-DD8FE4209912}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6FF36FED-9279-410E-8A61-DD8FE4209912}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6FF36FED-9279-410E-8A61-DD8FE4209912}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6FF36FED-9279-410E-8A61-DD8FE4209912}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8F0524B7-0102-44BC-BBCE-1E8EBE82BD45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F0524B7-0102-44BC-BBCE-1E8EBE82BD45}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F0524B7-0102-44BC-BBCE-1E8EBE82BD45}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F0524B7-0102-44BC-BBCE-1E8EBE82BD45}.Release|Any CPU.Build.0 = Release|Any CPU
 		{47AC305A-E1C6-4F84-9059-800BBEA7CA5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{47AC305A-E1C6-4F84-9059-800BBEA7CA5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47AC305A-E1C6-4F84-9059-800BBEA7CA5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
