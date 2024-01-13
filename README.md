@@ -1,4 +1,4 @@
-∑# The Sims 1 Widescreen Patcher
+# The Sims 1 Widescreen Patcher
 
 This program patches **The Sims 1** to a custom resolution.
 
