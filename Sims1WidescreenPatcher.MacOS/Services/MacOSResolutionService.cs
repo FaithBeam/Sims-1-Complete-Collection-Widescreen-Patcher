@@ -3,7 +3,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Serilog;
 using Sims1WidescreenPatcher.Core.Models;
-using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.MacOS.Services
@@ -30,8 +29,8 @@ namespace Sims1WidescreenPatcher.MacOS.Services
 			{
 				CgsDisplayMode mode = default;
 				CGSGetDisplayModeDescriptionOfLength(id, i, ref mode, Marshal.SizeOf(mode));
-				var newRes = new Resolution((int)mode.width, (int)mode.height);
-				if (!resolutions.Contains(newRes, Resolution.WidthHeightComparer) && newRes.Width >= 800 & newRes.Height >= 600)
+				var newRes = new Resolution((uint)mode.width, (uint)mode.height);
+				if (resolutions.All(x => !x.Equals(newRes)) && newRes.Width >= 800 & newRes.Height >= 600)
 				{
 					resolutions.Add(newRes);
 				}

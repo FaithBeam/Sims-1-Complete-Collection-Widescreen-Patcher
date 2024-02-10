@@ -7,8 +7,8 @@ public abstract class BaseImageProcessingJob
     public byte[]? ImageBytes;
     public string? Output;
     public string? BaseImageName;
-    public int Width;
-    public int Height;
+    public uint Width;
+    public uint Height;
 
     /// <summary>
     /// Overrides should call this base method before continuing

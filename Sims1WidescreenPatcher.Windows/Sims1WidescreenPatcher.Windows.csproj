@@ -12,7 +12,7 @@
 		<Product>Sims1WidescreenPatcher</Product>
 		<IsPackable>false</IsPackable>
 		<ApplicationIcon>..\Sims1WidescreenPatcher.UI\Assets\SimsICO.ico</ApplicationIcon>
-		<LangVersion>default</LangVersion>
+		<LangVersion>12</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<AvaloniaResource Include="Assets\**" />
@@ -27,6 +27,9 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.5" />
+		<PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.49-beta">
+		  <PrivateAssets>all</PrivateAssets>
+		</PackageReference>
 		<PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->

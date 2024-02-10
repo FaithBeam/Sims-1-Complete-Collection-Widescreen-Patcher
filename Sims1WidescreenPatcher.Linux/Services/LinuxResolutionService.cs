@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Serilog;
 using Sims1WidescreenPatcher.Core.Models;
-using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.Linux.Services
@@ -44,8 +43,8 @@ namespace Sims1WidescreenPatcher.Linux.Services
 				foreach (Match m in matches)
 				{
 					var split = m.Value.Split('x');
-					var newRes = new Resolution(int.Parse(split[0]), int.Parse(split[1]));
-					if (!resolutions.Contains(newRes, Resolution.WidthHeightComparer) && newRes.Width >= 800 && newRes.Height >= 600)
+					var newRes = new Resolution(uint.Parse(split[0]), uint.Parse(split[1]));
+					if (resolutions.All(x => !x.Equals(newRes)) && newRes.Width >= 800 && newRes.Height >= 600)
 					{
 						resolutions.Add(newRes);
 					}
