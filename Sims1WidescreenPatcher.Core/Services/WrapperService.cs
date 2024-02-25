@@ -6,7 +6,7 @@ namespace Sims1WidescreenPatcher.Core.Services;
 
 public class WrapperService : IWrapperService
 {
-    private static string[] _ddrawCompat040Resources = { @"DDrawCompat._0._4._0.ddraw.dll" };
+    private static string[] _ddrawCompat051Resources = { @"DDrawCompat._0._5._1.ddraw.dll" };
     private static string[] _ddrawCompat032Resources = { @"DDrawCompat._0._3._2.ddraw.dll" };
 
     private static string[] _dgvoodooResources =
@@ -27,11 +27,11 @@ public class WrapperService : IWrapperService
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             /* Return different ddrawcompat versions depending on Windows version.
-               Windows 10 and newer get ddrawcompat 0.4.0
+               Windows 10 and newer get ddrawcompat 0.5.1
                Windows 8.1 and older get ddrawcompat 0.3.2
              */
             return Environment.OSVersion.Version.Major >= 10
-                ? new List<IWrapper> { new DDrawCompatWrapper("0.4.0"), new DgVoodoo2Wrapper(), new NoneWrapper() }
+                ? new List<IWrapper> { new DDrawCompatWrapper("0.5.1"), new DgVoodoo2Wrapper(), new NoneWrapper() }
                 : new List<IWrapper> { new DDrawCompatWrapper("0.3.2"), new DgVoodoo2Wrapper(), new NoneWrapper() };
         }
 
@@ -52,7 +52,7 @@ public class WrapperService : IWrapperService
         switch (wrapper)
         {
             case DDrawCompatWrapper w:
-                resources = w.Version == "0.4.0" ? _ddrawCompat040Resources : _ddrawCompat032Resources;
+                resources = w.Version == "0.5.1" ? _ddrawCompat051Resources : _ddrawCompat032Resources;
                 break;
             case DgVoodoo2Wrapper:
                 resources = _dgvoodooResources;
@@ -78,7 +78,7 @@ public class WrapperService : IWrapperService
     public void Uninstall()
     {
         var simsInstallDir = GetSimsInstallDirectory();
-        foreach (var item in _ddrawCompat040Resources.Concat(_ddrawCompat032Resources).Concat(_dgvoodooResources))
+        foreach (var item in _ddrawCompat051Resources.Concat(_ddrawCompat032Resources).Concat(_dgvoodooResources))
         {
             var itemSplit = item.Split('.');
             var combined = itemSplit[^2] + "." + itemSplit[^1];
