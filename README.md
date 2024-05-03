@@ -22,7 +22,7 @@ This program patches **The Sims 1** to a custom resolution.
 |    11   |
 |    10   |
 |  7 SP 1 |
-| XP ([Use this version](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/releases/tag/1.24.0-legacy))      |
+| XP ([Use this older version](https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/releases/tag/1.24.0-legacy))      |
 
 | Ubuntu | Fedora |
 |--------|--------|
