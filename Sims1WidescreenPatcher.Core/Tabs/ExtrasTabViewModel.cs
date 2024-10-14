@@ -1,10 +1,8 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
 using ReactiveUI;
-using Sims1WidescreenPatcher.Core.Events;
 using Sims1WidescreenPatcher.Core.Factories;
 using Sims1WidescreenPatcher.Core.Models;
-using Sims1WidescreenPatcher.Core.Services;
 using Sims1WidescreenPatcher.Core.Services.Interfaces;
 using Sims1WidescreenPatcher.Core.ViewModels;
 
@@ -43,16 +41,11 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
             .Select(_ => AppState.SimsExePathExists && _cheatsService.CanEnableCheats())
             .Subscribe(x => UnlockCheatsViewModel.IsEnabled = x);
 
-        var uninstallEvt = Observable
-            .FromEventPattern<NewUninstallEventArgs>(progressService, "NewUninstallEventHandler");
-        // When the sims exe is uninstalled, check for the validity of these checkboxes
-        uninstallEvt
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ =>
-            {
-                UnlockCheatsViewModel.Checked = _cheatsService.CheatsEnabled();
-                PreviousSnapshot = new CheckboxSelectionSnapshot(UnlockCheatsViewModel.Checked);
-            });
+        progressService.Uninstall.Subscribe(_ =>
+        {
+            UnlockCheatsViewModel.Checked = _cheatsService.CheatsEnabled();
+            PreviousSnapshot = new CheckboxSelectionSnapshot(UnlockCheatsViewModel.Checked);
+        });
 
         ApplyCommand = ReactiveCommand.CreateFromTask(OnApplyClickedAsync);
     }

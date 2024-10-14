@@ -1,6 +1,4 @@
-﻿using Sims1WidescreenPatcher.Core.ViewModels;
-
-namespace Sims1WidescreenPatcher.Core.Models;
+﻿namespace Sims1WidescreenPatcher.Core.Models;
 
 public class CheckboxSelectionSnapshot : IEquatable<CheckboxSelectionSnapshot>
 {

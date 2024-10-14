@@ -7,9 +7,6 @@ namespace Sims1WidescreenPatcher.Core.Services;
 public class ImagesService : IImagesService
 {
     private string? _uiGraphicsPath;
-    private readonly IAppState _appState;
-    private readonly IProgressService _progressService;
-    private readonly IFar _far;
 
     private readonly string[] _blackBackground =
     {
@@ -35,9 +32,9 @@ public class ImagesService : IImagesService
         @"Studiotown\dlgframe_1024x768.bmp",
     };
 
-    private const string TallSubPanel = @"cpanel\Backgrounds\TallSubPanel.TGA";
-
-    private const string PanelBack = @"cpanel\Backgrounds\PanelBack.bmp";
+    private readonly IAppState _appState;
+    private readonly IProgressService _progressService;
+    private readonly IFar _far;
 
     public ImagesService(IAppState appState, IProgressService progressService, IFar far)
     {
@@ -45,6 +42,10 @@ public class ImagesService : IImagesService
         _progressService = progressService;
         _far = far;
     }
+
+    private const string TallSubPanel = @"cpanel\Backgrounds\TallSubPanel.TGA";
+
+    private const string PanelBack = @"cpanel\Backgrounds\PanelBack.bmp";
 
     public void Install()
     {
@@ -74,7 +75,7 @@ public class ImagesService : IImagesService
 
         foreach (var i in _blackBackground
                      .Concat(_blueBackground)
-                     .Concat(new[] { TallSubPanel, PanelBack }))
+                     .Concat(new List<string> { TallSubPanel, PanelBack }.AsReadOnly()))
         {
             DeleteUiGraphicsFile(i);
         }
@@ -84,6 +85,11 @@ public class ImagesService : IImagesService
     {
         _far.ParseFar();
         var jobs = new List<BaseImageProcessingJob>();
+
+        if (_appState.Resolution is null)
+        {
+            return jobs;
+        }
 
         if (_far.TryGetBytes(PanelBack, out var bytes))
         {
@@ -116,6 +122,10 @@ public class ImagesService : IImagesService
 
     private IEnumerable<BaseImageProcessingJob> GetCompositeJobs(IEnumerable<string> images, string color)
     {
+        if (_appState.Resolution is null)
+        {
+            throw new Exception("Resolution is null");
+        }
         foreach (var i in images)
         {
             if (_far.TryGetBytes(i, out var bytes))
@@ -134,7 +144,15 @@ public class ImagesService : IImagesService
 
     private string GetUiGraphicsFolder()
     {
-        var simsInstallDir = Directory.GetParent(_appState.SimsExePath).ToString();
+        if (string.IsNullOrWhiteSpace(_appState.SimsExePath))
+        {
+            throw new Exception("SimsExePath is null or empty");
+        }
+        var simsInstallDir = Directory.GetParent(_appState.SimsExePath)?.ToString();
+        if (string.IsNullOrWhiteSpace(simsInstallDir))
+        {
+            throw new Exception("SimsExePath is null or empty");
+        }
         return Path.Combine(simsInstallDir, "UIGraphics");
     }
 

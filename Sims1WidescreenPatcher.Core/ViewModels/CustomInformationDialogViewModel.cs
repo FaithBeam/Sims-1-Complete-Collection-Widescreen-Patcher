@@ -7,7 +7,7 @@ public class CustomInformationDialogViewModel : ViewModelBase
         Title = title;
         Message = message;
     }
-    
+
     public string Title { get; }
     public string Message { get; }
 }

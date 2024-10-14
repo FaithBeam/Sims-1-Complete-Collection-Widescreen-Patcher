@@ -6,6 +6,13 @@ namespace Sims1WidescreenPatcher.Core.Services;
 
 public class WrapperService : IWrapperService
 {
+    private readonly IAppState _appState;
+
+    public WrapperService(IAppState appState)
+    {
+        _appState = appState;
+    }
+
     private static string[] _ddrawCompat051Resources = { @"DDrawCompat._0._5._1.ddraw.dll" };
     private static string[] _ddrawCompat032Resources = { @"DDrawCompat._0._3._2.ddraw.dll" };
 
@@ -14,13 +21,6 @@ public class WrapperService : IWrapperService
         @"DgVoodoo2.D3D8.dll", @"DgVoodoo2.D3DImm.dll", @"DgVoodoo2.DDraw.dll", @"DgVoodoo2.dgVoodoo.conf",
         @"DgVoodoo2.dgVoodooCpl.exe"
     };
-
-    private readonly IAppState _appState;
-
-    public WrapperService(IAppState appState)
-    {
-        _appState = appState;
-    }
 
     public List<IWrapper> GetWrappers()
     {

@@ -1,53 +1,38 @@
-﻿using System.Numerics;
+﻿namespace Sims1WidescreenPatcher.Core.Models;
 
-namespace Sims1WidescreenPatcher.Core.Models;
-
-public class Resolution : IComparable<Resolution>
+public record Resolution : IComparable<Resolution>
 {
-    private sealed class WidthHeightEqualityComparer : IEqualityComparer<Resolution>
-    {
-        public bool Equals(Resolution x, Resolution y)
-        {
-            if (ReferenceEquals(x, y)) return true;
-            if (ReferenceEquals(x, null)) return false;
-            if (ReferenceEquals(y, null)) return false;
-            if (x.GetType() != y.GetType()) return false;
-            return x.Width == y.Width && x.Height == y.Height;
-        }
+    public readonly AspectRatio AspectRatio;
 
-        public int GetHashCode(Resolution obj)
-        {
-            unchecked
-            {
-                return (obj.Width * 397) ^ obj.Height;
-            }
-        }
+    public Resolution(int Width, int Height)
+    {
+        this.Width = Width;
+        this.Height = Height;
+        AspectRatio = new AspectRatio(Width, Height);
     }
 
-    public static IEqualityComparer<Resolution>? WidthHeightComparer { get; } = new WidthHeightEqualityComparer();
+    public int Width { get; init; }
+    public int Height { get; init; }
 
-    public int Width { get; }
-    public int Height { get; }
-    public AspectRatio AspectRatio { get; }
+    public override string ToString() => $"{Width}x{Height} ({AspectRatio})";
 
-    public Resolution(int width, int height)
-    {
-        Width = width;
-        Height = height;
-        AspectRatio = new AspectRatio(width, height);
-    }
+    public virtual bool Equals(Resolution? other) => other is not null && Width == other.Width &&
+                                                     Height == other.Height && AspectRatio.Equals(other.AspectRatio);
 
-    public override string ToString()
-    {
-        return $"{Width}x{Height} ({AspectRatio})";
-    }
+    public override int GetHashCode() => HashCode.Combine(AspectRatio, Width, Height);
 
     public int CompareTo(Resolution? other)
     {
         if (ReferenceEquals(this, other)) return 0;
-        if (ReferenceEquals(null, other)) return 1;
+        if (other is null) return 1;
         var widthComparison = Width.CompareTo(other.Width);
         if (widthComparison != 0) return widthComparison;
         return Height.CompareTo(other.Height);
+    }
+
+    public void Deconstruct(out int Width, out int Height)
+    {
+        Width = this.Width;
+        Height = this.Height;
     }
 }

@@ -10,7 +10,10 @@ public class UninstallService : IUninstallService
     private readonly IProgressService _progressService;
     private readonly IWrapperService _wrapperService;
 
-    public UninstallService(IAppState appState, IImagesService imagesService, IProgressService progressService, IWrapperService wrapperService)
+    public UninstallService(IAppState appState,
+        IImagesService imagesService,
+        IProgressService progressService,
+        IWrapperService wrapperService)
     {
         _appState = appState;
         _imagesService = imagesService;
@@ -20,6 +23,10 @@ public class UninstallService : IUninstallService
 
     public void Uninstall()
     {
+        if (string.IsNullOrWhiteSpace(_appState.SimsExePath))
+        {
+            return;
+        }
         if (_appState.SimsBackupExists)
         {
             File.SetAttributes(_appState.SimsExePath, FileAttributes.Normal);

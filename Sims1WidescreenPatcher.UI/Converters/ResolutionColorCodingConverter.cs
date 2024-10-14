@@ -37,110 +37,117 @@ public class ResolutionColorCodingConverter : IValueConverter
             return null;
         }
 
-        if (s == "Background")
+        switch (s)
         {
-            if (r.Width == 1600)
+            case "Background":
             {
-                if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
+                if (r.Width == 1600)
                 {
-                    return BackgroundBadLight;
-                }
+                    if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
+                    {
+                        return BackgroundBadLight;
+                    }
 
-                if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
-                {
-                    return BackgroundBadDark;
+                    if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
+                    {
+                        return BackgroundBadDark;
+                    }
                 }
-            }
             
-            if (r.AspectRatio is { Numerator: 4, Denominator: 3 })
-            {
-                if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
+                if (r.AspectRatio is { Numerator: 4, Denominator: 3 })
                 {
-                    return BackgroundGoodLight;
+                    if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
+                    {
+                        return BackgroundGoodLight;
+                    }
+
+                    if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
+                    {
+                        return BackgroundGoodDark;
+                    }
                 }
 
-                if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
-                {
-                    return BackgroundGoodDark;
-                }
+                break;
             }
-        }
-
-        if (s == "Pointerover")
-        {
-            if (r.Width == 1600)
+            case "Pointerover":
             {
-                if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
+                if (r.Width == 1600)
                 {
-                    return PointeroverBadLight;
-                }
+                    if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
+                    {
+                        return PointeroverBadLight;
+                    }
 
-                if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
-                {
-                    return PointeroverBadDark;
+                    if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
+                    {
+                        return PointeroverBadDark;
+                    }
                 }
-            }
             
-            if (r.AspectRatio is { Numerator: 4, Denominator: 3 })
-            {
+                if (r.AspectRatio is { Numerator: 4, Denominator: 3 })
+                {
+                    if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
+                    {
+                        return PointeroverGoodLight;
+                    }
+
+                    if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
+                    {
+                        return PointeroverGoodDark;
+                    }
+                }
+
                 if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
                 {
-                    return PointeroverGoodLight;
+                    return Brush.Parse("#19000000");
                 }
-
+            
                 if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
                 {
-                    return PointeroverGoodDark;
+                    return Brush.Parse("#19FFFFFF");
                 }
-            }
 
-            if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
-            {
-                return Brush.Parse("#19000000");
+                break;
             }
+            case "Selected":
+            {
+                if (r.Width == 1600)
+                {
+                    if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
+                    {
+                        return SelectedBadLight;
+                    }
+
+                    if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
+                    {
+                        return SelectedBadDark;
+                    }
+                }
             
-            if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
-            {
-                return Brush.Parse("#19FFFFFF");
-            }
-        }
-        
-        if (s == "Selected")
-        {
-            if (r.Width == 1600)
-            {
+                if (r.AspectRatio is { Numerator: 4, Denominator: 3 })
+                {
+                    if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
+                    {
+                        return SelectedGoodLight;
+                    }
+
+                    if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
+                    {
+                        return SelectedGoodDark;
+                    }
+                }
+
                 if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
                 {
-                    return SelectedBadLight;
+                    return Brush.Parse("#29000000");
                 }
-
+            
                 if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
                 {
-                    return SelectedBadDark;
-                }
-            }
-            
-            if (r.AspectRatio is { Numerator: 4, Denominator: 3 })
-            {
-                if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
-                {
-                    return SelectedGoodLight;
+                    return Brush.Parse("#09FFFFFF");
                 }
 
-                if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
-                {
-                    return SelectedGoodDark;
-                }
-            }
-
-            if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
-            {
-                return Brush.Parse("#29000000");
-            }
-            
-            if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
-            {
-                return Brush.Parse("#09FFFFFF");
+                break;
             }
         }
 

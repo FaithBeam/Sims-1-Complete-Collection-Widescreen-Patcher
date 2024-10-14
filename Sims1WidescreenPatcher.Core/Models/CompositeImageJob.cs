@@ -19,7 +19,7 @@ public class CompositeImageJob : BaseImageProcessingJob
         }
         
         using var image = new MagickImage(ImageBytes!);
-        using var background = new MagickImage(new MagickColor(Color), Width, Height);
+        using var background = new MagickImage(new MagickColor(Color), (uint)Width, (uint)Height);
         background.Composite(image, Gravity.Center);
         SetCommonBmpSettings(background);
         background.Write(Output!);

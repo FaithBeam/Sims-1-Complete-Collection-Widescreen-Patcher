@@ -7,13 +7,13 @@ namespace Sims1WidescreenPatcher.Core.Validations;
 /// </summary>
 public class RequiredAltAttribute : RequiredAttribute
 {
-    private static bool Visited;
+    private static bool _visited;
     
-    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
-        if (!Visited)
+        if (!_visited)
         {
-            Visited = true;
+            _visited = true;
             return ValidationResult.Success;
         }
 

@@ -3,7 +3,7 @@ using Sims1WidescreenPatcher.Linux.Services;
 using Sims1WidescreenPatcher.MacOS.Services;
 using Sims1WidescreenPatcher.Windows.Services;
 using System.Runtime.InteropServices;
-using Autofac;
+using Microsoft.Extensions.DependencyInjection;
 using Sims.Far;
 using Sims1WidescreenPatcher.Core.Services.Interfaces;
 using FindSimsPathService = Sims1WidescreenPatcher.Windows.Services.FindSimsPathService;
@@ -12,28 +12,28 @@ namespace Sims1WidescreenPatcher.DependencyInjection
 {
     public static class ServicesBootstrapper
     {
-        public static void RegisterServices(ContainerBuilder services)
+        public static void RegisterServices(IServiceCollection services)
         {
             RegisterCommonServices(services);
             RegisterPlatformSpecificServices(services);
         }
 
-        private static void RegisterPlatformSpecificServices(ContainerBuilder services)
+        private static void RegisterPlatformSpecificServices(IServiceCollection services)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (OperatingSystem.IsWindowsVersionAtLeast(5))
             {
-                services.RegisterType<WindowsResolutionsService>().As<IResolutionsService>().SingleInstance();
-                services.RegisterType<FindSimsPathService>().As<IFindSimsPathService>();
+                services.AddScoped<IResolutionsService, WindowsResolutionsService>()
+                    .AddScoped<IFindSimsPathService, FindSimsPathService>();
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            else if (OperatingSystem.IsMacOS())
             {
-                services.RegisterType<MacOsResolutionService>().As<IResolutionsService>().SingleInstance();
-                services.RegisterType<MacOS.Services.FindSimsPathService>().As<IFindSimsPathService>();
+                services.AddScoped<IResolutionsService, MacOsResolutionService>()
+                    .AddScoped<IFindSimsPathService, MacOS.Services.FindSimsPathService>();
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            else if (OperatingSystem.IsLinux())
             {
-                services.RegisterType<LinuxResolutionService>().As<IResolutionsService>().SingleInstance();
-                services.RegisterType<Linux.Services.FindSimsPathService>().As<IFindSimsPathService>();
+                services.AddScoped<IResolutionsService, LinuxResolutionService>()
+                    .AddScoped<IFindSimsPathService, Linux.Services.FindSimsPathService>();
             }
             else
             {
@@ -41,16 +41,16 @@ namespace Sims1WidescreenPatcher.DependencyInjection
             }
         }
 
-        private static void RegisterCommonServices(ContainerBuilder services)
+        private static void RegisterCommonServices(IServiceCollection services)
         {
-            services.RegisterType<Far>().As<IFar>();
-            services.RegisterType<PatchFileService>().As<IPatchFileService>();
-            services.RegisterType<ProgressService>().As<IProgressService>().SingleInstance();
-            services.RegisterType<CheatsService>().As<ICheatsService>();
-            services.RegisterType<ResolutionPatchService>().As<IResolutionPatchService>();
-            services.RegisterType<WrapperService>().As<IWrapperService>();
-            services.RegisterType<UninstallService>().As<IUninstallService>();
-            services.RegisterType<ImagesService>().As<IImagesService>();
+            services.AddScoped<IFar, Far>()
+                .AddScoped<IPatchFileService, PatchFileService>()
+                .AddScoped<IProgressService, ProgressService>()
+                .AddScoped<ICheatsService, CheatsService>()
+                .AddScoped<IResolutionPatchService, ResolutionPatchService>()
+                .AddScoped<IWrapperService, WrapperService>()
+                .AddScoped<IUninstallService, UninstallService>()
+                .AddScoped<IImagesService, ImagesService>();
         }
     }
 }

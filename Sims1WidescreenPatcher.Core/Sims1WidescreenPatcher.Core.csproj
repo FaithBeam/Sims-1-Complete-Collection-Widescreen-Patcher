@@ -7,12 +7,20 @@
         <LangVersion>default</LangVersion>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
     <ItemGroup>
-      <PackageReference Include="Avalonia" Version="11.0.5" />
-      <PackageReference Include="DynamicData" Version="8.0.2" />
-      <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="13.4.0" />
+      <PackageReference Include="Avalonia" Version="11.1.4" />
+      <PackageReference Include="DynamicData" Version="9.0.4" />
+      <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.0.0" />
       <PackageReference Include="PatternFinder" Version="1.0.2" />
-      <PackageReference Include="ReactiveUI" Version="19.5.1" />
+      <PackageReference Include="ReactiveUI" Version="20.1.63" />
       <PackageReference Include="Sims.Far" Version="3.2.2" />
     </ItemGroup>
 

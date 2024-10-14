@@ -1,4 +1,4 @@
-﻿using Autofac;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Sims1WidescreenPatcher.Core.Tabs;
 using Sims1WidescreenPatcher.Core.ViewModels;
 
@@ -6,14 +6,14 @@ namespace Sims1WidescreenPatcher.DependencyInjection
 {
     public static class ViewModelBootstrapper
     {
-        public static void RegisterViewModels(ContainerBuilder services)
+        public static void RegisterViewModels(IServiceCollection services)
         {
-            services.RegisterType<CustomResolutionDialogViewModel>().As<ICustomResolutionDialogViewModel>();
-            services.RegisterType<CustomYesNoDialogViewModel>().AsSelf();
-            services.RegisterType<NotificationViewModel>().As<INotificationViewModel>();
-            services.RegisterType<MainWindowViewModel>().As<IMainWindowViewModel>();
-            services.RegisterType<MainTabViewModel>().As<IMainTabViewModel>();
-            services.RegisterType<ExtrasTabViewModel>().As<IExtrasTabViewModel>();
+            services.AddScoped<ICustomResolutionDialogViewModel, CustomResolutionDialogViewModel>()
+                .AddScoped<CustomYesNoDialogViewModel>()
+                .AddScoped<INotificationViewModel, NotificationViewModel>()
+                .AddScoped<IMainWindowViewModel, MainWindowViewModel>()
+                .AddScoped<IMainTabViewModel, MainTabViewModel>()
+                .AddScoped<IExtrasTabViewModel, ExtrasTabViewModel>();
         }
     }
 }

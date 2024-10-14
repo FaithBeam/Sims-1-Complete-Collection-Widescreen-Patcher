@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Versioning;
 using Microsoft.Win32;
 using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.Windows.Services;
 
+[SupportedOSPlatform("windows")]
 public class FindSimsPathService : IFindSimsPathService
 {
     public string FindSimsPath()

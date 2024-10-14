@@ -14,9 +14,9 @@ public class CheckboxViewModel : ReactiveObject, ICheckboxViewModel
     }
 
     public string Label { get; set; }
-    
+
     public string ToolTipText { get; set; }
-    
+
     public bool Checked
     {
         get => _checked;

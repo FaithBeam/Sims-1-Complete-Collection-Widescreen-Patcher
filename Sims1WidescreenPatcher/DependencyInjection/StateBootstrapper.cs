@@ -1,12 +1,12 @@
-﻿using Autofac;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Sims1WidescreenPatcher.Core.Models;
 
 namespace Sims1WidescreenPatcher.DependencyInjection;
 
 public static class StateBootstrapper
 {
-    public static void RegisterState(ContainerBuilder services)
+    public static void RegisterState(IServiceCollection services)
     {
-        services.RegisterType<AppState>().As<IAppState>().SingleInstance();
+        services.AddSingleton<IAppState, AppState>();
     }
 }
