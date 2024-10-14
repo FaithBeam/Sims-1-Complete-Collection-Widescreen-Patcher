@@ -2,14 +2,20 @@
 
 namespace Sims1WidescreenPatcher.Core.ViewModels;
 
-public class CheckboxViewModel(string label, string toolTipText) : ReactiveObject, ICheckboxViewModel
+public class CheckboxViewModel : ReactiveObject, ICheckboxViewModel
 {
     private bool _checked;
     private bool _isEnabled = true;
 
-    public string Label { get; set; } = label;
+    public CheckboxViewModel(string label, string toolTipText)
+    {
+        Label = label;
+        ToolTipText = toolTipText;
+    }
 
-    public string ToolTipText { get; set; } = toolTipText;
+    public string Label { get; set; }
+
+    public string ToolTipText { get; set; }
 
     public bool Checked
     {

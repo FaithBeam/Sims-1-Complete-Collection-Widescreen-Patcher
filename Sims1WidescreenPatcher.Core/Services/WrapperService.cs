@@ -4,8 +4,15 @@ using Sims1WidescreenPatcher.Core.Models;
 
 namespace Sims1WidescreenPatcher.Core.Services;
 
-public class WrapperService(IAppState appState) : IWrapperService
+public class WrapperService : IWrapperService
 {
+    private readonly IAppState _appState;
+
+    public WrapperService(IAppState appState)
+    {
+        _appState = appState;
+    }
+
     private static string[] _ddrawCompat051Resources = { @"DDrawCompat._0._5._1.ddraw.dll" };
     private static string[] _ddrawCompat032Resources = { @"DDrawCompat._0._3._2.ddraw.dll" };
 
@@ -82,12 +89,12 @@ public class WrapperService(IAppState appState) : IWrapperService
 
     private string GetSimsInstallDirectory()
     {
-        if (string.IsNullOrWhiteSpace(appState.SimsExePath))
+        if (string.IsNullOrWhiteSpace(_appState.SimsExePath))
         {
             throw new Exception("Sims exe path is null");
         }
 
-        return Path.GetDirectoryName(appState.SimsExePath) ??
-               throw new Exception($"Failed to get directory name of {appState.SimsExePath}");
+        return Path.GetDirectoryName(_appState.SimsExePath) ??
+               throw new Exception($"Failed to get directory name of {_appState.SimsExePath}");
     }
 }

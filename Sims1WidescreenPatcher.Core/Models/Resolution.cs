@@ -1,8 +1,18 @@
 ﻿namespace Sims1WidescreenPatcher.Core.Models;
 
-public record Resolution(int Width, int Height) : IComparable<Resolution>
+public record Resolution : IComparable<Resolution>
 {
-    public readonly AspectRatio AspectRatio = new(Width, Height);
+    public readonly AspectRatio AspectRatio;
+
+    public Resolution(int Width, int Height)
+    {
+        this.Width = Width;
+        this.Height = Height;
+        AspectRatio = new AspectRatio(Width, Height);
+    }
+
+    public int Width { get; init; }
+    public int Height { get; init; }
 
     public override string ToString() => $"{Width}x{Height} ({AspectRatio})";
 
@@ -18,5 +28,11 @@ public record Resolution(int Width, int Height) : IComparable<Resolution>
         var widthComparison = Width.CompareTo(other.Width);
         if (widthComparison != 0) return widthComparison;
         return Height.CompareTo(other.Height);
+    }
+
+    public void Deconstruct(out int Width, out int Height)
+    {
+        Width = this.Width;
+        Height = this.Height;
     }
 }

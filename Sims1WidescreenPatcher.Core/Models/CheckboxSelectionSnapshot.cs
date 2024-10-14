@@ -1,10 +1,13 @@
-﻿using Sims1WidescreenPatcher.Core.ViewModels;
+﻿namespace Sims1WidescreenPatcher.Core.Models;
 
-namespace Sims1WidescreenPatcher.Core.Models;
-
-public class CheckboxSelectionSnapshot(params bool[] vms) : IEquatable<CheckboxSelectionSnapshot>
+public class CheckboxSelectionSnapshot : IEquatable<CheckboxSelectionSnapshot>
 {
-    private readonly bool[] _vms = vms;
+    private readonly bool[] _vms;
+
+    public CheckboxSelectionSnapshot(params bool[] vms)
+    {
+        _vms = vms;
+    }
 
     public bool Equals(CheckboxSelectionSnapshot? other)
     {
