@@ -333,7 +333,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
         var selectedWrapper = Wrappers[SelectedWrapperIndex];
 
-        if (selectedWrapper is DDrawCompatWrapper { Version: "0.5.1" })
+        if (selectedWrapper is DDrawCompatWrapper { Version: "0.5.4" })
         {
             var result = await OpenCustomYesNoDialogAsync("DDrawCompat Settings",
                 "Enable borderless fullscreen mode?\n(Choosing \"no\" may cause issues on variable refresh rate displays.)");
