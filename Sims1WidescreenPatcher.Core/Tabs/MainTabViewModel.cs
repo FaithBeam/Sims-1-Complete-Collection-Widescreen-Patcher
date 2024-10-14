@@ -31,7 +31,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     private bool _isBusy;
     private readonly ObservableAsPropertyHelper<bool> _hasBackup;
     private readonly ObservableAsPropertyHelper<bool> _isValidSimsExe;
-    private readonly List<string> _previouslyPatched = [];
+    private readonly List<string> _previouslyPatched = new() { };
     private double _progressPct;
     private string? _progressStatus;
     private string? _progressStatus2;

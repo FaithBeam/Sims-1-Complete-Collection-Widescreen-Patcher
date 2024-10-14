@@ -75,7 +75,7 @@ public class ImagesService : IImagesService
 
         foreach (var i in _blackBackground
                      .Concat(_blueBackground)
-                     .Concat([TallSubPanel, PanelBack]))
+                     .Concat(new List<string> { TallSubPanel, PanelBack }.AsReadOnly()))
         {
             DeleteUiGraphicsFile(i);
         }
