@@ -65,19 +65,19 @@ namespace Sims1WidescreenPatcher.Linux.Services
 
 internal static class X11
 {
-    [DllImport("libX11.so")]
+    [DllImport("libX11.so.6")]
     internal static extern IntPtr XOpenDisplay(IntPtr display);
 
-    [DllImport("libX11.so")]
+    [DllImport("libX11.so.6")]
     internal static extern void XCloseDisplay(IntPtr display);
 
-    [DllImport("libX11.so")]
+    [DllImport("libX11.so.6")]
     internal static extern IntPtr XDefaultRootWindow(IntPtr display);
 
-    [DllImport("libXrandr.so")]
+    [DllImport("libXrandr.so.2")]
     internal static extern IntPtr XRRGetScreenResources(IntPtr display, IntPtr root);
 
-    [DllImport("libXrandr.so")]
+    [DllImport("libXrandr.so.2")]
     internal static extern IntPtr XRRFreeScreenResources(IntPtr resources);
 
     [StructLayout(LayoutKind.Sequential)]
