@@ -8,7 +8,6 @@ using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Enums;
-using Sims1WidescreenPatcher.Core.Events;
 using Sims1WidescreenPatcher.Core.Factories;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services;
@@ -32,10 +31,10 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     private bool _isBusy;
     private readonly ObservableAsPropertyHelper<bool> _hasBackup;
     private readonly ObservableAsPropertyHelper<bool> _isValidSimsExe;
-    private readonly List<string> _previouslyPatched = new();
-    private readonly ObservableAsPropertyHelper<double> _progressPct;
-    private readonly ObservableAsPropertyHelper<string> _progressStatus;
-    private readonly ObservableAsPropertyHelper<string> _progressStatus2;
+    private readonly List<string> _previouslyPatched = [];
+    private double _progressPct;
+    private string? _progressStatus;
+    private string? _progressStatus2;
     private readonly SourceList<Resolution> _resolutionSource = new();
     private readonly IProgressService _progressService;
     private readonly IWrapperService _wrapperService;
@@ -142,17 +141,12 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         ShowCustomInformationDialog = new Interaction<CustomInformationDialogViewModel, Unit>();
         Path = findSimsPathService.FindSimsPath();
 
-        var progressEvt = Observable
-            .FromEventPattern<NewProgressEventArgs>(progressService, "NewProgressEventHandler");
-        _progressPct = progressEvt
-            .Select(x => x.EventArgs.Progress)
-            .ToProperty(this, x => x.Progress);
-        _progressStatus = progressEvt
-            .Select(x => x.EventArgs.Status)
-            .ToProperty(this, x => x.ProgressStatus);
-        _progressStatus2 = progressEvt
-            .Select(x => x.EventArgs.Status2)
-            .ToProperty(this, x => x.ProgressStatus2);
+        progressService.NewProgressObservable.Subscribe(x =>
+        {
+            Progress = x.Progress;
+            ProgressStatus = x.Status;
+            ProgressStatus2 = x.Status2;
+        });
     }
 
     #endregion
@@ -225,9 +219,23 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         set => this.RaiseAndSetIfChanged(ref _selectedWrapperIndex, value);
     }
 
-    public double Progress => _progressPct.Value;
-    public string ProgressStatus => _progressStatus.Value;
-    public string ProgressStatus2 => _progressStatus2.Value;
+    public double Progress
+    {
+        get => _progressPct;
+        set => this.RaiseAndSetIfChanged(ref _progressPct, value);
+    }
+
+    public string? ProgressStatus
+    {
+        get => _progressStatus;
+        set => this.RaiseAndSetIfChanged(ref _progressStatus, value);
+    }
+
+    public string? ProgressStatus2
+    {
+        get => _progressStatus2;
+        set => this.RaiseAndSetIfChanged(ref _progressStatus2, value);
+    }
 
     #endregion
 

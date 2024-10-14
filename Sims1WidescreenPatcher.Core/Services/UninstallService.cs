@@ -3,34 +3,30 @@ using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.Core.Services;
 
-public class UninstallService : IUninstallService
+public class UninstallService(
+    IAppState appState,
+    IImagesService imagesService,
+    IProgressService progressService,
+    IWrapperService wrapperService)
+    : IUninstallService
 {
-    private readonly IAppState _appState;
-    private readonly IImagesService _imagesService;
-    private readonly IProgressService _progressService;
-    private readonly IWrapperService _wrapperService;
-
-    public UninstallService(IAppState appState, IImagesService imagesService, IProgressService progressService, IWrapperService wrapperService)
-    {
-        _appState = appState;
-        _imagesService = imagesService;
-        _progressService = progressService;
-        _wrapperService = wrapperService;
-    }
-
     public void Uninstall()
     {
-        if (_appState.SimsBackupExists)
+        if (string.IsNullOrWhiteSpace(appState.SimsExePath))
         {
-            File.SetAttributes(_appState.SimsExePath, FileAttributes.Normal);
-            File.Delete(_appState.SimsExePath);
-            File.Move(_appState.SimsBackupPath, _appState.SimsExePath);
+            return;
+        }
+        if (appState.SimsBackupExists)
+        {
+            File.SetAttributes(appState.SimsExePath, FileAttributes.Normal);
+            File.Delete(appState.SimsExePath);
+            File.Move(appState.SimsBackupPath, appState.SimsExePath);
 
-            _wrapperService.Uninstall();
+            wrapperService.Uninstall();
 
-            _imagesService.Uninstall();
+            imagesService.Uninstall();
             
-            _progressService.UpdateUninstall();
+            progressService.UpdateUninstall();
         }
         else
         {

@@ -22,7 +22,7 @@ namespace Sims1WidescreenPatcher.MacOS.Services
 
 		public IEnumerable<Resolution> GetResolutions()
 		{
-			var resolutions = new List<Resolution>();
+			var resolutions = new HashSet<Resolution>();
 			var nModes = 0;
 			var id = CGMainDisplayID();
 			CGSGetNumberOfDisplayModes(id, ref nModes);
@@ -31,7 +31,7 @@ namespace Sims1WidescreenPatcher.MacOS.Services
 				CgsDisplayMode mode = default;
 				CGSGetDisplayModeDescriptionOfLength(id, i, ref mode, Marshal.SizeOf(mode));
 				var newRes = new Resolution((int)mode.width, (int)mode.height);
-				if (!resolutions.Contains(newRes, Resolution.WidthHeightComparer) && newRes.Width >= 800 & newRes.Height >= 600)
+				if (newRes.Width >= 800 & newRes.Height >= 600)
 				{
 					resolutions.Add(newRes);
 				}

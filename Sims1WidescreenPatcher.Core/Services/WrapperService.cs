@@ -4,7 +4,7 @@ using Sims1WidescreenPatcher.Core.Models;
 
 namespace Sims1WidescreenPatcher.Core.Services;
 
-public class WrapperService : IWrapperService
+public class WrapperService(IAppState appState) : IWrapperService
 {
     private static string[] _ddrawCompat051Resources = { @"DDrawCompat._0._5._1.ddraw.dll" };
     private static string[] _ddrawCompat032Resources = { @"DDrawCompat._0._3._2.ddraw.dll" };
@@ -14,13 +14,6 @@ public class WrapperService : IWrapperService
         @"DgVoodoo2.D3D8.dll", @"DgVoodoo2.D3DImm.dll", @"DgVoodoo2.DDraw.dll", @"DgVoodoo2.dgVoodoo.conf",
         @"DgVoodoo2.dgVoodooCpl.exe"
     };
-
-    private readonly IAppState _appState;
-
-    public WrapperService(IAppState appState)
-    {
-        _appState = appState;
-    }
 
     public List<IWrapper> GetWrappers()
     {
@@ -89,12 +82,12 @@ public class WrapperService : IWrapperService
 
     private string GetSimsInstallDirectory()
     {
-        if (string.IsNullOrWhiteSpace(_appState.SimsExePath))
+        if (string.IsNullOrWhiteSpace(appState.SimsExePath))
         {
             throw new Exception("Sims exe path is null");
         }
 
-        return Path.GetDirectoryName(_appState.SimsExePath) ??
-               throw new Exception($"Failed to get directory name of {_appState.SimsExePath}");
+        return Path.GetDirectoryName(appState.SimsExePath) ??
+               throw new Exception($"Failed to get directory name of {appState.SimsExePath}");
     }
 }

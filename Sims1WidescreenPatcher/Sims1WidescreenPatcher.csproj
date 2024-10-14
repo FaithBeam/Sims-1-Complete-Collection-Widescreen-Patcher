@@ -7,6 +7,10 @@
 		<Nullable>enable</Nullable>
 		<ApplicationIcon>SimsICO.ico</ApplicationIcon>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<LangVersion>default</LangVersion>
+		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+		<TrimMode>copyused</TrimMode>
+		<PublishTrimmed>true</PublishTrimmed>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -14,13 +18,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Avalonia.Desktop" Version="11.0.5" />
-		<PackageReference Include="Avalonia.Diagnostics" Version="11.0.5" />
-		<PackageReference Include="Avalonia.ReactiveUI" Version="11.0.5" />
+		<PackageReference Include="Avalonia.Desktop" Version="11.1.4" />
+		<PackageReference Include="Avalonia.Diagnostics" Version="11.1.4" />
+		<PackageReference Include="Avalonia.ReactiveUI" Version="11.1.4" />
 		<PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
-		<PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
-		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-		<PackageReference Include="Splat.Autofac" Version="14.7.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+		<PackageReference Include="Serilog.Formatting.Compact" Version="3.0.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+		<PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="15.2.22" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -43,6 +48,15 @@
 		<!-- Will be copied from output directory -->
 		<NSPrincipalClass>NSApplication</NSPrincipalClass>
 		<NSHighResolutionCapable>true</NSHighResolutionCapable>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	  <NoWarn>1701;1702;IL2121;IL2104;IL2121;IL2026</NoWarn>
 	</PropertyGroup>
 
 </Project>

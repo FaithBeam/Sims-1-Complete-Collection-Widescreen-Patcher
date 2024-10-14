@@ -15,15 +15,10 @@ public class NoneWrapper : IWrapper
     }
 }
 
-public class DDrawCompatWrapper : IWrapper
+public class DDrawCompatWrapper(string version) : IWrapper
 {
-    public DDrawCompatWrapper(string version)
-    {
-        Version = version;
-    }
-
     public string Name => "DDrawCompat";
-    public string Version { get; }
+    public string Version { get; } = version;
 
     public override string ToString()
     {

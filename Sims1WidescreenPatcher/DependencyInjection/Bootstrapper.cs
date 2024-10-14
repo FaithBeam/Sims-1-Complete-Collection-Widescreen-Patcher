@@ -1,10 +1,10 @@
-﻿using Autofac;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Sims1WidescreenPatcher.DependencyInjection;
 
 public static class Bootstrapper
 {
-	public static void Register(ContainerBuilder services)
+	public static void Register(IServiceCollection services)
 	{
 		StateBootstrapper.RegisterState(services);
 		ServicesBootstrapper.RegisterServices(services);

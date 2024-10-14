@@ -3,22 +3,18 @@ using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.Core.Services;
 
-public class CheatsService : ICheatsService
+public class CheatsService(IAppState appState, IPatchFileService patchFileService) : ICheatsService
 {
     private const string DisableCheatsPattern = "00 56 90 90";
     private const string EnableCheatsPattern = "00 56 75 04";
-    private readonly IAppState _appState;
-    private readonly IPatchFileService _patchFileService;
-
-    public CheatsService(IAppState appState, IPatchFileService patchFileService)
-    {
-        _appState = appState;
-        _patchFileService = patchFileService;
-    }
 
     public bool CheatsEnabled()
     {
-        var (found, _, _) = _patchFileService.FindPattern(_appState.SimsExePath, DisableCheatsPattern);
+        if (string.IsNullOrWhiteSpace(appState.SimsExePath))
+        {
+            return false;
+        }
+        var (found, _, _) = patchFileService.FindPattern(appState.SimsExePath, DisableCheatsPattern);
         return found;
     }
 
@@ -28,8 +24,12 @@ public class CheatsService : ICheatsService
     /// <returns></returns>
     public bool CanEnableCheats()
     {
-        var (disablePatternFound, _, _) = _patchFileService.FindPattern(_appState.SimsExePath, DisableCheatsPattern);
-        var (enablePatternFound, _, _) = _patchFileService.FindPattern(_appState.SimsExePath,EnableCheatsPattern);
+        if (string.IsNullOrWhiteSpace(appState.SimsExePath))
+        {
+            return false;
+        }
+        var (disablePatternFound, _, _) = patchFileService.FindPattern(appState.SimsExePath, DisableCheatsPattern);
+        var (enablePatternFound, _, _) = patchFileService.FindPattern(appState.SimsExePath,EnableCheatsPattern);
         return disablePatternFound || enablePatternFound;
     }
 
@@ -45,7 +45,11 @@ public class CheatsService : ICheatsService
 
     private void EditSimsExe(string pattern, Tuple<byte, byte> replacementBytes)
     {
-        var (found, offset, bytes) = _patchFileService.FindPattern(_appState.SimsExePath, pattern);
+        if (string.IsNullOrWhiteSpace(appState.SimsExePath))
+        {
+            return;
+        }
+        var (found, offset, bytes) = patchFileService.FindPattern(appState.SimsExePath, pattern);
         if (!found)
         {
             return;
@@ -54,6 +58,6 @@ public class CheatsService : ICheatsService
         bytes![offset + 2] = replacementBytes.Item1;
         bytes[offset + 2 + 1] = replacementBytes.Item2;
 
-        _patchFileService.WriteChanges(_appState.SimsExePath, bytes);
+        patchFileService.WriteChanges(appState.SimsExePath, bytes);
     }
 }

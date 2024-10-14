@@ -9,7 +9,7 @@ public class ScaleTallSubPanelJob : BaseImageProcessingJob
         base.Run();
         
         using var image = new MagickImage(ImageBytes!, MagickFormat.Tga);
-        image.Resize(new MagickGeometry(Width, Height) { IgnoreAspectRatio = true });
+        image.Resize(new MagickGeometry((uint)Width, (uint)Height) { IgnoreAspectRatio = true });
         image.Depth = 32;
         image.Settings.Compression = CompressionMethod.RLE;
         image.Settings.Format = MagickFormat.Tga;
