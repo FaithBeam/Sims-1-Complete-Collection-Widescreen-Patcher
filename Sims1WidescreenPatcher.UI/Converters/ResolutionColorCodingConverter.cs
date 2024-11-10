@@ -41,7 +41,7 @@ public class ResolutionColorCodingConverter : IValueConverter
         {
             case "Background":
             {
-                if (r.Width == 1600)
+                if (r.Width is 1600 or 2048)
                 {
                     if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
                     {
@@ -71,7 +71,7 @@ public class ResolutionColorCodingConverter : IValueConverter
             }
             case "Pointerover":
             {
-                if (r.Width == 1600)
+                if (r.Width is 1600 or 2048)
                 {
                     if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
                     {
@@ -111,7 +111,7 @@ public class ResolutionColorCodingConverter : IValueConverter
             }
             case "Selected":
             {
-                if (r.Width == 1600)
+                if (r.Width is 1600 or 2048)
                 {
                     if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
                     {
