@@ -8,7 +8,7 @@ namespace Sims1WidescreenPatcher.Core.Validations;
 public class RequiredAltAttribute : RequiredAttribute
 {
     private static bool _visited;
-    
+
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
         if (!_visited)

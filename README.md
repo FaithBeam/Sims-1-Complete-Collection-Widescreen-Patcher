@@ -8,11 +8,6 @@ This program patches **The Sims 1** to a custom resolution.
 
 * NoCD/Cracked Sims Executable
   * This exe cannot be previously patched to a custom resolution. For example, if you downloaded a crack that was patched to 1080p, this program will not work.
- 
-### Linux Requirements
-
-* X11
-  * You don't need to run X11, but you do need it installed
 
 ### OS Version Compatability
 

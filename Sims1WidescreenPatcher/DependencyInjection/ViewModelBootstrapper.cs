@@ -8,7 +8,8 @@ namespace Sims1WidescreenPatcher.DependencyInjection
     {
         public static void RegisterViewModels(IServiceCollection services)
         {
-            services.AddScoped<ICustomResolutionDialogViewModel, CustomResolutionDialogViewModel>()
+            services
+                .AddScoped<ICustomResolutionDialogViewModel, CustomResolutionDialogViewModel>()
                 .AddScoped<CustomYesNoDialogViewModel>()
                 .AddScoped<INotificationViewModel, NotificationViewModel>()
                 .AddScoped<IMainWindowViewModel, MainWindowViewModel>()

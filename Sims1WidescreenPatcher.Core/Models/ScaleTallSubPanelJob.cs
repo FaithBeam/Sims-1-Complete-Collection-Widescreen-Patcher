@@ -7,7 +7,7 @@ public class ScaleTallSubPanelJob : BaseImageProcessingJob
     public override void Run()
     {
         base.Run();
-        
+
         using var image = new MagickImage(ImageBytes!, MagickFormat.Tga);
         image.Resize(new MagickGeometry((uint)Width, (uint)Height) { IgnoreAspectRatio = true });
         image.Depth = 32;

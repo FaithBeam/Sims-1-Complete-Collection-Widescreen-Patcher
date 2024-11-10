@@ -20,7 +20,8 @@ public abstract class BaseImageProcessingJob
             BaseImageName = Path.GetFileName(Output);
         }
         var destDir = Path.GetDirectoryName(Output);
-        if (destDir == null || Directory.Exists(destDir)) return;
+        if (destDir == null || Directory.Exists(destDir))
+            return;
         Directory.CreateDirectory(destDir);
         if (ImageBytes is null || string.IsNullOrWhiteSpace(Output))
         {

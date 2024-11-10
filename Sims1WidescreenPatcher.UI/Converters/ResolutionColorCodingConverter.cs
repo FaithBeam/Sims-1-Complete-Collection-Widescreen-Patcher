@@ -14,7 +14,7 @@ public class ResolutionColorCodingConverter : IValueConverter
     private static readonly IBrush BackgroundGoodDark = Brush.Parse("#165607");
     private static readonly IBrush BackgroundBadLight = Brush.Parse("#f66");
     private static readonly IBrush BackgroundBadDark = Brush.Parse("#be1e1e");
-    
+
     private static readonly IBrush PointeroverGoodLight = Brush.Parse("#4ca43a");
     private static readonly IBrush PointeroverGoodDark = Brush.Parse("#4c893a");
     private static readonly IBrush PointeroverBadLight = Brush.Parse("#cd3740");
@@ -53,7 +53,7 @@ public class ResolutionColorCodingConverter : IValueConverter
                         return BackgroundBadDark;
                     }
                 }
-            
+
                 if (r.AspectRatio is { Numerator: 4, Denominator: 3 })
                 {
                     if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
@@ -83,7 +83,7 @@ public class ResolutionColorCodingConverter : IValueConverter
                         return PointeroverBadDark;
                     }
                 }
-            
+
                 if (r.AspectRatio is { Numerator: 4, Denominator: 3 })
                 {
                     if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
@@ -101,7 +101,7 @@ public class ResolutionColorCodingConverter : IValueConverter
                 {
                     return Brush.Parse("#19000000");
                 }
-            
+
                 if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
                 {
                     return Brush.Parse("#19FFFFFF");
@@ -123,7 +123,7 @@ public class ResolutionColorCodingConverter : IValueConverter
                         return SelectedBadDark;
                     }
                 }
-            
+
                 if (r.AspectRatio is { Numerator: 4, Denominator: 3 })
                 {
                     if (Application.Current?.ActualThemeVariant == ThemeVariant.Light)
@@ -141,7 +141,7 @@ public class ResolutionColorCodingConverter : IValueConverter
                 {
                     return Brush.Parse("#29000000");
                 }
-            
+
                 if (Application.Current?.ActualThemeVariant == ThemeVariant.Dark)
                 {
                     return Brush.Parse("#09FFFFFF");
@@ -154,7 +154,12 @@ public class ResolutionColorCodingConverter : IValueConverter
         return null;
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object? ConvertBack(
+        object? value,
+        Type targetType,
+        object? parameter,
+        CultureInfo culture
+    )
     {
         throw new NotImplementedException();
     }

@@ -17,7 +17,7 @@ public class CompositeImageJob : BaseImageProcessingJob
         {
             throw new Exception("Color is null");
         }
-        
+
         using var image = new MagickImage(ImageBytes!);
         using var background = new MagickImage(new MagickColor(Color), (uint)Width, (uint)Height);
         background.Composite(image, Gravity.Center);

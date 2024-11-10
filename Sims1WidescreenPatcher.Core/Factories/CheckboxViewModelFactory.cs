@@ -3,7 +3,7 @@ using Sims1WidescreenPatcher.Core.ViewModels;
 
 namespace Sims1WidescreenPatcher.Core.Factories;
 
-public class CheckboxViewModelFactory: UserControlViewModelCreator
+public class CheckboxViewModelFactory : UserControlViewModelCreator
 {
     public override IReactiveObject Create(string label)
     {

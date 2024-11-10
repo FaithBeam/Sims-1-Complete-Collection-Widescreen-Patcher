@@ -23,7 +23,10 @@ public class CheatsService : ICheatsService
         {
             return false;
         }
-        var (found, _, _) = _patchFileService.FindPattern(_appState.SimsExePath, DisableCheatsPattern);
+        var (found, _, _) = _patchFileService.FindPattern(
+            _appState.SimsExePath,
+            DisableCheatsPattern
+        );
         return found;
     }
 
@@ -37,8 +40,14 @@ public class CheatsService : ICheatsService
         {
             return false;
         }
-        var (disablePatternFound, _, _) = _patchFileService.FindPattern(_appState.SimsExePath, DisableCheatsPattern);
-        var (enablePatternFound, _, _) = _patchFileService.FindPattern(_appState.SimsExePath,EnableCheatsPattern);
+        var (disablePatternFound, _, _) = _patchFileService.FindPattern(
+            _appState.SimsExePath,
+            DisableCheatsPattern
+        );
+        var (enablePatternFound, _, _) = _patchFileService.FindPattern(
+            _appState.SimsExePath,
+            EnableCheatsPattern
+        );
         return disablePatternFound || enablePatternFound;
     }
 

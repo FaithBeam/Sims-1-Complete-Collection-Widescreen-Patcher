@@ -9,21 +9,21 @@ namespace Sims1WidescreenPatcher.UI;
 
 public partial class App : Application
 {
-	public override void Initialize()
-	{
-		AvaloniaXamlLoader.Load(this);
-	}
+    public override void Initialize()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
 
-	public override void OnFrameworkInitializationCompleted()
-	{
-		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-		{
-			desktop.MainWindow = new MainWindow()
-			{
-				DataContext = Locator.Current.GetService<IMainWindowViewModel>()
-			};
-		}
+    public override void OnFrameworkInitializationCompleted()
+    {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            desktop.MainWindow = new MainWindow()
+            {
+                DataContext = Locator.Current.GetService<IMainWindowViewModel>(),
+            };
+        }
 
-		base.OnFrameworkInitializationCompleted();
-	}
+        base.OnFrameworkInitializationCompleted();
+    }
 }

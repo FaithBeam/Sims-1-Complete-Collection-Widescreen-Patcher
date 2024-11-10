@@ -57,25 +57,34 @@ public class ImagesService : IImagesService
         var current = 0;
         var lockObject = new object();
 
-        Parallel.ForEach(jobs, job =>
-        {
-            job.Run();
-            lock (lockObject)
+        Parallel.ForEach(
+            jobs,
+            job =>
             {
-                current++;
-                var calc = current / (double)totalJobs * 100;
-                _progressService.UpdateProgress(calc, $"{current}/{totalJobs}", $"Scaling {job.BaseImageName}");
+                job.Run();
+                lock (lockObject)
+                {
+                    current++;
+                    var calc = current / (double)totalJobs * 100;
+                    _progressService.UpdateProgress(
+                        calc,
+                        $"{current}/{totalJobs}",
+                        $"Scaling {job.BaseImageName}"
+                    );
+                }
             }
-        });
+        );
     }
 
     public void Uninstall()
     {
         _uiGraphicsPath = GetUiGraphicsFolder();
 
-        foreach (var i in _blackBackground
-                     .Concat(_blueBackground)
-                     .Concat(new List<string> { TallSubPanel, PanelBack }.AsReadOnly()))
+        foreach (
+            var i in _blackBackground
+                .Concat(_blueBackground)
+                .Concat(new List<string> { TallSubPanel, PanelBack }.AsReadOnly())
+        )
         {
             DeleteUiGraphicsFile(i);
         }
@@ -93,13 +102,15 @@ public class ImagesService : IImagesService
 
         if (_far.TryGetBytes(PanelBack, out var bytes))
         {
-            jobs.Add(new ScalePanelBackJob
-            {
-                ImageBytes = bytes,
-                Output = CombineWithUiGraphicsPath(PanelBack),
-                Width = _appState.Resolution.Width,
-                Height = 100
-            });
+            jobs.Add(
+                new ScalePanelBackJob
+                {
+                    ImageBytes = bytes,
+                    Output = CombineWithUiGraphicsPath(PanelBack),
+                    Width = _appState.Resolution.Width,
+                    Height = 100,
+                }
+            );
         }
 
         jobs.AddRange(GetCompositeJobs(_blackBackground, "#000000"));
@@ -108,19 +119,24 @@ public class ImagesService : IImagesService
 
         if (_far.TryGetBytes(TallSubPanel, out bytes))
         {
-            jobs.Add(new ScaleTallSubPanelJob
-            {
-                ImageBytes = bytes,
-                Output = CombineWithUiGraphicsPath(TallSubPanel),
-                Width = _appState.Resolution.Width,
-                Height = 150
-            });
+            jobs.Add(
+                new ScaleTallSubPanelJob
+                {
+                    ImageBytes = bytes,
+                    Output = CombineWithUiGraphicsPath(TallSubPanel),
+                    Width = _appState.Resolution.Width,
+                    Height = 150,
+                }
+            );
         }
 
         return jobs;
     }
 
-    private IEnumerable<BaseImageProcessingJob> GetCompositeJobs(IEnumerable<string> images, string color)
+    private IEnumerable<BaseImageProcessingJob> GetCompositeJobs(
+        IEnumerable<string> images,
+        string color
+    )
     {
         if (_appState.Resolution is null)
         {
@@ -136,7 +152,7 @@ public class ImagesService : IImagesService
                     Height = _appState.Resolution.Height,
                     Output = CombineWithUiGraphicsPath(i),
                     Width = _appState.Resolution.Width,
-                    ImageBytes = bytes
+                    ImageBytes = bytes,
                 };
             }
         }
@@ -158,7 +174,8 @@ public class ImagesService : IImagesService
 
     private void DeleteUiGraphicsFile(string path)
     {
-        if (string.IsNullOrWhiteSpace(_uiGraphicsPath) || string.IsNullOrWhiteSpace(path)) return;
+        if (string.IsNullOrWhiteSpace(_uiGraphicsPath) || string.IsNullOrWhiteSpace(path))
+            return;
         var combined = CombineWithUiGraphicsPath(path);
         if (File.Exists(combined))
         {

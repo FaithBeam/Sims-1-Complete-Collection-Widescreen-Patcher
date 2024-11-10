@@ -49,13 +49,19 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
     #region Constructor
 
-    public MainTabViewModel(IResolutionsService resolutionsService,
+    public MainTabViewModel(
+        IResolutionsService resolutionsService,
         CustomYesNoDialogViewModel customYesNoDialogViewModel,
         ICustomResolutionDialogViewModel customResolutionDialogViewModel,
         IFindSimsPathService findSimsPathService,
-        CheckboxViewModelFactory ucVmFactory, IAppState appState, IResolutionPatchService resolutionPatchService,
-        IUninstallService uninstallService, IImagesService imagesService, IProgressService progressService,
-        IWrapperService wrapperService)
+        CheckboxViewModelFactory ucVmFactory,
+        IAppState appState,
+        IResolutionPatchService resolutionPatchService,
+        IUninstallService uninstallService,
+        IImagesService imagesService,
+        IProgressService progressService,
+        IWrapperService wrapperService
+    )
     {
         AppState = appState;
         _progressService = progressService;
@@ -70,54 +76,53 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         SortByAspectRatioCbVm.ToolTipText = "Sort the resolutions by their aspect ratio";
         _customYesNoDialogViewModel = customYesNoDialogViewModel;
         _customResolutionDialogViewModel = customResolutionDialogViewModel;
-        this
-            .WhenAnyValue(x => x.Path)
-            .Subscribe(x => AppState.SimsExePath = x);
-        this
-            .WhenAnyValue(x => x.SelectedResolution)
-            .Subscribe(x => AppState.Resolution = x);
-        _hasBackup = this
-            .WhenAnyValue(x => x.Path, x => x.IsBusy)
+        this.WhenAnyValue(x => x.Path).Subscribe(x => AppState.SimsExePath = x);
+        this.WhenAnyValue(x => x.SelectedResolution).Subscribe(x => AppState.Resolution = x);
+        _hasBackup = this.WhenAnyValue(x => x.Path, x => x.IsBusy)
             .Select(_ => _resolutionPatchService.BackupExists())
             .ToProperty(this, x => x.HasBackup, deferSubscription: true);
-        _isValidSimsExe = this
-            .WhenAnyValue(x => x.Path)
+        _isValidSimsExe = this.WhenAnyValue(x => x.Path)
             .Select(_ => _resolutionPatchService.CanPatchResolution())
             .ToProperty(this, x => x.IsValidSimsExe, deferSubscription: true);
-        var canPatch = this
-            .WhenAnyValue(x => x.IsBusy, x => x.Path, x => x.IsValidSimsExe, x => x.HasBackup,
+        var canPatch = this.WhenAnyValue(
+                x => x.IsBusy,
+                x => x.Path,
+                x => x.IsValidSimsExe,
+                x => x.HasBackup,
                 (isBusy, path, validSimsExe, hasBackup) =>
-                    !string.IsNullOrWhiteSpace(path) &&
-                    !hasBackup &&
-                    validSimsExe &&
-                    !_previouslyPatched.Contains(path) &&
-                    !isBusy)
+                    !string.IsNullOrWhiteSpace(path)
+                    && !hasBackup
+                    && validSimsExe
+                    && !_previouslyPatched.Contains(path)
+                    && !isBusy
+            )
             .DistinctUntilChanged();
-        var canUninstall = this
-            .WhenAnyValue(x => x.IsBusy, x => x.Path, x => x.HasBackup,
+        var canUninstall = this.WhenAnyValue(
+                x => x.IsBusy,
+                x => x.Path,
+                x => x.HasBackup,
                 (isBusy, path, hasBackup) =>
-                    !string.IsNullOrWhiteSpace(path) &&
-                    !isBusy &&
-                    hasBackup)
+                    !string.IsNullOrWhiteSpace(path) && !isBusy && hasBackup
+            )
             .DistinctUntilChanged();
         PatchCommand = ReactiveCommand.CreateFromTask(OnClickedPatch, canPatch);
         UninstallCommand = ReactiveCommand.CreateFromTask(OnClickedUninstall, canUninstall);
         OpenFile = ReactiveCommand.CreateFromTask(OpenFileAsync);
         ShowOpenFileDialog = new Interaction<Unit, IStorageFile?>();
-        var resolutionFilter = this
-            .WhenAnyValue(x => x.SelectedAspectRatio)
+        var resolutionFilter = this.WhenAnyValue(x => x.SelectedAspectRatio)
             .Select(CreateResolutionPredicate);
-        var resolutionSort = this
-            .WhenAnyValue(x => x.SortByAspectRatioCbVm.Checked)
-            .Select(x => x
-                ? SortExpressionComparer<Resolution>
-                    .Ascending(r => r.AspectRatio.Numerator)
-                    .ThenByAscending(r => r.AspectRatio.Denominator)
-                    .ThenByAscending(r => r.Width)
-                    .ThenByAscending(r => r.Height)
-                : SortExpressionComparer<Resolution>
-                    .Ascending(r => r.Width)
-                    .ThenByAscending(r => r.Height));
+        var resolutionSort = this.WhenAnyValue(x => x.SortByAspectRatioCbVm.Checked)
+            .Select(x =>
+                x
+                    ? SortExpressionComparer<Resolution>
+                        .Ascending(r => r.AspectRatio.Numerator)
+                        .ThenByAscending(r => r.AspectRatio.Denominator)
+                        .ThenByAscending(r => r.Width)
+                        .ThenByAscending(r => r.Height)
+                    : SortExpressionComparer<Resolution>
+                        .Ascending(r => r.Width)
+                        .ThenByAscending(r => r.Height)
+            );
         _resolutionSource
             .Connect()
             .Filter(resolutionFilter)
@@ -135,7 +140,8 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         SelectedResolution = FilteredResolutions.First();
         SelectedWrapperIndex = 0;
         SelectedAspectRatio = null;
-        ShowCustomResolutionDialog = new Interaction<ICustomResolutionDialogViewModel, Resolution?>();
+        ShowCustomResolutionDialog =
+            new Interaction<ICustomResolutionDialogViewModel, Resolution?>();
         CustomResolutionCommand = ReactiveCommand.CreateFromTask(OpenCustomResolutionDialogAsync);
         ShowCustomYesNoDialog = new Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?>();
         ShowCustomInformationDialog = new Interaction<CustomInformationDialogViewModel, Unit>();
@@ -158,8 +164,14 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     public ICommand OpenFile { get; }
     public Interaction<Unit, IStorageFile?> ShowOpenFileDialog { get; }
     public ICommand CustomResolutionCommand { get; }
-    public Interaction<ICustomResolutionDialogViewModel, Resolution?> ShowCustomResolutionDialog { get; }
-    public Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?> ShowCustomYesNoDialog { get; }
+    public Interaction<
+        ICustomResolutionDialogViewModel,
+        Resolution?
+    > ShowCustomResolutionDialog { get; }
+    public Interaction<
+        CustomYesNoDialogViewModel,
+        YesNoDialogResponse?
+    > ShowCustomYesNoDialog { get; }
     public Interaction<CustomInformationDialogViewModel, Unit> ShowCustomInformationDialog { get; }
 
     #endregion
@@ -299,7 +311,10 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         await ShowCustomInformationDialog.Handle(vm);
     }
 
-    private async Task<YesNoDialogResponse?> OpenCustomYesNoDialogAsync(string title, string message)
+    private async Task<YesNoDialogResponse?> OpenCustomYesNoDialogAsync(
+        string title,
+        string message
+    )
     {
         _customYesNoDialogViewModel.Title = title;
         _customYesNoDialogViewModel.Message = message;
@@ -335,17 +350,23 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
         if (selectedWrapper is DDrawCompatWrapper { Version: "0.5.4" })
         {
-            var result = await OpenCustomYesNoDialogAsync("DDrawCompat Settings",
-                "Enable borderless fullscreen mode?\n(Choosing \"no\" may cause issues on variable refresh rate displays.)");
+            var result = await OpenCustomYesNoDialogAsync(
+                "DDrawCompat Settings",
+                "Enable borderless fullscreen mode?\n(Choosing \"no\" may cause issues on variable refresh rate displays.)"
+            );
             if (result is not null && result.Result)
             {
-                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
-                    DDrawCompatEnums.BorderlessFullscreen);
+                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(
+                    Path,
+                    DDrawCompatEnums.BorderlessFullscreen
+                );
             }
             else
             {
-                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
-                    DDrawCompatEnums.ExclusiveFullscreen);
+                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(
+                    Path,
+                    DDrawCompatEnums.ExclusiveFullscreen
+                );
             }
         }
 
@@ -361,7 +382,10 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
         _previouslyPatched.Add(Path);
 
-        await OpenCustomInformationDialogAsync("Progress", "Patched! You may close this application now.");
+        await OpenCustomInformationDialogAsync(
+            "Progress",
+            "Patched! You may close this application now."
+        );
         _progressService.UpdateProgress(0.0);
 
         IsBusy = false;
@@ -373,12 +397,16 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         var dDrawSettingsPath = CheckDDrawCompatIniService.DDrawCompatSettingsExist(Path);
         if (!string.IsNullOrWhiteSpace(dDrawSettingsPath))
         {
-            var result = await OpenCustomYesNoDialogAsync("Uninstall",
-                $"DDrawCompat settings were found at:\n{dDrawSettingsPath}\n\nDo you wish to remove them?");
+            var result = await OpenCustomYesNoDialogAsync(
+                "Uninstall",
+                $"DDrawCompat settings were found at:\n{dDrawSettingsPath}\n\nDo you wish to remove them?"
+            );
             if (result is not null && result.Result)
             {
-                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(Path,
-                    DDrawCompatEnums.BorderlessFullscreen);
+                await DDrawCompatSettingsService.CreateDDrawCompatSettingsFile(
+                    Path,
+                    DDrawCompatEnums.BorderlessFullscreen
+                );
             }
 
             if (result is not null && result.Result)

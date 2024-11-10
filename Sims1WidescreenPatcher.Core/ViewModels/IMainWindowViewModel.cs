@@ -1,5 +1,4 @@
-﻿
-using Sims1WidescreenPatcher.Core.Tabs;
+﻿using Sims1WidescreenPatcher.Core.Tabs;
 
 namespace Sims1WidescreenPatcher.Core.ViewModels;
 

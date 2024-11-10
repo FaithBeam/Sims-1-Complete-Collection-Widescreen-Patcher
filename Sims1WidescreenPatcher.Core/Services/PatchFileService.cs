@@ -10,7 +10,7 @@ public class PatchFileService : IPatchFileService
         File.SetAttributes(simsExePath, FileAttributes.Normal);
         File.WriteAllBytes(simsExePath, bytes);
     }
-    
+
     public (bool found, long offset, byte[]? bytes) FindPattern(string simsExePath, string pattern)
     {
         if (string.IsNullOrWhiteSpace(simsExePath) || !File.Exists(simsExePath))

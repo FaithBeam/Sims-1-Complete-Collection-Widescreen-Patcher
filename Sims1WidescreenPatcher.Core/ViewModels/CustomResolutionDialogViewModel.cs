@@ -19,16 +19,21 @@ public class CustomResolutionDialogViewModel : ViewModelBase, ICustomResolutionD
 
     public CustomResolutionDialogViewModel()
     {
-        OkCommand = ReactiveCommand.Create(() => new Resolution(int.Parse(Width), int.Parse(Height)));
-        _aspectRatio = this
-            .WhenAnyValue(x => x.Width, x => x.Height, (w, h) =>
-            {
-                if (!int.TryParse(w, out var width) || !int.TryParse(h, out var height))
+        OkCommand = ReactiveCommand.Create(
+            () => new Resolution(int.Parse(Width), int.Parse(Height))
+        );
+        _aspectRatio = this.WhenAnyValue(
+                x => x.Width,
+                x => x.Height,
+                (w, h) =>
                 {
-                    return null;
+                    if (!int.TryParse(w, out var width) || !int.TryParse(h, out var height))
+                    {
+                        return null;
+                    }
+                    return new AspectRatio(width, height);
                 }
-                return new AspectRatio(width, height);
-            })
+            )
             .Throttle(TimeSpan.FromMilliseconds(100))
             .ToProperty(this, x => x.AspectRatio);
     }

@@ -6,9 +6,8 @@ public class NewProgressEventArgs
     public string Status { get; }
     public string Status2 { get; }
 
-    public NewProgressEventArgs(double progress) : this(progress, string.Empty, string.Empty)
-    {
-    }
+    public NewProgressEventArgs(double progress)
+        : this(progress, string.Empty, string.Empty) { }
 
     public NewProgressEventArgs(double progress, string status, string status2)
     {
