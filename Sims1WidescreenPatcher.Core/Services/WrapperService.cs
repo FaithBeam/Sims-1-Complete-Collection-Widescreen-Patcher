@@ -18,8 +18,11 @@ public class WrapperService : IWrapperService
 
     private static string[] _dgvoodooResources =
     {
-        @"DgVoodoo2.D3D8.dll", @"DgVoodoo2.D3DImm.dll", @"DgVoodoo2.DDraw.dll", @"DgVoodoo2.dgVoodoo.conf",
-        @"DgVoodoo2.dgVoodooCpl.exe"
+        @"DgVoodoo2.D3D8.dll",
+        @"DgVoodoo2.D3DImm.dll",
+        @"DgVoodoo2.DDraw.dll",
+        @"DgVoodoo2.dgVoodoo.conf",
+        @"DgVoodoo2.dgVoodooCpl.exe",
     };
 
     public List<IWrapper> GetWrappers()
@@ -31,8 +34,18 @@ public class WrapperService : IWrapperService
                Windows 8.1 and older get ddrawcompat 0.3.2
              */
             return Environment.OSVersion.Version.Major >= 10
-                ? new List<IWrapper> { new DDrawCompatWrapper("0.5.4"), new DgVoodoo2Wrapper(), new NoneWrapper() }
-                : new List<IWrapper> { new DDrawCompatWrapper("0.3.2"), new DgVoodoo2Wrapper(), new NoneWrapper() };
+                ? new List<IWrapper>
+                {
+                    new DDrawCompatWrapper("0.5.4"),
+                    new DgVoodoo2Wrapper(),
+                    new NoneWrapper(),
+                }
+                : new List<IWrapper>
+                {
+                    new DDrawCompatWrapper("0.3.2"),
+                    new DgVoodoo2Wrapper(),
+                    new NoneWrapper(),
+                };
         }
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -52,7 +65,8 @@ public class WrapperService : IWrapperService
         switch (wrapper)
         {
             case DDrawCompatWrapper w:
-                resources = w.Version == "0.5.4" ? _ddrawCompat054Resources : _ddrawCompat032Resources;
+                resources =
+                    w.Version == "0.5.4" ? _ddrawCompat054Resources : _ddrawCompat032Resources;
                 break;
             case DgVoodoo2Wrapper:
                 resources = _dgvoodooResources;
@@ -66,7 +80,9 @@ public class WrapperService : IWrapperService
         foreach (var resource in resources)
         {
             var currentResource = $"{resourceStream}{resource}";
-            await using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(currentResource);
+            await using var stream = Assembly
+                .GetExecutingAssembly()
+                .GetManifestResourceStream(currentResource);
             var resourceSplit = resource.Split('.');
             var combined = resourceSplit[^2] + "." + resourceSplit[^1];
             var dest = Path.Combine(simsInstallDir, combined);
@@ -78,7 +94,11 @@ public class WrapperService : IWrapperService
     public void Uninstall()
     {
         var simsInstallDir = GetSimsInstallDirectory();
-        foreach (var item in _ddrawCompat054Resources.Concat(_ddrawCompat032Resources).Concat(_dgvoodooResources))
+        foreach (
+            var item in _ddrawCompat054Resources
+                .Concat(_ddrawCompat032Resources)
+                .Concat(_dgvoodooResources)
+        )
         {
             var itemSplit = item.Split('.');
             var combined = itemSplit[^2] + "." + itemSplit[^1];
@@ -94,7 +114,7 @@ public class WrapperService : IWrapperService
             throw new Exception("Sims exe path is null");
         }
 
-        return Path.GetDirectoryName(_appState.SimsExePath) ??
-               throw new Exception($"Failed to get directory name of {_appState.SimsExePath}");
+        return Path.GetDirectoryName(_appState.SimsExePath)
+            ?? throw new Exception($"Failed to get directory name of {_appState.SimsExePath}");
     }
 }

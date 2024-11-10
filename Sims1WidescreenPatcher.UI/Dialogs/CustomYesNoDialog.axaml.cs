@@ -11,10 +11,12 @@ public partial class CustomYesNoDialog : ReactiveWindow<CustomYesNoDialogViewMod
     {
         InitializeComponent();
 
-        this.WhenActivated(delegate(Action<IDisposable> action)
-        {
-            action(ViewModel!.YesCommand.Subscribe(Close));
-            action(ViewModel!.NoCommand.Subscribe(Close));
-        });
+        this.WhenActivated(
+            delegate(Action<IDisposable> action)
+            {
+                action(ViewModel!.YesCommand.Subscribe(Close));
+                action(ViewModel!.NoCommand.Subscribe(Close));
+            }
+        );
     }
 }

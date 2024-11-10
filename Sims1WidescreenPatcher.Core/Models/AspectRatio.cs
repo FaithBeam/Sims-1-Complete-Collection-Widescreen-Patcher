@@ -27,10 +27,13 @@ public record AspectRatio : IComparable<AspectRatio>
 
     public int CompareTo(AspectRatio? other)
     {
-        if (ReferenceEquals(this, other)) return 0;
-        if (other is null) return 1;
+        if (ReferenceEquals(this, other))
+            return 0;
+        if (other is null)
+            return 1;
         var numeratorComparison = Numerator.CompareTo(other.Numerator);
-        if (numeratorComparison != 0) return numeratorComparison;
+        if (numeratorComparison != 0)
+            return numeratorComparison;
         return Denominator.CompareTo(other.Denominator);
     }
 

@@ -8,7 +8,7 @@ namespace Sims1WidescreenPatcher.UI.Views;
 public partial class MainWindow : ReactiveWindow<IMainWindowViewModel>
 {
     private INotificationViewModel? _notificationViewModel;
-    
+
     public MainWindow()
     {
         InitializeComponent();

@@ -13,13 +13,22 @@ public class ToolTipShownConverter : IValueConverter
     {
         if (value is string s && !string.IsNullOrWhiteSpace(s))
         {
-            return Brush.Parse(Application.Current?.ActualThemeVariant == ThemeVariant.Dark ? "#FF2B2B2B" : "#FFF2F2F2");
+            return Brush.Parse(
+                Application.Current?.ActualThemeVariant == ThemeVariant.Dark
+                    ? "#FF2B2B2B"
+                    : "#FFF2F2F2"
+            );
         }
 
         return Brushes.Transparent;
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object? ConvertBack(
+        object? value,
+        Type targetType,
+        object? parameter,
+        CultureInfo culture
+    )
     {
         throw new NotImplementedException();
     }

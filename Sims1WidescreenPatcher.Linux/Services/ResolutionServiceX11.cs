@@ -8,7 +8,7 @@ using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.Linux.Services
 {
-    public class LinuxResolutionService : IResolutionsService
+    public class ResolutionServiceX11 : IResolutionsService
     {
         public IEnumerable<Resolution> GetResolutions()
         {
@@ -44,7 +44,9 @@ namespace Sims1WidescreenPatcher.Linux.Services
                 throw new Exception("Failed to get screen resources");
             }
 
-            var screenResources = Marshal.PtrToStructure<X11.XrrScreenResources>(screenResourcesPtr);
+            var screenResources = Marshal.PtrToStructure<X11.XrrScreenResources>(
+                screenResourcesPtr
+            );
             var sizeXrrModeInfo = Marshal.SizeOf<X11.XrrModeInfo>();
             var modesArr = new X11.XrrModeInfo[screenResources.nmode];
             var curPtr = screenResources.modes;

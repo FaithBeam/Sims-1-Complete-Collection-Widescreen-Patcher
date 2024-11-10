@@ -11,10 +11,11 @@ public partial class CustomResolutionDialog : ReactiveWindow<CustomResolutionDia
     public CustomResolutionDialog()
     {
         InitializeComponent();
-        
+
         this.WhenActivated(d =>
         {
-            if (ViewModel != null) d(ViewModel.OkCommand.Subscribe(Close));
+            if (ViewModel != null)
+                d(ViewModel.OkCommand.Subscribe(Close));
         });
     }
 

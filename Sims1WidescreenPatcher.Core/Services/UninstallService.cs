@@ -10,10 +10,12 @@ public class UninstallService : IUninstallService
     private readonly IProgressService _progressService;
     private readonly IWrapperService _wrapperService;
 
-    public UninstallService(IAppState appState,
+    public UninstallService(
+        IAppState appState,
         IImagesService imagesService,
         IProgressService progressService,
-        IWrapperService wrapperService)
+        IWrapperService wrapperService
+    )
     {
         _appState = appState;
         _imagesService = imagesService;
@@ -36,7 +38,7 @@ public class UninstallService : IUninstallService
             _wrapperService.Uninstall();
 
             _imagesService.Uninstall();
-            
+
             _progressService.UpdateUninstall();
         }
         else

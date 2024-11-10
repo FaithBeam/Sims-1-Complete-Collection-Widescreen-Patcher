@@ -5,9 +5,11 @@ namespace Sims1WidescreenPatcher.Core.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
 {
-    public MainWindowViewModel(IMainTabViewModel mainTabViewModel,
+    public MainWindowViewModel(
+        IMainTabViewModel mainTabViewModel,
         IExtrasTabViewModel extrasTabViewModel,
-        INotificationViewModel notificationViewModel)
+        INotificationViewModel notificationViewModel
+    )
     {
         MainTabViewModel = mainTabViewModel;
         ExtrasTabViewModel = extrasTabViewModel;

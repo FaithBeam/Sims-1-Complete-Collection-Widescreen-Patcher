@@ -22,7 +22,10 @@ public class ResolutionPatchService : IResolutionPatchService
         {
             return false;
         }
-        var (resolutionPatternFound, _, _) = _patchFileService.FindPattern(_appState.SimsExePath, ResolutionPattern);
+        var (resolutionPatternFound, _, _) = _patchFileService.FindPattern(
+            _appState.SimsExePath,
+            ResolutionPattern
+        );
         return resolutionPatternFound;
     }
 
@@ -32,7 +35,10 @@ public class ResolutionPatchService : IResolutionPatchService
         {
             return;
         }
-        var (found, offset, bytes) = _patchFileService.FindPattern(_appState.SimsExePath, ResolutionPattern);
+        var (found, offset, bytes) = _patchFileService.FindPattern(
+            _appState.SimsExePath,
+            ResolutionPattern
+        );
         if (!found || bytes is null)
         {
             return;
@@ -41,14 +47,14 @@ public class ResolutionPatchService : IResolutionPatchService
         var widthBytes = BitConverter.GetBytes(_appState.Resolution.Width);
         bytes[offset] = widthBytes[0];
         bytes[offset + 1] = widthBytes[1];
-        
+
         var heightBytes = BitConverter.GetBytes(_appState.Resolution.Height);
         bytes[offset + 2 + 5] = heightBytes[0];
         bytes[offset + 2 + 5 + 1] = heightBytes[1];
 
         _patchFileService.WriteChanges(_appState.SimsExePath, bytes);
     }
-    
+
     public bool BackupExists()
     {
         var backupPath = GetSimsBackupPath();
