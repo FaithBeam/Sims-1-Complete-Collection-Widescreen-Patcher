@@ -1,3 +1,6 @@
+using System.Reactive;
+using System.Reactive.Linq;
+using ReactiveUI;
 using sims_iff.Models;
 using Sims.Far;
 using Sims1WidescreenPatcher.Core.Models;
@@ -5,15 +8,19 @@ using Sims1WidescreenPatcher.Core.ViewModels;
 
 namespace Sims1WidescreenPatcher.Core.Tabs;
 
-public class CareerEditorTabViewModel : ViewModelBase
+public interface ICareerEditorTabViewModel
+{
+}
+
+public class CareerEditorTabViewModel : ViewModelBase, ICareerEditorTabViewModel
 {
     private IAppState AppState { get; }
     private readonly IFar _far;
     private string? _pathToExpansionShared;
     private string? _pathToExpansionSharedFar;
     private string? _pathToWorkIff;
-    private bool _workIffExtracted;
-    private Iff? _workIff;
+    private bool _extractWorkIffCmdEnabled;
+    // private Iff? _workIff;
 
     public CareerEditorTabViewModel(IAppState appState, IFar far)
     {
@@ -21,12 +28,21 @@ public class CareerEditorTabViewModel : ViewModelBase
         _far = far;
         (_pathToExpansionShared, _pathToExpansionSharedFar) = GetPathToExpansionSharedDir(appState.SimsExePath);
         _pathToWorkIff = GetPathToWorkIff(_pathToExpansionShared);
-        _workIffExtracted = GetWorkIffExtracted(_pathToWorkIff);
-        
-        
+        ExtractWorkIffCmdEnabled = !GetWorkIffExtracted(_pathToWorkIff);
+
+        ExtractWorkIffCmd = ReactiveCommand.Create(ExtractWorkIff);
+        ExtractWorkIffCmd.IsExecuting.Where(x => !x).Subscribe(_ => ExtractWorkIffCmdEnabled = !File.Exists(_pathToWorkIff));
+    }
+    
+    public ReactiveCommand<Unit, Unit> ExtractWorkIffCmd { get; }
+
+    public bool ExtractWorkIffCmdEnabled
+    {
+        get => _extractWorkIffCmdEnabled;
+        set => this.RaiseAndSetIfChanged(ref _extractWorkIffCmdEnabled, value);
     }
 
-    private void ExtractExpansionShared()
+    private void ExtractWorkIff()
     {
         if (string.IsNullOrWhiteSpace(_pathToExpansionSharedFar) || !File.Exists(_pathToExpansionSharedFar))
         {

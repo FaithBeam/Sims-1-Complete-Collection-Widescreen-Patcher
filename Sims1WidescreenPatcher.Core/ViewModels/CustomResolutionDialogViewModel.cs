@@ -5,6 +5,15 @@ using Sims1WidescreenPatcher.Core.Models;
 
 namespace Sims1WidescreenPatcher.Core.ViewModels;
 
+public interface ICustomResolutionDialogViewModel
+{
+    ReactiveCommand<Unit, Resolution> OkCommand { get; }
+    string Width { get; set; }
+    string Height { get; set; }
+    AspectRatio? AspectRatio { get; }
+}
+
+
 public class CustomResolutionDialogViewModel : ViewModelBase, ICustomResolutionDialogViewModel
 {
     #region Fields
