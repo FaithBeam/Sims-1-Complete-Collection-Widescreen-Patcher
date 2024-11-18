@@ -53,4 +53,10 @@
       </EmbeddedResource>
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="sims-iff">
+        <HintPath>..\..\Sims.Iff\sims-iff\bin\Debug\net6.0\sims-iff.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
