@@ -1,6 +1,7 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
 using ReactiveUI;
+using sims_iff.Models;
 using Sims1WidescreenPatcher.Core.Factories;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services.Interfaces;
@@ -13,11 +14,14 @@ public interface IExtrasTabViewModel
     ReactiveCommand<Unit, Unit> ApplyCommand { get; }
     CheckboxViewModel UnlockCheatsViewModel { get; }
     bool ApplyBtnVisible { get; }
+    ReactiveCommand<Unit, Unit> ShowCareerEditorDialogCmd { get; set; }
+    IInteraction<ICareerEditorTabViewModel, Iff?> ShowCareerEditorDialogInteraction { get; set; }
 }
 
 public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
 {
     private readonly ICheatsService _cheatsService;
+    private readonly ICareerEditorTabViewModel _careerEditorTabViewModel;
     private readonly ObservableAsPropertyHelper<bool> _applyBtnVisible;
     private CheckboxSelectionSnapshot _previousSnapshot;
     private IAppState AppState { get; }
@@ -26,10 +30,12 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
         CheckboxViewModelFactory creator,
         ICheatsService cheatsService,
         IAppState appState,
-        IProgressService progressService
+        IProgressService progressService,
+        ICareerEditorTabViewModel careerEditorTabViewModel
     )
     {
         _cheatsService = cheatsService;
+        _careerEditorTabViewModel = careerEditorTabViewModel;
         AppState = appState;
         UnlockCheatsViewModel = (CheckboxViewModel)creator.Create("Unlock Cheats");
         UnlockCheatsViewModel.ToolTipText =
@@ -63,7 +69,22 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
         });
 
         ApplyCommand = ReactiveCommand.CreateFromTask(OnApplyClickedAsync);
+
+        ShowCareerEditorDialogInteraction = new Interaction<ICareerEditorTabViewModel, Iff?>();
+        ShowCareerEditorDialogCmd = ReactiveCommand.CreateFromTask(ShowCareerEditorDialogAsync);
     }
+
+    private async Task<Unit> ShowCareerEditorDialogAsync()
+    {
+        var res = await ShowCareerEditorDialogInteraction.Handle(_careerEditorTabViewModel);
+        return Unit.Default;
+    }
+
+    public ReactiveCommand<Unit, Unit> ShowCareerEditorDialogCmd { get; set; }
+    public IInteraction<
+        ICareerEditorTabViewModel,
+        Iff?
+    > ShowCareerEditorDialogInteraction { get; set; }
 
     private async Task OnApplyClickedAsync()
     {

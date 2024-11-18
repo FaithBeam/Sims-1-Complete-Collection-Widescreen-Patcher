@@ -26,6 +26,7 @@
       <PackageReference Include="PatternFinder" Version="1.0.2" />
       <PackageReference Include="ReactiveUI" Version="20.1.63" />
       <PackageReference Include="Sims.Far" Version="3.2.2" />
+      <PackageReference Include="System.Text.Json" Version="8.0.5" />
     </ItemGroup>
 
     <ItemGroup>

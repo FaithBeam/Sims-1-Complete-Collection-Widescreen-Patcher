@@ -1,0 +1,139 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Sims1WidescreenPatcher.UI.Dialogs.CareerEditorDialog"
+        Title="Career Editor">
+
+	<Design.DataContext>
+		<vm:CareerEditorDialogViewModel />
+	</Design.DataContext>
+	
+	<Grid ColumnDefinitions="*,*">
+		<StackPanel Grid.Column="0">
+			<Button Command="{Binding ExtractWorkIffCmd}">Extract Work.iff</Button>
+			<TextBox>Career Name</TextBox>
+			<DataGrid ItemsSource="{Binding Careers}" AutoGenerateColumns="False">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="ID" Binding="{Binding Id}" />
+					<DataGridTextColumn Header="Career" Binding="{Binding Content.CareerInfo.CareerName}" />
+				</DataGrid.Columns>
+			</DataGrid>
+		</StackPanel>
+		<StackPanel Grid.Column="1">
+			<StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<Label>Job name:</Label>
+					<TextBox>tbd</TextBox>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<Label>Male skin:</Label>
+					<TextBox>tbd</TextBox>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<Label>Female skin:</Label>
+					<TextBox>tbd</TextBox>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<Label>Texture:</Label>
+					<TextBox>tbd</TextBox>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<Label>Accessory:</Label>
+					<TextBox>tbd</TextBox>
+				</StackPanel>
+			</StackPanel>
+
+			<StackPanel Orientation="Horizontal">
+				<StackPanel>
+					<Label>Skills and friends needed</Label>
+					<StackPanel Orientation="Horizontal">
+						<Label>Friends</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label>Cooking</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label>Mechanical</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label>Charisma</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label>Body</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label>Logic</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label>Creativity</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+				</StackPanel>
+
+				<StackPanel>
+					<Label>Mood changes per hour</Label>
+					<StackPanel Orientation="Horizontal">
+						<Label>Hunger</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label>Comfort</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label>Hygiene</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label>Bladder</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label>Energy</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label>Fun</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label>Social</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+				</StackPanel>
+			</StackPanel>
+
+			<StackPanel Orientation="Horizontal">
+				<StackPanel>
+					<Label>General information</Label>
+					<StackPanel Orientation="Horizontal">
+						<Label>Salary</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label>Begin time</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<Label>End time</Label>
+						<NumericUpDown></NumericUpDown>
+					</StackPanel>
+				</StackPanel>
+
+				<StackPanel>
+					<Button>OK</Button>
+					<Button>Cancel</Button>
+				</StackPanel>
+			</StackPanel>
+		</StackPanel>
+	</Grid>
+</Window>

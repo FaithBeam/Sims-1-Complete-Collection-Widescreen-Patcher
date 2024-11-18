@@ -7,10 +7,9 @@ public interface IMainWindowViewModel
 {
     IMainTabViewModel? MainTabViewModel { get; }
     IExtrasTabViewModel? ExtrasTabViewModel { get; }
-    ICareerEditorTabViewModel? CareerEditorTabViewModel { get; } 
+    ICareerEditorTabViewModel? CareerEditorTabViewModel { get; }
     INotificationViewModel NotificationViewModel { get; }
 }
-
 
 public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
 {
