@@ -15,11 +15,15 @@
 		<StackPanel Grid.Column="0">
 			<Button Command="{Binding ExtractWorkIffCmd}">Extract Work.iff</Button>
 			<TextBox>Career Name</TextBox>
-			<DataGrid ItemsSource="{Binding Careers}" AutoGenerateColumns="False">
-				<DataGrid.Columns>
-					<DataGridTextColumn Header="ID" Binding="{Binding Id}" />
-					<DataGridTextColumn Header="Career" Binding="{Binding Content.CareerInfo.CareerName}" />
-				</DataGrid.Columns>
+			<ComboBox ItemsSource="{Binding Careers}" SelectedItem="{Binding SelectedCareer}">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Content.CareerInfo.CareerName}" />
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
+			<DataGrid>
+				
 			</DataGrid>
 		</StackPanel>
 		<StackPanel Grid.Column="1">

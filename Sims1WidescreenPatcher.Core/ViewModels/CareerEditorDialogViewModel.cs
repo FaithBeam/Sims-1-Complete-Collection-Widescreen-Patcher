@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using DynamicData;
 using ReactiveUI;
 using sims_iff.Models;
+using sims_iff.Models.ResourceContent.CARR;
 using Sims.Far;
 using Sims1WidescreenPatcher.Core.Models;
 
@@ -21,6 +22,8 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     private bool _extractWorkIffCmdEnabled;
     private SourceCache<Resource, int> _iffSourceCache;
     private readonly ReadOnlyObservableCollection<Resource> _careers;
+    private readonly ReadOnlyObservableCollection<JobInfo> _jobs;
+    private Resource? _selectedCareer;
 
     private Iff? _workIff;
 
@@ -45,11 +48,19 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             .Filter(x => x.TypeCode.Value == "CARR")
             .Bind(out _careers)
             .Subscribe();
+        this.WhenAnyValue(x => x.SelectedCareer)
+            .Select(x => ((Carr)x!.Content).Job)
+            .Subscribe();
         _iffSourceCache.AddOrUpdate(_workIff.Resources);
     }
 
     public ReadOnlyObservableCollection<Resource> Careers => _careers;
 
+    public Resource? SelectedCareer
+    {
+        get => _selectedCareer;
+        set => this.RaiseAndSetIfChanged(ref _selectedCareer, value);
+    }
     public ReactiveCommand<Unit, Unit> ExtractWorkIffCmd { get; }
 
     public bool ExtractWorkIffCmdEnabled
