@@ -14,16 +14,17 @@
 	<Grid ColumnDefinitions="*,*">
 		<StackPanel Grid.Column="0">
 			<Button Command="{Binding ExtractWorkIffCmd}">Extract Work.iff</Button>
-			<TextBox>Career Name</TextBox>
-			<ComboBox ItemsSource="{Binding Careers}" SelectedItem="{Binding SelectedCareer}">
+			<ComboBox ItemsSource="{Binding Careers}" SelectedItem="{Binding SelectedCareer}" PlaceholderText="Career Name">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
 						<TextBlock Text="{Binding Content.CareerInfo.CareerName}" />
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
 			</ComboBox>
-			<DataGrid>
-				
+			<DataGrid ItemsSource="{Binding Jobs}">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Name" Binding="{Binding JobName}"></DataGridTextColumn>
+				</DataGrid.Columns>
 			</DataGrid>
 		</StackPanel>
 		<StackPanel Grid.Column="1">

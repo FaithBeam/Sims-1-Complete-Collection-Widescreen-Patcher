@@ -16,46 +16,93 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
 {
     private IAppState AppState { get; }
     private readonly IFar _far;
-    private string? _pathToExpansionShared;
-    private string? _pathToExpansionSharedFar;
-    private string? _pathToWorkIff;
-    private bool _extractWorkIffCmdEnabled;
-    private SourceCache<Resource, int> _iffSourceCache;
+    private readonly ObservableAsPropertyHelper<string?> _pathToExpansionShared;
+    private readonly ObservableAsPropertyHelper<string?> _pathToExpansionSharedFar;
+    private readonly ObservableAsPropertyHelper<string?> _pathToWorkIff;
     private readonly ReadOnlyObservableCollection<Resource> _careers;
     private readonly ReadOnlyObservableCollection<JobInfo> _jobs;
     private Resource? _selectedCareer;
-
-    private Iff? _workIff;
+    private readonly ObservableAsPropertyHelper<Iff?>? _workIff;
+    private readonly ObservableAsPropertyHelper<bool>? _extractWorkIffIsExecuting;
 
     public CareerEditorDialogViewModel(IAppState appState, IFar far)
     {
         AppState = appState;
         _far = far;
-        (_pathToExpansionShared, _pathToExpansionSharedFar) = GetPathToExpansionSharedDir(
-            appState.SimsExePath
-        );
-        _pathToWorkIff = GetPathToWorkIff(_pathToExpansionShared);
-        ExtractWorkIffCmdEnabled = !GetWorkIffExtracted(_pathToWorkIff);
 
-        ExtractWorkIffCmd = ReactiveCommand.Create(ExtractWorkIff);
-        ExtractWorkIffCmd
-            .IsExecuting.Where(x => !x)
-            .Subscribe(_ => ExtractWorkIffCmdEnabled = !File.Exists(_pathToWorkIff));
-        
-        _workIff = Iff.Read(_pathToWorkIff!);
-        _iffSourceCache = new SourceCache<Resource, int>(x => x.Id);
-        var myOp = _iffSourceCache.Connect()
+        _pathToExpansionShared = this.WhenAnyValue(x => x.AppState.SimsExePath)
+            .Select(GetPathToExpansionSharedDir)
+            .ToProperty(this, x => x.PathToExpansionShared);
+        _pathToExpansionSharedFar = this.WhenAnyValue(x => x.PathToExpansionShared)
+            .Select(x =>
+                string.IsNullOrWhiteSpace(x) ? null : Path.Combine(x, "ExpansionShared.far")
+            )
+            .ToProperty(this, x => x.PathToExpansionSharedFar);
+        _pathToWorkIff = this.WhenAnyValue(x => x.PathToExpansionShared)
+            .Select(GetPathToWorkIff)
+            .ToProperty(this, x => x.PathToWorkIff);
+
+        var canExecuteExtractWorkIff = this.WhenAnyValue(
+            x => x.PathToWorkIff,
+            x => x.ExtractWorkIffIsExecuting,
+            selector: (p, _) => !string.IsNullOrWhiteSpace(p) && !GetWorkIffExtracted(p)
+        );
+        ExtractWorkIffCmd = ReactiveCommand.Create(ExtractWorkIff, canExecuteExtractWorkIff);
+        _extractWorkIffIsExecuting = ExtractWorkIffCmd.IsExecuting.ToProperty(
+            this,
+            x => x.ExtractWorkIffIsExecuting
+        );
+
+        _workIff = this.WhenAnyValue(x => x.ExtractWorkIffIsExecuting, x => x.PathToWorkIff)
+            .Select(x =>
+                string.IsNullOrWhiteSpace(x.Item2) || !File.Exists(x.Item2)
+                    ? null
+                    : Iff.Read(x.Item2)
+            )
+            .ToProperty(this, x => x.WorkIff);
+
+        SourceCache<Resource, int> iffSourceCache = new(x => x.Id);
+        SourceList<JobInfo> jobInfoSourceList = new();
+        var myOp = iffSourceCache
+            .Connect()
             .Filter(x => x.TypeCode.Value == "CARR")
             .Bind(out _careers)
             .Subscribe();
         this.WhenAnyValue(x => x.SelectedCareer)
-            .Select(x => ((Carr)x!.Content).Job)
-            .Subscribe();
-        _iffSourceCache.AddOrUpdate(_workIff.Resources);
+            .WhereNotNull()
+            .Select(x => ((Carr)x.Content).JobInfos)
+            .Subscribe(x =>
+            {
+                jobInfoSourceList.Edit(updater =>
+                {
+                    updater.Clear();
+                    updater.AddRange(x);
+                });
+            });
+        this.WhenAnyValue(x => x.WorkIff)
+            .Select(x => x?.Resources)
+            .Subscribe(x =>
+                iffSourceCache.Edit(updater =>
+                {
+                    updater.Clear();
+                    if (x is not null)
+                    {
+                        updater.AddOrUpdate(x);
+                    }
+                })
+            );
+        var op = jobInfoSourceList.Connect().Bind(out _jobs).Subscribe();
     }
 
     public ReadOnlyObservableCollection<Resource> Careers => _careers;
+    public ReadOnlyObservableCollection<JobInfo> Jobs => _jobs;
 
+    private string? PathToExpansionShared => _pathToExpansionShared.Value;
+    private string? PathToWorkIff => _pathToWorkIff.Value;
+    private string? PathToExpansionSharedFar => _pathToExpansionSharedFar.Value;
+
+    private bool ExtractWorkIffIsExecuting => _extractWorkIffIsExecuting?.Value ?? false;
+    public Iff? WorkIff => _workIff?.Value;
     public Resource? SelectedCareer
     {
         get => _selectedCareer;
@@ -63,26 +110,20 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     }
     public ReactiveCommand<Unit, Unit> ExtractWorkIffCmd { get; }
 
-    public bool ExtractWorkIffCmdEnabled
-    {
-        get => _extractWorkIffCmdEnabled;
-        set => this.RaiseAndSetIfChanged(ref _extractWorkIffCmdEnabled, value);
-    }
-
     private void ExtractWorkIff()
     {
         if (
-            string.IsNullOrWhiteSpace(_pathToExpansionSharedFar)
-            || !File.Exists(_pathToExpansionSharedFar)
+            string.IsNullOrWhiteSpace(PathToExpansionSharedFar)
+            || !File.Exists(PathToExpansionSharedFar)
         )
         {
             return;
         }
-        _far.PathToFar = _pathToExpansionSharedFar;
+        _far.PathToFar = PathToExpansionSharedFar;
         _far.ParseFar();
         _far.Extract(
             _far.Manifest.ManifestEntries.First(x => x.Filename == "work.iff"),
-            _pathToExpansionShared
+            PathToExpansionShared
         );
     }
 
@@ -93,26 +134,15 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             ? null
             : Path.Combine(expansionSharedDir, "work.iff");
 
-    private static (string? dir, string? file) GetPathToExpansionSharedDir(string? pathToSimsExe)
+    private static string? GetPathToExpansionSharedDir(string? pathToSimsExe)
     {
         if (string.IsNullOrWhiteSpace(pathToSimsExe))
         {
-            return (null, null);
+            return null;
         }
         var directory = Path.GetDirectoryName(pathToSimsExe);
-        if (string.IsNullOrWhiteSpace(directory))
-        {
-            return (null, null);
-        }
-        var pathToExpansionSharedDir = Path.Combine(directory, "ExpansionShared");
-        if (string.IsNullOrWhiteSpace(pathToExpansionSharedDir))
-        {
-            return (null, null);
-        }
-        var pathToExpansionSharedFar = Path.Combine(
-            pathToExpansionSharedDir,
-            "ExpansionShared.far"
-        );
-        return (pathToExpansionSharedDir, pathToExpansionSharedFar);
+        return string.IsNullOrWhiteSpace(directory)
+            ? null
+            : Path.Combine(directory, "ExpansionShared");
     }
 }
