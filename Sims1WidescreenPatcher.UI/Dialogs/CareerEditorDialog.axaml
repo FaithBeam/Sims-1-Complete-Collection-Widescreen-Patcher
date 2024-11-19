@@ -21,9 +21,9 @@
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
 			</ComboBox>
-			<DataGrid ItemsSource="{Binding Jobs}">
+			<DataGrid ItemsSource="{Binding Jobs}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedJob}">
 				<DataGrid.Columns>
-					<DataGridTextColumn Header="Name" Binding="{Binding JobName}"></DataGridTextColumn>
+					<DataGridTextColumn Header="Job Name" Binding="{Binding JobName}" />
 				</DataGrid.Columns>
 			</DataGrid>
 		</StackPanel>
@@ -31,23 +31,23 @@
 			<StackPanel>
 				<StackPanel Orientation="Horizontal">
 					<Label>Job name:</Label>
-					<TextBox>tbd</TextBox>
+					<TextBox Text="{Binding JobName}" />
 				</StackPanel>
 				<StackPanel Orientation="Horizontal">
 					<Label>Male skin:</Label>
-					<TextBox>tbd</TextBox>
+					<TextBox Text="{Binding MaleSkin}" />
 				</StackPanel>
 				<StackPanel Orientation="Horizontal">
 					<Label>Female skin:</Label>
-					<TextBox>tbd</TextBox>
+					<TextBox Text="{Binding FemaleSkin}" />
 				</StackPanel>
 				<StackPanel Orientation="Horizontal">
 					<Label>Texture:</Label>
-					<TextBox>tbd</TextBox>
+					<TextBox Text="{Binding Texture}" />
 				</StackPanel>
 				<StackPanel Orientation="Horizontal">
 					<Label>Accessory:</Label>
-					<TextBox>tbd</TextBox>
+					<TextBox Text="{Binding Accessory}" />
 				</StackPanel>
 			</StackPanel>
 
@@ -56,31 +56,31 @@
 					<Label>Skills and friends needed</Label>
 					<StackPanel Orientation="Horizontal">
 						<Label>Friends</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding FriendsNeeded}" />
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label>Cooking</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding Cooking}" />
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label>Mechanical</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding Mechanical}" />
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label>Charisma</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding Charisma}" />
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label>Body</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding Body}" />
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label>Logic</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding Logic}" />
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label>Creativity</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding Creativity}" />
 					</StackPanel>
 				</StackPanel>
 
@@ -88,31 +88,31 @@
 					<Label>Mood changes per hour</Label>
 					<StackPanel Orientation="Horizontal">
 						<Label>Hunger</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding Hunger}" />
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label>Comfort</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding Comfort}" />
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label>Hygiene</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding Hygiene}" />
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label>Bladder</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding Bladder}" />
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label>Energy</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding Energy}" />
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label>Fun</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding Fun}" />
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label>Social</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding Social}" />
 					</StackPanel>
 				</StackPanel>
 			</StackPanel>
@@ -122,16 +122,17 @@
 					<Label>General information</Label>
 					<StackPanel Orientation="Horizontal">
 						<Label>Salary</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding Salary}" />
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label>Begin time</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding BeginTime}" />
 					</StackPanel>
 					<StackPanel Orientation="Horizontal">
 						<Label>End time</Label>
-						<NumericUpDown></NumericUpDown>
+						<NumericUpDown Value="{Binding EndTime}" />
 					</StackPanel>
+					<ComboBox ItemsSource="{Binding CarTypes}" SelectedItem="{Binding CarType}" PlaceholderText="Vehicle" />
 				</StackPanel>
 
 				<StackPanel>
