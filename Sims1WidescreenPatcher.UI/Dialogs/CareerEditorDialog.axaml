@@ -11,6 +11,18 @@
         <vm:CareerEditorDialogViewModel />
     </Design.DataContext>
 
+    <Window.Styles>
+        <Style Selector="Label.styles">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="TextBox.styles">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="NumericUpDown.styles">
+            <Setter Property="MinWidth" Value="130" />
+        </Style>
+    </Window.Styles>
+
     <Grid ColumnDefinitions="*,*">
         <StackPanel Grid.Column="0">
             <Button Command="{Binding ExtractWorkIffCmd}">Extract Work.iff</Button>
@@ -31,24 +43,24 @@
         <StackPanel Grid.Column="1">
             <StackPanel>
                 <Grid ColumnDefinitions="110,*">
-                    <Label VerticalAlignment="Center">Job name:</Label>
-                    <TextBox Grid.Column="1" Text="{Binding JobName}" VerticalContentAlignment="Center" />
+                    <Label Classes="styles">Job name:</Label>
+                    <TextBox Grid.Column="1" Classes="styles" Text="{Binding JobName}" />
                 </Grid>
                 <Grid ColumnDefinitions="110,*">
-                    <Label VerticalAlignment="Center">Male skin:</Label>
-                    <TextBox Grid.Column="1" Text="{Binding MaleSkin}" VerticalContentAlignment="Center"/>
+                    <Label Classes="styles">Male skin:</Label>
+                    <TextBox Grid.Column="1" Classes="styles" Text="{Binding MaleSkin}" />
                 </Grid>
                 <Grid ColumnDefinitions="110,*">
-                    <Label VerticalAlignment="Center">Female skin:</Label>
-                    <TextBox Grid.Column="1" Text="{Binding FemaleSkin}" VerticalContentAlignment="Center"/>
+                    <Label Classes="styles">Female skin:</Label>
+                    <TextBox Grid.Column="1" Classes="styles" Text="{Binding FemaleSkin}" />
                 </Grid>
                 <Grid ColumnDefinitions="110,*">
-                    <Label VerticalAlignment="Center">Texture:</Label>
-                    <TextBox Grid.Column="1" Text="{Binding Texture}" VerticalContentAlignment="Center" />
+                    <Label Classes="styles">Texture:</Label>
+                    <TextBox Grid.Column="1" Classes="styles" Text="{Binding Texture}" />
                 </Grid>
                 <Grid ColumnDefinitions="110,*">
-                    <Label VerticalAlignment="Center">Accessory:</Label>
-                    <TextBox Grid.Column="1" Text="{Binding Accessory}" VerticalContentAlignment="Center" />
+                    <Label Classes="styles">Accessory:</Label>
+                    <TextBox Grid.Column="1" Classes="styles" Text="{Binding Accessory}" />
                 </Grid>
             </StackPanel>
 
@@ -56,64 +68,64 @@
                 <StackPanel>
                     <Label>Skills and friends needed</Label>
                     <Grid ColumnDefinitions="110,*">
-                        <Label VerticalAlignment="Center">Friends</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding FriendsNeeded}" MinWidth="130" />
+                        <Label Classes="styles">Friends</Label>
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding FriendsNeeded}" />
                     </Grid>
                     <Grid ColumnDefinitions="110,*">
-                        <Label VerticalAlignment="Center">Cooking</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding Cooking}" />
+                        <Label Classes="styles">Cooking</Label>
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding Cooking}" />
                     </Grid>
                     <Grid ColumnDefinitions="110,*">
-                        <Label VerticalAlignment="Center">Mechanical</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding Mechanical}" />
+                        <Label Classes="styles">Mechanical</Label>
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding Mechanical}" />
                     </Grid>
                     <Grid ColumnDefinitions="110,*">
-                        <Label VerticalAlignment="Center">Charisma</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding Charisma}" />
+                        <Label Classes="styles">Charisma</Label>
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding Charisma}" />
                     </Grid>
                     <Grid ColumnDefinitions="110,*">
-                        <Label VerticalAlignment="Center">Body</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding Body}" />
+                        <Label Classes="styles">Body</Label>
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding Body}" />
                     </Grid>
                     <Grid ColumnDefinitions="110,*">
-                        <Label VerticalAlignment="Center">Logic</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding Logic}" />
+                        <Label Classes="styles">Logic</Label>
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding Logic}" />
                     </Grid>
                     <Grid ColumnDefinitions="110,*">
-                        <Label VerticalAlignment="Center">Creativity</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding Creativity}" />
+                        <Label Classes="styles">Creativity</Label>
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding Creativity}" />
                     </Grid>
                 </StackPanel>
 
                 <StackPanel>
                     <Label>Mood changes per hour</Label>
                     <Grid ColumnDefinitions="110,*">
-                        <Label VerticalAlignment="Center">Hunger</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding Hunger}" MinWidth="130" />
+                        <Label Classes="styles">Hunger</Label>
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding Hunger}" />
                     </Grid>
                     <Grid ColumnDefinitions="110,*">
-                        <Label VerticalAlignment="Center">Comfort</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding Comfort}" />
+                        <Label Classes="styles">Comfort</Label>
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding Comfort}" />
                     </Grid>
                     <Grid ColumnDefinitions="110,*">
-                        <Label VerticalAlignment="Center">Hygiene</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding Hygiene}" />
+                        <Label Classes="styles">Hygiene</Label>
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding Hygiene}" />
                     </Grid>
                     <Grid ColumnDefinitions="110,*">
-                        <Label VerticalAlignment="Center">Bladder</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding Bladder}" />
+                        <Label Classes="styles">Bladder</Label>
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding Bladder}" />
                     </Grid>
                     <Grid ColumnDefinitions="110,*">
-                        <Label VerticalAlignment="Center">Energy</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding Energy}" />
+                        <Label Classes="styles">Energy</Label>
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding Energy}" />
                     </Grid>
                     <Grid ColumnDefinitions="110,*">
-                        <Label VerticalAlignment="Center">Fun</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding Fun}" />
+                        <Label Classes="styles">Fun</Label>
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding Fun}" />
                     </Grid>
                     <Grid ColumnDefinitions="110,*">
-                        <Label VerticalAlignment="Center">Social</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding Social}" />
+                        <Label Classes="styles">Social</Label>
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding Social}" />
                     </Grid>
                 </StackPanel>
             </StackPanel>
@@ -123,22 +135,22 @@
                     <Label>General information</Label>
                     <Grid ColumnDefinitions="110,*">
                         <Label>Salary</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding Salary}" MinWidth="130" />
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding Salary}" />
                     </Grid>
                     <Grid ColumnDefinitions="110,*">
                         <Label>Begin time</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding BeginTime}" />
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding BeginTime}" />
                     </Grid>
                     <Grid ColumnDefinitions="110,*">
                         <Label>End time</Label>
-                        <NumericUpDown Grid.Column="1" Value="{Binding EndTime}" />
+                        <NumericUpDown Grid.Column="1" Classes="styles" Value="{Binding EndTime}" />
                     </Grid>
                     <ComboBox ItemsSource="{Binding CarTypes}" SelectedItem="{Binding CarType}"
                               PlaceholderText="Vehicle" />
                 </StackPanel>
 
-                <StackPanel>
-                    <Button>OK</Button>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button>Save</Button>
                     <Button>Cancel</Button>
                 </StackPanel>
             </StackPanel>

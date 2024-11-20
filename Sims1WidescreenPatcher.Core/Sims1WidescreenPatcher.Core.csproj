@@ -25,6 +25,7 @@
       <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.0.0" />
       <PackageReference Include="PatternFinder" Version="1.0.2" />
       <PackageReference Include="ReactiveUI" Version="20.1.63" />
+      <PackageReference Include="Riok.Mapperly" Version="4.1.0" />
       <PackageReference Include="sims-iff" Version="0.1.1" />
       <PackageReference Include="Sims.Far" Version="3.2.2" />
       <PackageReference Include="System.Text.Json" Version="8.0.5" />
@@ -53,6 +54,10 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Mappings\" />
     </ItemGroup>
 
 </Project>
