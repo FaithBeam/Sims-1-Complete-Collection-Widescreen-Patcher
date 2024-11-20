@@ -7,139 +7,141 @@
         x:Class="Sims1WidescreenPatcher.UI.Dialogs.CareerEditorDialog"
         Title="Career Editor">
 
-	<Design.DataContext>
-		<vm:CareerEditorDialogViewModel />
-	</Design.DataContext>
-	
-	<Grid ColumnDefinitions="*,*">
-		<StackPanel Grid.Column="0">
-			<Button Command="{Binding ExtractWorkIffCmd}">Extract Work.iff</Button>
-			<ComboBox ItemsSource="{Binding Careers}" SelectedItem="{Binding SelectedCareer}" PlaceholderText="Career Name">
-				<ComboBox.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding Content.CareerInfo.CareerName}" />
-					</DataTemplate>
-				</ComboBox.ItemTemplate>
-			</ComboBox>
-			<DataGrid ItemsSource="{Binding Jobs}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedJob}">
-				<DataGrid.Columns>
-					<DataGridTextColumn Header="Job Name" Binding="{Binding JobName}" />
-				</DataGrid.Columns>
-			</DataGrid>
-		</StackPanel>
-		<StackPanel Grid.Column="1">
-			<StackPanel>
-				<StackPanel Orientation="Horizontal">
-					<Label>Job name:</Label>
-					<TextBox Text="{Binding JobName}" />
-				</StackPanel>
-				<StackPanel Orientation="Horizontal">
-					<Label>Male skin:</Label>
-					<TextBox Text="{Binding MaleSkin}" />
-				</StackPanel>
-				<StackPanel Orientation="Horizontal">
-					<Label>Female skin:</Label>
-					<TextBox Text="{Binding FemaleSkin}" />
-				</StackPanel>
-				<StackPanel Orientation="Horizontal">
-					<Label>Texture:</Label>
-					<TextBox Text="{Binding Texture}" />
-				</StackPanel>
-				<StackPanel Orientation="Horizontal">
-					<Label>Accessory:</Label>
-					<TextBox Text="{Binding Accessory}" />
-				</StackPanel>
-			</StackPanel>
+    <Design.DataContext>
+        <vm:CareerEditorDialogViewModel />
+    </Design.DataContext>
 
-			<StackPanel Orientation="Horizontal">
-				<StackPanel>
-					<Label>Skills and friends needed</Label>
-					<StackPanel Orientation="Horizontal">
-						<Label>Friends</Label>
-						<NumericUpDown Value="{Binding FriendsNeeded}" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label>Cooking</Label>
-						<NumericUpDown Value="{Binding Cooking}" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label>Mechanical</Label>
-						<NumericUpDown Value="{Binding Mechanical}" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label>Charisma</Label>
-						<NumericUpDown Value="{Binding Charisma}" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label>Body</Label>
-						<NumericUpDown Value="{Binding Body}" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label>Logic</Label>
-						<NumericUpDown Value="{Binding Logic}" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label>Creativity</Label>
-						<NumericUpDown Value="{Binding Creativity}" />
-					</StackPanel>
-				</StackPanel>
+    <Grid ColumnDefinitions="*,*">
+        <StackPanel Grid.Column="0">
+            <Button Command="{Binding ExtractWorkIffCmd}">Extract Work.iff</Button>
+            <ComboBox ItemsSource="{Binding Careers}" SelectedItem="{Binding SelectedCareer}"
+                      PlaceholderText="Career Name">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Content.CareerInfo.CareerName}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <DataGrid ItemsSource="{Binding Jobs}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedJob}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Job Name" Binding="{Binding JobName}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <StackPanel>
+                <Grid ColumnDefinitions="110,*">
+                    <Label VerticalAlignment="Center">Job name:</Label>
+                    <TextBox Grid.Column="1" Text="{Binding JobName}" VerticalContentAlignment="Center" />
+                </Grid>
+                <Grid ColumnDefinitions="110,*">
+                    <Label VerticalAlignment="Center">Male skin:</Label>
+                    <TextBox Grid.Column="1" Text="{Binding MaleSkin}" VerticalContentAlignment="Center"/>
+                </Grid>
+                <Grid ColumnDefinitions="110,*">
+                    <Label VerticalAlignment="Center">Female skin:</Label>
+                    <TextBox Grid.Column="1" Text="{Binding FemaleSkin}" VerticalContentAlignment="Center"/>
+                </Grid>
+                <Grid ColumnDefinitions="110,*">
+                    <Label VerticalAlignment="Center">Texture:</Label>
+                    <TextBox Grid.Column="1" Text="{Binding Texture}" VerticalContentAlignment="Center" />
+                </Grid>
+                <Grid ColumnDefinitions="110,*">
+                    <Label VerticalAlignment="Center">Accessory:</Label>
+                    <TextBox Grid.Column="1" Text="{Binding Accessory}" VerticalContentAlignment="Center" />
+                </Grid>
+            </StackPanel>
 
-				<StackPanel>
-					<Label>Mood changes per hour</Label>
-					<StackPanel Orientation="Horizontal">
-						<Label>Hunger</Label>
-						<NumericUpDown Value="{Binding Hunger}" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label>Comfort</Label>
-						<NumericUpDown Value="{Binding Comfort}" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label>Hygiene</Label>
-						<NumericUpDown Value="{Binding Hygiene}" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label>Bladder</Label>
-						<NumericUpDown Value="{Binding Bladder}" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label>Energy</Label>
-						<NumericUpDown Value="{Binding Energy}" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label>Fun</Label>
-						<NumericUpDown Value="{Binding Fun}" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label>Social</Label>
-						<NumericUpDown Value="{Binding Social}" />
-					</StackPanel>
-				</StackPanel>
-			</StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <Label>Skills and friends needed</Label>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label VerticalAlignment="Center">Friends</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding FriendsNeeded}" MinWidth="130" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label VerticalAlignment="Center">Cooking</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding Cooking}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label VerticalAlignment="Center">Mechanical</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding Mechanical}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label VerticalAlignment="Center">Charisma</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding Charisma}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label VerticalAlignment="Center">Body</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding Body}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label VerticalAlignment="Center">Logic</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding Logic}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label VerticalAlignment="Center">Creativity</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding Creativity}" />
+                    </Grid>
+                </StackPanel>
 
-			<StackPanel Orientation="Horizontal">
-				<StackPanel>
-					<Label>General information</Label>
-					<StackPanel Orientation="Horizontal">
-						<Label>Salary</Label>
-						<NumericUpDown Value="{Binding Salary}" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label>Begin time</Label>
-						<NumericUpDown Value="{Binding BeginTime}" />
-					</StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<Label>End time</Label>
-						<NumericUpDown Value="{Binding EndTime}" />
-					</StackPanel>
-					<ComboBox ItemsSource="{Binding CarTypes}" SelectedItem="{Binding CarType}" PlaceholderText="Vehicle" />
-				</StackPanel>
+                <StackPanel>
+                    <Label>Mood changes per hour</Label>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label VerticalAlignment="Center">Hunger</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding Hunger}" MinWidth="130" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label VerticalAlignment="Center">Comfort</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding Comfort}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label VerticalAlignment="Center">Hygiene</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding Hygiene}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label VerticalAlignment="Center">Bladder</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding Bladder}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label VerticalAlignment="Center">Energy</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding Energy}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label VerticalAlignment="Center">Fun</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding Fun}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label VerticalAlignment="Center">Social</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding Social}" />
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
 
-				<StackPanel>
-					<Button>OK</Button>
-					<Button>Cancel</Button>
-				</StackPanel>
-			</StackPanel>
-		</StackPanel>
-	</Grid>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <Label>General information</Label>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label>Salary</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding Salary}" MinWidth="130" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label>Begin time</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding BeginTime}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="110,*">
+                        <Label>End time</Label>
+                        <NumericUpDown Grid.Column="1" Value="{Binding EndTime}" />
+                    </Grid>
+                    <ComboBox ItemsSource="{Binding CarTypes}" SelectedItem="{Binding CarType}"
+                              PlaceholderText="Vehicle" />
+                </StackPanel>
+
+                <StackPanel>
+                    <Button>OK</Button>
+                    <Button>Cancel</Button>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
 </Window>
