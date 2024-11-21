@@ -27,4 +27,6 @@ public class CodeStringPairViewModel : ReactiveObject
         _languageCode = codeStringPair.LanguageCode;
         _stringPair = new StringPairViewModel(codeStringPair.StringPair);
     }
+
+    public CodeStringPair MapToCodeStringPair() => new(LanguageCode, StringPair.MapToStringPair());
 }

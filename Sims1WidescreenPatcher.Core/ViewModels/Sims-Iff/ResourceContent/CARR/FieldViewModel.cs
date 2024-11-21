@@ -18,4 +18,6 @@ public class FieldViewModel : ReactiveObject
     {
         _value = field.Value;
     }
+
+    public Field MapToField() => new(Value);
 }

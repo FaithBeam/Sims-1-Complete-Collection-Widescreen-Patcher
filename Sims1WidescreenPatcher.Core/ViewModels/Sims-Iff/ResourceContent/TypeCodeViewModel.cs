@@ -26,4 +26,6 @@ public class TypeCodeViewModel : ReactiveObject
         _value = typeCode.Value;
         _endianness = typeCode.Endianness;
     }
+
+    public sims_iff.Models.ResourceContent.TypeCode MapToTypeCode() => new(Value, Endianness);
 }

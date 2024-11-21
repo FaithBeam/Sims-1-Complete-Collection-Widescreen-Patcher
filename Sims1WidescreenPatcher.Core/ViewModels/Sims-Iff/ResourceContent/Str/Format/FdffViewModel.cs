@@ -1,4 +1,5 @@
 using sims_iff.Enums;
+using sims_iff.Interfaces;
 using sims_iff.Models.ResourceContent.Str.Format;
 
 namespace Sims1WidescreenPatcher.Core.ViewModels.Sims_Iff.ResourceContent.Str.Format;
@@ -39,9 +40,19 @@ public class FdffViewModel : ReactiveObject, IStrViewModel
 
     public FdffViewModel(Fdff fdff)
     {
-       _format = fdff.Format;
-       _numberEntries = fdff.NumberEntries;
-       _codeStringPairs = fdff.CodeStringPairs.Select(x => new CodeStringPairViewModel(x)).ToList();
-       _extraData = fdff.ExtraData;
+        _format = fdff.Format;
+        _numberEntries = fdff.NumberEntries;
+        _codeStringPairs = fdff
+            .CodeStringPairs.Select(x => new CodeStringPairViewModel(x))
+            .ToList();
+        _extraData = fdff.ExtraData;
     }
+
+    public IResourceContent MapToResourceContent() =>
+        new Fdff(
+            Format,
+            NumberEntries,
+            CodeStringPairs.Select(x => x.MapToCodeStringPair()).ToList(),
+            ExtraData
+        );
 }

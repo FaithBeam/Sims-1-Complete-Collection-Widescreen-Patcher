@@ -13,7 +13,6 @@ public interface INotificationViewModel
     ReactiveCommand<Unit, Unit> OkCommand { get; }
 }
 
-
 public class NotificationViewModel : ViewModelBase, INotificationViewModel
 {
     private bool _isVisible;

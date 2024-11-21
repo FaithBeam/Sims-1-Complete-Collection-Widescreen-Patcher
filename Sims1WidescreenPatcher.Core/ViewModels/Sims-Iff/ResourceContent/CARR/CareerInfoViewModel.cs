@@ -34,4 +34,7 @@ public class CareerInfoViewModel : ReactiveObject
         _careerName = careerInfo.CareerName;
         _numberJobLevels = new FieldViewModel(careerInfo.NumberJobLevels);
     }
+
+    public CareerInfo MapToCareerInfo() =>
+        new(CompressionCode, CareerName, NumberJobLevels.MapToField());
 }

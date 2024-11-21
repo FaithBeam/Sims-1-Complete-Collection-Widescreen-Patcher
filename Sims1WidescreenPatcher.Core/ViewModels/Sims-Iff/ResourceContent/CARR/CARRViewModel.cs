@@ -1,4 +1,5 @@
 ﻿using ReactiveUI;
+using sims_iff.Interfaces;
 using sims_iff.Models.ResourceContent.CARR;
 
 namespace Sims1WidescreenPatcher.Core.ViewModels.Sims_Iff.ResourceContent.CARR;
@@ -49,4 +50,13 @@ public class CarrViewModel : ReactiveObject, IResourceContentViewModel
         _careerInfo = new CareerInfoViewModel(carr.CareerInfo);
         _jobInfos = carr.JobInfos.Select(x => new JobInfoViewModel(x)).ToList();
     }
+
+    public IResourceContent MapToResourceContent() =>
+        new Carr(
+            Field1,
+            Field2,
+            Rrac,
+            CareerInfo.MapToCareerInfo(),
+            JobInfos.Select(x => x.MapToJobInfo()).ToList()
+        );
 }

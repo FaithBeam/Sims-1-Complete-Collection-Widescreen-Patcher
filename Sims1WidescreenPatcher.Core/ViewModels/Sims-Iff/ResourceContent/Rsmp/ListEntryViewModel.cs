@@ -58,4 +58,6 @@ public class ListEntryViewModel : ReactiveObject
         _flags = listEntry.Flags;
         _name = listEntry.Name;
     }
+
+    public ListEntry MapToListEntry() => new(Offset, Id, Version, UnknownField, Flags, Name);
 }

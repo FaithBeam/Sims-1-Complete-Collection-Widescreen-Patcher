@@ -1,3 +1,4 @@
+using sims_iff.Interfaces;
 using sims_iff.Models.ResourceContent.Rsmp;
 
 namespace Sims1WidescreenPatcher.Core.ViewModels.Sims_Iff.ResourceContent.Rsmp;
@@ -59,4 +60,14 @@ public class ResourceMapViewModel : ReactiveObject, IResourceContentViewModel
         _numberOfTypes = resourceMap.NumberOfTypes;
         _typeLists = resourceMap.TypeLists.Select(x => new TypeListViewModel(x)).ToList();
     }
+
+    public IResourceContent MapToResourceContent() =>
+        new ResourceMap(
+            Field1,
+            Version,
+            Pmsr,
+            Size,
+            NumberOfTypes,
+            TypeLists.Select(x => x.MapToTypeList()).ToList()
+        );
 }

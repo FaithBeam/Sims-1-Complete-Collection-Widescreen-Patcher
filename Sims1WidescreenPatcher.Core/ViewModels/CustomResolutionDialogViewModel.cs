@@ -13,7 +13,6 @@ public interface ICustomResolutionDialogViewModel
     AspectRatio? AspectRatio { get; }
 }
 
-
 public class CustomResolutionDialogViewModel : ViewModelBase, ICustomResolutionDialogViewModel
 {
     #region Fields

@@ -67,12 +67,26 @@ public class ResourceViewModel : ReactiveObject
         _content = MapResourceContent(resource.Content);
     }
 
+    public Resource MapToResource() =>
+        new Resource(
+            TypeCode.MapToTypeCode(),
+            Size,
+            Id,
+            Flags,
+            Name,
+            Content.MapToResourceContent()
+        );
+
     private IResourceContentViewModel MapResourceContent(IResourceContent resourceContent) =>
         resourceContent switch
         {
             Carr carr => new CarrViewModel(carr),
             ResourceMap rsmp => new ResourceMapViewModel(rsmp),
             Fdff fdff => new FdffViewModel(fdff),
-            _ => throw new ArgumentOutOfRangeException(nameof(resourceContent), resourceContent, null)
+            _ => throw new ArgumentOutOfRangeException(
+                nameof(resourceContent),
+                resourceContent,
+                null
+            ),
         };
 }

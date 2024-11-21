@@ -10,7 +10,6 @@ public interface ICheckboxViewModel
     bool IsEnabled { get; }
 }
 
-
 public class CheckboxViewModel : ReactiveObject, ICheckboxViewModel
 {
     private bool _checked;

@@ -35,4 +35,11 @@ public class TypeListViewModel : ReactiveObject
         _numberListEntries = typelist.NumberListEntries;
         _listEntries = typelist.ListEntries.Select(x => new ListEntryViewModel(x)).ToList();
     }
+
+    public TypeList MapToTypeList() =>
+        new(
+            TypeCode.MapToTypeCode(),
+            NumberListEntries,
+            ListEntries.Select(x => x.MapToListEntry()).ToList()
+        );
 }

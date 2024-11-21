@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
+using DynamicData.Binding;
 using ReactiveUI;
 using sims_iff.Models.ResourceContent.Str;
 using Sims.Far;
@@ -27,33 +28,6 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     private JobInfoViewModel? _selectedJob;
     private readonly ObservableAsPropertyHelper<IffViewModel?>? _workIff;
     private readonly ObservableAsPropertyHelper<bool>? _extractWorkIffIsExecuting;
-
-    private string? _jobName;
-    private string? _maleSkin;
-    private string? _femaleSkin;
-    private string? _texture;
-    private string? _accessory;
-
-    private int? _friendsNeeded;
-    private int? _cooking;
-    private int? _mechanical;
-    private int? _charisma;
-    private int? _body;
-    private int? _logic;
-    private int? _creativity;
-
-    private int? _hunger;
-    private int? _comfort;
-    private int? _hygiene;
-    private int? _bladder;
-    private int? _energy;
-    private int? _fun;
-    private int? _social;
-
-    private int? _salary;
-    private int? _beginTime;
-    private int? _endTime;
-    private CarType? _carType;
 
     public CareerEditorDialogViewModel(IAppState appState, IFar far, IIffService iffService)
     {
@@ -96,7 +70,12 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         var myOp = iffSourceCache
             .Connect()
             .Filter(x => x.TypeCode.Value == "CARR")
-            .Bind(out _careers)
+            .SortAndBind(
+                out _careers,
+                SortExpressionComparer<ResourceViewModel>.Ascending(x =>
+                    ((CarrViewModel)x.Content).CareerInfo.CareerName
+                )
+            )
             .Subscribe();
         this.WhenAnyValue(x => x.SelectedCareer)
             .WhereNotNull()
@@ -122,36 +101,16 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
                 })
             );
         var op = jobInfoSourceList.Connect().Bind(out _jobs).Subscribe();
-        this.WhenAnyValue(x => x.SelectedJob)
-            .Subscribe(x =>
-            {
-                JobName = x?.JobName;
-                MaleSkin = x?.MaleUniformMesh;
-                FemaleSkin = x?.FemaleUniformMesh;
-                Texture = x?.UniformSkin;
-                Accessory = x?.Unknown4;
 
-                FriendsNeeded = x?.FriendsRequired.Value;
-                Cooking = x?.CookingSkillRequired.Value;
-                Mechanical = x?.MechanicalSkillRequired.Value;
-                Body = x?.BodySkillRequired.Value;
-                Charisma = x?.CharismaRequired.Value;
-                Logic = x?.LogicSkillRequired.Value;
-                Creativity = x?.CreativitySkillRequired.Value;
-
-                Hunger = x?.HungerDecay.Value;
-                Comfort = x?.ComfortDecay.Value;
-                Hygiene = x?.HygieneDecay.Value;
-                Energy = x?.EnergyDecay.Value;
-                Fun = x?.FunDecay.Value;
-                Social = x?.SocialDecay.Value;
-                Bladder = x?.BladderDecay.Value;
-
-                Salary = x?.Salary.Value;
-                BeginTime = x?.StartTime.Value;
-                EndTime = x?.EndTime.Value;
-                CarType = x?.CarType;
-            });
+        var canExecuteSave = this.WhenAnyValue(
+            x => x.PathToWorkIff,
+            x => x.WorkIff,
+            selector: (path, workIff) => !string.IsNullOrWhiteSpace(path) && workIff is not null
+        );
+        SaveCmd = ReactiveCommand.Create(
+            () => iffService.Write(PathToWorkIff!, WorkIff!),
+            canExecuteSave
+        );
     }
 
     public ReadOnlyObservableCollection<ResourceViewModel> Careers => _careers;
@@ -175,162 +134,25 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         set => this.RaiseAndSetIfChanged(ref _selectedJob, value);
     }
 
-    public string? JobName
-    {
-        get => _jobName;
-        set => this.RaiseAndSetIfChanged(ref _jobName, value);
-    }
-
-    public string? MaleSkin
-    {
-        get => _maleSkin;
-        set => this.RaiseAndSetIfChanged(ref _maleSkin, value);
-    }
-
-    public string? FemaleSkin
-    {
-        get => _femaleSkin;
-        set => this.RaiseAndSetIfChanged(ref _femaleSkin, value);
-    }
-
-    public string? Texture
-    {
-        get => _texture;
-        set => this.RaiseAndSetIfChanged(ref _texture, value);
-    }
-
-    public string? Accessory
-    {
-        get => _accessory;
-        set => this.RaiseAndSetIfChanged(ref _accessory, value);
-    }
-
-    public int? FriendsNeeded
-    {
-        get => _friendsNeeded;
-        set => this.RaiseAndSetIfChanged(ref _friendsNeeded, value);
-    }
-
-    public int? Cooking
-    {
-        get => _cooking;
-        set => this.RaiseAndSetIfChanged(ref _cooking, value);
-    }
-
-    public int? Mechanical
-    {
-        get => _mechanical;
-        set => this.RaiseAndSetIfChanged(ref _mechanical, value);
-    }
-
-    public int? Charisma
-    {
-        get => _charisma;
-        set => this.RaiseAndSetIfChanged(ref _charisma, value);
-    }
-
-    public int? Body
-    {
-        get => _body;
-        set => this.RaiseAndSetIfChanged(ref _body, value);
-    }
-
-    public int? Logic
-    {
-        get => _logic;
-        set => this.RaiseAndSetIfChanged(ref _logic, value);
-    }
-
-    public int? Creativity
-    {
-        get => _creativity;
-        set => this.RaiseAndSetIfChanged(ref _creativity, value);
-    }
-
-    public int? Hunger
-    {
-        get => _hunger;
-        set => this.RaiseAndSetIfChanged(ref _hunger, value);
-    }
-
-    public int? Comfort
-    {
-        get => _comfort;
-        set => this.RaiseAndSetIfChanged(ref _comfort, value);
-    }
-
-    public int? Hygiene
-    {
-        get => _hygiene;
-        set => this.RaiseAndSetIfChanged(ref _hygiene, value);
-    }
-
-    public int? Bladder
-    {
-        get => _bladder;
-        set => this.RaiseAndSetIfChanged(ref _bladder, value);
-    }
-
-    public int? Energy
-    {
-        get => _energy;
-        set => this.RaiseAndSetIfChanged(ref _energy, value);
-    }
-
-    public int? Fun
-    {
-        get => _fun;
-        set => this.RaiseAndSetIfChanged(ref _fun, value);
-    }
-
-    public int? Social
-    {
-        get => _social;
-        set => this.RaiseAndSetIfChanged(ref _social, value);
-    }
-
-    public int? Salary
-    {
-        get => _salary;
-        set => this.RaiseAndSetIfChanged(ref _salary, value);
-    }
-
-    public int? BeginTime
-    {
-        get => _beginTime;
-        set => this.RaiseAndSetIfChanged(ref _beginTime, value);
-    }
-
-    public int? EndTime
-    {
-        get => _endTime;
-        set => this.RaiseAndSetIfChanged(ref _endTime, value);
-    }
-
-    public CarType? CarType
-    {
-        get => _carType;
-        set => this.RaiseAndSetIfChanged(ref _carType, value);
-    }
-
     public List<CarType> CarTypes { get; } =
         new()
         {
-            sims_iff.Models.ResourceContent.Str.CarType.Coupe,
-            sims_iff.Models.ResourceContent.Str.CarType.Jeep,
-            sims_iff.Models.ResourceContent.Str.CarType.Cruiser,
-            sims_iff.Models.ResourceContent.Str.CarType.Sedan,
-            sims_iff.Models.ResourceContent.Str.CarType.Suv,
-            sims_iff.Models.ResourceContent.Str.CarType.TownCar,
-            sims_iff.Models.ResourceContent.Str.CarType.Bentley,
-            sims_iff.Models.ResourceContent.Str.CarType.Junker,
-            sims_iff.Models.ResourceContent.Str.CarType.Limo,
-            sims_iff.Models.ResourceContent.Str.CarType.Truck,
-            sims_iff.Models.ResourceContent.Str.CarType.Circus,
-            sims_iff.Models.ResourceContent.Str.CarType.ClownCar,
+            CarType.Coupe,
+            CarType.Jeep,
+            CarType.Cruiser,
+            CarType.Sedan,
+            CarType.Suv,
+            CarType.TownCar,
+            CarType.Bentley,
+            CarType.Junker,
+            CarType.Limo,
+            CarType.Truck,
+            CarType.Circus,
+            CarType.ClownCar,
         };
 
     public ReactiveCommand<Unit, Unit> ExtractWorkIffCmd { get; }
+    public ReactiveCommand<Unit, Unit> SaveCmd { get; }
 
     private void ExtractWorkIff()
     {

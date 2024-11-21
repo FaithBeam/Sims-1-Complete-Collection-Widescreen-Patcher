@@ -219,4 +219,34 @@ public class JobInfoViewModel : ReactiveObject
         _uniformSkin = jobInfo.UniformSkin;
         _unknown4 = jobInfo.Unknown4;
     }
+
+    public JobInfo MapToJobInfo() =>
+        new(
+            FriendsRequired.MapToField(),
+            CookingSkillRequired.MapToField(),
+            MechanicalSkillRequired.MapToField(),
+            CharismaRequired.MapToField(),
+            BodySkillRequired.MapToField(),
+            LogicSkillRequired.MapToField(),
+            CreativitySkillRequired.MapToField(),
+            Unknown1.MapToField(),
+            Unknown2.MapToField(),
+            Unknown3.MapToField(),
+            HungerDecay.MapToField(),
+            ComfortDecay.MapToField(),
+            HygieneDecay.MapToField(),
+            BladderDecay.MapToField(),
+            EnergyDecay.MapToField(),
+            FunDecay.MapToField(),
+            SocialDecay.MapToField(),
+            Salary.MapToField(),
+            StartTime.MapToField(),
+            EndTime.MapToField(),
+            CarType,
+            JobName,
+            MaleUniformMesh,
+            FemaleUniformMesh,
+            UniformSkin,
+            Unknown4
+        );
 }

@@ -27,4 +27,6 @@ public class StringPairViewModel : ReactiveObject
         _data = stringPair.Data;
         _notes = stringPair.Notes;
     }
+
+    public StringPair MapToStringPair() => new(Data, Notes);
 }

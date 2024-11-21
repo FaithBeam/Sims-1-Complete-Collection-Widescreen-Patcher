@@ -62,6 +62,10 @@
       </Compile>
     </ItemGroup>
 
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Controls\LabelNumericUpDownControl.axaml" />
+    </ItemGroup>
+
 
 
 </Project>
