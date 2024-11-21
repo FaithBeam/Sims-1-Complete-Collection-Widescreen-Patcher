@@ -3,11 +3,12 @@ using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
 using ReactiveUI;
-using sims_iff.Models;
-using sims_iff.Models.ResourceContent.CARR;
 using sims_iff.Models.ResourceContent.Str;
 using Sims.Far;
 using Sims1WidescreenPatcher.Core.Models;
+using Sims1WidescreenPatcher.Core.Services;
+using Sims1WidescreenPatcher.Core.ViewModels.Sims_Iff;
+using Sims1WidescreenPatcher.Core.ViewModels.Sims_Iff.ResourceContent.CARR;
 
 namespace Sims1WidescreenPatcher.Core.ViewModels;
 
@@ -20,11 +21,11 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     private readonly ObservableAsPropertyHelper<string?> _pathToExpansionShared;
     private readonly ObservableAsPropertyHelper<string?> _pathToExpansionSharedFar;
     private readonly ObservableAsPropertyHelper<string?> _pathToWorkIff;
-    private readonly ReadOnlyObservableCollection<Resource> _careers;
-    private readonly ReadOnlyObservableCollection<JobInfo> _jobs;
-    private Resource? _selectedCareer;
-    private JobInfo? _selectedJob;
-    private readonly ObservableAsPropertyHelper<Iff?>? _workIff;
+    private readonly ReadOnlyObservableCollection<ResourceViewModel> _careers;
+    private readonly ReadOnlyObservableCollection<JobInfoViewModel> _jobs;
+    private ResourceViewModel? _selectedCareer;
+    private JobInfoViewModel? _selectedJob;
+    private readonly ObservableAsPropertyHelper<IffViewModel?>? _workIff;
     private readonly ObservableAsPropertyHelper<bool>? _extractWorkIffIsExecuting;
 
     private string? _jobName;
@@ -54,7 +55,7 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     private int? _endTime;
     private CarType? _carType;
 
-    public CareerEditorDialogViewModel(IAppState appState, IFar far)
+    public CareerEditorDialogViewModel(IAppState appState, IFar far, IIffService iffService)
     {
         AppState = appState;
         _far = far;
@@ -86,12 +87,12 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             .Select(x =>
                 string.IsNullOrWhiteSpace(x.Item2) || !File.Exists(x.Item2)
                     ? null
-                    : Iff.Read(x.Item2)
+                    : iffService.Load(x.Item2)
             )
             .ToProperty(this, x => x.WorkIff);
 
-        SourceCache<Resource, int> iffSourceCache = new(x => x.Id);
-        SourceList<JobInfo> jobInfoSourceList = new();
+        SourceCache<ResourceViewModel, int> iffSourceCache = new(x => x.Id);
+        SourceList<JobInfoViewModel> jobInfoSourceList = new();
         var myOp = iffSourceCache
             .Connect()
             .Filter(x => x.TypeCode.Value == "CARR")
@@ -99,7 +100,7 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             .Subscribe();
         this.WhenAnyValue(x => x.SelectedCareer)
             .WhereNotNull()
-            .Select(x => ((Carr)x.Content).JobInfos)
+            .Select(x => ((CarrViewModel)x.Content).JobInfos)
             .Subscribe(x =>
             {
                 jobInfoSourceList.Edit(updater =>
@@ -153,22 +154,22 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             });
     }
 
-    public ReadOnlyObservableCollection<Resource> Careers => _careers;
-    public ReadOnlyObservableCollection<JobInfo> Jobs => _jobs;
+    public ReadOnlyObservableCollection<ResourceViewModel> Careers => _careers;
+    public ReadOnlyObservableCollection<JobInfoViewModel> Jobs => _jobs;
 
     private string? PathToExpansionShared => _pathToExpansionShared.Value;
     private string? PathToWorkIff => _pathToWorkIff.Value;
     private string? PathToExpansionSharedFar => _pathToExpansionSharedFar.Value;
 
     private bool ExtractWorkIffIsExecuting => _extractWorkIffIsExecuting?.Value ?? false;
-    private Iff? WorkIff => _workIff?.Value;
-    public Resource? SelectedCareer
+    private IffViewModel? WorkIff => _workIff?.Value;
+    public ResourceViewModel? SelectedCareer
     {
         get => _selectedCareer;
         set => this.RaiseAndSetIfChanged(ref _selectedCareer, value);
     }
 
-    public JobInfo? SelectedJob
+    public JobInfoViewModel? SelectedJob
     {
         get => _selectedJob;
         set => this.RaiseAndSetIfChanged(ref _selectedJob, value);

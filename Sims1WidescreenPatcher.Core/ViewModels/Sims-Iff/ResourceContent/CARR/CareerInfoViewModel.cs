@@ -1,4 +1,6 @@
-﻿namespace Sims1WidescreenPatcher.Core.ViewModels.Sims_Iff.ResourceContent.CARR;
+﻿using sims_iff.Models.ResourceContent.CARR;
+
+namespace Sims1WidescreenPatcher.Core.ViewModels.Sims_Iff.ResourceContent.CARR;
 
 using ReactiveUI;
 
@@ -6,7 +8,7 @@ public class CareerInfoViewModel : ReactiveObject
 {
     private byte _compressionCode;
     private string _careerName;
-    private Field _numberJobLevels;
+    private FieldViewModel _numberJobLevels;
 
     public byte CompressionCode
     {
@@ -20,7 +22,7 @@ public class CareerInfoViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _careerName, value);
     }
 
-    public Field NumberJobLevels
+    public FieldViewModel NumberJobLevels
     {
         get => _numberJobLevels;
         set => this.RaiseAndSetIfChanged(ref _numberJobLevels, value);
@@ -30,6 +32,6 @@ public class CareerInfoViewModel : ReactiveObject
     {
         _compressionCode = careerInfo.CompressionCode;
         _careerName = careerInfo.CareerName;
-        _numberJobLevels = careerInfo.NumberJobLevels;
+        _numberJobLevels = new FieldViewModel(careerInfo.NumberJobLevels);
     }
 }

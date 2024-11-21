@@ -53,6 +53,7 @@ public static class ServicesBootstrapper
     {
         services
             .AddScoped<IFar, Far>()
+            .AddScoped<IIffService, IffService>()
             .AddScoped<IPatchFileService, PatchFileService>()
             .AddScoped<IProgressService, ProgressService>()
             .AddScoped<ICheatsService, CheatsService>()

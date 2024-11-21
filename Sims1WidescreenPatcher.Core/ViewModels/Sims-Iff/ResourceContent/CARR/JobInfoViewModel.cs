@@ -192,26 +192,26 @@ public class JobInfoViewModel : ReactiveObject
 
     public JobInfoViewModel(JobInfo jobInfo)
     {
-        _friendsRequired = jobInfo.FriendsRequired;
-        _cookingSkillRequired = jobInfo.CookingSkillRequired;
-        _mechanicalSkillRequired = jobInfo.MechanicalSkillRequired;
-        _charismaRequired = jobInfo.CharismaRequired;
-        _bodySkillRequired = jobInfo.BodySkillRequired;
-        _logicSkillRequired = jobInfo.LogicSkillRequired;
-        _creativitySkillRequired = jobInfo.CreativitySkillRequired;
-        _unknown1 = jobInfo.Unknown1;
-        _unknown2 = jobInfo.Unknown2;
-        _unknown3 = jobInfo.Unknown3;
-        _hungerDecay = jobInfo.HungerDecay;
-        _comfortDecay = jobInfo.ComfortDecay;
-        _hygieneDecay = jobInfo.HygieneDecay;
-        _bladderDecay = jobInfo.BladderDecay;
-        _energyDecay = jobInfo.EnergyDecay;
-        _funDecay = jobInfo.FunDecay;
-        _socialDecay = jobInfo.SocialDecay;
-        _salary = jobInfo.Salary;
-        _startTime = jobInfo.StartTime;
-        _endTime = jobInfo.EndTime;
+        _friendsRequired = new FieldViewModel(jobInfo.FriendsRequired);
+        _cookingSkillRequired = new FieldViewModel(jobInfo.CookingSkillRequired);
+        _mechanicalSkillRequired = new FieldViewModel(jobInfo.MechanicalSkillRequired);
+        _charismaRequired = new FieldViewModel(jobInfo.CharismaRequired);
+        _bodySkillRequired = new FieldViewModel(jobInfo.BodySkillRequired);
+        _logicSkillRequired = new FieldViewModel(jobInfo.LogicSkillRequired);
+        _creativitySkillRequired = new FieldViewModel(jobInfo.CreativitySkillRequired);
+        _unknown1 = new FieldViewModel(jobInfo.Unknown1);
+        _unknown2 = new FieldViewModel(jobInfo.Unknown2);
+        _unknown3 = new FieldViewModel(jobInfo.Unknown3);
+        _hungerDecay = new FieldViewModel(jobInfo.HungerDecay);
+        _comfortDecay = new FieldViewModel(jobInfo.ComfortDecay);
+        _hygieneDecay = new FieldViewModel(jobInfo.HygieneDecay);
+        _bladderDecay = new FieldViewModel(jobInfo.BladderDecay);
+        _energyDecay = new FieldViewModel(jobInfo.EnergyDecay);
+        _funDecay = new FieldViewModel(jobInfo.FunDecay);
+        _socialDecay = new FieldViewModel(jobInfo.SocialDecay);
+        _salary = new FieldViewModel(jobInfo.Salary);
+        _startTime = new FieldViewModel(jobInfo.StartTime);
+        _endTime = new FieldViewModel(jobInfo.EndTime);
         _carType = jobInfo.CarType;
         _jobName = jobInfo.JobName;
         _maleUniformMesh = jobInfo.MaleUniformMesh;

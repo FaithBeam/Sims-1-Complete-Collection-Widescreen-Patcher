@@ -1,4 +1,6 @@
-﻿namespace Sims1WidescreenPatcher.Core.ViewModels.Sims_Iff.ResourceContent;
+﻿using sims_iff.Enums;
+
+namespace Sims1WidescreenPatcher.Core.ViewModels.Sims_Iff.ResourceContent;
 
 using ReactiveUI;
 
@@ -19,7 +21,7 @@ public class TypeCodeViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _endianness, value);
     }
 
-    public TypeCodeViewModel(TypeCode typeCode)
+    public TypeCodeViewModel(sims_iff.Models.ResourceContent.TypeCode typeCode)
     {
         _value = typeCode.Value;
         _endianness = typeCode.Endianness;

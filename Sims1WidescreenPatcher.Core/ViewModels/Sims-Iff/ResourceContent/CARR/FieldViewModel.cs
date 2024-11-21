@@ -1,4 +1,6 @@
-﻿namespace Sims1WidescreenPatcher.Core.ViewModels.Sims_Iff.ResourceContent.CARR;
+﻿using sims_iff.Models.ResourceContent.CARR;
+
+namespace Sims1WidescreenPatcher.Core.ViewModels.Sims_Iff.ResourceContent.CARR;
 
 using ReactiveUI;
 

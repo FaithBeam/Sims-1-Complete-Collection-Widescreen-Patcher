@@ -1,13 +1,15 @@
-﻿namespace Sims1WidescreenPatcher.Core.ViewModels.Sims_Iff;
+﻿using sims_iff.Models;
 
-using ReactiveUI;
+namespace Sims1WidescreenPatcher.Core.ViewModels.Sims_Iff;
+
 using System.Collections.Generic;
+using ReactiveUI;
 
 public class IffViewModel : ReactiveObject
 {
     private string _signature;
     private int _offsetToResourceMap;
-    private List<Resource> _resources;
+    private List<ResourceViewModel> _resources;
 
     public string Signature
     {
@@ -21,7 +23,7 @@ public class IffViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _offsetToResourceMap, value);
     }
 
-    public List<Resource> Resources
+    public List<ResourceViewModel> Resources
     {
         get => _resources;
         set => this.RaiseAndSetIfChanged(ref _resources, value);
@@ -31,6 +33,6 @@ public class IffViewModel : ReactiveObject
     {
         _signature = iff.Signature;
         _offsetToResourceMap = iff.OffsetToResourceMap;
-        _resources = iff.Resources;
+        _resources = iff.Resources.Select(x => new ResourceViewModel(x)).ToList();
     }
 }
