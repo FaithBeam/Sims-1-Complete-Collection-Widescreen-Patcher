@@ -28,6 +28,7 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     private JobInfoViewModel? _selectedJob;
     private readonly ObservableAsPropertyHelper<IffViewModel?>? _workIff;
     private readonly ObservableAsPropertyHelper<bool>? _extractWorkIffIsExecuting;
+    private IffPreset? _selectedPreset;
 
     public CareerEditorDialogViewModel(IAppState appState, IFar far, IIffService iffService)
     {
@@ -111,6 +112,16 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             () => iffService.Write(PathToWorkIff!, WorkIff!),
             canExecuteSave
         );
+
+        // apply preset to job infos
+        this.WhenAnyValue(x => x.SelectedPreset)
+            .WhereNotNull()
+            .Subscribe(x =>
+                iffService.ApplyPreset(
+                    Careers.SelectMany(c => ((CarrViewModel)c.Content).JobInfos),
+                    (IffPreset)x!
+                )
+            );
     }
 
     public ReadOnlyObservableCollection<ResourceViewModel> Careers => _careers;
@@ -132,6 +143,14 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     {
         get => _selectedJob;
         set => this.RaiseAndSetIfChanged(ref _selectedJob, value);
+    }
+
+    public List<IffPreset> Presets { get; } = new() { IffPreset.Default, IffPreset.Cheater };
+
+    public IffPreset? SelectedPreset
+    {
+        get => _selectedPreset;
+        set => this.RaiseAndSetIfChanged(ref _selectedPreset, value);
     }
 
     public List<CarType> CarTypes { get; } =

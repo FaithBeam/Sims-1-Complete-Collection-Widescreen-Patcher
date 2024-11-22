@@ -35,8 +35,9 @@
     <Grid ColumnDefinitions="200,Auto" Margin="3">
         <StackPanel Grid.Column="0" Margin="0 0 3 0">
             <Button Command="{Binding ExtractWorkIffCmd}">Extract Work.iff</Button>
+            <ComboBox Classes="styles" ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset}" PlaceholderText="Presets" />
             <ComboBox Classes="styles" ItemsSource="{Binding Careers}" SelectedItem="{Binding SelectedCareer}"
-                      PlaceholderText="Career Name">
+                      PlaceholderText="Career Name" HorizontalAlignment="Stretch">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Content.CareerInfo.CareerName}" />
