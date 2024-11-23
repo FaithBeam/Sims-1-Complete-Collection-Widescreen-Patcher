@@ -59,17 +59,27 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         var showFileDialogObs = this.WhenAnyObservable(x => x.ShowOpenFileDialogCmd);
         var mergedPathToWorkIffChangedObs = pathToWorkIffObs.Merge(showFileDialogObs);
         _pathToWorkIff = mergedPathToWorkIffChangedObs.ToProperty(this, x => x.PathToWorkIff);
-        _workIff = this.WhenAnyValue(x => x.PathToWorkIff)
+        var workIffObs = this.WhenAnyValue(x => x.PathToWorkIff)
             .WhereNotNull()
             .Select(x =>
                 string.IsNullOrWhiteSpace(x) || !File.Exists(x) ? null : iffService.Load(x)
             )
-            .WhereNotNull()
-            .ToProperty(this, x => x.WorkIff);
+            .WhereNotNull();
+        var canExecuteResetCmd = this.WhenAnyValue(
+            x => x.PathToWorkIff,
+            selector: p => !string.IsNullOrWhiteSpace(p) && File.Exists(p)
+        );
+        ResetCmd = ReactiveCommand.Create(
+            () => iffService.Load(PathToWorkIff!),
+            canExecuteResetCmd
+        );
+        var resetCmdObs = this.WhenAnyObservable(x => x.ResetCmd);
+        workIffObs = workIffObs.Merge(resetCmdObs);
+        _workIff = workIffObs.ToProperty(this, x => x.WorkIff);
 
         ShowSaveFileDialogInteraction = new Interaction<Unit, IStorageFile?>();
         var canExecuteSaveAs = this.WhenAnyValue(x => x.WorkIff, selector: x => x is not null);
-        SaveAsCmd = ReactiveCommand.CreateFromTask<string?>(
+        SaveAsCmd = ReactiveCommand.CreateFromTask(
             async () =>
             {
                 var path = (await ShowSaveFileDialogInteraction.Handle(Unit.Default))
@@ -206,6 +216,7 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     public ReactiveCommand<Unit, string?> SaveAsCmd { get; }
     public ReactiveCommand<Unit, Unit> AboutCmd { get; }
 
+    public ReactiveCommand<Unit, IffViewModel> ResetCmd { get; }
     public ReactiveCommand<Unit, string?> ShowOpenFileDialogCmd { get; init; }
     public IInteraction<Unit, IStorageFile?> ShowOpenFileDialogInteraction { get; }
 

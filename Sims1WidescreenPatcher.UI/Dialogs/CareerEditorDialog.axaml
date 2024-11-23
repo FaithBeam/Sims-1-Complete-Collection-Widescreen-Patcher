@@ -51,9 +51,9 @@
                 <MenuItem Header="_Open" Command="{Binding ShowOpenFileDialogCmd}" />
                 <MenuItem Header="_Save" Command="{Binding SaveCmd}" />
                 <MenuItem Header="_Save As" Command="{Binding SaveAsCmd}" />
-                <MenuItem Header="_Reset"></MenuItem>
+                <MenuItem Header="_Reset" Command="{Binding ResetCmd}" />
                 <Separator />
-                <MenuItem x:Name="ExitMenuItem" Header="_Exit" Click="ExitMenuItem_OnClick"></MenuItem>
+                <MenuItem x:Name="ExitMenuItem" Header="_Exit" Click="ExitMenuItem_OnClick" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_About" Command="{Binding AboutCmd}" />
@@ -115,7 +115,7 @@
                         <Grid ColumnDefinitions="80,*">
                             <Label Classes="styles">Friends</Label>
                             <NumericUpDown Grid.Column="1" Classes="nonSkill"
-                                           Value="{Binding SelectedJob.FriendsRequired.Value, FallbackValue=N/A}" />
+                                           Value="{Binding SelectedJob.FriendsRequired.Value, FallbackValue=N/A}" Minimum="0" />
                         </Grid>
                         <Grid ColumnDefinitions="80,*">
                             <Label Classes="styles">Cooking</Label>
