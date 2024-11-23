@@ -53,8 +53,8 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         );
 
         var showFileDialogObs = this.WhenAnyObservable(x => x.ShowOpenFileDialogCmd);
-        var merged = pathToWorkIffObs.Merge(showFileDialogObs);
-        _pathToWorkIff = merged.ToProperty(this, x => x.PathToWorkIff);
+        var mergedPathToWorkIffChangedObs = pathToWorkIffObs.Merge(showFileDialogObs);
+        _pathToWorkIff = mergedPathToWorkIffChangedObs.ToProperty(this, x => x.PathToWorkIff);
         _workIff = this.WhenAnyValue(x => x.PathToWorkIff)
             .WhereNotNull()
             .Select(x =>
@@ -62,6 +62,26 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             )
             .WhereNotNull()
             .ToProperty(this, x => x.WorkIff);
+
+        ShowSaveFileDialogInteraction = new Interaction<Unit, IStorageFile?>();
+        var canExecuteSaveAs = this.WhenAnyValue(x => x.WorkIff, selector: x => x is not null);
+        SaveAsCmd = ReactiveCommand.CreateFromTask<string?>(
+            async () =>
+            {
+                var path = (await ShowSaveFileDialogInteraction.Handle(Unit.Default))
+                    ?.Path
+                    .LocalPath;
+                if (!string.IsNullOrWhiteSpace(path) && WorkIff is not null)
+                {
+                    iffService.Write(path, WorkIff);
+                }
+                return path;
+            },
+            canExecuteSaveAs
+        );
+        var saveAsCmdObs = this.WhenAnyObservable(x => x.SaveAsCmd);
+        mergedPathToWorkIffChangedObs = mergedPathToWorkIffChangedObs.Merge(saveAsCmdObs);
+        _pathToWorkIff = mergedPathToWorkIffChangedObs.ToProperty(this, x => x.PathToWorkIff);
 
         SourceCache<ResourceViewModel, int> iffSourceCache = new(x => x.Id);
         SourceList<JobInfoViewModel> jobInfoSourceList = new();
@@ -176,6 +196,8 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         };
 
     public ReactiveCommand<Unit, Unit> SaveCmd { get; }
+    public IInteraction<Unit, IStorageFile?> ShowSaveFileDialogInteraction { get; }
+    public ReactiveCommand<Unit, string?> SaveAsCmd { get; }
 
     public ReactiveCommand<Unit, string?> ShowOpenFileDialogCmd { get; init; }
     public IInteraction<Unit, IStorageFile?> ShowOpenFileDialogInteraction { get; }

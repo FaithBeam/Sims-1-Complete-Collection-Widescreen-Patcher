@@ -49,8 +49,8 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_Open" Command="{Binding ShowOpenFileDialogCmd}" />
-                <MenuItem Header="_Save"></MenuItem>
-                <MenuItem Header="_Save As"></MenuItem>
+                <MenuItem Header="_Save" Command="{Binding SaveCmd}" />
+                <MenuItem Header="_Save As" Command="{Binding SaveAsCmd}" />
                 <MenuItem Header="_Reset"></MenuItem>
                 <Separator />
                 <MenuItem x:Name="ExitMenuItem" Header="_Exit" Click="ExitMenuItem_OnClick"></MenuItem>

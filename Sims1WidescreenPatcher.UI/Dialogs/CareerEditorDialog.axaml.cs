@@ -29,7 +29,30 @@ public partial class CareerEditorDialog : ReactiveWindow<CareerEditorDialogViewM
             _window = (Window)_topLevel!;
 
             d(ViewModel.ShowOpenFileDialogInteraction.RegisterHandler(ShowOpenFileDialogAsync));
+            d(ViewModel.ShowSaveFileDialogInteraction.RegisterHandler(ShowSaveFileDialogAsync));
         });
+    }
+
+    private async Task ShowSaveFileDialogAsync(IInteractionContext<Unit, IStorageFile?> interaction)
+    {
+        if (_topLevel != null)
+        {
+            var file = await _topLevel.StorageProvider.SaveFilePickerAsync(
+                new FilePickerSaveOptions
+                {
+                    Title = "Save work.iff to",
+                    SuggestedFileName = "work.iff",
+                    FileTypeChoices = new[]
+                    {
+                        new FilePickerFileType("iff files (*.iff)")
+                        {
+                            Patterns = new[] { "*.iff" },
+                        },
+                    },
+                }
+            );
+            interaction.SetOutput(file);
+        }
     }
 
     private void ExitMenuItem_OnClick(object? sender, RoutedEventArgs e)
