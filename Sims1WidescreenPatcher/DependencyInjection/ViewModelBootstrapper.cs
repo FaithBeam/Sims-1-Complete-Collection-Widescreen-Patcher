@@ -14,7 +14,6 @@ public static class ViewModelBootstrapper
             .AddScoped<INotificationViewModel, NotificationViewModel>()
             .AddScoped<IMainWindowViewModel, MainWindowViewModel>()
             .AddScoped<IMainTabViewModel, MainTabViewModel>()
-            .AddScoped<IExtrasTabViewModel, ExtrasTabViewModel>()
-            .AddScoped<ICareerEditorTabViewModel, CareerEditorDialogViewModel>();
+            .AddScoped<IExtrasTabViewModel, ExtrasTabViewModel>();
     }
 }

@@ -21,7 +21,7 @@ public interface IExtrasTabViewModel
 public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
 {
     private readonly ICheatsService _cheatsService;
-    private readonly ICareerEditorTabViewModel _careerEditorTabViewModel;
+    private readonly ICareerEditorViewModelFactory _careerEditorViewModelFactory;
     private readonly ObservableAsPropertyHelper<bool> _applyBtnVisible;
     private CheckboxSelectionSnapshot _previousSnapshot;
     private IAppState AppState { get; }
@@ -31,11 +31,11 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
         ICheatsService cheatsService,
         IAppState appState,
         IProgressService progressService,
-        ICareerEditorTabViewModel careerEditorTabViewModel
+        ICareerEditorViewModelFactory careerEditorViewModelFactory
     )
     {
         _cheatsService = cheatsService;
-        _careerEditorTabViewModel = careerEditorTabViewModel;
+        _careerEditorViewModelFactory = careerEditorViewModelFactory;
         AppState = appState;
         UnlockCheatsViewModel = (CheckboxViewModel)creator.Create("Unlock Cheats");
         UnlockCheatsViewModel.ToolTipText =
@@ -76,7 +76,9 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
 
     private async Task<Unit> ShowCareerEditorDialogAsync()
     {
-        var res = await ShowCareerEditorDialogInteraction.Handle(_careerEditorTabViewModel);
+        var res = await ShowCareerEditorDialogInteraction.Handle(
+            _careerEditorViewModelFactory.Create()
+        );
         return Unit.Default;
     }
 
