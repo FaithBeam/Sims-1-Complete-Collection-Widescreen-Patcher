@@ -48,12 +48,12 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open"></MenuItem>
+                <MenuItem Header="_Open" Command="{Binding ShowOpenFileDialogCmd}" />
                 <MenuItem Header="_Save"></MenuItem>
                 <MenuItem Header="_Save As"></MenuItem>
                 <MenuItem Header="_Reset"></MenuItem>
                 <Separator />
-                <MenuItem Header="_Exit"></MenuItem>
+                <MenuItem x:Name="ExitMenuItem" Header="_Exit" Click="ExitMenuItem_OnClick"></MenuItem>
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_About"></MenuItem>
@@ -216,8 +216,8 @@
                     </StackPanel>
 
                     <Grid Grid.Column="1" RowDefinitions="*,*">
-                        <Button HorizontalAlignment="Center" Command="{Binding SaveCmd}">Save</Button>
-                        <Button HorizontalAlignment="Center" Grid.Row="1">Cancel</Button>
+                        <Button HorizontalAlignment="Center" Command="{Binding SaveCmd}" Content="Save" />
+                        <Button x:Name="CancelBtn" HorizontalAlignment="Center" Grid.Row="1" Click="CancelBtn_OnClick" Content="Cancel" />
                     </Grid>
                 </Grid>
             </StackPanel>

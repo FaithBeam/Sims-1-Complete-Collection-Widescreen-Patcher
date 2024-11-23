@@ -28,7 +28,9 @@ public partial class MainTab : ReactiveUserControl<IMainTabViewModel>
         this.WhenActivated(d =>
         {
             if (ViewModel == null)
+            {
                 return;
+            }
             _topLevel = TopLevel.GetTopLevel(this);
             _window = (Window)_topLevel!;
             d(ViewModel.ShowOpenFileDialog.RegisterHandler(ShowOpenFileDialogAsync));
