@@ -56,7 +56,7 @@
                 <MenuItem x:Name="ExitMenuItem" Header="_Exit" Click="ExitMenuItem_OnClick"></MenuItem>
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="_About"></MenuItem>
+                <MenuItem Header="_About" Command="{Binding AboutCmd}" />
             </MenuItem>
         </Menu>
 

@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Runtime.InteropServices;
 using Avalonia.Platform.Storage;
 using DynamicData;
 using DynamicData.Binding;
@@ -18,6 +20,8 @@ public interface ICareerEditorTabViewModel { }
 
 public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewModel
 {
+    private const string AboutLink =
+        "https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Career-Editor";
     private IAppState AppState { get; }
     private readonly IFar _far;
     private readonly ObservableAsPropertyHelper<string?> _pathToExpansionShared;
@@ -146,6 +150,8 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         _windowTitle = this.WhenAnyValue(x => x.PathToWorkIff)
             .Select(x => $"Career Editor{(string.IsNullOrWhiteSpace(x) ? "" : $": {x}")}")
             .ToProperty(this, x => x.WindowTitle);
+
+        AboutCmd = ReactiveCommand.Create(() => OpenUrl(AboutLink));
     }
 
     public ReadOnlyObservableCollection<ResourceViewModel> Careers => _careers;
@@ -198,6 +204,7 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     public ReactiveCommand<Unit, Unit> SaveCmd { get; }
     public IInteraction<Unit, IStorageFile?> ShowSaveFileDialogInteraction { get; }
     public ReactiveCommand<Unit, string?> SaveAsCmd { get; }
+    public ReactiveCommand<Unit, Unit> AboutCmd { get; }
 
     public ReactiveCommand<Unit, string?> ShowOpenFileDialogCmd { get; init; }
     public IInteraction<Unit, IStorageFile?> ShowOpenFileDialogInteraction { get; }
@@ -246,5 +253,35 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         return string.IsNullOrWhiteSpace(directory)
             ? null
             : Path.Combine(directory, "ExpansionShared");
+    }
+
+    // https://stackoverflow.com/a/43232486
+    private void OpenUrl(string url)
+    {
+        try
+        {
+            Process.Start(url);
+        }
+        catch
+        {
+            // hack because of this: https://github.com/dotnet/corefx/issues/10361
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                url = url.Replace("&", "^&");
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Process.Start("xdg-open", url);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Process.Start("open", url);
+            }
+            else
+            {
+                throw;
+            }
+        }
     }
 }
