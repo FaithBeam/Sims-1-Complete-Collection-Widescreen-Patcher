@@ -29,6 +29,7 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     private readonly ObservableAsPropertyHelper<IffViewModel?>? _workIff;
     private readonly ObservableAsPropertyHelper<bool>? _extractWorkIffIsExecuting;
     private IffPreset? _selectedPreset;
+    private readonly ObservableAsPropertyHelper<string> _windowTitle;
 
     public CareerEditorDialogViewModel(IAppState appState, IFar far, IIffService iffService)
     {
@@ -47,12 +48,9 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             .Select(GetPathToWorkIff)
             .ToProperty(this, x => x.PathToWorkIff);
 
-        var canExecuteExtractWorkIff = this.WhenAnyValue(
-            x => x.PathToWorkIff,
-            x => x.ExtractWorkIffIsExecuting,
-            selector: (p, _) => !string.IsNullOrWhiteSpace(p) && !GetWorkIffExtracted(p)
-        );
-        ExtractWorkIffCmd = ReactiveCommand.Create(ExtractWorkIff, canExecuteExtractWorkIff);
+        ExtractWorkIffCmd = ReactiveCommand.Create(ExtractWorkIff);
+        this.WhenAnyValue(x => x.PathToWorkIff, x => x.ExtractWorkIffIsExecuting)
+            .Subscribe(x => ExtractWorkIffCmd.Execute().Subscribe());
         _extractWorkIffIsExecuting = ExtractWorkIffCmd.IsExecuting.ToProperty(
             this,
             x => x.ExtractWorkIffIsExecuting
@@ -122,6 +120,10 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
                     (IffPreset)x!
                 )
             );
+
+        _windowTitle = this.WhenAnyValue(x => x.PathToWorkIff)
+            .Select(x => $"Career Editor {(string.IsNullOrWhiteSpace(x) ? "" : $": {x}")}")
+            .ToProperty(this, x => x.WindowTitle);
     }
 
     public ReadOnlyObservableCollection<ResourceViewModel> Careers => _careers;
@@ -153,21 +155,23 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         set => this.RaiseAndSetIfChanged(ref _selectedPreset, value);
     }
 
+    public string WindowTitle => _windowTitle.Value;
+
     public List<CarType> CarTypes { get; } =
         new()
         {
+            CarType.Bentley,
+            CarType.Circus,
+            CarType.ClownCar,
             CarType.Coupe,
-            CarType.Jeep,
             CarType.Cruiser,
+            CarType.Jeep,
+            CarType.Junker,
+            CarType.Limo,
             CarType.Sedan,
             CarType.Suv,
             CarType.TownCar,
-            CarType.Bentley,
-            CarType.Junker,
-            CarType.Limo,
             CarType.Truck,
-            CarType.Circus,
-            CarType.ClownCar,
         };
 
     public ReactiveCommand<Unit, Unit> ExtractWorkIffCmd { get; }
@@ -178,10 +182,13 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         if (
             string.IsNullOrWhiteSpace(PathToExpansionSharedFar)
             || !File.Exists(PathToExpansionSharedFar)
+            || string.IsNullOrWhiteSpace(PathToWorkIff)
+            || File.Exists(PathToWorkIff)
         )
         {
             return;
         }
+
         _far.PathToFar = PathToExpansionSharedFar;
         _far.ParseFar();
         _far.Extract(
@@ -189,8 +196,6 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             PathToExpansionShared
         );
     }
-
-    private static bool GetWorkIffExtracted(string? pathToWorkIff) => File.Exists(pathToWorkIff);
 
     private static string? GetPathToWorkIff(string? expansionSharedDir) =>
         string.IsNullOrWhiteSpace(expansionSharedDir)

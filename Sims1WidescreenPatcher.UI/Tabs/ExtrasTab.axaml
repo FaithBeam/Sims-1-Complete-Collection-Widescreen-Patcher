@@ -22,7 +22,7 @@
         <StackPanel DockPanel.Dock="Top">
             <customcontrols:Checkbox DataContext="{Binding UnlockCheatsViewModel}"
                                      IsEnabled="{Binding IsEnabled}" />
-			<Button Command="{Binding ShowCareerEditorDialogCmd}">Career Editor</Button>
+			<Button Margin="0 5 0 0" Command="{Binding ShowCareerEditorDialogCmd}">Career Editor</Button>
         </StackPanel>
         <Button HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
