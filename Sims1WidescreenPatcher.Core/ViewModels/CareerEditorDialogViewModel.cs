@@ -246,7 +246,7 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         set => this.RaiseAndSetIfChanged(ref _selectedJob, value);
     }
 
-    public List<IffPreset> Presets { get; } = new() { IffPreset.Default, IffPreset.Cheater };
+    public List<IffPreset> Presets { get; } = new() { IffPreset.CapDecayAtNegative5 };
 
     public IffPreset? SelectedPreset
     {

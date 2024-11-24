@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
+        xmlns:converters="clr-namespace:Sims1WidescreenPatcher.UI.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Sims1WidescreenPatcher.UI.Dialogs.CareerEditorDialog"
         SizeToContent="WidthAndHeight"
@@ -11,7 +12,10 @@
     <Design.DataContext>
         <vm:CareerEditorDialogViewModel />
     </Design.DataContext>
-
+    
+    <Window.Resources>
+        <converters:EnumMemberConverter x:Key="EnumMemberConverter" />
+    </Window.Resources>
 
     <Window.Styles>
         <Style Selector="ComboBox.styles">
@@ -62,8 +66,8 @@
 
         <Grid ColumnDefinitions="200,Auto" Margin="3">
             <Grid Grid.Column="0" Margin="0 0 3 0" RowDefinitions="Auto,Auto,*">
-                <ComboBox Grid.Row="0" Classes="styles" ItemsSource="{Binding Presets}"
-                          SelectedItem="{Binding SelectedPreset}"
+                <ComboBox Grid.Row="0" Classes="styles" ItemsSource="{Binding Presets, Converter={StaticResource EnumMemberConverter}}"
+                          SelectedItem="{Binding SelectedPreset, Converter={StaticResource EnumMemberConverter}}"
                           PlaceholderText="Presets" />
 
                 <ComboBox Grid.Row="1" Classes="styles" ItemsSource="{Binding Careers}"
