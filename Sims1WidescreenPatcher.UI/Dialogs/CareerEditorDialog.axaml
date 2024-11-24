@@ -149,7 +149,7 @@
                         </Grid>
                     </StackPanel>
 
-                    <StackPanel>
+                    <StackPanel Margin="0 0 20 0">
                         <Label HorizontalAlignment="Center">Mood changes per hour</Label>
                         <Grid ColumnDefinitions="80,*">
                             <Label Classes="styles">Hunger</Label>
@@ -187,8 +187,34 @@
                                            Value="{Binding SelectedJob.SocialDecay.Value, FallbackValue=N/A}" />
                         </Grid>
                     </StackPanel>
+                    
+                    <StackPanel>
+                        <Label Content="Mood changes per shift" HorizontalAlignment="Center" />
+                        <Grid RowDefinitions="32,32,32,32,32,32,32" ColumnDefinitions="Auto,Auto">
+                            <Label Grid.Row="0" Grid.Column="0"  Content="Hunger" VerticalAlignment="Center"/>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding ShiftHungerDecay, FallbackValue=N/A}" VerticalAlignment="Center" Margin="10 0 0 0" />
+                            
+                            <Label Grid.Row="1" Grid.Column="0" Content="Comfort" VerticalAlignment="Center"/>
+                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding ShiftComfortDecay, FallbackValue=N/A}" VerticalAlignment="Center" Margin="10 0 0 0" />
+                            
+                            <Label Grid.Row="2" Grid.Column="0" Content="Hygiene" VerticalAlignment="Center"/>
+                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding ShiftHygieneDecay, FallbackValue=N/A}" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                            
+                            <Label Grid.Row="3" Grid.Column="0" Content="Bladder" VerticalAlignment="Center"/>
+                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding ShiftBladderDecay, FallbackValue=N/A}" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                            
+                            <Label Grid.Row="4" Grid.Column="0" Content="Energy" VerticalAlignment="Center"/>
+                            <Label Grid.Row="4" Grid.Column="1" Content="{Binding ShiftEnergyDecay, FallbackValue=N/A}" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                            
+                            <Label Grid.Row="5" Grid.Column="0" Content="Fun" VerticalAlignment="Center"/>
+                            <Label Grid.Row="5" Grid.Column="1" Content="{Binding ShiftFunDecay, FallbackValue=N/A}" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                            
+                            <Label Grid.Row="6" Grid.Column="0" Content="Social" VerticalAlignment="Center"/>
+                            <Label Grid.Row="6" Grid.Column="1" Content="{Binding ShiftSocialDecay, FallbackValue=N/A}" VerticalAlignment="Center" Margin="10 0 0 0" />
+                        </Grid>
+                    </StackPanel>
                 </StackPanel>
-
+                
                 <Grid ColumnDefinitions="Auto,*">
                     <StackPanel>
                         <Label HorizontalAlignment="Center">General information</Label>
@@ -208,6 +234,10 @@
                             <NumericUpDown Grid.Column="1" Classes="nonSkill"
                                            Value="{Binding SelectedJob.EndTime.Value, FallbackValue=N/A}" Minimum="0"
                                            Maximum="23" />
+                        </Grid>
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Label Content="Shift Length" />
+                            <Label Grid.Column="1" Content="{Binding ShiftLength, FallbackValue=N/A}" />
                         </Grid>
                         <ComboBox Classes="styles" ItemsSource="{Binding CarTypes}"
                                   SelectedItem="{Binding SelectedJob.CarType, FallbackValue=N/A}"

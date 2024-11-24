@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using Avalonia.Platform.Storage;
 using DynamicData;
+using DynamicData.Aggregation;
 using DynamicData.Binding;
 using ReactiveUI;
 using sims_iff.Models.ResourceContent.Str;
@@ -35,6 +36,15 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     private IffPreset? _selectedPreset;
     private readonly ObservableAsPropertyHelper<string> _windowTitle;
 
+    private readonly ObservableAsPropertyHelper<int?> _shiftLength;
+    private readonly ObservableAsPropertyHelper<int?> _shiftHungerDecay;
+    private readonly ObservableAsPropertyHelper<int?> _shiftComfortDecay;
+    private readonly ObservableAsPropertyHelper<int?> _shiftHygieneDecay;
+    private readonly ObservableAsPropertyHelper<int?> _shiftBladderDecay;
+    private readonly ObservableAsPropertyHelper<int?> _shiftEnergyDecay;
+    private readonly ObservableAsPropertyHelper<int?> _shiftFunDecay;
+    private readonly ObservableAsPropertyHelper<int?> _shiftSocialDecay;
+
     public CareerEditorDialogViewModel(IAppState appState, IFar far, IIffService iffService)
     {
         AppState = appState;
@@ -56,7 +66,7 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             async () => (await ShowOpenFileDialogInteraction.Handle(Unit.Default))?.Path.LocalPath
         );
 
-        var showFileDialogObs = this.WhenAnyObservable(x => x.ShowOpenFileDialogCmd);
+        var showFileDialogObs = this.WhenAnyObservable(x => x.ShowOpenFileDialogCmd).WhereNotNull();
         var mergedPathToWorkIffChangedObs = pathToWorkIffObs.Merge(showFileDialogObs);
         _pathToWorkIff = mergedPathToWorkIffChangedObs.ToProperty(this, x => x.PathToWorkIff);
         var workIffObs = this.WhenAnyValue(x => x.PathToWorkIff)
@@ -93,7 +103,7 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             },
             canExecuteSaveAs
         );
-        var saveAsCmdObs = this.WhenAnyObservable(x => x.SaveAsCmd);
+        var saveAsCmdObs = this.WhenAnyObservable(x => x.SaveAsCmd).WhereNotNull();
         mergedPathToWorkIffChangedObs = mergedPathToWorkIffChangedObs.Merge(saveAsCmdObs);
         _pathToWorkIff = mergedPathToWorkIffChangedObs.ToProperty(this, x => x.PathToWorkIff);
 
@@ -162,6 +172,58 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             .ToProperty(this, x => x.WindowTitle);
 
         AboutCmd = ReactiveCommand.Create(() => OpenUrl(AboutLink));
+
+        _shiftLength = this.WhenAnyValue(x => x.SelectedJob)
+            .Select(CalculateShiftLength)
+            .ToProperty(this, x => x.ShiftLength);
+        _shiftHungerDecay = this.WhenAnyValue(x => x.SelectedJob)
+            .Select(selectedJob =>
+                CalculateShiftLength(selectedJob) * SelectedJob?.HungerDecay.Value
+            )
+            .ToProperty(this, x => x.ShiftHungerDecay);
+        _shiftComfortDecay = this.WhenAnyValue(x => x.SelectedJob)
+            .Select(selectedJob =>
+                CalculateShiftLength(selectedJob) * SelectedJob?.ComfortDecay.Value
+            )
+            .ToProperty(this, x => x.ShiftComfortDecay);
+        _shiftHygieneDecay = this.WhenAnyValue(x => x.SelectedJob)
+            .Select(selectedJob =>
+                CalculateShiftLength(selectedJob) * SelectedJob?.HygieneDecay.Value
+            )
+            .ToProperty(this, x => x.ShiftHygieneDecay);
+        _shiftBladderDecay = this.WhenAnyValue(x => x.SelectedJob)
+            .Select(selectedJob =>
+                CalculateShiftLength(selectedJob) * SelectedJob?.BladderDecay.Value
+            )
+            .ToProperty(this, x => x.ShiftBladderDecay);
+        _shiftEnergyDecay = this.WhenAnyValue(x => x.SelectedJob)
+            .Select(selectedJob =>
+                CalculateShiftLength(selectedJob) * SelectedJob?.EnergyDecay.Value
+            )
+            .ToProperty(this, x => x.ShiftEnergyDecay);
+        _shiftFunDecay = this.WhenAnyValue(x => x.SelectedJob)
+            .Select(selectedJob => CalculateShiftLength(selectedJob) * SelectedJob?.FunDecay.Value)
+            .ToProperty(this, x => x.ShiftFunDecay);
+        _shiftSocialDecay = this.WhenAnyValue(x => x.SelectedJob)
+            .Select(selectedJob =>
+                CalculateShiftLength(selectedJob) * SelectedJob?.SocialDecay.Value
+            )
+            .ToProperty(this, x => x.ShiftSocialDecay);
+    }
+
+    private static int? CalculateShiftLength(JobInfoViewModel? vm)
+    {
+        if (vm is null)
+        {
+            return null;
+        }
+        var startTime = vm.StartTime.Value;
+        var endTime = vm.EndTime.Value;
+        if (startTime > endTime)
+        {
+            endTime += 24;
+        }
+        return endTime - startTime;
     }
 
     public ReadOnlyObservableCollection<ResourceViewModel> Careers => _careers;
@@ -193,6 +255,15 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     }
 
     public string WindowTitle => _windowTitle.Value;
+
+    public int? ShiftLength => _shiftLength.Value;
+    public int? ShiftHungerDecay => _shiftHungerDecay.Value;
+    public int? ShiftComfortDecay => _shiftComfortDecay.Value;
+    public int? ShiftHygieneDecay => _shiftHygieneDecay.Value;
+    public int? ShiftBladderDecay => _shiftBladderDecay.Value;
+    public int? ShiftEnergyDecay => _shiftEnergyDecay.Value;
+    public int? ShiftFunDecay => _shiftFunDecay.Value;
+    public int? ShiftSocialDecay => _shiftSocialDecay.Value;
 
     public List<CarType> CarTypes { get; } =
         new()

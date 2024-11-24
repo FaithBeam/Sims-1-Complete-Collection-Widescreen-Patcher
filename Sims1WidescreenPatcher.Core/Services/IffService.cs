@@ -9,6 +9,7 @@ public interface IIffService
     IffViewModel Load(string pathToIff);
     void Write(string pathToIff, IffViewModel viewModel);
     void ApplyPreset(IEnumerable<JobInfoViewModel> jobInfoViewModels, IffPreset preset);
+    Task<IffViewModel> LoadAsync(string pathToIff);
 }
 
 public enum IffPreset
@@ -22,6 +23,11 @@ public class IffService : IIffService
     public IffViewModel Load(string pathToIff)
     {
         return new IffViewModel(Iff.Read(pathToIff));
+    }
+
+    public async Task<IffViewModel> LoadAsync(string pathToIff)
+    {
+        return await Task.Run(() => Load(pathToIff));
     }
 
     public void Write(string pathToIff, IffViewModel viewModel)
