@@ -179,38 +179,44 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         _shiftLength = this.WhenAnyValue(x => x.SelectedJob)
             .Select(CalculateShiftLength)
             .ToProperty(this, x => x.ShiftLength);
-        _shiftHungerDecay = this.WhenAnyValue(x => x.SelectedJob)
-            .Select(selectedJob =>
-                CalculateShiftLength(selectedJob) * SelectedJob?.HungerDecay.Value
+        _shiftHungerDecay = this.WhenAnyValue(
+                x => x.SelectedJob,
+                x => x.SelectedJob!.HungerDecay.Value
             )
+            .Select(x => CalculateShiftLength(x.Item1) * x.Item2)
             .ToProperty(this, x => x.ShiftHungerDecay);
-        _shiftComfortDecay = this.WhenAnyValue(x => x.SelectedJob)
-            .Select(selectedJob =>
-                CalculateShiftLength(selectedJob) * SelectedJob?.ComfortDecay.Value
+        _shiftComfortDecay = this.WhenAnyValue(
+                x => x.SelectedJob,
+                x => x.SelectedJob!.ComfortDecay.Value
             )
+            .Select(x => CalculateShiftLength(x.Item1) * x.Item2)
             .ToProperty(this, x => x.ShiftComfortDecay);
-        _shiftHygieneDecay = this.WhenAnyValue(x => x.SelectedJob)
-            .Select(selectedJob =>
-                CalculateShiftLength(selectedJob) * SelectedJob?.HygieneDecay.Value
+        _shiftHygieneDecay = this.WhenAnyValue(
+                x => x.SelectedJob,
+                x => x.SelectedJob!.HygieneDecay.Value
             )
+            .Select(x => CalculateShiftLength(x.Item1) * x.Item2)
             .ToProperty(this, x => x.ShiftHygieneDecay);
-        _shiftBladderDecay = this.WhenAnyValue(x => x.SelectedJob)
-            .Select(selectedJob =>
-                CalculateShiftLength(selectedJob) * SelectedJob?.BladderDecay.Value
+        _shiftBladderDecay = this.WhenAnyValue(
+                x => x.SelectedJob,
+                x => x.SelectedJob!.BladderDecay.Value
             )
+            .Select(x => CalculateShiftLength(x.Item1) * x.Item2)
             .ToProperty(this, x => x.ShiftBladderDecay);
-        _shiftEnergyDecay = this.WhenAnyValue(x => x.SelectedJob)
-            .Select(selectedJob =>
-                CalculateShiftLength(selectedJob) * SelectedJob?.EnergyDecay.Value
+        _shiftEnergyDecay = this.WhenAnyValue(
+                x => x.SelectedJob,
+                x => x.SelectedJob!.EnergyDecay.Value
             )
+            .Select(x => CalculateShiftLength(x.Item1) * x.Item2)
             .ToProperty(this, x => x.ShiftEnergyDecay);
-        _shiftFunDecay = this.WhenAnyValue(x => x.SelectedJob)
-            .Select(selectedJob => CalculateShiftLength(selectedJob) * SelectedJob?.FunDecay.Value)
+        _shiftFunDecay = this.WhenAnyValue(x => x.SelectedJob, x => x.SelectedJob!.FunDecay.Value)
+            .Select(x => CalculateShiftLength(x.Item1) * x.Item2)
             .ToProperty(this, x => x.ShiftFunDecay);
-        _shiftSocialDecay = this.WhenAnyValue(x => x.SelectedJob)
-            .Select(selectedJob =>
-                CalculateShiftLength(selectedJob) * SelectedJob?.SocialDecay.Value
+        _shiftSocialDecay = this.WhenAnyValue(
+                x => x.SelectedJob,
+                x => x.SelectedJob!.SocialDecay.Value
             )
+            .Select(x => CalculateShiftLength(x.Item1) * x.Item2)
             .ToProperty(this, x => x.ShiftSocialDecay);
     }
 
