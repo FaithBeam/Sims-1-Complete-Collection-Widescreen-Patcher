@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
 using Avalonia.Data.Converters;
 using Sims1WidescreenPatcher.Core.Enums;
 using Sims1WidescreenPatcher.Core.Services;
@@ -30,12 +32,14 @@ public class EnumMemberConverter : IValueConverter
         CultureInfo culture
     )
     {
-        if (value is null)
+        if (value is not string strVal)
         {
             return null;
         }
 
-        Enum.TryParse<IffPreset>(value as string, out var result);
-        return result;
+        var t = typeof(IffPreset);
+        var fieldInfo = t.GetFields(BindingFlags.Static | BindingFlags.Public)
+            .First(x => x.GetCustomAttribute<EnumMemberAttribute>()?.Value == strVal);
+        return (IffPreset)(fieldInfo.GetValue(this) ?? throw new InvalidOperationException());
     }
 }

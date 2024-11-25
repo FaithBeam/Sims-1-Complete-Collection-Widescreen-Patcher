@@ -157,6 +157,9 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             canExecuteSave
         );
 
+        // reset preset when workiff changes
+        this.WhenAnyValue(x => x.WorkIff).Subscribe(_ => SelectedPreset = null);
+
         // apply preset to job infos
         this.WhenAnyValue(x => x.SelectedPreset)
             .WhereNotNull()
@@ -246,7 +249,8 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         set => this.RaiseAndSetIfChanged(ref _selectedJob, value);
     }
 
-    public List<IffPreset> Presets { get; } = new() { IffPreset.CapDecayAtNegative5 };
+    public List<IffPreset> Presets { get; } =
+        new() { IffPreset.CapDecayAtNegative5, IffPreset.NoDecay };
 
     public IffPreset? SelectedPreset
     {
