@@ -37,5 +37,5 @@ public class IffViewModel : ReactiveObject
     }
 
     public Iff MapToIff() =>
-        new Iff(Signature, OffsetToResourceMap, Resources.Select(x => x.MapToResource()).ToList());
+        new(Signature, OffsetToResourceMap, Resources.Select(x => x.MapToResource()).ToList());
 }

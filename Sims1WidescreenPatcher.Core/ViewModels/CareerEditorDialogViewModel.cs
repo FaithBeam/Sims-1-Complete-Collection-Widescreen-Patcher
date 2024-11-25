@@ -5,7 +5,6 @@ using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using Avalonia.Platform.Storage;
 using DynamicData;
-using DynamicData.Aggregation;
 using DynamicData.Binding;
 using ReactiveUI;
 using sims_iff.Models.ResourceContent.Str;
@@ -86,6 +85,41 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         var resetCmdObs = this.WhenAnyObservable(x => x.ResetCmd);
         workIffObs = workIffObs.Merge(resetCmdObs);
         _workIff = workIffObs.ToProperty(this, x => x.WorkIff);
+
+        var canExecuteOpenWorkIffFolder = this.WhenAnyValue(
+            x => x.PathToWorkIff,
+            selector: p => !string.IsNullOrWhiteSpace(p)
+        );
+        OpenWorkIffFolderCmd = ReactiveCommand.Create(
+            () =>
+            {
+                var processStartInfo = new ProcessStartInfo
+                {
+                    Arguments = Path.GetDirectoryName(PathToWorkIff),
+                };
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    processStartInfo.FileName = "explorer.exe";
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    processStartInfo.FileName = "xdg-open";
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    processStartInfo.FileName = "open";
+                }
+                else
+                {
+                    throw new Exception("Unsupported platform");
+                }
+
+                processStartInfo.UseShellExecute = true;
+                Process.Start(processStartInfo);
+            },
+            canExecuteOpenWorkIffFolder
+        );
 
         ShowSaveFileDialogInteraction = new Interaction<Unit, IStorageFile?>();
         var canExecuteSaveAs = this.WhenAnyValue(x => x.WorkIff, selector: x => x is not null);
@@ -300,6 +334,7 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     public ReactiveCommand<Unit, IffViewModel> ResetCmd { get; }
     public ReactiveCommand<Unit, string?> ShowOpenFileDialogCmd { get; init; }
     public IInteraction<Unit, IStorageFile?> ShowOpenFileDialogInteraction { get; }
+    public ReactiveCommand<Unit, Unit> OpenWorkIffFolderCmd { get; }
 
     private string? ExtractWorkIff(string? pathToExpansionSharedFar)
     {

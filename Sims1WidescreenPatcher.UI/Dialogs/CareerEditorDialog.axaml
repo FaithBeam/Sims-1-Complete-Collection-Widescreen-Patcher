@@ -53,6 +53,7 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_Open" Command="{Binding ShowOpenFileDialogCmd}" />
+                <MenuItem Header="_Open work.iff Folder" Command="{Binding OpenWorkIffFolderCmd}" />
                 <MenuItem Header="_Save" Command="{Binding SaveCmd}" />
                 <MenuItem Header="_Save As" Command="{Binding SaveAsCmd}" />
                 <MenuItem Header="_Reset" Command="{Binding ResetCmd}" />
