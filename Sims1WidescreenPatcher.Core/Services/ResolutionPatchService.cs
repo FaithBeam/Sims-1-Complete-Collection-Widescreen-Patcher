@@ -3,6 +3,14 @@ using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.Core.Services;
 
+public interface IResolutionPatchService
+{
+    bool CanPatchResolution();
+    bool BackupExists();
+    void CreateBackup();
+    void EditSimsExe();
+}
+
 public class ResolutionPatchService : IResolutionPatchService
 {
     private readonly IAppState _appState;

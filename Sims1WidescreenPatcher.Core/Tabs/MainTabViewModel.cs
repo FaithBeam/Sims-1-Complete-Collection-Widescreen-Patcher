@@ -416,7 +416,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     private async Task OnClickedUninstall()
     {
         IsBusy = true;
-        var dDrawSettingsPath = CheckDDrawCompatIniService.DDrawCompatSettingsExist(Path);
+        var dDrawSettingsPath = DDrawCompatSettingsService.DDrawCompatSettingsExist(Path);
         if (!string.IsNullOrWhiteSpace(dDrawSettingsPath))
         {
             var result = await OpenCustomYesNoDialogAsync(
@@ -433,7 +433,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
             if (result is not null && result.Result)
             {
-                RemoveDDrawCompatSettingsService.Remove(dDrawSettingsPath);
+                DDrawCompatSettingsService.Remove(dDrawSettingsPath);
             }
         }
 

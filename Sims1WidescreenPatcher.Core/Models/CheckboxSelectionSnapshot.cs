@@ -2,46 +2,51 @@
 
 public class CheckboxSelectionSnapshot : IEquatable<CheckboxSelectionSnapshot>
 {
-    private readonly bool[] _vms;
-
-    public CheckboxSelectionSnapshot(params bool[] vms)
+    public CheckboxSelectionSnapshot(params ValueTuple<string, bool>[] values)
     {
-        _vms = vms;
+        States = new Dictionary<string, bool>();
+        foreach (var vt in values)
+        {
+            States.Add(vt.Item1, vt.Item2);
+        }
     }
+
+    public readonly Dictionary<string, bool> States;
 
     public bool Equals(CheckboxSelectionSnapshot? other)
     {
-        if (ReferenceEquals(null, other))
+        if (other is null)
             return false;
         if (ReferenceEquals(this, other))
             return true;
-        if (_vms.Length != other._vms.Length)
-            return false;
-
-        for (int i = 0; i < _vms.Length; i++)
+        foreach (var state in States)
         {
-            if (_vms[i] != other._vms[i])
+            if (!other.States.ContainsKey(state.Key))
+            {
+                return false;
+            }
+
+            if (other.States[state.Key] != state.Value)
             {
                 return false;
             }
         }
-
         return true;
     }
 
     public override bool Equals(object? obj)
     {
-        if (ReferenceEquals(null, obj))
+        if (obj is null)
             return false;
         if (ReferenceEquals(this, obj))
             return true;
-        if (obj.GetType() != this.GetType())
+        if (obj.GetType() != GetType())
             return false;
         return Equals((CheckboxSelectionSnapshot)obj);
     }
 
     public override int GetHashCode()
     {
-        return _vms.GetHashCode();
+        return States.GetHashCode();
     }
 }

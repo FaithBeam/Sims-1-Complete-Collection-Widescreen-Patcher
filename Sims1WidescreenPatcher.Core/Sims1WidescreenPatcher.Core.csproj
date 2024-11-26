@@ -38,6 +38,8 @@
       <EmbeddedResource Include="Resources\DgVoodoo2\DDraw.dll" />
       <EmbeddedResource Include="Resources\DgVoodoo2\dgVoodoo.conf" />
       <EmbeddedResource Include="Resources\DgVoodoo2\dgVoodooCpl.exe" />
+      <None Remove="Resources\dd_domcal.iff" />
+      <EmbeddedResource Include="Resources\dd_domcal.iff" />
     </ItemGroup>
 
     <ItemGroup>
