@@ -27,6 +27,7 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
     private readonly ICareerEditorViewModelFactory _careerEditorViewModelFactory;
     private readonly IDomCalService _domCalService;
     private readonly ObservableAsPropertyHelper<bool> _applyBtnVisible;
+
     private CheckboxSelectionSnapshot _previousSnapshot;
     private IAppState AppState { get; }
 
@@ -48,9 +49,9 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
             "Unlock cheats that were disabled in the release build of the game.";
         UnlockCheatsViewModel.Checked = _cheatsService.CheatsEnabled();
 
-        DomcalCheckboxViewModel = (CheckboxViewModel)creator.Create("Weekends Off");
+        DomcalCheckboxViewModel = (CheckboxViewModel)creator.Create("Add Weekends");
         DomcalCheckboxViewModel.ToolTipText =
-            "dd_domcal mod: No work and school on the weekends.\nThis adds a hacked calendar that you can purchase that removes the need to work every 6th and 7th day.";
+            "DomCal mod by Damon\nNo work and school on the weekends.\nThis adds a hacked calendar that you can purchase that removes the need to work every 6th and 7th day.";
         DomcalCheckboxViewModel.Checked = domCalService.IsInstalled();
 
         DomcalAdjustCareerSalariesViewModel = (CheckboxViewModel)creator.Create("Adjust Salaries");

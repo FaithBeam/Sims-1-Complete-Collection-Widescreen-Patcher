@@ -217,22 +217,22 @@
                     <Grid Grid.Column="0" RowDefinitions="*,32,32,32,32,32" ColumnDefinitions="Auto,Auto">
                         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">General information</Label>
 
-                        <Label Grid.Row="1" Grid.Column="0">Salary</Label>
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">Salary</Label>
                         <NumericUpDown Grid.Row="1" Grid.Column="1" Classes="nonSkill"
                                        Value="{Binding SelectedJob.Salary.Value, FallbackValue=N/A}" />
 
-                        <Label Grid.Row="2" Grid.Column="0">Begin time</Label>
+                        <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Begin time</Label>
                         <NumericUpDown Grid.Row="2" Grid.Column="1" Classes="nonSkill"
                                        Value="{Binding SelectedJob.StartTime.Value, FallbackValue=N/A}" Minimum="0"
                                        Maximum="23" />
 
-                        <Label Grid.Row="3" Grid.Column="0">End time</Label>
+                        <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">End time</Label>
                         <NumericUpDown Grid.Row="3" Grid.Column="1" Classes="nonSkill"
                                        Value="{Binding SelectedJob.EndTime.Value, FallbackValue=N/A}" Minimum="0"
                                        Maximum="23" />
 
-                        <Label Grid.Row="4" Grid.Column="0" Content="Shift Length" />
-                        <Label Grid.Row="4" Grid.Column="1" Content="{Binding ShiftLength, FallbackValue=N/A}" />
+                        <Label Grid.Row="4" Grid.Column="0" Content="Shift Length" VerticalAlignment="Center" />
+                        <Label Grid.Row="4" Grid.Column="1" Content="{Binding ShiftLength, FallbackValue=N/A}" VerticalAlignment="Center" />
 
                         <ComboBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Classes="styles"
                                   ItemsSource="{Binding CarTypes}"
