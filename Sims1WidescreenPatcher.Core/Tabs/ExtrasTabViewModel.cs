@@ -53,8 +53,7 @@ public class ExtrasTabViewModel : ViewModelBase, IExtrasTabViewModel
             "dd_domcal mod: No work and school on the weekends.\nThis adds a hacked calendar that you can purchase that removes the need to work every 6th and 7th day.";
         DomcalCheckboxViewModel.Checked = domCalService.IsInstalled();
 
-        DomcalAdjustCareerSalariesViewModel = (CheckboxViewModel)
-            creator.Create("Adjust Salaries for DomCal Mod");
+        DomcalAdjustCareerSalariesViewModel = (CheckboxViewModel)creator.Create("Adjust Salaries");
         DomcalAdjustCareerSalariesViewModel.ToolTipText =
             "This increases the salaries of jobs by about 30% when using the DomCal mod to even out the days lost from not working.";
         DomcalAdjustCareerSalariesViewModel.Checked = _domCalService.IsSalariesEdited();

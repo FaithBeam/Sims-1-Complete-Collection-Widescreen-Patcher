@@ -32,7 +32,6 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     private ResourceViewModel? _selectedCareer;
     private JobInfoViewModel? _selectedJob;
     private readonly ObservableAsPropertyHelper<IffViewModel?>? _workIff;
-    private IffPreset? _selectedPreset;
     private readonly ObservableAsPropertyHelper<string> _windowTitle;
 
     private readonly ObservableAsPropertyHelper<int?> _shiftLength;
@@ -191,19 +190,6 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             canExecuteSave
         );
 
-        // reset preset when workiff changes
-        this.WhenAnyValue(x => x.WorkIff).Subscribe(_ => SelectedPreset = null);
-
-        // apply preset to job infos
-        this.WhenAnyValue(x => x.SelectedPreset)
-            .WhereNotNull()
-            .Subscribe(x =>
-                iffService.ApplyPreset(
-                    Careers.SelectMany(c => ((CarrViewModel)c.Content).JobInfos),
-                    (IffPreset)x!
-                )
-            );
-
         _windowTitle = this.WhenAnyValue(x => x.PathToWorkIff)
             .Select(x => $"Career Editor{(string.IsNullOrWhiteSpace(x) ? "" : $": {x}")}")
             .ToProperty(this, x => x.WindowTitle);
@@ -287,15 +273,6 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     {
         get => _selectedJob;
         set => this.RaiseAndSetIfChanged(ref _selectedJob, value);
-    }
-
-    public List<IffPreset> Presets { get; } =
-        new() { IffPreset.CapDecayAtNegative5, IffPreset.NoDecay };
-
-    public IffPreset? SelectedPreset
-    {
-        get => _selectedPreset;
-        set => this.RaiseAndSetIfChanged(ref _selectedPreset, value);
     }
 
     public string WindowTitle => _windowTitle.Value;

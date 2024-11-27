@@ -19,13 +19,13 @@
 
     <DockPanel x:Name="ExtrasTabDockPanel"
                Margin="5">
-        <StackPanel DockPanel.Dock="Top">
-            <customcontrols:Checkbox DataContext="{Binding UnlockCheatsViewModel}"
+        <Grid DockPanel.Dock="Top" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="4*,96*">
+            <customcontrols:Checkbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" DataContext="{Binding UnlockCheatsViewModel}"
                                      IsEnabled="{Binding IsEnabled}" />
-            <customcontrols:Checkbox DataContext="{Binding DomcalCheckboxViewModel}" IsEnabled="{Binding IsEnabled}" />
-            <customcontrols:Checkbox DataContext="{Binding DomcalAdjustCareerSalariesViewModel}" IsEnabled="{Binding IsEnabled}" />
-            <Button Margin="0 5 0 0" Command="{Binding ShowCareerEditorDialogCmd}">Career Editor</Button>
-        </StackPanel>
+            <customcontrols:Checkbox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" DataContext="{Binding DomcalCheckboxViewModel}" IsEnabled="{Binding IsEnabled}" />
+            <customcontrols:Checkbox Grid.Row="2" Grid.Column="1" DataContext="{Binding DomcalAdjustCareerSalariesViewModel}" IsEnabled="{Binding IsEnabled}" />
+            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 5 0 0" Command="{Binding ShowCareerEditorDialogCmd}">Career Editor</Button>
+        </Grid>
         <Button HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 DockPanel.Dock="Bottom"

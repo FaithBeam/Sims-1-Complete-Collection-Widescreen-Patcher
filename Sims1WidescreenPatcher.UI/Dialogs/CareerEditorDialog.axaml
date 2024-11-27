@@ -3,19 +3,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
-        xmlns:converters="clr-namespace:Sims1WidescreenPatcher.UI.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Sims1WidescreenPatcher.UI.Dialogs.CareerEditorDialog"
         SizeToContent="WidthAndHeight"
+        CanResize="False"
         Title="{Binding WindowTitle}">
 
     <Design.DataContext>
         <vm:CareerEditorDialogViewModel />
     </Design.DataContext>
-    
-    <Window.Resources>
-        <converters:EnumMemberConverter x:Key="EnumMemberConverter" />
-    </Window.Resources>
 
     <Window.Styles>
         <Style Selector="ComboBox.styles">
@@ -66,12 +62,9 @@
         </Menu>
 
         <Grid ColumnDefinitions="200,Auto" Margin="3">
-            <Grid Grid.Column="0" Margin="0 0 3 0" RowDefinitions="Auto,Auto,*">
-                <ComboBox Grid.Row="0" Classes="styles" ItemsSource="{Binding Presets, Converter={StaticResource EnumMemberConverter}}"
-                          SelectedItem="{Binding SelectedPreset, Converter={StaticResource EnumMemberConverter}}"
-                          PlaceholderText="Presets" />
+            <Grid Grid.Column="0" Margin="0 0 3 0" RowDefinitions="Auto,*">
 
-                <ComboBox Grid.Row="1" Classes="styles" ItemsSource="{Binding Careers}"
+                <ComboBox Grid.Row="0" Classes="styles" ItemsSource="{Binding Careers}"
                           SelectedItem="{Binding SelectedCareer}"
                           PlaceholderText="Career Name" HorizontalAlignment="Stretch">
                     <ComboBox.ItemTemplate>
@@ -81,7 +74,7 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <ListBox Grid.Row="2" ItemsSource="{Binding Jobs}" SelectedItem="{Binding SelectedJob}">
+                <ListBox Grid.Row="1" ItemsSource="{Binding Jobs}" SelectedItem="{Binding SelectedJob}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding JobName}" />
