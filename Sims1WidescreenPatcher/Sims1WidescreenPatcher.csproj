@@ -21,7 +21,7 @@
         <PackageReference Include="Avalonia.Diagnostics" Version="11.1.4" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="11.1.4" />
         <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
         <PackageReference Include="Serilog.Formatting.Compact" Version="3.0.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
         <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="15.2.22" />
