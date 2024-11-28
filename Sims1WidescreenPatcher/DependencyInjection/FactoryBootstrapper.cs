@@ -7,6 +7,8 @@ public static class FactoryBootstrapper
 {
     public static void RegisterFactories(IServiceCollection services)
     {
-        services.AddScoped<CheckboxViewModelFactory>();
+        services
+            .AddScoped<CheckboxViewModelFactory>()
+            .AddScoped<ICareerEditorViewModelFactory, CareerEditorViewModelFactory>();
     }
 }

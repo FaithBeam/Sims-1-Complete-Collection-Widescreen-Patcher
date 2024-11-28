@@ -11,12 +11,11 @@ public class RequiredAltAttribute : RequiredAttribute
 
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
-        if (!_visited)
+        if (_visited)
         {
-            _visited = true;
-            return ValidationResult.Success;
+            return base.IsValid(value, validationContext);
         }
-
-        return base.IsValid(value, validationContext);
+        _visited = true;
+        return ValidationResult.Success;
     }
 }

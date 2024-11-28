@@ -3,6 +3,11 @@ using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.Core.Services;
 
+public interface IUninstallService
+{
+    void Uninstall();
+}
+
 public class UninstallService : IUninstallService
 {
     private readonly IAppState _appState;

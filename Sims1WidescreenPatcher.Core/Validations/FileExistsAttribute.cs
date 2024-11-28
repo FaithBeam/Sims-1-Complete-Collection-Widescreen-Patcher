@@ -13,11 +13,8 @@ public class FileExistsAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
 
-        if (File.Exists(path))
-        {
-            return ValidationResult.Success;
-        }
-
-        return new ValidationResult($"Path to Sims.exe does not exist");
+        return File.Exists(path)
+            ? ValidationResult.Success
+            : new ValidationResult($"Path to Sims.exe does not exist");
     }
 }

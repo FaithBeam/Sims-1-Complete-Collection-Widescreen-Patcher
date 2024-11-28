@@ -17,6 +17,28 @@ using Sims1WidescreenPatcher.Core.ViewModels;
 
 namespace Sims1WidescreenPatcher.Core.Tabs;
 
+public interface IMainTabViewModel
+{
+    ICommand PatchCommand { get; }
+    ICommand UninstallCommand { get; }
+    ICommand OpenFile { get; }
+    Interaction<Unit, IStorageFile?> ShowOpenFileDialog { get; }
+    ICommand CustomResolutionCommand { get; }
+    Interaction<ICustomResolutionDialogViewModel, Resolution?> ShowCustomResolutionDialog { get; }
+    Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?> ShowCustomYesNoDialog { get; }
+    Interaction<CustomInformationDialogViewModel, Unit> ShowCustomInformationDialog { get; }
+    string Path { get; set; }
+    AspectRatio? SelectedAspectRatio { get; set; }
+    ReadOnlyObservableCollection<AspectRatio> AspectRatios { get; }
+    ReadOnlyObservableCollection<Resolution> FilteredResolutions { get; }
+    Resolution? SelectedResolution { get; set; }
+    AvaloniaList<IWrapper> Wrappers { get; }
+    int SelectedWrapperIndex { get; set; }
+    double Progress { get; }
+    public ICheckboxViewModel ResolutionsColoredCbVm { get; }
+    public ICheckboxViewModel SortByAspectRatioCbVm { get; }
+}
+
 public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 {
     #region Fields
@@ -394,7 +416,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     private async Task OnClickedUninstall()
     {
         IsBusy = true;
-        var dDrawSettingsPath = CheckDDrawCompatIniService.DDrawCompatSettingsExist(Path);
+        var dDrawSettingsPath = DDrawCompatSettingsService.DDrawCompatSettingsExist(Path);
         if (!string.IsNullOrWhiteSpace(dDrawSettingsPath))
         {
             var result = await OpenCustomYesNoDialogAsync(
@@ -411,7 +433,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
             if (result is not null && result.Result)
             {
-                RemoveDDrawCompatSettingsService.Remove(dDrawSettingsPath);
+                DDrawCompatSettingsService.Remove(dDrawSettingsPath);
             }
         }
 
