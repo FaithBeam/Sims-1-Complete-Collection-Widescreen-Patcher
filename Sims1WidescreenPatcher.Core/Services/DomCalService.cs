@@ -220,13 +220,13 @@ public class DomCalService : IDomCalService
         var simsDir = Path.GetDirectoryName(_appState.SimsExePath);
         if (string.IsNullOrWhiteSpace(simsDir) || !Directory.Exists(simsDir))
         {
-            throw new InvalidOperationException($"SimsDir {simsDir} does not exist.");
+            return false;
         }
 
         var expansionSharedFolder = Path.Combine(simsDir, "ExpansionShared");
         if (!Directory.Exists(expansionSharedFolder))
         {
-            throw new InvalidOperationException($"SimsDir {expansionSharedFolder} does not exist.");
+            return false;
         }
 
         var workIffFile = Path.Combine(expansionSharedFolder, "work.iff");
@@ -234,11 +234,13 @@ public class DomCalService : IDomCalService
         {
             return false;
         }
+
         var salaryFile = Path.Combine(expansionSharedFolder, "salaries.txt");
         if (!File.Exists(salaryFile))
         {
             return false;
         }
+
         return true;
     }
 }
