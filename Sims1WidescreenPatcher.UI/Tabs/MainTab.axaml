@@ -14,6 +14,7 @@
 
     <Control.Resources>
         <converters:ResolutionColorCodingConverter x:Key="ResolutionColorCodingConverter" />
+        <converters:ToolTipShownConverter x:Key="ToolTipShownConverter" />
     </Control.Resources>
 
     <Grid IsSharedSizeScope="True">
@@ -169,22 +170,36 @@
                         </Style>
                     </Button.Styles>
                 </Button>
-                <Button Grid.Column="2"
-                        x:Name="PatchButton"
-                        Command="{Binding PatchCommand}"
-                        Content="Patch"
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center">
-                    <Button.Styles>
-                        <Style Selector="Button">
-                            <Setter Property="Background" Value="{DynamicResource ButtonBackground}" />
+                <StackPanel Grid.Column="2" VerticalAlignment="Bottom">
+                    <ToolTip.Tip>
+                        <TextBlock Text="{Binding PatchButtonToolTipTxt}"></TextBlock>
+                    </ToolTip.Tip>
+                    <StackPanel.Styles>
+                        <!-- Hack to not show tooltip when there is no value for bound ToolTipText -->
+                        <Style Selector="ToolTip">
+                            <Setter Property="BorderBrush" Value="{Binding PatchButtonToolTipTxt, Converter={StaticResource ToolTipShownConverter}}" />
+                            <Setter Property="Background"
+                                    Value="{Binding PatchButtonToolTipTxt, Converter={StaticResource ToolTipShownConverter}}" />
                         </Style>
-                        <Style Selector="Button:pointerover /template/ ContentPresenter">
-                            <Setter Property="Background" Value="LightGreen" />
-                        </Style>
-                    </Button.Styles>
-                </Button>
+                    </StackPanel.Styles>
+                    <Button
+                            x:Name="PatchButton"
+                            Command="{Binding PatchCommand}"
+                            Content="Patch"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center">
+                        <Button.Styles>
+                            <Style Selector="Button">
+                                <Setter Property="Background" Value="{DynamicResource ButtonBackground}" />
+                            </Style>
+                            <Style Selector="Button:pointerover /template/ ContentPresenter">
+                                <Setter Property="Background" Value="LightGreen" />
+                            </Style>
+                        </Button.Styles>
+                    </Button>
+                </StackPanel>
+                
             </Grid>
             <!--Row 4-->
             <Grid>

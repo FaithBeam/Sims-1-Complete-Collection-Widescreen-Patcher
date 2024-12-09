@@ -65,7 +65,11 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     private readonly IResolutionPatchService _resolutionPatchService;
     private readonly IUninstallService _uninstallService;
     private readonly IImagesService _imagesService;
+    private readonly ObservableAsPropertyHelper<string?> _patchButtonToolTipTxt;
     private IAppState AppState { get; }
+
+    private const string IncompatibleSimsExeTxt =
+        "Your Sims.exe is not able to be patched.\nYou need to be using a cracked/nocd Sims.exe that has not been patched to a custom resolution.";
 
     #endregion
 
@@ -175,12 +179,40 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
             ProgressStatus = x.Status;
             ProgressStatus2 = x.Status2;
         });
+
+        ShowBadSimsExeInfoDialog = ReactiveCommand.CreateFromTask(async () =>
+        {
+            await OpenCustomInformationDialogAsync("Information", IncompatibleSimsExeTxt);
+        });
+        this.WhenAnyValue(
+                x => x.IsValidSimsExe,
+                x => x.Path,
+                x => x.HasBackup,
+                selector: (validExe, path, hasBackup) =>
+                    !validExe && !hasBackup && !string.IsNullOrWhiteSpace(path)
+            )
+            .Where(x => x)
+            .Subscribe(_ =>
+            {
+                ShowBadSimsExeInfoDialog.Execute().Subscribe();
+            });
+        _patchButtonToolTipTxt = this.WhenAnyValue(
+                x => x.IsValidSimsExe,
+                x => x.Path,
+                x => x.HasBackup,
+                selector: (validExe, path, hasBackup) =>
+                    !validExe && !hasBackup && !string.IsNullOrWhiteSpace(path)
+            )
+            .Where(x => x)
+            .Select(_ => IncompatibleSimsExeTxt)
+            .ToProperty(this, x => x.PatchButtonToolTipTxt);
     }
 
     #endregion
 
     #region Commands
 
+    public ReactiveCommand<Unit, Unit> ShowBadSimsExeInfoDialog { get; }
     public ICommand PatchCommand { get; }
     public ICommand UninstallCommand { get; }
     public ICommand OpenFile { get; }
@@ -199,6 +231,8 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     #endregion
 
     #region Properties
+
+    public string? PatchButtonToolTipTxt => _patchButtonToolTipTxt.Value;
 
     [RequiredAlt]
     [FileExists]
