@@ -4,6 +4,12 @@ using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.Core.Services;
 
+public interface IImagesService
+{
+    void Install();
+    void Uninstall();
+}
+
 public class ImagesService : IImagesService
 {
     private string? _uiGraphicsPath;

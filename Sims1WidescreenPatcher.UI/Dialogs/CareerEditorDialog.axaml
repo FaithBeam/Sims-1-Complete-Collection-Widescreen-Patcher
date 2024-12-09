@@ -1,0 +1,253 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Sims1WidescreenPatcher.UI.Dialogs.CareerEditorDialog"
+        SizeToContent="WidthAndHeight"
+        CanResize="False"
+        Title="{Binding WindowTitle}">
+
+    <Design.DataContext>
+        <vm:CareerEditorDialogViewModel />
+    </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="ComboBox.styles">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Padding" Value="12 5 0 5" />
+        </Style>
+        <Style Selector="Label.styles">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="TextBox.styles">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="IsEnabled" Value="{Binding !!SelectedJob}" />
+        </Style>
+        <Style Selector="NumericUpDown.nonSkill">
+            <Setter Property="MinWidth" Value="130" />
+            <Setter Property="FormatString" Value="N0" />
+            <Setter Property="ParsingNumberStyle" Value="Integer" />
+            <Setter Property="Increment" Value="1" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="IsEnabled" Value="{Binding !!SelectedJob}" />
+        </Style>
+        <Style Selector="NumericUpDown.skill">
+            <Setter Property="MinWidth" Value="130" />
+            <Setter Property="FormatString" Value="N0" />
+            <Setter Property="ParsingNumberStyle" Value="Integer" />
+            <Setter Property="Increment" Value="100" />
+            <Setter Property="Minimum" Value="0" />
+            <Setter Property="Maximum" Value="1000" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="IsEnabled" Value="{Binding !!SelectedJob}" />
+        </Style>
+    </Window.Styles>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open" Command="{Binding ShowOpenFileDialogCmd}" />
+                <MenuItem Header="_Open work.iff Folder" Command="{Binding OpenWorkIffFolderCmd}" />
+                <MenuItem Header="_Save" Command="{Binding SaveCmd}" />
+                <MenuItem Header="_Save As" Command="{Binding SaveAsCmd}" />
+                <MenuItem Header="_Reset" Command="{Binding ResetCmd}" />
+                <Separator />
+                <MenuItem x:Name="ExitMenuItem" Header="_Exit" Click="ExitMenuItem_OnClick" />
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" Command="{Binding AboutCmd}" />
+            </MenuItem>
+        </Menu>
+
+        <Grid ColumnDefinitions="200,Auto" Margin="3">
+            <Grid Grid.Column="0" Margin="0 0 3 0" RowDefinitions="Auto,*">
+
+                <ComboBox Grid.Row="0" Classes="styles" ItemsSource="{Binding Careers}"
+                          SelectedItem="{Binding SelectedCareer}"
+                          PlaceholderText="Career Name" HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Content.CareerInfo.CareerName}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <ListBox Grid.Row="1" ItemsSource="{Binding Jobs}" SelectedItem="{Binding SelectedJob}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding JobName}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+
+            <Grid Grid.Column="1" RowDefinitions="*,*,*">
+                <!-- Job Strings -->
+                <Grid Grid.Row="0" Margin="0 0 0 3" RowDefinitions="*,*,*,*,*" ColumnDefinitions="80,*">
+                    <Label Grid.Row="0" Grid.Column="0" Classes="styles">Job name:</Label>
+                    <TextBox Grid.Row="0" Grid.Column="1" Classes="styles"
+                             Text="{Binding SelectedJob.JobName, FallbackValue=N/A}" />
+
+                    <Label Grid.Row="1" Grid.Column="0" Classes="styles">Male skin:</Label>
+                    <TextBox Grid.Row="1" Grid.Column="1" Classes="styles"
+                             Text="{Binding SelectedJob.MaleUniformMesh, FallbackValue=N/A}" />
+
+                    <Label Grid.Row="2" Grid.Column="0" Classes="styles">Female skin:</Label>
+                    <TextBox Grid.Row="2" Grid.Column="1" Classes="styles"
+                             Text="{Binding SelectedJob.FemaleUniformMesh, FallbackValue=N/A}" />
+
+                    <Label Grid.Row="3" Grid.Column="0" Classes="styles">Texture:</Label>
+                    <TextBox Grid.Row="3" Grid.Column="1" Classes="styles"
+                             Text="{Binding SelectedJob.UniformSkin, FallbackValue=N/A}" />
+
+                    <Label Grid.Row="4" Grid.Column="0" Classes="styles">Accessory:</Label>
+                    <TextBox Grid.Row="4" Grid.Column="1" Classes="styles"
+                             Text="{Binding SelectedJob.Unknown4, FallbackValue=N/A}" />
+                </Grid>
+
+                <Grid Grid.Row="1" ColumnDefinitions="*,*,*">
+                    <!-- Skills and friends needed -->
+                    <Grid Grid.Column="0" Margin="0 0 20 0" RowDefinitions="*,32,32,32,32,32,32,32"
+                          ColumnDefinitions="Auto,Auto">
+                        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">Skills and friends needed</Label>
+
+                        <Label Grid.Row="1" Grid.Column="0" Classes="styles">Friends</Label>
+                        <NumericUpDown Grid.Row="1" Grid.Column="1" Classes="nonSkill"
+                                       Value="{Binding SelectedJob.FriendsRequired.Value, FallbackValue=N/A}"
+                                       Minimum="0" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Classes="styles">Cooking</Label>
+                        <NumericUpDown Grid.Row="2" Grid.Column="1" Classes="skill"
+                                       Value="{Binding SelectedJob.CookingSkillRequired.Value, FallbackValue=N/A}" />
+
+                        <Label Grid.Row="3" Grid.Column="0" Classes="styles">Mechanical</Label>
+                        <NumericUpDown Grid.Row="3" Grid.Column="1" Classes="skill"
+                                       Value="{Binding SelectedJob.MechanicalSkillRequired.Value, FallbackValue=N/A}" />
+
+                        <Label Grid.Row="4" Grid.Column="0" Classes="styles">Charisma</Label>
+                        <NumericUpDown Grid.Row="4" Grid.Column="1" Classes="skill"
+                                       Value="{Binding SelectedJob.CharismaRequired.Value, FallbackValue=N/A}" />
+
+                        <Label Grid.Row="5" Grid.Column="0" Classes="styles">Body</Label>
+                        <NumericUpDown Grid.Row="5" Grid.Column="1" Classes="skill"
+                                       Value="{Binding SelectedJob.BodySkillRequired.Value, FallbackValue=N/A}" />
+
+                        <Label Grid.Row="6" Grid.Column="0" Classes="styles">Logic</Label>
+                        <NumericUpDown Grid.Row="6" Grid.Column="1" Classes="skill"
+                                       Value="{Binding SelectedJob.LogicSkillRequired.Value, FallbackValue=N/A}" />
+
+                        <Label Grid.Row="7" Grid.Column="0" Classes="styles">Creativity</Label>
+                        <NumericUpDown Grid.Row="7" Grid.Column="1" Classes="skill"
+                                       Value="{Binding SelectedJob.CreativitySkillRequired.Value, FallbackValue=N/A}" />
+                    </Grid>
+
+                    <!-- Mood changes per hour -->
+                    <Grid Grid.Column="1" Margin="0 0 20 0" RowDefinitions="*,32,32,32,32,32,32,32"
+                          ColumnDefinitions="Auto,Auto">
+                        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">Mood changes per hour</Label>
+
+                        <Label Grid.Row="1" Grid.Column="0" Classes="styles">Hunger</Label>
+                        <NumericUpDown Grid.Row="1" Grid.Column="1" Classes="nonSkill"
+                                       Value="{Binding SelectedJob.HungerDecay.Value, FallbackValue=N/A}" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Classes="styles">Comfort</Label>
+                        <NumericUpDown Grid.Row="2" Grid.Column="1" Classes="nonSkill"
+                                       Value="{Binding SelectedJob.ComfortDecay.Value, FallbackValue=N/A}" />
+
+                        <Label Grid.Row="3" Grid.Column="0" Classes="styles">Hygiene</Label>
+                        <NumericUpDown Grid.Row="3" Grid.Column="1" Classes="nonSkill"
+                                       Value="{Binding SelectedJob.HygieneDecay.Value, FallbackValue=N/A}" />
+
+                        <Label Grid.Row="4" Grid.Column="0" Classes="styles">Bladder</Label>
+                        <NumericUpDown Grid.Row="4" Grid.Column="1" Classes="nonSkill"
+                                       Value="{Binding SelectedJob.BladderDecay.Value, FallbackValue=N/A}" />
+
+                        <Label Grid.Row="5" Grid.Column="0" Classes="styles">Energy</Label>
+                        <NumericUpDown Grid.Row="5" Grid.Column="1" Classes="nonSkill"
+                                       Value="{Binding SelectedJob.EnergyDecay.Value, FallbackValue=N/A}" />
+
+                        <Label Grid.Row="6" Grid.Column="0" Classes="styles">Fun</Label>
+                        <NumericUpDown Grid.Row="6" Grid.Column="1" Classes="nonSkill"
+                                       Value="{Binding SelectedJob.FunDecay.Value, FallbackValue=N/A}" />
+
+                        <Label Grid.Row="7" Grid.Column="0" Classes="styles">Social</Label>
+                        <NumericUpDown Grid.Row="7" Grid.Column="1" Classes="nonSkill"
+                                       Value="{Binding SelectedJob.SocialDecay.Value, FallbackValue=N/A}" />
+                    </Grid>
+
+                    <!-- Mood changes per shift -->
+                    <Grid Grid.Column="2" RowDefinitions="*,32,32,32,32,32,32,32" ColumnDefinitions="Auto,*">
+                        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Mood changes per shift"
+                               HorizontalAlignment="Center" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Content="Hunger" VerticalAlignment="Center" />
+                        <Label Grid.Row="1" Grid.Column="1" Content="{Binding ShiftHungerDecay}"
+                               VerticalAlignment="Center" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Content="Comfort" VerticalAlignment="Center" />
+                        <Label Grid.Row="2" Grid.Column="1"
+                               Content="{Binding ShiftComfortDecay}" VerticalAlignment="Center" />
+
+                        <Label Grid.Row="3" Grid.Column="0" Content="Hygiene" VerticalAlignment="Center" />
+                        <Label Grid.Row="3" Grid.Column="1"
+                               Content="{Binding ShiftHygieneDecay}" VerticalAlignment="Center" />
+
+                        <Label Grid.Row="4" Grid.Column="0" Content="Bladder" VerticalAlignment="Center" />
+                        <Label Grid.Row="4" Grid.Column="1"
+                               Content="{Binding ShiftBladderDecay}" VerticalAlignment="Center" />
+
+                        <Label Grid.Row="5" Grid.Column="0" Content="Energy" VerticalAlignment="Center" />
+                        <Label Grid.Row="5" Grid.Column="1" Content="{Binding ShiftEnergyDecay}"
+                               VerticalAlignment="Center" />
+
+                        <Label Grid.Row="6" Grid.Column="0" Content="Fun" VerticalAlignment="Center" />
+                        <Label Grid.Row="6" Grid.Column="1" Content="{Binding ShiftFunDecay}"
+                               VerticalAlignment="Center" />
+
+                        <Label Grid.Row="7" Grid.Column="0" Content="Social" VerticalAlignment="Center" />
+                        <Label Grid.Row="7" Grid.Column="1" Content="{Binding ShiftSocialDecay}"
+                               VerticalAlignment="Center" />
+                    </Grid>
+                </Grid>
+
+                <!-- General Information -->
+                <Grid Grid.Row="2" ColumnDefinitions="Auto,*">
+                    <Grid Grid.Column="0" RowDefinitions="*,32,32,32,32,32" ColumnDefinitions="Auto,Auto">
+                        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">General information</Label>
+
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">Salary</Label>
+                        <NumericUpDown Grid.Row="1" Grid.Column="1" Classes="nonSkill"
+                                       Value="{Binding SelectedJob.Salary.Value, FallbackValue=N/A}" />
+
+                        <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Begin time</Label>
+                        <NumericUpDown Grid.Row="2" Grid.Column="1" Classes="nonSkill"
+                                       Value="{Binding SelectedJob.StartTime.Value, FallbackValue=N/A}" Minimum="0"
+                                       Maximum="23" />
+
+                        <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">End time</Label>
+                        <NumericUpDown Grid.Row="3" Grid.Column="1" Classes="nonSkill"
+                                       Value="{Binding SelectedJob.EndTime.Value, FallbackValue=N/A}" Minimum="0"
+                                       Maximum="23" />
+
+                        <Label Grid.Row="4" Grid.Column="0" Content="Shift Length" VerticalAlignment="Center" />
+                        <Label Grid.Row="4" Grid.Column="1" Content="{Binding ShiftLength, FallbackValue=N/A}" VerticalAlignment="Center" />
+
+                        <ComboBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Classes="styles"
+                                  ItemsSource="{Binding CarTypes}"
+                                  SelectedItem="{Binding SelectedJob.CarType, FallbackValue=N/A}"
+                                  PlaceholderText="Vehicle" IsEnabled="{Binding !!SelectedJob}"
+                                  HorizontalAlignment="Stretch" />
+                    </Grid>
+
+                    <Grid Grid.Column="1" RowDefinitions="*,*">
+                        <Button HorizontalAlignment="Center" Command="{Binding SaveCmd}" Content="Save" />
+                        <Button x:Name="CancelBtn" HorizontalAlignment="Center" Grid.Row="1" Click="CancelBtn_OnClick"
+                                Content="Cancel" />
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

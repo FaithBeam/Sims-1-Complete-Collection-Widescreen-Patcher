@@ -4,6 +4,13 @@ using Sims1WidescreenPatcher.Core.Models;
 
 namespace Sims1WidescreenPatcher.Core.Services;
 
+public interface IWrapperService
+{
+    List<IWrapper> GetWrappers();
+    Task Install(IWrapper wrapper);
+    void Uninstall();
+}
+
 public class WrapperService : IWrapperService
 {
     private readonly IAppState _appState;
@@ -13,10 +20,16 @@ public class WrapperService : IWrapperService
         _appState = appState;
     }
 
-    private static string[] _ddrawCompat054Resources = { @"DDrawCompat._0._5._4.ddraw.dll" };
-    private static string[] _ddrawCompat032Resources = { @"DDrawCompat._0._3._2.ddraw.dll" };
+    private static readonly string[] DdrawCompat054Resources =
+    {
+        @"DDrawCompat._0._5._4.ddraw.dll",
+    };
+    private static readonly string[] DdrawCompat032Resources =
+    {
+        @"DDrawCompat._0._3._2.ddraw.dll",
+    };
 
-    private static string[] _dgvoodooResources =
+    private static readonly string[] DgvoodooResources =
     {
         @"DgVoodoo2.D3D8.dll",
         @"DgVoodoo2.D3DImm.dll",
@@ -66,10 +79,10 @@ public class WrapperService : IWrapperService
         {
             case DDrawCompatWrapper w:
                 resources =
-                    w.Version == "0.5.4" ? _ddrawCompat054Resources : _ddrawCompat032Resources;
+                    w.Version == "0.5.4" ? DdrawCompat054Resources : DdrawCompat032Resources;
                 break;
             case DgVoodoo2Wrapper:
-                resources = _dgvoodooResources;
+                resources = DgvoodooResources;
                 break;
             case NoneWrapper:
                 break;
@@ -95,9 +108,9 @@ public class WrapperService : IWrapperService
     {
         var simsInstallDir = GetSimsInstallDirectory();
         foreach (
-            var item in _ddrawCompat054Resources
-                .Concat(_ddrawCompat032Resources)
-                .Concat(_dgvoodooResources)
+            var item in DdrawCompat054Resources
+                .Concat(DdrawCompat032Resources)
+                .Concat(DgvoodooResources)
         )
         {
             var itemSplit = item.Split('.');

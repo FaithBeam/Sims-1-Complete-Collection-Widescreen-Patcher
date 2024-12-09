@@ -6,6 +6,15 @@ using Sims1WidescreenPatcher.Core.Services.Interfaces;
 
 namespace Sims1WidescreenPatcher.Core.Services;
 
+public interface IProgressService
+{
+    void UpdateProgress(double pct);
+    void UpdateProgress(double pct, string status, string status2);
+    void UpdateUninstall();
+    IObservable<Unit> Uninstall { get; }
+    IObservable<NewProgressEventArgs> NewProgressObservable { get; }
+}
+
 public class ProgressService : IProgressService
 {
     private readonly Subject<Unit> _uninstallSubject = new();
