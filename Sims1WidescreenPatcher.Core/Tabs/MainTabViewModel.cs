@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using Avalonia.Collections;
@@ -8,6 +9,7 @@ using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Enums;
+using Sims1WidescreenPatcher.Core.Events;
 using Sims1WidescreenPatcher.Core.Factories;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services;
@@ -19,45 +21,45 @@ namespace Sims1WidescreenPatcher.Core.Tabs;
 
 public interface IMainTabViewModel
 {
-    ICommand PatchCommand { get; }
-    ICommand UninstallCommand { get; }
-    ICommand OpenFile { get; }
-    Interaction<Unit, IStorageFile?> ShowOpenFileDialog { get; }
-    ICommand CustomResolutionCommand { get; }
-    Interaction<ICustomResolutionDialogViewModel, Resolution?> ShowCustomResolutionDialog { get; }
-    Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?> ShowCustomYesNoDialog { get; }
-    Interaction<CustomInformationDialogViewModel, Unit> ShowCustomInformationDialog { get; }
+    ReactiveCommand<Unit, Unit>? PatchCommand { get; }
+    ReactiveCommand<Unit, Unit>? UninstallCommand { get; }
+    ReactiveCommand<Unit, Unit>? OpenFile { get; }
+    Interaction<Unit, IStorageFile?>? ShowOpenFileDialog { get; }
+    ReactiveCommand<Unit, Unit>? CustomResolutionCommand { get; }
+    Interaction<ICustomResolutionDialogViewModel?, Resolution?>? ShowCustomResolutionDialog { get; }
+    Interaction<CustomYesNoDialogViewModel?, YesNoDialogResponse?>? ShowCustomYesNoDialog { get; }
+    Interaction<CustomInformationDialogViewModel, Unit>? ShowCustomInformationDialog { get; }
     string Path { get; set; }
     AspectRatio? SelectedAspectRatio { get; set; }
-    ReadOnlyObservableCollection<AspectRatio> AspectRatios { get; }
-    ReadOnlyObservableCollection<Resolution> FilteredResolutions { get; }
+    ReadOnlyObservableCollection<AspectRatio>? AspectRatios { get; }
+    ReadOnlyObservableCollection<Resolution>? FilteredResolutions { get; }
     Resolution? SelectedResolution { get; set; }
-    AvaloniaList<IWrapper> Wrappers { get; }
+    AvaloniaList<IWrapper>? Wrappers { get; }
     int SelectedWrapperIndex { get; set; }
     double Progress { get; }
-    public ICheckboxViewModel ResolutionsColoredCbVm { get; }
-    public ICheckboxViewModel SortByAspectRatioCbVm { get; }
+    public ICheckboxViewModel? ResolutionsColoredCbVm { get; }
+    public ICheckboxViewModel? SortByAspectRatioCbVm { get; }
 }
 
 public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 {
     #region Fields
 
-    private readonly CustomYesNoDialogViewModel _customYesNoDialogViewModel;
-    private readonly ICustomResolutionDialogViewModel _customResolutionDialogViewModel;
+    private readonly CustomYesNoDialogViewModel? _customYesNoDialogViewModel;
+    private readonly ICustomResolutionDialogViewModel? _customResolutionDialogViewModel;
     private int _selectedWrapperIndex;
     private Resolution? _selectedResolution;
     private Resolution? _previousResolution;
     private AspectRatio? _selectedSelectedAspectRatio;
     private string _path = "";
     private bool _isBusy;
-    private readonly ObservableAsPropertyHelper<bool> _hasBackup;
-    private readonly ObservableAsPropertyHelper<bool> _isValidSimsExe;
-    private readonly List<string> _previouslyPatched = new() { };
-    private double _progressPct;
-    private string? _progressStatus;
-    private string? _progressStatus2;
-    private readonly SourceList<Resolution> _resolutionSource = new();
+    private readonly ObservableAsPropertyHelper<bool>? _hasBackup;
+    private readonly ObservableAsPropertyHelper<bool>? _isValidSimsExe;
+    private readonly List<string>? _previouslyPatched;
+    private readonly ObservableAsPropertyHelper<double> _progressPct;
+    private readonly ObservableAsPropertyHelper<string?> _progressStatus;
+    private readonly ObservableAsPropertyHelper<string?> _progressStatus2;
+    private readonly SourceList<Resolution> _resolutionSource;
     private readonly IProgressService _progressService;
     private readonly IWrapperService _wrapperService;
     private readonly ReadOnlyObservableCollection<Resolution> _filteredResolutions;
@@ -66,7 +68,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
     private readonly IUninstallService _uninstallService;
     private readonly IImagesService _imagesService;
     private readonly ObservableAsPropertyHelper<string?> _patchButtonToolTipTxt;
-    private IAppState AppState { get; }
+    private IAppState? AppState { get; }
 
     private const string IncompatibleSimsExeTxt =
         "Your Sims.exe is not able to be patched.\nYou need to be using a cracked/nocd Sims.exe that has not been patched to a custom resolution.";
@@ -89,6 +91,8 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         IWrapperService wrapperService
     )
     {
+        _previouslyPatched = new List<string>();
+        _resolutionSource = new SourceList<Resolution>();
         AppState = appState;
         _progressService = progressService;
         _wrapperService = wrapperService;
@@ -102,14 +106,85 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         SortByAspectRatioCbVm.ToolTipText = "Sort the resolutions by their aspect ratio";
         _customYesNoDialogViewModel = customYesNoDialogViewModel;
         _customResolutionDialogViewModel = customResolutionDialogViewModel;
-        this.WhenAnyValue(x => x.Path).Subscribe(x => AppState.SimsExePath = x);
-        this.WhenAnyValue(x => x.SelectedResolution).Subscribe(x => AppState.Resolution = x);
+
+        OpenFile = ReactiveCommand.CreateFromTask(OpenFileAsync);
+        ShowOpenFileDialog = new Interaction<Unit, IStorageFile?>();
+
+        SelectedWrapperIndex = 0;
+        SelectedAspectRatio = null;
+        ShowCustomResolutionDialog =
+            new Interaction<ICustomResolutionDialogViewModel?, Resolution?>();
+        CustomResolutionCommand = ReactiveCommand.CreateFromTask(OpenCustomResolutionDialogAsync);
+        ShowCustomYesNoDialog =
+            new Interaction<CustomYesNoDialogViewModel?, YesNoDialogResponse?>();
+        ShowCustomInformationDialog = new Interaction<CustomInformationDialogViewModel, Unit>();
+
+        ShowBadSimsExeInfoDialog = ReactiveCommand.CreateFromTask(async () =>
+        {
+            await OpenCustomInformationDialogAsync("Information", IncompatibleSimsExeTxt);
+        });
+
+        var resolutionFilter = this.WhenAnyValue(x => x.SelectedAspectRatio)
+            .Select(CreateResolutionPredicate);
+        var resolutionSort = this.WhenAnyValue(x => x.SortByAspectRatioCbVm!.Checked)
+            .Select(x =>
+                x
+                    ? SortExpressionComparer<Resolution>
+                        .Ascending(r => r.AspectRatio.Numerator)
+                        .ThenByAscending(r => r.AspectRatio.Denominator)
+                        .ThenByAscending(r => r.Width)
+                        .ThenByAscending(r => r.Height)
+                    : SortExpressionComparer<Resolution>
+                        .Ascending(r => r.Width)
+                        .ThenByAscending(r => r.Height)
+            );
+
+        if (_resolutionSource.Count < 1)
+        {
+            _resolutionSource.AddRange(resolutionsService.GetResolutions());
+        }
+
+        if (string.IsNullOrWhiteSpace(Path))
+        {
+            Path = findSimsPathService.FindSimsPath();
+        }
+
+        this.WhenAnyValue(x => x.Path)
+            .Subscribe(x =>
+            {
+                if (AppState != null)
+                {
+                    AppState.SimsExePath = x;
+                }
+            });
+        this.WhenAnyValue(x => x.SelectedResolution)
+            .Subscribe(x =>
+            {
+                if (AppState != null)
+                {
+                    AppState.Resolution = x;
+                }
+            });
         _hasBackup = this.WhenAnyValue(x => x.Path, x => x.IsBusy)
             .Select(_ => _resolutionPatchService.BackupExists())
             .ToProperty(this, x => x.HasBackup, deferSubscription: true);
         _isValidSimsExe = this.WhenAnyValue(x => x.Path)
             .Select(_ => _resolutionPatchService.CanPatchResolution())
             .ToProperty(this, x => x.IsValidSimsExe, deferSubscription: true);
+
+        _resolutionSource
+            .Connect()
+            .Filter(resolutionFilter)
+            .Sort(resolutionSort)
+            .Bind(out _filteredResolutions)
+            .Subscribe(GetNewSelectedResolution);
+        _resolutionSource
+            .Connect()
+            .DistinctValues(x => x.AspectRatio)
+            .Sort(Comparer<AspectRatio>.Default)
+            .Bind(out _aspectRatios)
+            .Subscribe();
+
         var canPatch = this.WhenAnyValue(
                 x => x.IsBusy,
                 x => x.Path,
@@ -133,57 +208,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
             .DistinctUntilChanged();
         PatchCommand = ReactiveCommand.CreateFromTask(OnClickedPatch, canPatch);
         UninstallCommand = ReactiveCommand.CreateFromTask(OnClickedUninstall, canUninstall);
-        OpenFile = ReactiveCommand.CreateFromTask(OpenFileAsync);
-        ShowOpenFileDialog = new Interaction<Unit, IStorageFile?>();
-        var resolutionFilter = this.WhenAnyValue(x => x.SelectedAspectRatio)
-            .Select(CreateResolutionPredicate);
-        var resolutionSort = this.WhenAnyValue(x => x.SortByAspectRatioCbVm.Checked)
-            .Select(x =>
-                x
-                    ? SortExpressionComparer<Resolution>
-                        .Ascending(r => r.AspectRatio.Numerator)
-                        .ThenByAscending(r => r.AspectRatio.Denominator)
-                        .ThenByAscending(r => r.Width)
-                        .ThenByAscending(r => r.Height)
-                    : SortExpressionComparer<Resolution>
-                        .Ascending(r => r.Width)
-                        .ThenByAscending(r => r.Height)
-            );
-        _resolutionSource
-            .Connect()
-            .Filter(resolutionFilter)
-            .Sort(resolutionSort)
-            .Bind(out _filteredResolutions)
-            .Subscribe(GetNewSelectedResolution);
-        _resolutionSource
-            .Connect()
-            .DistinctValues(x => x.AspectRatio)
-            .Sort(Comparer<AspectRatio>.Default)
-            .Bind(out _aspectRatios)
-            .Subscribe();
 
-        _resolutionSource.AddRange(resolutionsService.GetResolutions());
-        SelectedResolution = FilteredResolutions.First();
-        SelectedWrapperIndex = 0;
-        SelectedAspectRatio = null;
-        ShowCustomResolutionDialog =
-            new Interaction<ICustomResolutionDialogViewModel, Resolution?>();
-        CustomResolutionCommand = ReactiveCommand.CreateFromTask(OpenCustomResolutionDialogAsync);
-        ShowCustomYesNoDialog = new Interaction<CustomYesNoDialogViewModel, YesNoDialogResponse?>();
-        ShowCustomInformationDialog = new Interaction<CustomInformationDialogViewModel, Unit>();
-        Path = findSimsPathService.FindSimsPath();
-
-        progressService.NewProgressObservable.Subscribe(x =>
-        {
-            Progress = x.Progress;
-            ProgressStatus = x.Status;
-            ProgressStatus2 = x.Status2;
-        });
-
-        ShowBadSimsExeInfoDialog = ReactiveCommand.CreateFromTask(async () =>
-        {
-            await OpenCustomInformationDialogAsync("Information", IncompatibleSimsExeTxt);
-        });
         this.WhenAnyValue(
                 x => x.IsValidSimsExe,
                 x => x.Path,
@@ -191,11 +216,13 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
                 selector: (validExe, path, hasBackup) =>
                     !validExe && !hasBackup && !string.IsNullOrWhiteSpace(path)
             )
+            .ObserveOn(RxApp.MainThreadScheduler)
+            // this is terrible. Without this, the command is invoked before the view has a chance to bind an
+            // interaction for ShowCustomInformationDialog, causing the app to crash
+            .DelaySubscription(TimeSpan.FromSeconds(1))
             .Where(x => x)
-            .Subscribe(_ =>
-            {
-                ShowBadSimsExeInfoDialog.Execute().Subscribe();
-            });
+            .Select(_ => Unit.Default)
+            .InvokeCommand(ShowBadSimsExeInfoDialog);
         _patchButtonToolTipTxt = this.WhenAnyValue(
                 x => x.IsValidSimsExe,
                 x => x.Path,
@@ -203,29 +230,53 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
                 selector: (validExe, path, hasBackup) =>
                     !validExe && !hasBackup && !string.IsNullOrWhiteSpace(path)
             )
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .DelaySubscription(TimeSpan.FromSeconds(1))
             .Where(x => x)
             .Select(_ => IncompatibleSimsExeTxt)
             .ToProperty(this, x => x.PatchButtonToolTipTxt);
+
+        _progressPct = progressService
+            .NewProgressObservable.ObserveOn(RxApp.MainThreadScheduler)
+            .Select(x => x.Progress)
+            .ToProperty(this, x => x.Progress);
+        _progressStatus = progressService
+            .NewProgressObservable.ObserveOn(RxApp.MainThreadScheduler)
+            .Select(x => x.Status)
+            .ToProperty(this, x => x.ProgressStatus);
+        _progressStatus2 = progressService
+            .NewProgressObservable.ObserveOn(RxApp.MainThreadScheduler)
+            .Select(x => x.Status2)
+            .ToProperty(this, x => x.ProgressStatus2);
+
+        if (Wrappers is null || !Wrappers.Any())
+        {
+            Wrappers = new AvaloniaList<IWrapper>(_wrapperService.GetWrappers());
+        }
+
+        SelectedResolution ??= FilteredResolutions.First();
     }
 
     #endregion
 
     #region Commands
 
-    public ReactiveCommand<Unit, Unit> ShowBadSimsExeInfoDialog { get; }
-    public ICommand PatchCommand { get; }
-    public ICommand UninstallCommand { get; }
-    public ICommand OpenFile { get; }
-    public Interaction<Unit, IStorageFile?> ShowOpenFileDialog { get; }
-    public ICommand CustomResolutionCommand { get; }
+    public ReactiveCommand<Unit, Unit>? ShowBadSimsExeInfoDialog { get; }
+    public ReactiveCommand<Unit, Unit>? PatchCommand { get; }
+    public ReactiveCommand<Unit, Unit>? UninstallCommand { get; }
+    public ReactiveCommand<Unit, Unit>? OpenFile { get; }
+    public Interaction<Unit, IStorageFile?>? ShowOpenFileDialog { get; }
+    public ReactiveCommand<Unit, Unit>? CustomResolutionCommand { get; }
+
     public Interaction<
-        ICustomResolutionDialogViewModel,
+        ICustomResolutionDialogViewModel?,
         Resolution?
-    > ShowCustomResolutionDialog { get; }
+    >? ShowCustomResolutionDialog { get; }
     public Interaction<
-        CustomYesNoDialogViewModel,
+        CustomYesNoDialogViewModel?,
         YesNoDialogResponse?
-    > ShowCustomYesNoDialog { get; }
+    >? ShowCustomYesNoDialog { get; }
+
     public Interaction<CustomInformationDialogViewModel, Unit> ShowCustomInformationDialog { get; }
 
     #endregion
@@ -248,8 +299,8 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         set => this.RaiseAndSetIfChanged(ref _isBusy, value);
     }
 
-    private bool HasBackup => _hasBackup.Value;
-    private bool IsValidSimsExe => _isValidSimsExe.Value;
+    private bool HasBackup => _hasBackup?.Value ?? false;
+    private bool IsValidSimsExe => _isValidSimsExe?.Value ?? false;
 
     public AspectRatio? SelectedAspectRatio
     {
@@ -257,9 +308,9 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         set => this.RaiseAndSetIfChanged(ref _selectedSelectedAspectRatio, value);
     }
 
-    public ICheckboxViewModel ResolutionsColoredCbVm { get; set; }
+    public ICheckboxViewModel? ResolutionsColoredCbVm { get; }
 
-    public ICheckboxViewModel SortByAspectRatioCbVm { get; set; }
+    public ICheckboxViewModel? SortByAspectRatioCbVm { get; }
 
     public ReadOnlyObservableCollection<AspectRatio> AspectRatios => _aspectRatios;
 
@@ -279,7 +330,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         }
     }
 
-    public AvaloniaList<IWrapper> Wrappers => new(_wrapperService.GetWrappers());
+    public AvaloniaList<IWrapper> Wrappers { get; }
 
     public int SelectedWrapperIndex
     {
@@ -287,23 +338,11 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         set => this.RaiseAndSetIfChanged(ref _selectedWrapperIndex, value);
     }
 
-    public double Progress
-    {
-        get => _progressPct;
-        set => this.RaiseAndSetIfChanged(ref _progressPct, value);
-    }
+    public double Progress => _progressPct.Value;
 
-    public string? ProgressStatus
-    {
-        get => _progressStatus;
-        set => this.RaiseAndSetIfChanged(ref _progressStatus, value);
-    }
+    public string? ProgressStatus => _progressStatus.Value;
 
-    public string? ProgressStatus2
-    {
-        get => _progressStatus2;
-        set => this.RaiseAndSetIfChanged(ref _progressStatus2, value);
-    }
+    public string? ProgressStatus2 => _progressStatus2.Value;
 
     #endregion
 
@@ -325,7 +364,10 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
                     SelectedResolution = change.Item.Current;
                     break;
                 case ListChangeReason.AddRange:
-                    if (FilteredResolutions.All(x => x != SelectedResolution))
+                    if (
+                        FilteredResolutions != null
+                        && FilteredResolutions.All(x => x != SelectedResolution)
+                    )
                     {
                         SelectedResolution = change.Range.First();
                         return;
@@ -337,7 +379,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
                 case ListChangeReason.Remove:
                     break;
                 case ListChangeReason.RemoveRange:
-                    SelectedResolution = FilteredResolutions.First();
+                    SelectedResolution = FilteredResolutions?.First();
                     return;
                 case ListChangeReason.Refresh:
                     break;
@@ -372,29 +414,43 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         string message
     )
     {
+        if (_customYesNoDialogViewModel == null)
+        {
+            return null;
+        }
         _customYesNoDialogViewModel.Title = title;
         _customYesNoDialogViewModel.Message = message;
+        if (ShowCustomYesNoDialog == null)
+        {
+            return null;
+        }
         var result = await ShowCustomYesNoDialog.Handle(_customYesNoDialogViewModel);
         return result;
     }
 
     private async Task OpenCustomResolutionDialogAsync()
     {
-        var res = await ShowCustomResolutionDialog.Handle(_customResolutionDialogViewModel);
-        if (res is null)
+        if (ShowCustomResolutionDialog != null)
         {
-            return;
-        }
+            var res = await ShowCustomResolutionDialog.Handle(_customResolutionDialogViewModel);
+            if (res is null)
+            {
+                return;
+            }
 
-        _resolutionSource.Add(res);
+            _resolutionSource.Add(res);
+        }
     }
 
     private async Task OpenFileAsync()
     {
-        var storageFile = await ShowOpenFileDialog.Handle(Unit.Default);
-        if (storageFile is not null)
+        if (ShowOpenFileDialog != null)
         {
-            Path = storageFile.Path.LocalPath;
+            var storageFile = await ShowOpenFileDialog.Handle(Unit.Default);
+            if (storageFile is not null)
+            {
+                Path = storageFile.Path.LocalPath;
+            }
         }
     }
 
@@ -436,7 +492,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
             await Task.Run(() => _wrapperService.Install(selectedWrapper));
         }
 
-        _previouslyPatched.Add(Path);
+        _previouslyPatched?.Add(Path);
 
         await OpenCustomInformationDialogAsync(
             "Progress",
@@ -472,7 +528,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         }
 
         await Task.Run(() => _uninstallService.Uninstall());
-        _previouslyPatched.Remove(Path);
+        _previouslyPatched?.Remove(Path);
         IsBusy = false;
         await OpenCustomInformationDialogAsync("Progress", "Uninstalled");
     }
