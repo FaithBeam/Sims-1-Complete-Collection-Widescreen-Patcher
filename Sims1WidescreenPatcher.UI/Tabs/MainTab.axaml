@@ -13,6 +13,7 @@
     </Design.DataContext>
 
     <Control.Resources>
+        <converters:ResolutionColorCodingConverter x:Key="ResolutionColorCodingConverter" />
         <converters:ToolTipShownConverter x:Key="ToolTipShownConverter" />
     </Control.Resources>
 
@@ -27,9 +28,11 @@
                 <TextBox Grid.Column="0"
                          Margin="0 0 5 0"
                          x:Name="FileDialog"
-                         Watermark="Path to Sims.exe" />
+                         Watermark="Path to Sims.exe"
+                         Text="{Binding Path}" />
                 <Button Grid.Column="1"
                         x:Name="BrowseButton"
+                        Command="{Binding OpenFile}"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         Content="Browse" />
@@ -42,6 +45,8 @@
                     <Label>Aspect Ratio</Label>
                     <ComboBox x:Name="AspectRatioComboBox"
                               HorizontalAlignment="Stretch"
+                              SelectedItem="{Binding SelectedAspectRatio}"
+                              ItemsSource="{Binding AspectRatios}"
                               Tapped="AspectRatioComboBox_OnTapped">
                     </ComboBox>
                     <ToolTip.Tip>
@@ -56,8 +61,8 @@
                 <StackPanel Grid.Column="1"
                             VerticalAlignment="Bottom"
                             Margin="0 0 5 0">
-                    <userControls:Checkbox x:Name="ResolutionsColoredCheckbox" />
-                    <userControls:Checkbox x:Name="SortByAspectRatioCheckbox" 
+                    <userControls:Checkbox DataContext="{Binding ResolutionsColoredCbVm}" />
+                    <userControls:Checkbox DataContext="{Binding SortByAspectRatioCbVm}"
                                            Margin="0 5 0 0" />
                 </StackPanel>
                 <StackPanel Grid.Column="2"
@@ -65,7 +70,11 @@
                     <Label>Resolution</Label>
                     <ComboBox Margin="0 0 5 0"
                               x:Name="ResolutionCombo"
-                              HorizontalAlignment="Stretch">
+                              ItemsSource="{Binding FilteredResolutions}"
+                              SelectedItem="{Binding SelectedResolution}"
+                              HorizontalAlignment="Stretch"
+                              Classes.ShouldColor="{Binding ResolutionsColoredCbVm.Checked}"
+                              Classes.ShouldNotColor="{Binding !ResolutionsColoredCbVm.Checked}">
                         <ToolTip.Tip>
                             <TextBlock>
                                 Resolutions supported by your monitor.
@@ -78,13 +87,41 @@
                                 <TextBlock Text="Red" Foreground="Red" /> resolutions have game breaking graphical issues, and it's recommended to avoid them.
                             </TextBlock>
                         </ToolTip.Tip>
+
+                        <ComboBox.Styles>
+                            <Style Selector="ComboBox.ShouldColor > ComboBoxItem">
+                                <Setter Property="Background"
+                                        Value="{Binding Converter={StaticResource ResolutionColorCodingConverter}, ConverterParameter='Background'}" />
+                            </Style>
+                            <Style
+                                Selector="ComboBox.ShouldColor > ComboBoxItem:pointerover /template/ ContentPresenter">
+                                <Setter Property="Background"
+                                        Value="{Binding Converter={StaticResource ResolutionColorCodingConverter}, ConverterParameter='Pointerover'}" />
+                            </Style>
+                            <Style Selector="ComboBox.ShouldColor > ComboBoxItem:selected /template/ ContentPresenter">
+                                <Setter Property="Background"
+                                        Value="{Binding Converter={StaticResource ResolutionColorCodingConverter}, ConverterParameter='Selected'}" />
+                            </Style>
+                            <Style Selector="ComboBox.ShouldNotColor > ComboBoxItem">
+                                <Setter Property="Background" Value="{DynamicResource ComboBoxItemBackground}" />
+                            </Style>
+                            <Style
+                                Selector="ComboBox.ShouldNotColor > ComboBoxItem:pointerover /template/ ContentPresenter">
+                                <Setter Property="Background"
+                                        Value="{DynamicResource ComboBoxItemBackgroundPointerOver}" />
+                            </Style>
+                            <Style
+                                Selector="ComboBox.ShouldNotColor > ComboBoxItem:selected /template/ ContentPresenter">
+                                <Setter Property="Background" Value="{DynamicResource ComboBoxItemBackgroundSelected}" />
+                            </Style>
+                        </ComboBox.Styles>
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Grid.Column="3"
                             VerticalAlignment="Bottom">
                     <!-- Empty label for spacing and alignment purposes -->
                     <!-- <Label Content="" /> -->
-                    <Button x:Name="AddResolutionBtn" Content="Add Resolution">
+                    <Button Command="{Binding CustomResolutionCommand}" Content="Add Resolution">
                         <ToolTip.Tip>Add a custom resolution</ToolTip.Tip>
                     </Button>
                 </StackPanel>
@@ -100,6 +137,8 @@
                     <Label>Wrapper</Label>
                     <ComboBox Margin="0 0 5 0"
                               x:Name="WrapperCombo"
+                              ItemsSource="{Binding Wrappers}"
+                              SelectedIndex="{Binding SelectedWrapperIndex}"
                               HorizontalAlignment="Stretch">
                         <ToolTip.Tip>
                             <TextBlock>
@@ -117,11 +156,15 @@
                 <Button Grid.Column="1"
                         Margin="0 0 5 0"
                         x:Name="UninstallButton"
+                        Command="{Binding UninstallCommand}"
                         Content="Uninstall"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center">
                     <Button.Styles>
+                        <Style Selector="Button">
+                            <Setter Property="Background" Value="{DynamicResource ButtonBackground}" />
+                        </Style>
                         <Style Selector="Button:pointerover /template/ ContentPresenter">
                             <Setter Property="Background" Value="IndianRed" />
                         </Style>
@@ -129,7 +172,7 @@
                 </Button>
                 <StackPanel Grid.Column="2" VerticalAlignment="Bottom">
                     <ToolTip.Tip>
-                        <TextBlock x:Name="PatchBtnToolTipTxt" />
+                        <TextBlock Text="{Binding PatchButtonToolTipTxt}"></TextBlock>
                     </ToolTip.Tip>
                     <StackPanel.Styles>
                         <!-- Hack to not show tooltip when there is no value for bound ToolTipText -->
@@ -141,6 +184,7 @@
                     </StackPanel.Styles>
                     <Button
                             x:Name="PatchButton"
+                            Command="{Binding PatchCommand}"
                             Content="Patch"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Stretch"
@@ -164,17 +208,20 @@
                         <Label Padding="2"
                                HorizontalAlignment="Left"
                                Content="Progress"/>
-                        <Label x:Name="ProgressStatusLabel" Grid.Column="1"
-                               HorizontalAlignment="Center"/>
-                        <Label x:Name="ProgressStatus2Label" Grid.Column="2"
+                        <Label Grid.Column="1"
+                               HorizontalAlignment="Center"
+                               Content="{Binding ProgressStatus}"/>
+                        <Label Grid.Column="2"
                                HorizontalAlignment="Right"
                                FontSize="8"
-                               VerticalAlignment="Bottom"/>
+                               VerticalAlignment="Bottom"
+                               Content="{Binding ProgressStatus2}"/>
                     </Grid>
                     <ProgressBar x:Name="ProgressBar"
                                  Minimum="0"
                                  Maximum="100"
-                                 ShowProgressText="True" />
+                                 ShowProgressText="True"
+                                 Value="{Binding Progress}" />
                 </StackPanel>
             </Grid>
         </StackPanel>

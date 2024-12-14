@@ -29,249 +29,31 @@ public partial class MainTab : ReactiveUserControl<MainTabViewModel>
     private TopLevel? _topLevel;
     private Window? _window;
 
-    private readonly Style _cbShouldColorBackgroundStyle = new(x =>
-        x.OfType<ComboBox>().Class("ShouldColor").Child().OfType<ComboBoxItem>()
-    )
-    {
-        Setters =
-        {
-            new Setter(
-                BackgroundProperty,
-                new Binding
-                {
-                    Converter = new ResolutionColorCodingConverter(),
-                    ConverterParameter = "Background",
-                }
-            ),
-        },
-    };
-    private readonly Style _cbShouldColorPointerOverStyle = new(x =>
-        x.OfType<ComboBox>()
-            .Class("ShouldColor")
-            .Child()
-            .OfType<ComboBoxItem>()
-            .Class(":pointerover")
-            .Template()
-            .OfType<ContentPresenter>()
-    )
-    {
-        Setters =
-        {
-            new Setter(
-                BackgroundProperty,
-                new Binding
-                {
-                    Converter = new ResolutionColorCodingConverter(),
-                    ConverterParameter = "Pointerover",
-                }
-            ),
-        },
-    };
-    private readonly Style _cbShouldColorSelectedStyle = new(x =>
-        x.OfType<ComboBox>()
-            .Class("ShouldColor")
-            .Child()
-            .OfType<ComboBoxItem>()
-            .Class(":selected")
-            .Template()
-            .OfType<ContentPresenter>()
-    )
-    {
-        Setters =
-        {
-            new Setter(
-                BackgroundProperty,
-                new Binding
-                {
-                    Converter = new ResolutionColorCodingConverter(),
-                    ConverterParameter = "Selected",
-                }
-            ),
-        },
-    };
-
     public MainTab()
     {
         InitializeComponent();
 
-        ResolutionCombo.Styles.AddRange(
-            new[]
-            {
-                _cbShouldColorBackgroundStyle,
-                _cbShouldColorPointerOverStyle,
-                _cbShouldColorSelectedStyle,
-            }
-        );
-
         this.WhenActivated(d =>
         {
+            if (ViewModel == null)
+            {
+                return;
+            }
             _topLevel = TopLevel.GetTopLevel(this);
             _window = (Window)_topLevel!;
+            d(ViewModel.ShowOpenFileDialog.RegisterHandler(ShowOpenFileDialogAsync));
 
-            this.WhenAnyValue(x => x.ViewModel)
-                .WhereNotNull()
-                .Subscribe(viewModel =>
-                {
-                    this.Bind(viewModel, vm => vm.Path, v => v.FileDialog.Text).DisposeWith(d);
-
-                    this.BindCommand(viewModel, vm => vm.OpenFile, v => v.BrowseButton)
-                        .DisposeWith(d);
-
-                    this.OneWayBind(
-                            viewModel,
-                            vm => vm.AspectRatios,
-                            v => v.AspectRatioComboBox.ItemsSource
-                        )
-                        .DisposeWith(d);
-                    this.Bind(
-                            viewModel,
-                            vm => vm.SelectedAspectRatio,
-                            v => v.AspectRatioComboBox.SelectedItem
-                        )
-                        .DisposeWith(d);
-
-                    this.Bind(
-                            viewModel,
-                            vm => vm.ResolutionsColoredCbVm,
-                            v => v.ResolutionsColoredCheckbox.DataContext
-                        )
-                        .DisposeWith(d);
-
-                    this.Bind(
-                            viewModel,
-                            vm => vm.SortByAspectRatioCbVm,
-                            v => v.SortByAspectRatioCheckbox.DataContext
-                        )
-                        .DisposeWith(d);
-
-                    AspectRatioComboBox.ItemTemplate = new FuncDataTemplate<AspectRatio?>(
-                        (value, _) =>
-                            new TextBlock
-                            {
-                                [TextBlock.TextProperty] = value?.ToString() ?? string.Empty,
-                            }
-                    );
-                    ResolutionCombo.ItemTemplate = new FuncDataTemplate<Resolution?>(
-                        (r, _) =>
-                            new TextBlock
-                            {
-                                [TextBlock.TextProperty] = r?.ToString() ?? string.Empty,
-                            }
-                    );
-                    WrapperCombo.ItemTemplate = new FuncDataTemplate<IWrapper?>(
-                        (value, _) =>
-                            new TextBlock { [TextBlock.TextProperty] = value?.Name ?? string.Empty }
-                    );
-                    this.OneWayBind(
-                            viewModel,
-                            vm => vm.FilteredResolutions,
-                            v => v.ResolutionCombo.ItemsSource
-                        )
-                        .DisposeWith(d);
-                    viewModel
-                        .WhenAnyValue(x => x.ResolutionsColoredCbVm!.Checked)
-                        .Subscribe(@checked =>
-                        {
-                            if (@checked)
-                            {
-                                ResolutionCombo.Classes.Add("ShouldColor");
-                            }
-                            else
-                            {
-                                if (ResolutionCombo.Classes.Contains("ShouldColor"))
-                                {
-                                    ResolutionCombo.Classes.Remove("ShouldColor");
-                                }
-                            }
-                        })
-                        .DisposeWith(d);
-                    this.Bind(
-                            viewModel,
-                            vm => vm.SelectedResolution,
-                            v => v.ResolutionCombo.SelectedItem
-                        )
-                        .DisposeWith(d);
-
-                    this.BindCommand(
-                            viewModel,
-                            vm => vm.CustomResolutionCommand,
-                            v => v.AddResolutionBtn
-                        )
-                        .DisposeWith(d);
-
-                    this.OneWayBind(viewModel, vm => vm.Wrappers, v => v.WrapperCombo.ItemsSource)
-                        .DisposeWith(d);
-                    this.Bind(
-                            viewModel,
-                            vm => vm.SelectedWrapperIndex,
-                            v => v.WrapperCombo.SelectedIndex
-                        )
-                        .DisposeWith(d);
-
-                    this.BindCommand(viewModel, vm => vm.UninstallCommand, v => v.UninstallButton)
-                        .DisposeWith(d);
-
-                    this.BindCommand(viewModel, vm => vm.PatchCommand, v => v.PatchButton)
-                        .DisposeWith(d);
-                    this.Bind(
-                            viewModel,
-                            vm => vm.PatchButtonToolTipTxt,
-                            v => v.PatchBtnToolTipTxt.Text
-                        )
-                        .DisposeWith(d);
-
-                    this.OneWayBind(
-                            viewModel,
-                            vm => vm.ProgressStatus,
-                            v => v.ProgressStatusLabel.Content
-                        )
-                        .DisposeWith(d);
-                    this.OneWayBind(
-                            viewModel,
-                            vm => vm.ProgressStatus2,
-                            v => v.ProgressStatus2Label.Content
-                        )
-                        .DisposeWith(d);
-                    this.OneWayBind(viewModel, vm => vm.Progress, v => v.ProgressBar.Value)
-                        .DisposeWith(d);
-
-                    if (viewModel.ShowOpenFileDialog != null)
-                    {
-                        this.BindInteraction(
-                            viewModel,
-                            vm => vm.ShowOpenFileDialog!,
-                            ShowOpenFileDialogAsync
-                        );
-                    }
-                    if (viewModel.ShowCustomResolutionDialog != null)
-                    {
-                        this.BindInteraction(
-                                viewModel,
-                                vm => vm.ShowCustomResolutionDialog!,
-                                ShowCustomResolutionDialogAsync
-                            )
-                            .DisposeWith(d);
-                    }
-                    if (viewModel.ShowCustomYesNoDialog != null)
-                    {
-                        this.BindInteraction(
-                                viewModel,
-                                vm => vm.ShowCustomYesNoDialog!,
-                                ShowCustomYesNoDialogAsync
-                            )
-                            .DisposeWith(d);
-                    }
-                    if (viewModel.ShowCustomInformationDialog != null)
-                    {
-                        this.BindInteraction(
-                                viewModel,
-                                vm => vm.ShowCustomInformationDialog!,
-                                ShowCustomInformationDialogAsync
-                            )
-                            .DisposeWith(d);
-                    }
-                })
-                .DisposeWith(d);
+            d(
+                ViewModel.ShowCustomResolutionDialog.RegisterHandler(
+                    ShowCustomResolutionDialogAsync
+                )
+            );
+            d(ViewModel.ShowCustomYesNoDialog.RegisterHandler(ShowCustomYesNoDialogAsync));
+            d(
+                ViewModel.ShowCustomInformationDialog.RegisterHandler(
+                    ShowCustomInformationDialogAsync
+                )
+            );
         });
     }
 

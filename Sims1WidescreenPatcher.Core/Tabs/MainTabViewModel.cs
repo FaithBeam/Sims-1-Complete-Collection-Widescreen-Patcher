@@ -45,8 +45,8 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 {
     #region Fields
 
-    private readonly CustomYesNoDialogViewModel? _customYesNoDialogViewModel;
-    private readonly ICustomResolutionDialogViewModel? _customResolutionDialogViewModel;
+    private readonly CustomYesNoDialogViewModel _customYesNoDialogViewModel;
+    private readonly ICustomResolutionDialogViewModel _customResolutionDialogViewModel;
     private int _selectedWrapperIndex;
     private Resolution? _selectedResolution;
     private Resolution? _previousResolution;
@@ -146,7 +146,9 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
         if (string.IsNullOrWhiteSpace(Path))
         {
-            Path = findSimsPathService.FindSimsPath();
+            // Path = findSimsPathService.FindSimsPath();
+            Path =
+                "/Users/ryanniebling/Applications/Kegworks/The Sims.app/Contents/SharedSupport/prefix/drive_c/Program Files (x86)/Maxis/The Sims/Sims.exe";
         }
 
         this.WhenAnyValue(x => x.Path)
@@ -261,21 +263,21 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
     #region Commands
 
-    public ReactiveCommand<Unit, Unit>? ShowBadSimsExeInfoDialog { get; }
-    public ReactiveCommand<Unit, Unit>? PatchCommand { get; }
-    public ReactiveCommand<Unit, Unit>? UninstallCommand { get; }
-    public ReactiveCommand<Unit, Unit>? OpenFile { get; }
-    public Interaction<Unit, IStorageFile?>? ShowOpenFileDialog { get; }
-    public ReactiveCommand<Unit, Unit>? CustomResolutionCommand { get; }
+    public ReactiveCommand<Unit, Unit> ShowBadSimsExeInfoDialog { get; }
+    public ReactiveCommand<Unit, Unit> PatchCommand { get; }
+    public ReactiveCommand<Unit, Unit> UninstallCommand { get; }
+    public ReactiveCommand<Unit, Unit> OpenFile { get; }
+    public Interaction<Unit, IStorageFile?> ShowOpenFileDialog { get; }
+    public ReactiveCommand<Unit, Unit> CustomResolutionCommand { get; }
 
     public Interaction<
         ICustomResolutionDialogViewModel?,
         Resolution?
-    >? ShowCustomResolutionDialog { get; }
+    > ShowCustomResolutionDialog { get; }
     public Interaction<
         CustomYesNoDialogViewModel?,
         YesNoDialogResponse?
-    >? ShowCustomYesNoDialog { get; }
+    > ShowCustomYesNoDialog { get; }
 
     public Interaction<CustomInformationDialogViewModel, Unit> ShowCustomInformationDialog { get; }
 
@@ -414,43 +416,29 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         string message
     )
     {
-        if (_customYesNoDialogViewModel == null)
-        {
-            return null;
-        }
         _customYesNoDialogViewModel.Title = title;
         _customYesNoDialogViewModel.Message = message;
-        if (ShowCustomYesNoDialog == null)
-        {
-            return null;
-        }
         var result = await ShowCustomYesNoDialog.Handle(_customYesNoDialogViewModel);
         return result;
     }
 
     private async Task OpenCustomResolutionDialogAsync()
     {
-        if (ShowCustomResolutionDialog != null)
+        var res = await ShowCustomResolutionDialog.Handle(_customResolutionDialogViewModel);
+        if (res is null)
         {
-            var res = await ShowCustomResolutionDialog.Handle(_customResolutionDialogViewModel);
-            if (res is null)
-            {
-                return;
-            }
-
-            _resolutionSource.Add(res);
+            return;
         }
+
+        _resolutionSource.Add(res);
     }
 
     private async Task OpenFileAsync()
     {
-        if (ShowOpenFileDialog != null)
+        var storageFile = await ShowOpenFileDialog.Handle(Unit.Default);
+        if (storageFile is not null)
         {
-            var storageFile = await ShowOpenFileDialog.Handle(Unit.Default);
-            if (storageFile is not null)
-            {
-                Path = storageFile.Path.LocalPath;
-            }
+            Path = storageFile.Path.LocalPath;
         }
     }
 
