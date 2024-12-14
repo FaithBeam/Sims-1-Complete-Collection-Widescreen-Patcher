@@ -146,9 +146,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
         if (string.IsNullOrWhiteSpace(Path))
         {
-            // Path = findSimsPathService.FindSimsPath();
-            Path =
-                "/Users/ryanniebling/Applications/Kegworks/The Sims.app/Contents/SharedSupport/prefix/drive_c/Program Files (x86)/Maxis/The Sims/Sims.exe";
+            Path = findSimsPathService.FindSimsPath();
         }
 
         this.WhenAnyValue(x => x.Path)
