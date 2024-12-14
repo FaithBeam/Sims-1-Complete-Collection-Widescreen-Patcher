@@ -25,7 +25,9 @@
       <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.0.0" />
       <PackageReference Include="PatternFinder" Version="1.0.2" />
       <PackageReference Include="ReactiveUI" Version="20.1.63" />
+      <PackageReference Include="sims-iff" Version="0.2.2" />
       <PackageReference Include="Sims.Far" Version="3.2.2" />
+      <PackageReference Include="System.Text.Json" Version="8.0.5" />
     </ItemGroup>
 
     <ItemGroup>
@@ -36,6 +38,8 @@
       <EmbeddedResource Include="Resources\DgVoodoo2\DDraw.dll" />
       <EmbeddedResource Include="Resources\DgVoodoo2\dgVoodoo.conf" />
       <EmbeddedResource Include="Resources\DgVoodoo2\dgVoodooCpl.exe" />
+      <None Remove="Resources\dd_domcal.iff" />
+      <EmbeddedResource Include="Resources\dd_domcal.iff" />
     </ItemGroup>
 
     <ItemGroup>

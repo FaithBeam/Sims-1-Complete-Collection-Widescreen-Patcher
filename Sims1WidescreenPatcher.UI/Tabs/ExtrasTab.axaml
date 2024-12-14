@@ -17,21 +17,29 @@
         <StyleInclude Source="../Styles/CheckboxStyles.axaml" />
     </UserControl.Styles>
 
-    <DockPanel x:Name="ExtrasTabDockPanel"
-               Margin="5">
-        <StackPanel DockPanel.Dock="Top">
-            <customcontrols:Checkbox DataContext="{Binding UnlockCheatsViewModel}"
-                                     IsEnabled="{Binding IsEnabled}" />
-        </StackPanel>
-        <Button HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                DockPanel.Dock="Bottom"
-                Background="#007bff"
-                Content="Apply"
-                IsVisible="False"
-                IsEnabled="{Binding ApplyBtnVisible}"
-                Classes.Hidden="{Binding !ApplyBtnVisible}"
-                Classes.Visible="{Binding ApplyBtnVisible}"
-                Command="{Binding ApplyCommand}" />
-    </DockPanel>
+        <Panel x:Name="ExtrasTabDockPanel"
+                   Margin="5">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="4*,96*">
+                <customcontrols:Checkbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 0 2"
+                                         DataContext="{Binding UnlockCheatsViewModel}"
+                                         IsEnabled="{Binding IsEnabled}" />
+                <customcontrols:Checkbox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 0 2"
+                                         DataContext="{Binding DomcalCheckboxViewModel}" IsEnabled="{Binding IsEnabled}" />
+                <customcontrols:Checkbox Grid.Row="2" Grid.Column="1" Margin="0 0 0 2"
+                                         DataContext="{Binding DomcalAdjustCareerSalariesViewModel}"
+                                         IsEnabled="{Binding IsEnabled}" />
+                <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding ShowCareerEditorDialogCmd}" Content="Career Editor" />
+            </Grid>
+            <Button HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Background="#007bff"
+                    ZIndex="1"
+                    Content="Apply"
+                    IsVisible="False"
+                    IsEnabled="{Binding ApplyBtnVisible}"
+                    Classes.Hidden="{Binding !ApplyBtnVisible}"
+                    Classes.Visible="{Binding ApplyBtnVisible}"
+                    Command="{Binding ApplyCommand}" />
+        </Panel>
+        
 </UserControl>

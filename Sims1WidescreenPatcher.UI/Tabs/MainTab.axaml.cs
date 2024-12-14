@@ -1,23 +1,30 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Templates;
+using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
+using Avalonia.Styling;
 using ReactiveUI;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Tabs;
 using Sims1WidescreenPatcher.Core.ViewModels;
-using Sims1WidescreenPatcher.UI.Views;
+using Sims1WidescreenPatcher.UI.Converters;
 using CustomInformationDialog = Sims1WidescreenPatcher.UI.Dialogs.CustomInformationDialog;
 using CustomResolutionDialog = Sims1WidescreenPatcher.UI.Dialogs.CustomResolutionDialog;
 using CustomYesNoDialog = Sims1WidescreenPatcher.UI.Dialogs.CustomYesNoDialog;
 
 namespace Sims1WidescreenPatcher.UI.Tabs;
 
-public partial class MainTab : ReactiveUserControl<IMainTabViewModel>
+public partial class MainTab : ReactiveUserControl<MainTabViewModel>
 {
     private TopLevel? _topLevel;
     private Window? _window;
@@ -25,13 +32,17 @@ public partial class MainTab : ReactiveUserControl<IMainTabViewModel>
     public MainTab()
     {
         InitializeComponent();
+
         this.WhenActivated(d =>
         {
             if (ViewModel == null)
+            {
                 return;
+            }
             _topLevel = TopLevel.GetTopLevel(this);
             _window = (Window)_topLevel!;
             d(ViewModel.ShowOpenFileDialog.RegisterHandler(ShowOpenFileDialogAsync));
+
             d(
                 ViewModel.ShowCustomResolutionDialog.RegisterHandler(
                     ShowCustomResolutionDialogAsync
@@ -59,7 +70,7 @@ public partial class MainTab : ReactiveUserControl<IMainTabViewModel>
     }
 
     private async Task ShowCustomYesNoDialogAsync(
-        IInteractionContext<CustomYesNoDialogViewModel, YesNoDialogResponse?> interaction
+        IInteractionContext<CustomYesNoDialogViewModel?, YesNoDialogResponse?> interaction
     )
     {
         var dialog = new CustomYesNoDialog { DataContext = interaction.Input };
@@ -71,7 +82,7 @@ public partial class MainTab : ReactiveUserControl<IMainTabViewModel>
     }
 
     private async Task ShowCustomResolutionDialogAsync(
-        IInteractionContext<ICustomResolutionDialogViewModel, Resolution?> interaction
+        IInteractionContext<ICustomResolutionDialogViewModel?, Resolution?> interaction
     )
     {
         var dialog = new CustomResolutionDialog { DataContext = interaction.Input };

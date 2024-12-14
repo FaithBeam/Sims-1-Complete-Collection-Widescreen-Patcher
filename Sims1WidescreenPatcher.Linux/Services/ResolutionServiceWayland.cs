@@ -18,7 +18,7 @@ public class ResolutionServiceWayland : IResolutionsService
             throw new DirectoryNotFoundException($"Could not find directory {DrmDir}");
         }
 
-        HashSet<Resolution> resolutions = [];
+        HashSet<Resolution> resolutions = new();
         var modeFiles = Directory.EnumerateFiles(
             DrmDir,
             "modes",
