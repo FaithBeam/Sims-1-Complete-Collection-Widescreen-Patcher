@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
+        x:DataType="viewModels:CustomResolutionDialogViewModel"
         mc:Ignorable="d"
         Width="450"
         Height="80"

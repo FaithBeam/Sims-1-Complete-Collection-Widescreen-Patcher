@@ -5,6 +5,7 @@
         xmlns:tabs="clr-namespace:Sims1WidescreenPatcher.UI.Tabs"
         xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
         xmlns:usercontrols="clr-namespace:Sims1WidescreenPatcher.UI.UserControls"
+        x:DataType="viewModels:MainWindowViewModel"
         mc:Ignorable="d"
         Height="150"
         Width="600"

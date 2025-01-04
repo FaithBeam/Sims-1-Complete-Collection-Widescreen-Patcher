@@ -6,6 +6,7 @@
              xmlns:userControls="clr-namespace:Sims1WidescreenPatcher.UI.UserControls"
              xmlns:converters="clr-namespace:Sims1WidescreenPatcher.UI.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModels:MainTabViewModel"
              x:Class="Sims1WidescreenPatcher.UI.Tabs.MainTab">
 
     <Design.DataContext>

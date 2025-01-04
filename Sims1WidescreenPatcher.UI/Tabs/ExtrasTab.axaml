@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.Tabs;assembly=Sims1WidescreenPatcher.Core"
              xmlns:customcontrols="clr-namespace:Sims1WidescreenPatcher.UI.UserControls"
+             x:DataType="viewModels:ExtrasTabViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Sims1WidescreenPatcher.UI.Tabs.ExtrasTab"
              x:Name="ExtrasTabUserControl">

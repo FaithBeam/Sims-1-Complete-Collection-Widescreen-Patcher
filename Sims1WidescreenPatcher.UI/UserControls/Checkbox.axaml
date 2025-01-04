@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
              xmlns:converters="clr-namespace:Sims1WidescreenPatcher.UI.Converters"
+             x:DataType="viewModels:CheckboxViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Sims1WidescreenPatcher.UI.UserControls.Checkbox">
 
