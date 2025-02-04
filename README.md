@@ -1,5 +1,7 @@
 # The Sims 1 Widescreen Patcher
 
+**This does NOT work for the Legacy Collection!**
+
 This program patches **The Sims 1** to a custom resolution.
 
 ![image](https://github.com/user-attachments/assets/6e3f2e81-4eee-4373-84e7-9a86bcbac2cb)
