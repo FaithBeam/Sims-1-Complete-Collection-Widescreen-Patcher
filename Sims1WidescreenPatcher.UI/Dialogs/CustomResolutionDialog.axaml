@@ -10,6 +10,7 @@
         d:DesignWidth="450"
         d:DesignHeight="80"
         x:Class="Sims1WidescreenPatcher.UI.Dialogs.CustomResolutionDialog"
+        x:DataType="viewModels:CustomResolutionDialogViewModel"
         Title="Enter Custom Resolution"
         SizeToContent="Height"
         Icon="/Assets/SimsICO.ico">

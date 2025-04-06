@@ -4,6 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -24,13 +25,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Avalonia" Version="11.1.4" />
-      <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.1.4" />
-      <PackageReference Include="Avalonia.Desktop" Version="11.1.4" />
-      <PackageReference Include="Avalonia.Diagnostics" Version="11.1.4" />
-      <PackageReference Include="Avalonia.ReactiveUI" Version="11.1.4" />
-      <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.4" />
-      <PackageReference Include="System.Text.Json" Version="8.0.5" />
+      <PackageReference Include="Avalonia" Version="11.2.6" />
+      <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.6" />
+      <PackageReference Include="Avalonia.Desktop" Version="11.2.6" />
+      <PackageReference Include="Avalonia.Diagnostics" Version="11.2.6" />
+      <PackageReference Include="Avalonia.ReactiveUI" Version="11.2.6" />
+      <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.6" />
+        <PackageReference Include="System.Text.Json" Version="8.0.5" />
     </ItemGroup>
 
     <ItemGroup>
@@ -39,7 +40,7 @@
 
     <ItemGroup>
       <Reference Include="sims-iff">
-        <HintPath>..\..\Sims.Iff\sims-iff\bin\Debug\net6.0\sims-iff.dll</HintPath>
+        <HintPath>..\..\Sims.Iff\sims-iff\bin\Debug\net9.0\sims-iff.dll</HintPath>
       </Reference>
     </ItemGroup>
 

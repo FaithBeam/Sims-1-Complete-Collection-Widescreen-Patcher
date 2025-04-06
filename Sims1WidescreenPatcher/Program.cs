@@ -6,6 +6,8 @@ using Microsoft.Extensions.Hosting;
 using ReactiveUI;
 using Serilog;
 using Serilog.Formatting.Compact;
+// using Serilog;
+// using Serilog.Formatting.Compact;
 using Sims1WidescreenPatcher.DependencyInjection;
 using Sims1WidescreenPatcher.UI;
 using Splat;

@@ -13,16 +13,14 @@ public interface ICareerEditorViewModelFactory
 public class CareerEditorViewModelFactory : ICareerEditorViewModelFactory
 {
     private readonly IAppState _appState;
-    private readonly IFar _far;
     private readonly IIffService _iffService;
 
-    public CareerEditorViewModelFactory(IAppState appState, IFar far, IIffService iffService)
+    public CareerEditorViewModelFactory(IAppState appState, IIffService iffService)
     {
         _appState = appState;
-        _far = far;
         _iffService = iffService;
     }
 
     public CareerEditorDialogViewModel Create() =>
-        new CareerEditorDialogViewModel(_appState, _far, _iffService);
+        new CareerEditorDialogViewModel(_appState, _iffService);
 }

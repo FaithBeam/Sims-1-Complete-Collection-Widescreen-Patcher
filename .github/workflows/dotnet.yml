@@ -2,7 +2,7 @@ name: .NET
 
 env:
   PACK_ID: Sims1WidescreenPatcher
-  PACK_VER: 3.13.0
+  PACK_VER: 3.14.0
 
 on: 
   push:
@@ -26,7 +26,7 @@ jobs:
         run: dotnet publish Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -c Release -o artifacts -p:VersionPrefix=${{ env.PACK_VER }} -p:PublishSingleFile=true -p:SelfContained=true -p:DebugType=embedded -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:PublishTrimmed=true -p:RuntimeIdentifier=linux-x64
       - name: Upload a Build Artifact
         if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master'
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+linux.x64
           path: artifacts/Sims1WidescreenPatcher
@@ -45,7 +45,7 @@ jobs:
         run: dotnet publish Sims1WidescreenPatcher/Sims1WidescreenPatcher.csproj -c Release -o artifacts -p:VersionPrefix=${{ env.PACK_VER }} -p:PublishSingleFile=true -p:SelfContained=true -p:DebugType=embedded -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:PublishTrimmed=true -p:RuntimeIdentifier=win-x64
       - name: Upload a Build Artifact
         if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master'
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+win.x64
           path: artifacts/Sims1WidescreenPatcher.exe
@@ -70,7 +70,7 @@ jobs:
         run: tar -cvf Sims1WidescreenPatcher.${{ env.PACK_VER }}+macOS.x64.tar artifacts/
       - name: Upload a Build Artifact
         if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master'
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+macOS.x64
           path: ${{ env.PACK_ID }}.${{ env.PACK_VER }}+macOS.x64.tar

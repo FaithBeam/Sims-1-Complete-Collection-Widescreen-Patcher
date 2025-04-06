@@ -9,9 +9,9 @@ public class ScalePanelBackJob : BaseImageProcessingJob
         base.Run();
 
         using var image = new MagickImage(ImageBytes!);
-        var left = image.Clone(0, 0, 286, 100);
-        var middle = image.Clone((int)left.Width, 0, 500, 100);
-        var right = image.Clone((int)left.Width + (int)middle.Width, 0, 18, 100);
+        var left = image.CloneArea(0, 0, 286, 100);
+        var middle = image.CloneArea((int)left.Width, 0, 500, 100);
+        var right = image.CloneArea((int)left.Width + (int)middle.Width, 0, 18, 100);
         middle.Resize(
             new MagickGeometry((uint)Width - left.Width - right.Width, (uint)Height)
             {

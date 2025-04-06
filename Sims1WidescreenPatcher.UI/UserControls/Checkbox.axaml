@@ -5,7 +5,8 @@
              xmlns:viewModels="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
              xmlns:converters="clr-namespace:Sims1WidescreenPatcher.UI.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Sims1WidescreenPatcher.UI.UserControls.Checkbox">
+             x:Class="Sims1WidescreenPatcher.UI.UserControls.Checkbox"
+             x:DataType="viewModels:CheckboxViewModel">
 
     <Design.DataContext>
         <viewModels:CheckboxViewModel />

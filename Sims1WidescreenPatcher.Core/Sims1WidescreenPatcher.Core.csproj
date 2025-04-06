@@ -16,30 +16,35 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="Resources\DDrawCompat\0.5.4\ddraw.dll" />
+      <None Remove="Resources\DDrawCompat\0.6.0\ddraw.dll" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Avalonia" Version="11.1.4" />
-      <PackageReference Include="DynamicData" Version="9.0.4" />
-      <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.0.0" />
+      <PackageReference Include="Avalonia" Version="11.2.6" />
+      <PackageReference Include="DynamicData" Version="9.2.1" />
+      <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.6.0" />
       <PackageReference Include="PatternFinder" Version="1.0.2" />
       <PackageReference Include="ReactiveUI" Version="20.1.63" />
       <PackageReference Include="sims-iff" Version="0.2.2" />
-      <PackageReference Include="Sims.Far" Version="3.2.2" />
-      <PackageReference Include="System.Text.Json" Version="8.0.5" />
+      <PackageReference Include="Sims.Far" Version="4.2.2" />
+        <PackageReference Include="System.Text.Json" Version="8.0.5" />
     </ItemGroup>
 
     <ItemGroup>
       <EmbeddedResource Include="Resources\DDrawCompat\0.3.2\ddraw.dll" />
-      <EmbeddedResource Include="Resources\DDrawCompat\0.5.4\ddraw.dll" />
-      <EmbeddedResource Include="Resources\DgVoodoo2\D3D8.dll" />
-      <EmbeddedResource Include="Resources\DgVoodoo2\D3DImm.dll" />
-      <EmbeddedResource Include="Resources\DgVoodoo2\DDraw.dll" />
-      <EmbeddedResource Include="Resources\DgVoodoo2\dgVoodoo.conf" />
-      <EmbeddedResource Include="Resources\DgVoodoo2\dgVoodooCpl.exe" />
+      <EmbeddedResource Include="Resources\DDrawCompat\0.6.0\ddraw.dll" />
       <None Remove="Resources\dd_domcal.iff" />
       <EmbeddedResource Include="Resources\dd_domcal.iff" />
+      <None Remove="Resources\DgVoodoo2\2_86\D3D8.dll" />
+      <EmbeddedResource Include="Resources\DgVoodoo2\2_86\D3D8.dll" />
+      <None Remove="Resources\DgVoodoo2\2_86\D3DImm.dll" />
+      <EmbeddedResource Include="Resources\DgVoodoo2\2_86\D3DImm.dll" />
+      <None Remove="Resources\DgVoodoo2\2_86\DDraw.dll" />
+      <EmbeddedResource Include="Resources\DgVoodoo2\2_86\DDraw.dll" />
+      <None Remove="Resources\DgVoodoo2\2_86\dgVoodoo.conf" />
+      <EmbeddedResource Include="Resources\DgVoodoo2\2_86\dgVoodoo.conf" />
+      <None Remove="Resources\DgVoodoo2\2_86\dgVoodooCpl.exe" />
+      <EmbeddedResource Include="Resources\DgVoodoo2\2_86\dgVoodooCpl.exe" />
     </ItemGroup>
 
     <ItemGroup>

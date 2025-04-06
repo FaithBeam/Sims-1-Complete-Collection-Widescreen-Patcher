@@ -40,13 +40,11 @@ public class ImagesService : IImagesService
 
     private readonly IAppState _appState;
     private readonly IProgressService _progressService;
-    private readonly IFar _far;
 
-    public ImagesService(IAppState appState, IProgressService progressService, IFar far)
+    public ImagesService(IAppState appState, IProgressService progressService)
     {
         _appState = appState;
         _progressService = progressService;
-        _far = far;
     }
 
     private const string TallSubPanel = @"cpanel\Backgrounds\TallSubPanel.TGA";
@@ -56,8 +54,8 @@ public class ImagesService : IImagesService
     public void Install()
     {
         _uiGraphicsPath = GetUiGraphicsFolder();
-        _far.PathToFar = CombineWithUiGraphicsPath("UIGraphics.far");
-        var jobs = GetJobs();
+        var far = Far.Read(Path.Combine(_uiGraphicsPath, "UIGraphics.far"));
+        var jobs = GetJobs(far);
 
         var totalJobs = jobs.Count;
         var current = 0;
@@ -96,9 +94,8 @@ public class ImagesService : IImagesService
         }
     }
 
-    private List<BaseImageProcessingJob> GetJobs()
+    private List<BaseImageProcessingJob> GetJobs(Far far)
     {
-        _far.ParseFar();
         var jobs = new List<BaseImageProcessingJob>();
 
         if (_appState.Resolution is null)
@@ -106,12 +103,13 @@ public class ImagesService : IImagesService
             return jobs;
         }
 
-        if (_far.TryGetBytes(PanelBack, out var bytes))
+        var panelBack = far.Files.FirstOrDefault(x => x.Name == PanelBack);
+        if (panelBack is not null)
         {
             jobs.Add(
                 new ScalePanelBackJob
                 {
-                    ImageBytes = bytes,
+                    ImageBytes = panelBack.Bytes,
                     Output = CombineWithUiGraphicsPath(PanelBack),
                     Width = _appState.Resolution.Width,
                     Height = 100,
@@ -119,16 +117,17 @@ public class ImagesService : IImagesService
             );
         }
 
-        jobs.AddRange(GetCompositeJobs(_blackBackground, "#000000"));
+        jobs.AddRange(GetCompositeJobs(far, _blackBackground, "#000000"));
 
-        jobs.AddRange(GetCompositeJobs(_blueBackground, "#000052"));
+        jobs.AddRange(GetCompositeJobs(far, _blueBackground, "#000052"));
 
-        if (_far.TryGetBytes(TallSubPanel, out bytes))
+        var tallSubPanel = far.Files.FirstOrDefault(x => x.Name == TallSubPanel);
+        if (tallSubPanel is not null)
         {
             jobs.Add(
                 new ScaleTallSubPanelJob
                 {
-                    ImageBytes = bytes,
+                    ImageBytes = tallSubPanel.Bytes,
                     Output = CombineWithUiGraphicsPath(TallSubPanel),
                     Width = _appState.Resolution.Width,
                     Height = 150,
@@ -140,6 +139,7 @@ public class ImagesService : IImagesService
     }
 
     private IEnumerable<BaseImageProcessingJob> GetCompositeJobs(
+        Far far,
         IEnumerable<string> images,
         string color
     )
@@ -150,7 +150,8 @@ public class ImagesService : IImagesService
         }
         foreach (var i in images)
         {
-            if (_far.TryGetBytes(i, out var bytes))
+            var img = far.Files.FirstOrDefault(x => x.Name == i);
+            if (img is not null)
             {
                 yield return new CompositeImageJob
                 {
@@ -158,7 +159,7 @@ public class ImagesService : IImagesService
                     Height = _appState.Resolution.Height,
                     Output = CombineWithUiGraphicsPath(i),
                     Width = _appState.Resolution.Width,
-                    ImageBytes = bytes,
+                    ImageBytes = img.Bytes,
                 };
             }
         }

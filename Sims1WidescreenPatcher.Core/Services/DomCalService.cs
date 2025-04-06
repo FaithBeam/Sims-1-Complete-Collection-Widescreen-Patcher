@@ -20,13 +20,11 @@ public class DomCalService : IDomCalService
 {
     private const string DomcalName = "dd_domcal.iff";
     private readonly IAppState _appState;
-    private readonly IFar _far;
     private readonly IIffService _iffService;
 
-    public DomCalService(IAppState appState, IFar far, IIffService iffService)
+    public DomCalService(IAppState appState, IIffService iffService)
     {
         _appState = appState;
-        _far = far;
         _iffService = iffService;
     }
 
@@ -135,9 +133,10 @@ public class DomCalService : IDomCalService
             {
                 throw new FileNotFoundException(expansionSharedFile);
             }
-            _far.PathToFar = expansionSharedFile;
-            _far.ParseFar();
-            _far.Extract("work.iff", expansionSharedFolder);
+
+            var far = Far.Read(expansionSharedFile);
+            var workIffFarFile = far.Files.First(x => x.Name == "work.iff");
+            workIffFarFile.Extract(Path.Combine(expansionSharedFolder, "work.iff"));
             if (!File.Exists(workIffFile))
             {
                 throw new FileNotFoundException(workIffFile);
