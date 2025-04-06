@@ -23,13 +23,12 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     private const string AboutLink =
         "https://github.com/FaithBeam/Sims-1-Complete-Collection-Widescreen-Patcher/wiki/Career-Editor";
     private IAppState AppState { get; }
-    private readonly IFar _far;
     private readonly ObservableAsPropertyHelper<string?> _pathToExpansionShared;
     private readonly ObservableAsPropertyHelper<string?> _pathToExpansionSharedFar;
     private readonly ObservableAsPropertyHelper<string?> _pathToWorkIff;
-    private readonly ReadOnlyObservableCollection<ResourceViewModel> _careers;
+    private readonly ReadOnlyObservableCollection<CarrViewModel> _careers;
     private readonly ReadOnlyObservableCollection<JobInfoViewModel> _jobs;
-    private ResourceViewModel? _selectedCareer;
+    private CarrViewModel? _selectedCareer;
     private JobInfoViewModel? _selectedJob;
     private readonly ObservableAsPropertyHelper<IffViewModel?>? _workIff;
     private readonly ObservableAsPropertyHelper<string> _windowTitle;
@@ -43,10 +42,9 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     private readonly ObservableAsPropertyHelper<int?> _shiftFunDecay;
     private readonly ObservableAsPropertyHelper<int?> _shiftSocialDecay;
 
-    public CareerEditorDialogViewModel(IAppState appState, IFar far, IIffService iffService)
+    public CareerEditorDialogViewModel(IAppState appState, IIffService iffService)
     {
         AppState = appState;
-        _far = far;
 
         _pathToExpansionShared = this.WhenAnyValue(x => x.AppState.SimsExePath)
             .Select(GetPathToExpansionSharedDir)
@@ -145,15 +143,14 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         var myOp = iffSourceCache
             .Connect()
             .Filter(x => x.TypeCode.Value == "CARR")
+            .Cast(x => (CarrViewModel)x.Content)
             .SortAndBind(
                 out _careers,
-                SortExpressionComparer<ResourceViewModel>.Ascending(x =>
-                    ((CarrViewModel)x.Content).CareerInfo.CareerName
-                )
+                SortExpressionComparer<CarrViewModel>.Ascending(x => x.CareerInfo.CareerName)
             )
             .Subscribe();
         this.WhenAnyValue(x => x.SelectedCareer)
-            .Select(x => ((CarrViewModel?)x?.Content)?.JobInfos)
+            .Select(x => x?.JobInfos)
             .Subscribe(x =>
             {
                 jobInfoSourceList.Edit(updater =>
@@ -255,7 +252,7 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
         return endTime - startTime;
     }
 
-    public ReadOnlyObservableCollection<ResourceViewModel> Careers => _careers;
+    public ReadOnlyObservableCollection<CarrViewModel> Careers => _careers;
     public ReadOnlyObservableCollection<JobInfoViewModel> Jobs => _jobs;
 
     private string? PathToExpansionShared => _pathToExpansionShared.Value;
@@ -263,7 +260,7 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
     private string? PathToExpansionSharedFar => _pathToExpansionSharedFar.Value;
 
     private IffViewModel? WorkIff => _workIff?.Value;
-    public ResourceViewModel? SelectedCareer
+    public CarrViewModel? SelectedCareer
     {
         get => _selectedCareer;
         set => this.RaiseAndSetIfChanged(ref _selectedCareer, value);
@@ -338,12 +335,9 @@ public class CareerEditorDialogViewModel : ViewModelBase, ICareerEditorTabViewMo
             return pathToWorkIff;
         }
 
-        _far.PathToFar = PathToExpansionSharedFar;
-        _far.ParseFar();
-        _far.Extract(
-            _far.Manifest.ManifestEntries.First(x => x.Filename == "work.iff"),
-            pathToExpansionShared
-        );
+        var far = Far.Read(pathToExpansionSharedFar);
+        far.Files.First(x => x.Name == "work.iff").Extract(pathToWorkIff);
+
         return pathToWorkIff;
     }
 

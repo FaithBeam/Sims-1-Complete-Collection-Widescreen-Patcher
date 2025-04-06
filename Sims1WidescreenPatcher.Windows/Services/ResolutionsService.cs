@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.Versioning;
 using Serilog;
+// using Serilog;
 using Sims1WidescreenPatcher.Core.Models;
 using Sims1WidescreenPatcher.Core.Services.Interfaces;
 using Windows.Win32;

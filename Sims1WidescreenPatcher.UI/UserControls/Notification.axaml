@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Sims1WidescreenPatcher.Core.ViewModels;assembly=Sims1WidescreenPatcher.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Sims1WidescreenPatcher.UI.UserControls.Notification">
+             x:Class="Sims1WidescreenPatcher.UI.UserControls.Notification"
+             x:DataType="vm:NotificationViewModel">
 
     <UserControl.DataContext>
         <vm:NotificationViewModel />

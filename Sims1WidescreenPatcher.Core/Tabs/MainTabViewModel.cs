@@ -375,16 +375,13 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
                     break;
                 case ListChangeReason.Replace:
-                    break;
                 case ListChangeReason.Remove:
                     break;
                 case ListChangeReason.RemoveRange:
                     SelectedResolution = FilteredResolutions?.First();
                     return;
                 case ListChangeReason.Refresh:
-                    break;
                 case ListChangeReason.Moved:
-                    break;
                 case ListChangeReason.Clear:
                     break;
                 default:
@@ -393,15 +390,8 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
         }
     }
 
-    private Func<Resolution, bool> CreateResolutionPredicate(AspectRatio? ar)
-    {
-        if (ar is null)
-        {
-            return _ => true;
-        }
-
-        return resolution => resolution.AspectRatio == ar;
-    }
+    private Func<Resolution, bool> CreateResolutionPredicate(AspectRatio? ar) =>
+        ar is null ? _ => true : resolution => resolution.AspectRatio == ar;
 
     private async Task OpenCustomInformationDialogAsync(string title, string message)
     {
@@ -446,7 +436,7 @@ public class MainTabViewModel : ViewModelBase, IMainTabViewModel
 
         var selectedWrapper = Wrappers[SelectedWrapperIndex];
 
-        if (selectedWrapper is DDrawCompatWrapper { Version: "0.5.4" })
+        if (selectedWrapper is DDrawCompatWrapper { Version: "0.6.0" })
         {
             var result = await OpenCustomYesNoDialogAsync(
                 "DDrawCompat Settings",

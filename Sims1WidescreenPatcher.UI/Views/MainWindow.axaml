@@ -10,6 +10,7 @@
         Width="600"
 		CanResize="False"
         x:Class="Sims1WidescreenPatcher.UI.Views.MainWindow"
+        x:DataType="viewModels:MainWindowViewModel"
         Icon="/Assets/SimsICO.ico"
         SizeToContent="Height"
         Title="Sims 1 Widescreen Patcher">

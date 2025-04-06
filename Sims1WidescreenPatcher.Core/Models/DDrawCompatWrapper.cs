@@ -33,10 +33,16 @@ public class DDrawCompatWrapper : IWrapper
 
 public class DgVoodoo2Wrapper : IWrapper
 {
+    public DgVoodoo2Wrapper(string version)
+    {
+        Version = version;
+    }
+
+    public string Version { get; }
     public string Name => "DgVoodoo2";
 
     public override string ToString()
     {
-        return Name;
+        return $"{Name} ({Version})";
     }
 }

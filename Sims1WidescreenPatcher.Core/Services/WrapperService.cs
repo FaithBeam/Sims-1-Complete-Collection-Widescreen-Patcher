@@ -20,10 +20,11 @@ public class WrapperService : IWrapperService
         _appState = appState;
     }
 
-    private static readonly string[] DdrawCompat054Resources =
+    private static readonly string[] DdrawCompat060Resources =
     {
-        @"DDrawCompat._0._5._4.ddraw.dll",
+        @"DDrawCompat._0._6._0.ddraw.dll",
     };
+
     private static readonly string[] DdrawCompat032Resources =
     {
         @"DDrawCompat._0._3._2.ddraw.dll",
@@ -31,11 +32,11 @@ public class WrapperService : IWrapperService
 
     private static readonly string[] DgvoodooResources =
     {
-        @"DgVoodoo2.D3D8.dll",
-        @"DgVoodoo2.D3DImm.dll",
-        @"DgVoodoo2.DDraw.dll",
-        @"DgVoodoo2.dgVoodoo.conf",
-        @"DgVoodoo2.dgVoodooCpl.exe",
+        @"DgVoodoo2._2_86.D3D8.dll",
+        @"DgVoodoo2._2_86.D3DImm.dll",
+        @"DgVoodoo2._2_86.DDraw.dll",
+        @"DgVoodoo2._2_86.dgVoodoo.conf",
+        @"DgVoodoo2._2_86.dgVoodooCpl.exe",
     };
 
     public List<IWrapper> GetWrappers()
@@ -43,27 +44,27 @@ public class WrapperService : IWrapperService
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             /* Return different ddrawcompat versions depending on Windows version.
-               Windows 10 and newer get ddrawcompat 0.5.4
+               Windows 10 and newer get ddrawcompat 0.6.0
                Windows 8.1 and older get ddrawcompat 0.3.2
              */
             return Environment.OSVersion.Version.Major >= 10
                 ? new List<IWrapper>
                 {
-                    new DDrawCompatWrapper("0.5.4"),
-                    new DgVoodoo2Wrapper(),
+                    new DDrawCompatWrapper("0.6.0"),
+                    new DgVoodoo2Wrapper("2_86"),
                     new NoneWrapper(),
                 }
                 : new List<IWrapper>
                 {
                     new DDrawCompatWrapper("0.3.2"),
-                    new DgVoodoo2Wrapper(),
+                    new DgVoodoo2Wrapper("2_86"),
                     new NoneWrapper(),
                 };
         }
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            return new List<IWrapper> { new NoneWrapper(), new DgVoodoo2Wrapper() };
+            return new List<IWrapper> { new NoneWrapper(), new DgVoodoo2Wrapper("2_86") };
         }
 
         return new List<IWrapper> { new NoneWrapper() };
@@ -79,10 +80,13 @@ public class WrapperService : IWrapperService
         {
             case DDrawCompatWrapper w:
                 resources =
-                    w.Version == "0.5.4" ? DdrawCompat054Resources : DdrawCompat032Resources;
+                    w.Version == "0.6.0" ? DdrawCompat060Resources : DdrawCompat032Resources;
                 break;
-            case DgVoodoo2Wrapper:
-                resources = DgvoodooResources;
+            case DgVoodoo2Wrapper w:
+                resources =
+                    w.Version == "2_86"
+                        ? DgvoodooResources
+                        : throw new ArgumentOutOfRangeException(nameof(w.Version));
                 break;
             case NoneWrapper:
                 break;
@@ -108,7 +112,7 @@ public class WrapperService : IWrapperService
     {
         var simsInstallDir = GetSimsInstallDirectory();
         foreach (
-            var item in DdrawCompat054Resources
+            var item in DdrawCompat060Resources
                 .Concat(DdrawCompat032Resources)
                 .Concat(DgvoodooResources)
         )

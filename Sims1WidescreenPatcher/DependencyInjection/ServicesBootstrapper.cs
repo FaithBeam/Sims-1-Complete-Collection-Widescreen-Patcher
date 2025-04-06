@@ -52,7 +52,6 @@ public static class ServicesBootstrapper
     private static void RegisterCommonServices(IServiceCollection services)
     {
         services
-            .AddScoped<IFar, Far>()
             .AddScoped<IDomCalService, DomCalService>()
             .AddScoped<IIffService, IffService>()
             .AddScoped<IPatchFileService, PatchFileService>()
